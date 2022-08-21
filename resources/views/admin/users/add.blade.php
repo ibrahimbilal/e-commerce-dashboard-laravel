@@ -19,7 +19,7 @@
     @endphp
     @include('admin.inc.page_title', $params)
 
-    <form class="row d-block clearfix" id="edit-user" method="POST">
+    <form class="row d-block clearfix" id="add-user" method="POST">
         <div class="col-sm-12 col-lg-9 float-start post-box">
             <div class="main-box box-spaces">
                 <div class="form-item primary mb-3">
@@ -38,7 +38,7 @@
                     <input class="form-control" id="email" name="email" type="email">
                 </div>
 				<div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
-					<label class="item-title" for="new-password">password:</label>
+					<label class="item-title" for="password">password:</label>
 					<div class="with-icon">
 						<input class="form-control" id="password" name="password" type="password">
 						<span class="show-pass"><i class="fi-rr-eye"> </i></span>
@@ -59,11 +59,10 @@
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
                     <label class="item-title">gender:</label>
                     <label class="radio-label" for="male">
-                        <input class="input-radio" id="male" name="customer_type" type="radio" value="Male"
-                            checked>Male
+                        <input class="input-radio" id="male" name="gender" type="radio" value="male" checked>Male
                     </label>
                     <label class="radio-label" for="female">
-                        <input class="input-radio" id="female" name="customer_type" type="radio" value="Female">Female
+                        <input class="input-radio" id="female" name="gender" type="radio" value="female">Female
                     </label>
                 </div>
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
@@ -77,9 +76,9 @@
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
                     <label class="item-title" for="user-status">status:</label>
                     <select class="form-select" id="user-status" name="user_status">
-                        <option>not verified</option>
-                        <option>verified</option>
-                        <option>blocked</option>
+                        <option value="not_verified">not verified</option>
+                        <option value="verified">verified</option>
+                        <option value="blocked">blocked</option>
                     </select>
                 </div>
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
@@ -125,19 +124,17 @@
     <script>
 
         // form Ajax Request
-        $('form#edit-user').on('submit', function(e) {
+        $('form#add-user').on('submit', function(e) {
             e.preventDefault();
             // var data = $(this).serialize();
-            var data = $('#user-language').val();
+            var data = $(this).serialize();
             $.ajax({
                 type: 'POST',
                 url: "{{ route('users.create') }}",
                 headers: {
                     "X-CSRF-TOKEN": "{{ csrf_token() }}",
                 },
-                data: {
-                    user_language: data
-                },
+                data: data,
                 success: function(res) {
                     if (res.success) {
                         Swal.fire({
@@ -145,14 +142,16 @@
                             title: res.success,
                             showConfirmButton: true,
                             confirmButtonColor: 'var(--main-color)',
+							willClose: () => {
+                                window.location.replace(res.redirect);
+                            }
                         });
                     } else {
                         Swal.fire({
                             icon: 'error',
                             title: 'Oops...',
                             html: '<div class="alerts danger"><ul class="list" style="text-align: start">' +
-                                Object.keys(res.errors).map(k => '<li class="content">' + res
-                                    .errors[k] + '</li>').join('') + '</ul></div>',
+                                Object.keys(res.errors).map(k => '<li class="content">' + res.errors[k] + '</li>').join('') + '</ul></div>',
                             showConfirmButton: true,
                             confirmButtonColor: 'var(--main-color)',
                         });

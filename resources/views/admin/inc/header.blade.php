@@ -132,9 +132,14 @@
     <div class="float-window main-box user-window pb-3" id="user-window">
         <div class="win-body">
             <ul class="notify-list p-0 m-0">
-                <li class="notify-item d-flex align-items-center"><a class="link" href="#">My Account</a>
+                <li class="notify-item d-flex align-items-center"><a class="link" href="{{ route('profile') }}">My Account</a>
                 </li>
-                <li class="notify-item d-flex align-items-center"><a class="link" href="#">Logout</a></li>
+                <li class="notify-item d-flex align-items-center">
+					<form action="{{route('logout')}}" method="POST">
+						@csrf
+						<button class="btn text-start trans-btn link" type="submit">Logout</button>
+					</form>
+				</li>
             </ul>
         </div>
     </div>

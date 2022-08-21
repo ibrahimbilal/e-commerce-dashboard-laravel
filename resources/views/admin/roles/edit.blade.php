@@ -41,7 +41,7 @@
                                 <table class="table mb-0 border-0">
                                     <tbody>
                                         @php
-                                            $list = ['Products', 'Attributes', 'Reviews', 'Categories', 'Tags', 'Discounts', 'Customers', 'Orders', 'Invoices', 'Analytics', 'Marketing', 'Users', 'Roles', 'Gallary', 'Languages', 'Settings'];
+                                            $list = ['products', 'attributes', 'reviews', 'categories', 'tags', 'discounts', 'customers', 'orders', 'invoices', 'analytics', 'marketing', 'users', 'roles', 'gallary', 'languages', 'settings'];
                                         @endphp
 
                                         @foreach ($list as $item)
@@ -189,7 +189,7 @@
 			}).then((result) => {
 				if (result.isConfirmed) {
 					$.ajax({
-						type: 'POST',
+						type: 'DELETE',
 						url: "{{ route('roles.delete', $role->id) }}",
 						headers: {
 							"X-CSRF-TOKEN": "{{ csrf_token() }}",
@@ -198,7 +198,7 @@
 							if (res.success) {
 								Swal.fire({
 									title: 'Deleted!',
-									text: 'Your role has been deleted.',
+									text: 'Role has been deleted.',
 									icon: 'success',
 									willClose: () => {
 										window.location.replace(res.redirect);
@@ -221,7 +221,7 @@
 				} else if (result.dismiss === Swal.DismissReason.cancel) {
 					Swal.fire({
 						title: 'Cancelled',
-						text: 'Your role is safe :)',
+						text: 'Role is safe :)',
 						icon: 'error',
 						timer: 1500,
 						timerProgressBar: true,

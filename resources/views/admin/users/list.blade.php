@@ -3,6 +3,8 @@
 @section('title', 'Users List')
 
 @section('stylesheet')
+<!-- Icons -->
+<link href="{{ asset('css/uicons-solid-rounded.css') }}" rel="stylesheet">
 <!-- Data Tables -->
 <link href="{{ asset('css/datatables.min.css') }}" rel="stylesheet">
 @endsection
@@ -41,7 +43,7 @@
             <div class="main-box box-spaces mb-0">
                 <div class="table-holder mt-0">
                     <div class="table-responsive">
-                        <table class="table table-striped" id="users">
+                        <table class="table table-striped" id="users-table">
                             <thead>
                                 <tr>
                                     <th></th>
@@ -55,37 +57,31 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @if (count($users))
-                                    @foreach ($users as $user)
-                                        <tr>
-                                            <td></td>
-                                            <td class="customer-img">
-                                                <div class="img-holder">
-													<img src="{{ asset('images/customers/image-1.png') }}" width="70">
-                                                </div>
-                                            </td>
-                                            <td class="user-title">{{ $user->name }}</td>
-                                            <td>{{ $user->email }}</td>
-                                            <td>{{ $user->roll }}</td>
-                                            <td>{{ $user->created_at }}</td>
-                                            <td class="status-title">{{ $user->status }}</td>
-                                            <td>
-                                                <div class="btn-group">
-                                                    <a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('users.edit', $user->id ) }}">
-														<span class="icon"><i class="fi-rr-edit"> </i></span>edit
-													</a>
-                                                    <a class="btn btn-danger btn-rounded me-2 py-1">
-														<span class="icon"><i class="fi-rr-trash"> </i></span>trash
-													</a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                @else
-                                    <tr>
-                                        <td colspan="8" class="text-center">No Data</td>
-                                    </tr>
-                                @endif
+								@foreach ($users as $user)
+									<tr>
+										<td></td>
+										<td class="customer-img">
+											<div class="img-holder">
+												<img src="{{ asset('images/customers/image-1.png') }}" width="70">
+											</div>
+										</td>
+										<td class="user-title">{{ $user->first_name }} {{ $user->last_name }}</td>
+										<td>{{ $user->email }}</td>
+										<td>{{ $user->role->title }}</td>
+										<td>{{ $user->created_at }}</td>
+										<td class="status-title">{{ $user->getStatus() }}</td>
+										<td>
+											<div class="btn-group">
+												<a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('users.edit', $user->id ) }}">
+													<span class="icon"><i class="fi-rr-edit"> </i></span>edit
+												</a>
+												<a class="btn btn-danger btn-rounded me-2 py-1" id="delete" data-id="{{$user->id}}" href="{{ route('users.delete', $user->id ) }}">
+													<span class="icon"><i class="fi-rr-trash"> </i></span>trash
+												</a>
+											</div>
+										</td>
+									</tr>
+								@endforeach
                             </tbody>
                             <tfoot>
                                 <tr>
@@ -115,20 +111,20 @@
     <script src="{{ asset('js/datatables.min.js') }}" type="text/javascript"></script>
     <script>
         // Data Tables
-        let customer_table = $('#users').DataTable({
+        let tabel = $('#users-table').DataTable({
             dom: 'Bfrtip',
             columnDefs: [{
-                    orderable: false,
-                    className: 'select-checkbox',
-                    targets: 0
-                },
+					orderable: false,
+					className: 'select-checkbox',
+					targets: 0
+				},
                 {
                     bSortable: false,
-                    aTargets: [0, 1, 3, 4, 6]
+                    aTargets: [0, 1, 3, 7]
                 },
                 {
                     bSearchable: false,
-                    aTargets: [0, 1, 6]
+                    aTargets: [0, 1, 7]
                 }
             ],
             select: {
@@ -145,7 +141,7 @@
                     colvis: 'Columns'
                 }
             },
-            stateSave: true,
+            stateSave: false,
             paging: true,
             searching: true,
             lengthMenu: [
@@ -188,25 +184,86 @@
                 ]
             }, 'colvis']
         });
-        customer_table.on("click", "th.select-checkbox", function() {
-            if ($("th.select-checkbox").hasClass("selected")) {
-                customer_table.rows().deselect();
-                $("th.select-checkbox").removeClass("selected");
-            } else {
-                customer_table.rows().select();
-                $("th.select-checkbox").addClass("selected");
-            }
-        }).on("select deselect", function() {
-            ("Some selection or deselection going on")
-            if (customer_table.rows({
-                    selected: true
-                }).count() !== customer_table.rows().count()) {
-                $("th.select-checkbox").removeClass("selected");
-            } else {
-                $("th.select-checkbox").addClass("selected");
-            }
-        });
+		if ( $("th.select-checkbox").length > 0 ) {
+			tabel.on("click", "th.select-checkbox", function() {
+					if ($("th.select-checkbox").hasClass("selected")) {
+						tabel.rows().deselect();
+						$("th.select-checkbox").removeClass("selected");
+					} else {
+						tabel.rows().select();
+						$("th.select-checkbox").addClass("selected");
+					}
+			}).on("select deselect", function() {
+				("Some selection or deselection going on")
+				if (tabel.rows({
+						selected: true
+					}).count() !== tabel.rows().count()) {
+					$("th.select-checkbox").removeClass("selected");
+				} else {
+					$("th.select-checkbox").addClass("selected");
+				}
+			});
+		}
 
+		// Delete User
+		$('a#delete').on('click', function(e) {
+			e.preventDefault();
+			const itemId = $(this).data('id'),
+				url = $(this).attr('href'),
+				parentRow = $(this).parents('tr');
+			Swal.fire({
+				title: 'Are you sure?',
+				text: "You won't be able to revert this!",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: 'var(--main-color)',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Yes, delete it!',
+				cancelButtonText: 'No, cancel!',
+			}).then((result) => {
+				if (result.isConfirmed) {
+					$.ajax({
+						type: 'DELETE',
+						url: url,
+						headers: {
+							"X-CSRF-TOKEN": "{{ csrf_token() }}",
+						},
+						success: function(res) {
+							if (res.success) {
+								Swal.fire({
+									title: 'Deleted!',
+									text: 'Your user has been deleted.',
+									icon: 'success',
+									willClose: () => {
+										parentRow.hide(500);
+									}
+								});
+							} else {
+								Swal.fire({
+									icon: 'error',
+									title: 'Oops...',
+									html: '<ul class="errors-list">' + Object.keys(res.errors).map(k =>
+											'<li class="content">' + res.errors[k] + '</li>').join('') +
+										'</ul>',
+									showConfirmButton: true,
+									confirmButtonColor: 'var(--main-color)',
+								});
+							}
+						}
+					});
+
+				} else if (result.dismiss === Swal.DismissReason.cancel) {
+					Swal.fire({
+						title: 'Cancelled',
+						text: 'Your user is safe :)',
+						icon: 'error',
+						timer: 1500,
+						timerProgressBar: true,
+						showConfirmButton: false,
+					})
+				}
+			})
+		});
     </script>
 	@if (session('error'))
 		<script>

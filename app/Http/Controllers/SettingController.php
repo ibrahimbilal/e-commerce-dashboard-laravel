@@ -21,14 +21,24 @@ class SettingController extends Controller
 	}
 
 	public function save_general_settings(Request $request) {
-		$data = $request->only(['site_title', 'tagline', 'site_description', 'site_url', 'timezone', 'date_formate', 'date_formate_custom', 'time_formate', 'time_formate_custom']);
+		$data = $request->only(
+			'site_title',
+			'tagline',
+			'site_description',
+			'site_url',
+			'timezone',
+			'date_formate',
+			'date_formate_custom',
+			'time_formate',
+			'time_formate_custom'
+		);
 
 		$validator = Validator::make($data, [
             'site_title' 			=> 'required|string|min:4',
             'tagline' 				=> 'required|string',
             'site_description' 		=> 'required|string',
             'site_url' 				=> 'required|url',
-            'timezone' 				=> 'required|string',
+            'timezone' 				=> 'required|string|timezone',
             'date_formate' 			=> 'required|string',
             'date_formate_custom' 	=> 'required_if:date_formate,custom|string',
             'time_formate' 			=> 'required|string',

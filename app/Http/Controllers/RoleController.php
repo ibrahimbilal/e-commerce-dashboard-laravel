@@ -46,7 +46,9 @@ class RoleController extends Controller
 			]);
 
 		} catch ( \Exception $ex ) {
-			return redirect()->route('roles.list')->with(['error' => 'There Is Error!']);
+			return response()->json([
+				'errors' => ['There Is Error!']
+			]);
 		}
 	}
 
@@ -101,7 +103,6 @@ class RoleController extends Controller
 			}
 
 			$role->delete();
-			// return redirect()->route('roles.list')->with(['success' => 'The Role successfully deleted!']);
 			return response()->json([
 				'success'=>'The Role successfully deleted!',
 				'redirect'=> route('roles.list')
@@ -110,9 +111,6 @@ class RoleController extends Controller
         }catch( \Exception $ex ) {
             return redirect()->route('roles.list')->with( ['error' => 'There Is Error!'] );
         }
-
-
-
 	}
 
 }

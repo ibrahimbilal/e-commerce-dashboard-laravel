@@ -315,7 +315,7 @@
                     colvis: 'Columns'
                 }
             },
-            stateSave: true,
+            stateSave: false,
             paging: true,
             searching: true,
             lengthMenu: [

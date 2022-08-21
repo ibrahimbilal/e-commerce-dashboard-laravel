@@ -27,11 +27,13 @@
                 </div>
                 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap">
                     <label class="item-title" for="first-name">first name:</label>
-                    <input class="form-control" id="first-name" name="first_name" type="text" value="{{ $user->first_name }}">
+                    <input class="form-control" id="first-name" name="first_name" type="text"
+                        value="{{ $user->first_name }}">
                 </div>
                 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
                     <label class="item-title" for="last-name">last name:</label>
-                    <input class="form-control" id="last-name" name="last_name" type="text" value="{{ $user->last_name }}">
+                    <input class="form-control" id="last-name" name="last_name" type="text"
+                        value="{{ $user->last_name }}">
                 </div>
                 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
                     <label class="item-title" for="email">email address:</label>
@@ -51,24 +53,28 @@
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
                     <label class="item-title">gender:</label>
                     <label class="radio-label" for="male">
-                        <input class="input-radio" id="male" name="gender" type="radio" value="male" {{ selected($user->gender, 'male', 'radio') }}>Male
+                        <input class="input-radio" id="male" name="gender" type="radio" value="male"
+                            {{ selected($user->gender, 'male', 'radio') }}>Male
                     </label>
                     <label class="radio-label" for="female">
-                        <input class="input-radio" id="female" name="gender" type="radio" value="female" {{ selected($user->gender, 'female', 'radio') }}>Female
+                        <input class="input-radio" id="female" name="gender" type="radio" value="female"
+                            {{ selected($user->gender, 'female', 'radio') }}>Female
                     </label>
                 </div>
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
                     <label class="item-title" for="user-role">role:</label>
                     <select class="form-select" id="user-role" name="user_role">
-						@foreach ( $roles as $role )
-							<option value="{{ $role->id }}" {{ selected($user->role_id, $role->id, 'select') }}>{{ $role->title }}</option>
-						@endforeach
+                        @foreach ($roles as $role)
+                            <option value="{{ $role->id }}" {{ selected($user->role_id, $role->id, 'select') }}>
+                                {{ $role->title }}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
                     <label class="item-title" for="user-status">status:</label>
                     <select class="form-select" id="user-status" name="user_status">
-                        <option value="not_verified" {{ selected($user->status, 'not_verified', 'select') }}>not verified</option>
+                        <option value="not_verified" {{ selected($user->status, 'not_verified', 'select') }}>not verified
+                        </option>
                         <option value="verified" {{ selected($user->status, 'verified', 'select') }}>verified</option>
                         <option value="blocked" {{ selected($user->status, 'blocked', 'select') }}>blocked</option>
                     </select>
@@ -119,7 +125,8 @@
                     <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
                         <label class="item-title" for="confirm-password">confirm password:</label>
                         <div class="with-icon">
-                            <input class="form-control" id="confirm-password" name="password_confirmation" type="password">
+                            <input class="form-control" id="confirm-password" name="password_confirmation"
+                                type="password">
                             <span class="show-pass"><i class="fi-rr-eye"> </i></span>
                         </div>
                     </div>
@@ -129,10 +136,12 @@
         <div class="col-sm-6 col-lg-3 float-end meta-box">
             <div class="main-box box-spaces">
                 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-                    <label class="item-title meta-title">Registered At:</label><span class="ms-2">{{ format_date($user->created_at) }}</span>
+                    <label class="item-title meta-title">Registered At:</label><span
+                        class="ms-2">{{ format_date($user->created_at) }}</span>
                 </div>
                 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-                    <label class="item-title meta-title">updated at:</label><span class="ms-2">{{ format_date($user->updated_at) }}</span>
+                    <label class="item-title meta-title">updated at:</label><span
+                        class="ms-2">{{ format_date($user->updated_at) }}</span>
                 </div>
                 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
                     <label class="item-title meta-title">Last Logged In:</label><span class="ms-2">26/03/2021
@@ -151,14 +160,12 @@
                     <label class="item-title meta-title">iP City:</label><span class="ms-2">New York</span>
                 </div>
                 <div class="btns-holder d-flex justify-content-between mt-4">
-                    <a class="btn trans-btn w-100 text-start delete" data-post-type="user"><span
-                            class="icon me-1"><i class="fi-rr-trash"> </i></span>move to trash</a>
-                    <button class="btn solid-btn" type="submit">update </button>
+                    <button class="btn solid-btn w-100" type="submit">update</button>
                 </div>
             </div>
         </div>
-	</form>
-	<div class="row d-block clearfix">
+    </form>
+    <div class="row d-block clearfix">
         <div class="col-sm-12 col-lg-9 float-start post-box">
             <div class="main-box box-spaces">
                 <div class="form-item primary">
@@ -167,24 +174,54 @@
                         <div class="item-title">
                             <label class="item-title mb-2">status:</label>
                         </div>
-						@if (!auth()->user()->two_factor_secret)
-							<div class="item-content">
-								<p class="mb-0">2FA Is Disabled</p><small>When two factor authentication is enabled, you will be prompted for a secure, random token during authentication. You may retrieve this token from your phone's Google Authenticator application.</small><br>
-								<form method="GET" action="{{ url('user/confirm-password') }}">
-									@csrf
-									<button class="btn regular-btn mt-2 text-nowrap" type="submit">Enable</button>
-								</form>
-							</div>
-						@else
-							<div class="item-content">
-								<p class="mb-0">You have enabled 2FA.</p><small>When two factor authentication is enabled, you will be prompted for a secure, random token during authentication. You may retrieve this token from your phone's Google Authenticator application.</small><br>
-								<button class="btn regular-btn mt-2 text-nowrap" type="button">Show Recovery Codes</button>
-								<button class="btn regular-btn mt-2 text-nowrap" type="button">Disable</button>
-								@if (session('status') == 'two-factor-authentication-enabled')
-									<small>When two factor authentication is enabled, you will be prompted for a secure, random token during authentication. You may retrieve this token from your phone's Google Authenticator application.</small>
-								@endif
-							</div>
-						@endif
+                        <div class="item-content">
+                            @if (!auth()->user()->two_factor_secret)
+                                <p class="mb-0">2FA Is Disabled</p><small>When two factor authentication is enabled, you will be prompted for a secure, random token during authentication. You may retrieve this token from your phone's Google Authenticator application.</small><br>
+                                <form method="POST" action="{{ url('user/two-factor-authentication') }}">
+                                    @csrf
+                                    <button class="btn regular-btn mt-2 text-nowrap" type="submit">Enable</button>
+                                </form>
+                            @else
+                                <p class="mb-0">You have enabled 2FA.</p>
+                                <small>When two factor authentication is enabled, you will be prompted for a secure, random token during authentication. You may retrieve this token from your phone's Google Authenticator application.</small><br>
+
+                                @if (session('status') == 'two-factor-authentication-enabled' || !auth()->user()->two_factor_confirmed_at)
+									<br>
+									<small>To finish enabling two factor authentication, scan the following QR code using your phone's authenticator application or enter the setup key and provide the generated OTP code</small><br>
+									<br>
+									{!! auth()->user()->twoFactorQrCodeSvg() !!}
+									<br>
+									<form method="POST" action="{{ route('two-factor.confirm') }}">
+										@csrf
+										<div
+											class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
+											<input class="form-control" name="code" type="text" required>
+											<button class="btn solid-btn ms-sm-3 mt-2 mt-sm-0 text-nowrap"
+												type="submit">Confirm</button>
+										</div>
+									</form>
+                                @endif
+
+                                <div class="recovery-codes-wrapper">
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+									@if ( auth()->user()->two_factor_confirmed_at )
+										<button
+											id="show-recovery-codes"
+											class="btn regular-btn me-3 text-nowrap w-100"
+											type="button">Show Recovery Codes</button>
+									@endif
+                                    <form method="POST" action="{{ url('user/two-factor-authentication') }}">
+                                        @csrf
+                                        @method('DELETE')
+                                        {{-- <button class="btn regular-btn mt-2 text-nowrap" type="button">Show Recovery Codes</button> --}}
+                                        <button class="btn solid-btn solid-danger-btn text-nowrap"
+                                            type="submit">Disable</button>
+                                    </form>
+                                </div>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
@@ -376,61 +413,20 @@
             });
         });
 
-		// Delete Role
-		$('a.trans-btn.delete').on('click', function(e) {
-			e.preventDefault();
-			Swal.fire({
-				title: 'Are you sure?',
-				text: "You won't be able to revert this!",
-				icon: 'warning',
-				showCancelButton: true,
-				confirmButtonColor: 'var(--main-color)',
-				cancelButtonColor: '#d33',
-				confirmButtonText: 'Yes, delete it!',
-				cancelButtonText: 'No, cancel!',
-			}).then((result) => {
-				if (result.isConfirmed) {
-					$.ajax({
-						type: 'DELETE',
-						url: "{{ route('users.delete', $user->id) }}",
-						headers: {
-							"X-CSRF-TOKEN": "{{ csrf_token() }}",
-						},
-						success: function(res) {
-							if (res.success) {
-								Swal.fire({
-									title: 'Deleted!',
-									text: 'User has been deleted.',
-									icon: 'success',
-									willClose: () => {
-										window.location.replace(res.redirect);
-									}
-								});
-							} else {
-								Swal.fire({
-									icon: 'error',
-									title: 'Oops...',
-									html: '<ul class="errors-list">' + Object.keys(res.errors).map(k =>
-											'<li class="content">' + res.errors[k] + '</li>').join('') +
-										'</ul>',
-									showConfirmButton: true,
-									confirmButtonColor: 'var(--main-color)',
-								});
-							}
-						}
-					});
-
-				} else if (result.dismiss === Swal.DismissReason.cancel) {
-					Swal.fire({
-						title: 'Cancelled',
-						text: 'User is safe :)',
-						icon: 'error',
-						timer: 1500,
-						timerProgressBar: true,
-						showConfirmButton: false,
-					})
-				}
-			})
-		});
+        // Show Recovery codes
+        $('#show-recovery-codes').on('click', function() {
+            $.ajax({
+                type: 'POST',
+                url: "{{ route('users.show_recovery_code', $user->id) }}",
+                headers: {
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                },
+                success: function(res) {
+                    $('.recovery-codes-wrapper').append('<small>' + res.notify +
+                        '</small><div class="codes-list">' + Object.keys(res.codes).map(k =>
+                            '<div class="code">' + res.codes[k] + '</div>').join('') + '</div>')
+                }
+            });
+        });
     </script>
 @endsection

@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,9 +18,14 @@ Route::get('/', function () {
 	return view('welcome');
 });
 
+Route::get('/home', function () {
+	return dd(Auth::user());
+})->middleware(['auth', 'verified']);
+
 Route::prefix('admin/')->group(function () {
 
 	Route::get('', [App\Http\Controllers\AdminController::class, 'index'])->name('index');
+	Route::get('profile', [App\Http\Controllers\AdminController::class, 'profile'])->name('profile')->middleware(['auth', 'verified']);
 
 	// Settings Pages
 	Route::controller(App\Http\Controllers\SettingController::class)
@@ -39,6 +45,8 @@ Route::prefix('admin/')->group(function () {
 			Route::post('create', 'create')->name('users.create');
 			Route::get('edit/{id}', 'edit')->name('users.edit');
 			Route::post('update/{id}', 'update')->name('users.update');
+			Route::delete('delete/{id}', 'delete')->name('users.delete');
+			Route::post('show-code/{id}', 'show_codes')->name('users.show_recovery_code');
 		});
 
 	// Roles Pages
@@ -50,7 +58,7 @@ Route::prefix('admin/')->group(function () {
 			Route::post('create', 'create')->name('roles.create');
 			Route::get('edit/{id}', 'edit')->name('roles.edit');
 			Route::post('update/{id}', 'update')->name('roles.update');
-			Route::post('delete/{id}', 'delete')->name('roles.delete');
+			Route::delete('delete/{id}', 'delete')->name('roles.delete');
 		});
 });
 

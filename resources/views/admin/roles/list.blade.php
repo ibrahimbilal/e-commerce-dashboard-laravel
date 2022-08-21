@@ -31,27 +31,21 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @if (count($roles))
-                                    @foreach ($roles as $role)
-                                        <tr data-id="{{$role->id}}">
-                                            <td class="user-title">{{ $role->title }}</td>
-                                            <td>
-                                                <div class="btn-group">
-                                                    <a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('roles.edit', $role->id ) }}">
-														<span class="icon"><i class="fi-rr-edit"> </i></span>edit
-													</a>
-                                                    <a class="btn btn-danger btn-rounded me-2 py-1" id="delete" data-id="{{$role->id}}" href="{{ route('roles.delete', $role->id ) }}">
-														<span class="icon"><i class="fi-rr-trash"> </i></span>trash
-													</a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                @else
-                                    <tr>
-                                        <td colspan="2" class="text-center">No Data</td>
-                                    </tr>
-                                @endif
+								@foreach ($roles as $role)
+									<tr data-id="{{$role->id}}">
+										<td class="user-title">{{ $role->title }}</td>
+										<td>
+											<div class="btn-group">
+												<a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('roles.edit', $role->id ) }}">
+													<span class="icon"><i class="fi-rr-edit"> </i></span>edit
+												</a>
+												<a class="btn btn-danger btn-rounded me-2 py-1" id="delete" data-id="{{$role->id}}" href="{{ route('roles.delete', $role->id ) }}">
+													<span class="icon"><i class="fi-rr-trash"> </i></span>trash
+												</a>
+											</div>
+										</td>
+									</tr>
+								@endforeach
                             </tbody>
                             <tfoot>
                                 <tr>
@@ -75,16 +69,16 @@
     <script src="{{ asset('js/datatables.min.js') }}" type="text/javascript"></script>
     <script>
 		// Data Tables
-		let product_table = $('#roles').DataTable({
+		$('#roles').DataTable({
 			dom: 'Bfrtip',
 			columnDefs: [
 				{
 					bSortable: false,
-					aTargets: [ 1]
+					aTargets: [1]
 				},
 				{
 					bSearchable: false,
-					aTargets: [ 1]
+					aTargets: [1]
 				}
 			],
 			order: [
@@ -97,7 +91,7 @@
 					colvis: 'Columns'
 				}
 			},
-			stateSave: true,
+			stateSave: false,
 			paging: true,
 			searching: true,
 			lengthMenu: [[ 10, 15, 25, 50, 75, 100 ], ['10 Roles', '15 Roles', '25 Roles', '50 Roles', '75 Roles', '100 Roles']],
@@ -158,7 +152,7 @@
 			}).then((result) => {
 				if (result.isConfirmed) {
 					$.ajax({
-						type: 'POST',
+						type: 'DELETE',
 						url: url,
 						headers: {
 							"X-CSRF-TOKEN": "{{ csrf_token() }}",
