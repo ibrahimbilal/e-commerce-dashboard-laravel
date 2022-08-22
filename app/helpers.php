@@ -118,16 +118,16 @@ if (!function_exists('get_dashboard_menu')) {
 			],
 			[
 				[
-					"route_name" => 'users.list',
-					"active_if" => ['users.list', 'users.add', 'users.edit'],
+					"route_name" => 'users.index',
+					"active_if" => ['users.index', 'users.create', 'users.edit', 'users.profile'],
 					"icon" => 'user',
 					"title" => 'users',
 					"has_submeu" => false,
 					"badge" => '',
 				],
 				[
-					"route_name" => 'roles.list',
-					"active_if" => ['roles.list', 'roles.add', 'roles.edit'],
+					"route_name" => 'roles.index',
+					"active_if" => ['roles.index', 'roles.create', 'roles.edit'],
 					"icon" => 'key',
 					"title" => 'roles',
 					"has_submeu" => false,
@@ -153,15 +153,15 @@ if (!function_exists('get_dashboard_menu')) {
 				],
 				[
 					"route_name" => '',
-					"active_if" => ['general_settings', 'theme_settings', 'store_settings', 'currencies_settings', 'emails_settings', 'payment_settings'],
+					"active_if" => ['general-settings.index', 'theme_settings', 'store_settings', 'currencies_settings', 'emails_settings', 'payment_settings'],
 					"icon" => 'settings',
 					"title" => 'settings',
 					"has_submeu" => true,
 					"badge" => '',
 					"submenu_items" => [
 						[
-							"route_name" => 'general_settings',
-							"active_if" => ['general_settings'],
+							"route_name" => 'general-settings.index',
+							"active_if" => ['general-settings.index'],
 							"title" => 'general',
 						],
 						[
@@ -526,3 +526,16 @@ if ( !function_exists('format_date') ) {
 	}
 }
 
+if ( !function_exists('user_full_name') ) {
+	/**
+	 * User full name
+	 * @return string
+	 */
+	function user_full_name() {
+		if ( !auth()->user() ) {
+			return;
+		}
+
+		return auth()->user()->first_name . ' ' . auth()->user()->last_name;
+	}
+}

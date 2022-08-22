@@ -14,7 +14,7 @@
     // breadcrumbs params
     $params = [
         'page_title' => 'Edit User',
-        'breadcrumbs_items' => [['title' => 'users', 'route_name' => 'users.list'], ['title' => 'edit']],
+        'breadcrumbs_items' => [['title' => 'users', 'route_name' => 'users.index'], ['title' => 'edit']],
     ];
     @endphp
     @include('admin.inc.page_title', $params)
@@ -45,7 +45,7 @@
                     <label class="item-title" for="birth-date">Birth Of Date:</label>
                     <div class="position-relative w-100">
                         <input class="form-control" id="birth-date" name="birth_date" type="text"
-                            data-toggle="datepicker" value="{{ $user->getBirthDate() }}">
+                            data-toggle="datepicker" data-value="{{ $user->getBirthDate() }}">
                     </div>
                 </div>
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
@@ -167,24 +167,57 @@
                         <div class="item-title">
                             <label class="item-title mb-2">status:</label>
                         </div>
-						@if (!auth()->user()->two_factor_secret)
-							<div class="item-content">
-								<p class="mb-0">2FA Is Disabled</p><small>When two factor authentication is enabled, you will be prompted for a secure, random token during authentication. You may retrieve this token from your phone's Google Authenticator application.</small><br>
-								<form method="GET" action="{{ url('user/confirm-password') }}">
+                        <div class="item-content">
+                            @if (!$user->two_factor_secret)
+                                <p class="mb-0">2FA Is Disabled</p>
+								<small>{{ __('When two factor authentication is enabled, you will be prompted for a secure, random token during authentication. You may retrieve this token from your phone\'s Google Authenticator application.') }}</small><br>
+                                <form method="POST" action="{{ url('user/two-factor-authentication') }}">
+                                    @csrf
+                                    <button class="btn regular-btn mt-2 text-nowrap" type="submit">{{ __('Enable') }}</button>
+                                </form>
+                            @else
+                                <p class="mb-0">You have enabled 2FA.</p>
+                                <small>{{ __('When two factor authentication is enabled, you will be prompted for a secure, random token during authentication. You may retrieve this token from your phone\'s Google Authenticator application.') }}</small><br>
+
+                                @if (session('status') == 'two-factor-authentication-enabled' || !$user->two_factor_confirmed_at)
+									<br>
+									<small>{{ __('To finish enabling two factor authentication, scan the following QR code using your phone\'s authenticator application or enter the setup key and provide the generated OTP code') }}</small><br>
+									<br>
+									{!! $user->twoFactorQrCodeSvg() !!}
+									<br>
+									<br>
+									<p class="mb-0">
+										{{ __('Setup Key') }}: {{ decrypt($user->two_factor_secret) }}
+									</p>
+									<form id="create-two-factor-authentication" method="POST" action="{{ route('two-factor.confirm') }}">
+										@csrf
+										<div class="form-item second mt-3">
+											<input class="form-control" name="code" type="text" required>
+										</div>
+									</form>
+									<button class="btn solid-btn mt-3 me-2 text-nowrap" form="create-two-factor-authentication" type="submit">Confirm</button>
+									<button class="btn trans-btn mt-3 text-nowrap" form="delete-two-factor-authentication" type="submit">Cancle</button>
+                                @endif
+
+                                <div class="recovery-codes-wrapper">
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+									@if ( $user->two_factor_confirmed_at )
+										<button
+											id="show-recovery-codes"
+											class="btn regular-btn me-3 text-nowrap w-100"
+											type="button">Show Recovery Codes</button>
+
+											<button class="btn solid-btn solid-danger-btn text-nowrap" form="delete-two-factor-authentication" type="submit">Disable</button>
+									@endif
+                                </div>
+								<form id="delete-two-factor-authentication" method="POST" action="{{ url('user/two-factor-authentication') }}" style="display: none">
 									@csrf
-									<button class="btn regular-btn mt-2 text-nowrap" type="submit">Enable</button>
+									@method('DELETE')
 								</form>
-							</div>
-						@else
-							<div class="item-content">
-								<p class="mb-0">You have enabled 2FA.</p><small>When two factor authentication is enabled, you will be prompted for a secure, random token during authentication. You may retrieve this token from your phone's Google Authenticator application.</small><br>
-								<button class="btn regular-btn mt-2 text-nowrap" type="button">Show Recovery Codes</button>
-								<button class="btn regular-btn mt-2 text-nowrap" type="button">Disable</button>
-								@if (session('status') == 'two-factor-authentication-enabled')
-									<small>When two factor authentication is enabled, you will be prompted for a secure, random token during authentication. You may retrieve this token from your phone's Google Authenticator application.</small>
-								@endif
-							</div>
-						@endif
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
@@ -347,7 +380,7 @@
             var data = $(this).serialize();
             // var data = $('#user-language').val();
             $.ajax({
-                type: 'POST',
+                type: 'PUT',
                 url: "{{ route('users.update', $user->id) }}",
                 headers: {
                     "X-CSRF-TOKEN": "{{ csrf_token() }}",
@@ -392,7 +425,7 @@
 				if (result.isConfirmed) {
 					$.ajax({
 						type: 'DELETE',
-						url: "{{ route('users.delete', $user->id) }}",
+						url: "{{ route('users.destroy', $user->id) }}",
 						headers: {
 							"X-CSRF-TOKEN": "{{ csrf_token() }}",
 						},

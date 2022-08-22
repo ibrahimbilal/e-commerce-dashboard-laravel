@@ -12,7 +12,7 @@
     // breadcrumbs params
     $params = [
         'page_title' => 'Edit Role',
-        'breadcrumbs_items' => [['title' => 'roles', 'route_name' => 'roles.list'], ['title' => 'edit']],
+        'breadcrumbs_items' => [['title' => 'roles', 'route_name' => 'roles.index'], ['title' => 'edit']],
     ];
     @endphp
     @include('admin.inc.page_title', $params)
@@ -57,10 +57,9 @@
                                                             <label class="switch text-start">
                                                                 <input class="switch" type="checkbox"
                                                                     name="permissions[{{ $item }}][view]"
-																	@php
-																		$v = isset(json_decode($role->permissions)->$item->view) ? json_decode($role->permissions)->$item->view : '';
-																	@endphp
-                                                                    {{ selected($v, 'on', 'checkbox') }}>
+																	@isset(json_decode($role->permissions)->$item->view)
+																		{{ selected(json_decode($role->permissions)->$item->view, 'on', 'checkbox') }}
+																	@endisset>
 																	<span class="slider"></span>
                                                             </label>
                                                         </div>
@@ -69,10 +68,9 @@
                                                             <label class="switch text-start">
                                                                 <input class="switch" type="checkbox"
                                                                     name="permissions[{{ $item }}][edit]"
-																	@php
-																		$e = isset(json_decode($role->permissions)->$item->edit) ? json_decode($role->permissions)->$item->edit : '';
-																	@endphp
-                                                                    {{ selected($e, 'on', 'checkbox') }}>
+																	@isset(json_decode($role->permissions)->$item->edit)
+																		{{ selected(json_decode($role->permissions)->$item->edit, 'on', 'checkbox') }}
+																	@endisset>
 																	<span class="slider"></span>
                                                             </label>
                                                         </div>
@@ -81,10 +79,9 @@
                                                             <label class="switch text-start">
                                                                 <input class="switch" type="checkbox"
                                                                     name="permissions[{{ $item }}][create]"
-																	@php
-																		$c = isset(json_decode($role->permissions)->$item->create) ? json_decode($role->permissions)->$item->create : '';
-																	@endphp
-                                                                    {{ selected($c, 'on', 'checkbox') }}>
+																	@isset(json_decode($role->permissions)->$item->create)
+																		{{ selected(json_decode($role->permissions)->$item->create, 'on', 'checkbox') }}
+																	@endisset>
 																	<span class="slider"></span>
                                                             </label>
                                                         </div>
@@ -93,10 +90,9 @@
                                                             <label class="switch text-start">
                                                                 <input class="switch" type="checkbox"
                                                                     name="permissions[{{ $item }}][delete]"
-																	@php
-																		$d = isset(json_decode($role->permissions)->$item->delete) ? json_decode($role->permissions)->$item->delete : '';
-																	@endphp
-                                                                    {{ selected($d, 'on', 'checkbox') }}>
+																	@isset(json_decode($role->permissions)->$item->delete)
+																		{{ selected(json_decode($role->permissions)->$item->delete, 'on', 'checkbox') }}
+																	@endisset>
 																	<span class="slider"></span>
                                                             </label>
                                                         </div>
@@ -121,7 +117,7 @@
                     <label class="item-title meta-title">updated at:</label><span class="ms-2">{{ format_date($role->updated_at) }}</span>
                 </div>
                 <div class="btns-holder d-flex justify-content-between mt-4">
-                    <a class="btn trans-btn w-100 text-start delete" href="{{ route('roles.delete', $role->id) }}">
+                    <a class="btn trans-btn w-100 text-start delete" href="{{ route('roles.destroy', $role->id) }}">
 						<span class="icon me-1"><i class="fi-rr-trash"> </i></span>move to trash
 					</a>
                     <button class="btn solid-btn" type="submit">update</button>
@@ -145,7 +141,7 @@
             e.preventDefault();
             var data = $(this).serialize();
             $.ajax({
-                type: 'POST',
+                type: 'PUT',
                 url: "{{ route('roles.update', $role->id) }}",
                 headers: {
                     "X-CSRF-TOKEN": "{{ csrf_token() }}",
@@ -190,7 +186,7 @@
 				if (result.isConfirmed) {
 					$.ajax({
 						type: 'DELETE',
-						url: "{{ route('roles.delete', $role->id) }}",
+						url: "{{ route('roles.destroy', $role->id) }}",
 						headers: {
 							"X-CSRF-TOKEN": "{{ csrf_token() }}",
 						},

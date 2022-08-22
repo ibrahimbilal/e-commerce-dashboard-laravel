@@ -1,22 +1,22 @@
 <header class="main-box d-flex justify-content-between align-items-center">
     <!-- Search Form-->
     <div class="search-area d-flex justify-content-between align-items-center">
-        <div class="action-item d-flex justify-content-between align-items-center me-4 d-lg-none"><span class="icon"
-                id="menu-btn"><i class="fi-rr-menu-burger"> </i></span></div>
-        <div class="action-item d-flex justify-content-between align-items-center me-4 d-sm-none"><span class="icon"
-                id="search-btn"><i class="fi-rr-search"> </i></span></div>
+        <div class="action-item d-flex justify-content-between align-items-center me-4 d-lg-none">
+			<span class="icon" id="menu-btn"><i class="fi-rr-menu-burger"> </i></span>
+		</div>
+        <div class="action-item d-flex justify-content-between align-items-center me-4 d-sm-none">
+			<span class="icon" id="search-btn"><i class="fi-rr-search"> </i></span>
+		</div>
         <form class="search-form d-none d-sm-block">
             <input class="search-input" type="text" name="s" placeholder="Search Here..." autocomplete="off">
-            <button class="submit" type="submit"><i class="fi-rr-search"> </i>
-            </button>
+            <button class="submit" type="submit"><i class="fi-rr-search"> </i></button>
         </form>
     </div>
     <!-- Mobile Search Form-->
     <div class="mobile search-area align-items-center"><span class="close"><i class="fi-rr-cross"> </i></span>
         <form class="search-form d-flex">
             <input class="search-input" type="text" name="s" placeholder="Search Here..." autocomplete="off">
-            <button class="submit" type="submit"><i class="fi-rr-search"> </i>
-            </button>
+            <button class="submit" type="submit"><i class="fi-rr-search"> </i></button>
         </form>
     </div>
     <div class="action-area flex-row-reverse d-flex justify-content-between align-items-center">
@@ -40,7 +40,7 @@
         <div class="header-btn action-item user-area flex-row-reverse d-flex justify-content-between align-items-center"
             id="user" data-window="#user-window"><span class="icon"><i class="fi-rr-angle-small-down">
                 </i></span>
-            <div class="user-name d-none d-xl-block me-2">Jayson Hinrichsen</div><img class="avatar me-2"
+            <div class="user-name d-none d-xl-block me-2">{{ user_full_name() }}</div><img class="avatar me-2"
                 src="{{ asset('/images/avatars/image-01.png') }}">
         </div>
     </div>
@@ -120,8 +120,7 @@
                             src="{{ asset('/images/avatars/image-03.png') }}"></div>
                     <div class="content">
                         <div class="name">Daniil Lobachev</div>
-                        <div class="msg">I published the product on the product</div><span class="date">25 min
-                            ago</span>
+                        <div class="msg">I published the product on the product</div><span class="date">25 min ago</span>
                     </div>
                 </li>
             </ul>
@@ -132,7 +131,7 @@
     <div class="float-window main-box user-window pb-3" id="user-window">
         <div class="win-body">
             <ul class="notify-list p-0 m-0">
-                <li class="notify-item d-flex align-items-center"><a class="link" href="{{ route('profile') }}">My Account</a>
+                <li class="notify-item d-flex align-items-center"><a class="link" href="{{ route('users.show', auth()->user()->id) }}">My Account</a>
                 </li>
                 <li class="notify-item d-flex align-items-center">
 					<form action="{{route('logout')}}" method="POST">

@@ -1,10 +1,10 @@
 @extends('admin.layout')
 
-@section('title', 'Edit User')
+@section('title', 'Profile')
 
 @section('stylesheet')
     <!-- Data Tables -->
-    <link href="{{ asset('css/datatables.min.css') }}" rel="stylesheet">
+    {{-- <link href="{{ asset('css/datatables.min.css') }}" rel="stylesheet"> --}}
     <!-- Date Picker-->
     <link href="{{ asset('css/pickadate.css') }}" rel="stylesheet">
 @endsection
@@ -13,8 +13,8 @@
     @php
     // breadcrumbs params
     $params = [
-        'page_title' => 'Edit User',
-        'breadcrumbs_items' => [['title' => 'users', 'route_name' => 'users.list'], ['title' => 'edit']],
+        'page_title' => 'Profile',
+        'breadcrumbs_items' => [['title' => 'users', 'route_name' => 'users.index'], ['title' => 'profile']],
     ];
     @endphp
     @include('admin.inc.page_title', $params)
@@ -47,7 +47,7 @@
                     <label class="item-title" for="birth-date">Birth Of Date:</label>
                     <div class="position-relative w-100">
                         <input class="form-control" id="birth-date" name="birth_date" type="text"
-                            data-toggle="datepicker" value="{{ $user->getBirthDate() }}">
+                            data-toggle="datepicker" data-value="{{ $user->getBirthDate() }}">
                     </div>
                 </div>
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
@@ -144,14 +144,13 @@
                         class="ms-2">{{ format_date($user->updated_at) }}</span>
                 </div>
                 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-                    <label class="item-title meta-title">Last Logged In:</label><span class="ms-2">26/03/2021
-                        14:58</span>
+                    <label class="item-title meta-title">Last Logged In:</label><span class="ms-2">{{ end($sessions)->last_active_formated }}</span>
                 </div>
                 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-                    <label class="item-title meta-title">Device:</label><span class="ms-2">Samsung Galaxy S20</span>
+                    <label class="item-title meta-title">Device:</label><span class="ms-2">{{ end($sessions)->agent->device }}</span>
                 </div>
                 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-                    <label class="item-title meta-title">iP Address:</label><span class="ms-2">216.58.217.164</span>
+                    <label class="item-title meta-title">iP Address:</label><span class="ms-2">{{ $sessions[0]->ip_address }}</span>
                 </div>
                 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
                     <label class="item-title meta-title">iP Country:</label><span class="ms-2">United State</span>
@@ -175,51 +174,54 @@
                             <label class="item-title mb-2">status:</label>
                         </div>
                         <div class="item-content">
-                            @if (!auth()->user()->two_factor_secret)
-                                <p class="mb-0">2FA Is Disabled</p><small>When two factor authentication is enabled, you will be prompted for a secure, random token during authentication. You may retrieve this token from your phone's Google Authenticator application.</small><br>
+                            @if (!$user->two_factor_secret)
+                                <p class="mb-0">2FA Is Disabled</p>
+								<small>{{ __('When two factor authentication is enabled, you will be prompted for a secure, random token during authentication. You may retrieve this token from your phone\'s Google Authenticator application.') }}</small><br>
                                 <form method="POST" action="{{ url('user/two-factor-authentication') }}">
                                     @csrf
-                                    <button class="btn regular-btn mt-2 text-nowrap" type="submit">Enable</button>
+                                    <button class="btn regular-btn mt-2 text-nowrap" type="submit">{{ __('Enable') }}</button>
                                 </form>
                             @else
                                 <p class="mb-0">You have enabled 2FA.</p>
-                                <small>When two factor authentication is enabled, you will be prompted for a secure, random token during authentication. You may retrieve this token from your phone's Google Authenticator application.</small><br>
+                                <small>{{ __('When two factor authentication is enabled, you will be prompted for a secure, random token during authentication. You may retrieve this token from your phone\'s Google Authenticator application.') }}</small><br>
 
-                                @if (session('status') == 'two-factor-authentication-enabled' || !auth()->user()->two_factor_confirmed_at)
+                                @if (session('status') == 'two-factor-authentication-enabled' || !$user->two_factor_confirmed_at)
 									<br>
-									<small>To finish enabling two factor authentication, scan the following QR code using your phone's authenticator application or enter the setup key and provide the generated OTP code</small><br>
+									<small>{{ __('To finish enabling two factor authentication, scan the following QR code using your phone\'s authenticator application or enter the setup key and provide the generated OTP code') }}</small><br>
 									<br>
-									{!! auth()->user()->twoFactorQrCodeSvg() !!}
+									{!! $user->twoFactorQrCodeSvg() !!}
 									<br>
-									<form method="POST" action="{{ route('two-factor.confirm') }}">
+									<br>
+									<p class="mb-0">
+										{{ __('Setup Key') }}: {{ decrypt($user->two_factor_secret) }}
+									</p>
+									<form id="create-two-factor-authentication" method="POST" action="{{ route('two-factor.confirm') }}">
 										@csrf
-										<div
-											class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
+										<div class="form-item second mt-3">
 											<input class="form-control" name="code" type="text" required>
-											<button class="btn solid-btn ms-sm-3 mt-2 mt-sm-0 text-nowrap"
-												type="submit">Confirm</button>
 										</div>
 									</form>
+									<button class="btn solid-btn mt-3 me-2 text-nowrap" form="create-two-factor-authentication" type="submit">Confirm</button>
+									<button class="btn trans-btn mt-3 text-nowrap" form="delete-two-factor-authentication" type="submit">Cancle</button>
                                 @endif
 
                                 <div class="recovery-codes-wrapper">
                                 </div>
 
                                 <div class="d-flex justify-content-between">
-									@if ( auth()->user()->two_factor_confirmed_at )
+									@if ( $user->two_factor_confirmed_at )
 										<button
 											id="show-recovery-codes"
 											class="btn regular-btn me-3 text-nowrap w-100"
 											type="button">Show Recovery Codes</button>
+
+											<button class="btn solid-btn solid-danger-btn text-nowrap" form="delete-two-factor-authentication" type="submit">Disable</button>
 									@endif
-                                    <form method="POST" action="{{ url('user/two-factor-authentication') }}">
-                                        @csrf
-                                        @method('DELETE')
-                                        {{-- <button class="btn regular-btn mt-2 text-nowrap" type="button">Show Recovery Codes</button> --}}
-                                        <button class="btn solid-btn solid-danger-btn text-nowrap"
-                                            type="submit">Disable</button>
-                                    </form>
                                 </div>
+								<form id="delete-two-factor-authentication" method="POST" action="{{ url('user/two-factor-authentication') }}" style="display: none">
+									@csrf
+									@method('DELETE')
+								</form>
                             @endif
                         </div>
                     </div>
@@ -230,39 +232,52 @@
             <div class="main-box box-spaces">
                 <div class="form-item primary">
                     <h2 class="box-title item-title">Browser Sessions</h2>
-                    <div class="form-item second d-flex mt-3 flex-wrap flex-sm-nowrap"><small>If necessary, you may log out of all of your other browser sessions across all of your devices. Some of your recent sessions are listed below; however, this list may not be exhaustive. If you feel your account has been compromised, you should also update your password.</small></div>
+                    <div class="form-item second mt-3">
+						<small>Manage and log out your active sessions on other browsers and devices.</small>
+						<small class="mt-2 d-block">If necessary, you may log out of all of your other browser sessions across all of your devices. Some of your recent sessions are listed below; however, this list may not be exhaustive. If you feel your account has been compromised, you should also update your password.</small>
+					</div>
                     <div class="form-item second d-flex mt-3 flex-wrap flex-sm-nowrap">
                         <div class="item-title">
                             <label class="item-title mb-2">Active Sessions:</label>
                         </div>
                         <div class="item-content">
-                            <div class="sessions-list">
-                                <div class="session-item">
-                                    <div class="icon"> <i class="fi-rr-computer"> </i>
-                                    </div>
-                                    <div class="details">
-                                        <div class="browser">Windows - Chrome</div>
-                                        <div class="status"><span class="ip">127.0.0.1,</span><span
-                                                class="login this">This device</span></div>
-                                    </div>
-                                </div>
-                                <div class="session-item">
-                                    <div class="icon"> <i class="fi-rr-smartphone"> </i>
-                                    </div>
-                                    <div class="details">
-                                        <div class="browser">AndroidOS - Chrome</div>
-                                        <div class="status"><span class="ip">127.0.0.1,</span><span
-                                                class="login">Last active 15 seconds ago</span></div>
-                                    </div>
-                                </div>
-                            </div>
+							@if (count($sessions) > 0)
+							{{-- @dd($sessions) --}}
+								<div class="sessions-list">
+									<!-- Other Browser Sessions -->
+									@foreach ($sessions as $session)
+										<div class="session-item">
+											<div class="icon">
+												@if ($session->agent->is_desktop)
+													<i class="fi-rr-computer"> </i>
+												@else
+													<i class="fi-rr-smartphone"> </i>
+												@endif
+											</div>
+											<div class="details">
+												<div class="browser">{{ $session->agent->platform ? $session->agent->platform : 'Unknown' }} - {{ $session->agent->browser ? $session->agent->browser : 'Unknown' }}</div>
+												<div class="status">
+													<span class="ip">{{ $session->ip_address }},</span>
+													<span class="login @if($session->is_current_device) this @endif">
+														@if ($session->is_current_device)
+															{{ __('This device') }}
+														@else
+															{{ __('Last active') }} {{ $session->last_active }}
+														@endif
+													</span>
+												</div>
+											</div>
+										</div>
+									@endforeach
+								</div>
+							@endif
                             <button class="btn solid-btn mt-3" type="button">Log Out Other Browser Sessions </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-sm-12 col-lg-9 float-start post-box">
+        {{-- <div class="col-sm-12 col-lg-9 float-start post-box">
             <div class="main-box box-spaces mb-0">
                 <div class="form-item primary">
                     <h2 class="box-title item-title">Activities</h2>
@@ -297,7 +312,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
     </div>
 @endsection
 
@@ -305,78 +320,78 @@
     <!-- Sweet Alert -->
     <script src="{{ asset('js/sweetalert2.all.min.js') }}" type="text/javascript"></script>
     <!-- Data Table-->
-    <script src="{{ asset('js/datatables.min.js') }}" type="text/javascript"></script>
+    {{-- <script src="{{ asset('js/datatables.min.js') }}" type="text/javascript"></script> --}}
     <!-- Date Picker-->
     <script src="{{ asset('js/pickadate/picker.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/pickadate/picker.date.js') }}" type="text/javascript"></script>
     <script>
         // Data Tables
-        let product_table = $('#activities').DataTable({
-            dom: 'Bfrtip',
-            columnDefs: [{
-                    bSortable: false,
-                    aTargets: [4]
-                },
-                {
-                    bSearchable: false,
-                    aTargets: [0, 1, 2, 3]
-                }
-            ],
-            order: [
-                [3, 'desc']
-            ],
-            language: {
-                info: "Show _START_ To _END_ Of _TOTAL_ Activity",
-                buttons: {
-                    pageLength: 'Show %d',
-                    colvis: 'Columns'
-                }
-            },
-            stateSave: true,
-            paging: true,
-            searching: true,
-            lengthMenu: [
-                [10, 15, 25, 50, 75, 100],
-                ['10 Activities', '15 Activities', '25 Activities', '50 Activities', '75 Activities',
-                    '100 Activities'
-                ]
-            ],
-            buttons: ($(window).width() > 578) ? ['pageLength', 'print', {
-                extend: 'collection',
-                text: 'Export',
-                className: 'btn btn-group',
-                buttons: [{
-                        extend: 'excelHtml5',
-                        className: 'dropdown-item'
-                    },
-                    {
-                        extend: 'csvHtml5',
-                        className: 'dropdown-item'
-                    },
-                    {
-                        extend: 'pdfHtml5',
-                        className: 'dropdown-item'
-                    }
-                ]
-            }, 'colvis'] : ['pageLength', {
-                extend: 'collection',
-                text: 'Export',
-                className: 'btn btn-group',
-                buttons: [{
-                        extend: 'excelHtml5',
-                        className: 'dropdown-item'
-                    },
-                    {
-                        extend: 'csvHtml5',
-                        className: 'dropdown-item'
-                    },
-                    {
-                        extend: 'pdfHtml5',
-                        className: 'dropdown-item'
-                    }
-                ]
-            }, 'colvis']
-        });
+        // let product_table = $('#activities').DataTable({
+        //     dom: 'Bfrtip',
+        //     columnDefs: [{
+        //             bSortable: false,
+        //             aTargets: [4]
+        //         },
+        //         {
+        //             bSearchable: false,
+        //             aTargets: [0, 1, 2, 3]
+        //         }
+        //     ],
+        //     order: [
+        //         [3, 'desc']
+        //     ],
+        //     language: {
+        //         info: "Show _START_ To _END_ Of _TOTAL_ Activity",
+        //         buttons: {
+        //             pageLength: 'Show %d',
+        //             colvis: 'Columns'
+        //         }
+        //     },
+        //     stateSave: true,
+        //     paging: true,
+        //     searching: true,
+        //     lengthMenu: [
+        //         [10, 15, 25, 50, 75, 100],
+        //         ['10 Activities', '15 Activities', '25 Activities', '50 Activities', '75 Activities',
+        //             '100 Activities'
+        //         ]
+        //     ],
+        //     buttons: ($(window).width() > 578) ? ['pageLength', 'print', {
+        //         extend: 'collection',
+        //         text: 'Export',
+        //         className: 'btn btn-group',
+        //         buttons: [{
+        //                 extend: 'excelHtml5',
+        //                 className: 'dropdown-item'
+        //             },
+        //             {
+        //                 extend: 'csvHtml5',
+        //                 className: 'dropdown-item'
+        //             },
+        //             {
+        //                 extend: 'pdfHtml5',
+        //                 className: 'dropdown-item'
+        //             }
+        //         ]
+        //     }, 'colvis'] : ['pageLength', {
+        //         extend: 'collection',
+        //         text: 'Export',
+        //         className: 'btn btn-group',
+        //         buttons: [{
+        //                 extend: 'excelHtml5',
+        //                 className: 'dropdown-item'
+        //             },
+        //             {
+        //                 extend: 'csvHtml5',
+        //                 className: 'dropdown-item'
+        //             },
+        //             {
+        //                 extend: 'pdfHtml5',
+        //                 className: 'dropdown-item'
+        //             }
+        //         ]
+        //     }, 'colvis']
+        // });
 
         // form Ajax Request
         $('form#edit-user').on('submit', function(e) {
@@ -384,7 +399,7 @@
             var data = $(this).serialize();
             // var data = $('#user-language').val();
             $.ajax({
-                type: 'POST',
+                type: 'PUT',
                 url: "{{ route('users.update', $user->id) }}",
                 headers: {
                     "X-CSRF-TOKEN": "{{ csrf_token() }}",
@@ -415,18 +430,27 @@
 
         // Show Recovery codes
         $('#show-recovery-codes').on('click', function() {
-            $.ajax({
-                type: 'POST',
-                url: "{{ route('users.show_recovery_code', $user->id) }}",
-                headers: {
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                },
-                success: function(res) {
-                    $('.recovery-codes-wrapper').append('<small>' + res.notify +
-                        '</small><div class="codes-list">' + Object.keys(res.codes).map(k =>
-                            '<div class="code">' + res.codes[k] + '</div>').join('') + '</div>')
-                }
-            });
+			var $this = $(this);
+			if ( $this.hasClass('hide') ) {
+				$('.recovery-codes-wrapper').html('');
+				$this.text('Show Recovery Codes');
+				$this.removeClass('hide').addClass('show');
+			} else {
+				$.ajax({
+					type: 'POST',
+					url: "{{ route('users.show_recovery_code', $user->id) }}",
+					headers: {
+						"X-CSRF-TOKEN": "{{ csrf_token() }}",
+					},
+					success: function(res) {
+						$('.recovery-codes-wrapper').append('<small>' + res.notify +
+							'</small><div class="codes-list">' + Object.keys(res.codes).map(k =>
+								'<div class="code">' + res.codes[k] + '</div>').join('') + '</div>');
+						$this.text('Hide Recovery Codes');
+						$this.removeClass('show').addClass('hide');
+					}
+				});
+			}
         });
     </script>
 @endsection

@@ -13,12 +13,4 @@ class AdminController extends Controller
 	{
 		return view('admin.index');
 	}
-
-	// profile page
-	public function profile()
-	{
-		$user = Auth::user();
-		$roles = Role::all();
-		return view('admin.profile', compact('user', 'roles'));
-	}
 }

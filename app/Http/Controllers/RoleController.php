@@ -9,18 +9,36 @@ use Illuminate\Support\Facades\Validator;
 
 class RoleController extends Controller
 {
-    public function list() {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
 		$roles = Role::all();
 		return view('admin.roles.list', compact('roles'));
-	}
+    }
 
-    public function add() {
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
 		return view('admin.roles.add');
-	}
+    }
 
-    public function create(Request $request) {
-
-		try {
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        try {
 			$data = $request->only('role_title', 'permissions');
 
 			$validator = Validator::make($data, [
@@ -42,7 +60,7 @@ class RoleController extends Controller
 
 			return response()->json([
 				'success'=>'Role successfully Created',
-				'redirect'=> route('roles.list')
+				'redirect'=> route('roles.index')
 			]);
 
 		} catch ( \Exception $ex ) {
@@ -50,23 +68,48 @@ class RoleController extends Controller
 				'errors' => ['There Is Error!']
 			]);
 		}
-	}
+    }
 
-    public function edit($id) {
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
 		$role = Role::find($id);
 		if ( !$role ) {
-			return redirect()->route('roles.list')->with(['error' => 'The Role Dose Not Exist!']);
+			return redirect()->route('roles.index')->with(['error' => 'The Role Dose Not Exist!']);
 		}
 		return view('admin.roles.edit', compact('role'));
-	}
+    }
 
-	public function update(Request $request, $id) {
-
-        try {
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+		try {
 
             $role = Role::find($id);
             if ( !$role ) {
-				return redirect()->route('roles.list')->with(['error' => 'The Role Dose Not Exist!']);
+				return redirect()->route('roles.index')->with(['error' => 'The Role Dose Not Exist!']);
             }
 
             $data = $request->only('role_title', 'permissions');
@@ -90,11 +133,18 @@ class RoleController extends Controller
 			return response()->json(['success'=>'Data successfully updated!']);
 
         }catch( \Exception $ex ) {
-			return redirect()->route('roles.list')->with(['error' => 'There Is Error!']);
+			return redirect()->route('roles.index')->with(['error' => 'There Is Error!']);
         }
     }
 
-	public function delete($id) {
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
 		try {
 
             $role = Role::find($id);
@@ -105,12 +155,11 @@ class RoleController extends Controller
 			$role->delete();
 			return response()->json([
 				'success'=>'The Role successfully deleted!',
-				'redirect'=> route('roles.list')
+				'redirect'=> route('roles.index')
 			]);
 
         }catch( \Exception $ex ) {
-            return redirect()->route('roles.list')->with( ['error' => 'There Is Error!'] );
+            return redirect()->route('roles.index')->with( ['error' => 'There Is Error!'] );
         }
-	}
-
+    }
 }

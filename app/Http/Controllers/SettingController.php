@@ -4,13 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Setting;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
 
 class SettingController extends Controller
 {
-    public function view_general_page() {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
 		$settings = Setting::all();
 		$datas = [];
 		foreach ($settings as $col) {
@@ -18,9 +22,26 @@ class SettingController extends Controller
 			$datas[$col->setting_key] = $col->setting_value;
 		}
 		return view('admin.settings.general', compact('datas'));
-	}
+    }
 
-	public function save_general_settings(Request $request) {
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
 		$data = $request->only(
 			'site_title',
 			'tagline',
@@ -59,8 +80,6 @@ class SettingController extends Controller
 			$data['date_formate_custom'] = '';
 		}
 
-
-
 		// Change values in .env file
 		if ( $request->has('site_title') ) {
 			update_env('APP_NAME', $request->get('site_title') );
@@ -86,7 +105,52 @@ class SettingController extends Controller
 
 		// return redirect()->route('general_settings')->with('status', 'Changes Saved Successfuly!');
 		return response()->json(['success'=>'Your settings successfully updated!']);
-	}
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
+    }
 
 	public function ajax_date_preview(Request $request) {
 		$data = $request->only(['format']);

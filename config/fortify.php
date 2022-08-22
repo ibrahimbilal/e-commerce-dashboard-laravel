@@ -1,7 +1,6 @@
 <?php
 
 use Laravel\Fortify\Features;
-use Illuminate\Support\Facades\Auth;
 use App\Providers\RouteServiceProvider;
 
 return [
@@ -122,10 +121,16 @@ return [
 
     'views' => true,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Redirect User To Specific Pages
+    |--------------------------------------------------------------------------
+    */
+
 	'redirects' => [
         'login' => 'admin',
         'logout' => 'login',
-        'password-confirmation' => 'profile',
+        'password-confirmation' => 'admin/profile',
         'register' => null,
         'email-verification' => 'admin',
         'password-reset' => 'admin',

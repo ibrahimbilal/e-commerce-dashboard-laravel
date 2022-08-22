@@ -14,7 +14,7 @@
     // breadcrumbs params
     $params = [
         'page_title' => 'Add User',
-        'breadcrumbs_items' => [['title' => 'users', 'route_name' => 'users.list'], ['title' => 'add']],
+        'breadcrumbs_items' => [['title' => 'users', 'route_name' => 'users.index'], ['title' => 'add']],
     ];
     @endphp
     @include('admin.inc.page_title', $params)
@@ -130,7 +130,7 @@
             var data = $(this).serialize();
             $.ajax({
                 type: 'POST',
-                url: "{{ route('users.create') }}",
+                url: "{{ route('users.store') }}",
                 headers: {
                     "X-CSRF-TOKEN": "{{ csrf_token() }}",
                 },

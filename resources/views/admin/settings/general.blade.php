@@ -188,7 +188,7 @@
             var data = $(this).serialize();
             $.ajax({
                 type: 'POST',
-                url: "{{ route('save_general_settings') }}",
+                url: "{{ route('general-settings.store') }}",
                 headers: {
 					"X-CSRF-TOKEN": "{{ csrf_token() }}",
 				},

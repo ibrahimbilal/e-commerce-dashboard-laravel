@@ -15,7 +15,7 @@
     // breadcrumbs params
     $params = [
         'page_title' => 'Users',
-        'add_route_name' => 'users.add',
+        'add_route_name' => 'users.create',
         'breadcrumbs_items' => ['title' => 'users'],
     ];
     @endphp
@@ -67,7 +67,7 @@
 										</td>
 										<td class="user-title">{{ $user->first_name }} {{ $user->last_name }}</td>
 										<td>{{ $user->email }}</td>
-										<td>{{ $user->role->title }}</td>
+										<td>{{ $user->roles->title }}</td>
 										<td>{{ $user->created_at }}</td>
 										<td class="status-title">{{ $user->getStatus() }}</td>
 										<td>
@@ -75,7 +75,7 @@
 												<a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('users.edit', $user->id ) }}">
 													<span class="icon"><i class="fi-rr-edit"> </i></span>edit
 												</a>
-												<a class="btn btn-danger btn-rounded me-2 py-1" id="delete" data-id="{{$user->id}}" href="{{ route('users.delete', $user->id ) }}">
+												<a class="btn btn-danger btn-rounded me-2 py-1" id="delete" data-id="{{$user->id}}" href="{{ route('users.destroy', $user->id ) }}">
 													<span class="icon"><i class="fi-rr-trash"> </i></span>trash
 												</a>
 											</div>

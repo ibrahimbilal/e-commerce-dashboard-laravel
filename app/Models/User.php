@@ -34,6 +34,8 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $hidden = [
         'password',
         'remember_token',
+		'two_factor_recovery_codes',
+        'two_factor_secret',
     ];
 
     /**
@@ -46,7 +48,7 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
 	// Relationship with Role Table
-	public function role() {
+	public function roles() {
 		return $this->belongsTo(Role::class, 'role_id', 'id');
 	}
 
@@ -56,6 +58,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
 	public function getBirthDate() {
-		return $this->birth_date ? date("j F, Y", strtotime($this->birth_date)) : '';
+		// return $this->birth_date ? date("j F, Y", strtotime($this->birth_date)) : '';
+		return $this->birth_date ? date("Y,m,d", strtotime($this->birth_date)) : '';
 	}
 }

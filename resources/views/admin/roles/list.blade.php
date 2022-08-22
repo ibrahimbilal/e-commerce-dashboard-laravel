@@ -13,7 +13,7 @@
     // breadcrumbs params
     $params = [
         'page_title' => 'Roles',
-        'add_route_name' => 'roles.add',
+        'add_route_name' => 'roles.create',
         'breadcrumbs_items' => ['title' => 'roles'],
     ];
     @endphp
@@ -39,7 +39,7 @@
 												<a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('roles.edit', $role->id ) }}">
 													<span class="icon"><i class="fi-rr-edit"> </i></span>edit
 												</a>
-												<a class="btn btn-danger btn-rounded me-2 py-1" id="delete" data-id="{{$role->id}}" href="{{ route('roles.delete', $role->id ) }}">
+												<a class="btn btn-danger btn-rounded me-2 py-1" id="delete" data-id="{{$role->id}}" href="{{ route('roles.destroy', $role->id ) }}">
 													<span class="icon"><i class="fi-rr-trash"> </i></span>trash
 												</a>
 											</div>

@@ -12,7 +12,7 @@
     // breadcrumbs params
     $params = [
         'page_title' => 'Add Role',
-        'breadcrumbs_items' => [['title' => 'roles', 'route_name' => 'roles.list'], ['title' => 'add']],
+        'breadcrumbs_items' => [['title' => 'roles', 'route_name' => 'roles.index'], ['title' => 'add']],
     ];
     @endphp
     @include('admin.inc.page_title', $params)
@@ -41,7 +41,7 @@
                                 <table class="table mb-0 border-0">
                                     <tbody>
                                         @php
-                                            $list = ['Products', 'Attributes', 'Reviews', 'Categories', 'Tags', 'Discounts', 'Customers', 'Orders', 'Invoices', 'Analytics', 'Marketing', 'Users', 'Roles', 'Gallary', 'Languages', 'Settings'];
+                                            $list = ['products', 'attributes', 'reviews', 'categories', 'tags', 'discounts', 'customers', 'orders', 'invoices', 'analytics', 'marketing', 'users', 'roles', 'gallary', 'languages', 'settings'];
                                         @endphp
                                         @foreach ($list as $item)
                                             <tr class="bg-active">
@@ -121,7 +121,7 @@
             console.log(data);
             $.ajax({
                 type: 'POST',
-                url: "{{ route('roles.create') }}",
+                url: "{{ route('roles.store') }}",
                 headers: {
                     "X-CSRF-TOKEN": "{{ csrf_token() }}",
                 },
