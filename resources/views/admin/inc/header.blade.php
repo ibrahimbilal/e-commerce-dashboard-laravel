@@ -40,8 +40,12 @@
         <div class="header-btn action-item user-area flex-row-reverse d-flex justify-content-between align-items-center"
             id="user" data-window="#user-window"><span class="icon"><i class="fi-rr-angle-small-down">
                 </i></span>
-            <div class="user-name d-none d-xl-block me-2">{{ user_full_name() }}</div><img class="avatar me-2"
-                src="{{ asset('/images/avatars/image-01.png') }}">
+            <div class="user-name d-none d-xl-block me-2">{{ user_full_name() }}</div>
+			@if (Auth::user()->profile_picture)
+				<img class="avatar me-2" src="{{ URL::asset(Auth::user()->profile_picture) }}">
+			@else
+				<img class="avatar me-2" src="{{ asset('images/avatars/' . Auth::user()->gender . '-avatar.png') }}">
+			@endif
         </div>
     </div>
     <!-- Notifications-->
@@ -131,7 +135,8 @@
     <div class="float-window main-box user-window pb-3" id="user-window">
         <div class="win-body">
             <ul class="notify-list p-0 m-0">
-                <li class="notify-item d-flex align-items-center"><a class="link" href="{{ route('users.show', auth()->user()->id) }}">My Account</a>
+                <li class="notify-item d-flex align-items-center">
+					<a class="link" href="{{ route('users.profile') }}">My Account</a>
                 </li>
                 <li class="notify-item d-flex align-items-center">
 					<form action="{{route('logout')}}" method="POST">

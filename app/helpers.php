@@ -11,8 +11,8 @@ if (!function_exists('get_dashboard_menu')) {
 		return [
 			[
 				[
-					"route_name" => 'index',
-					"active_if" => ['index'],
+					"route_name" => 'admin.index',
+					"active_if" => ['admin.index'],
 					"icon" => 'apps',
 					"title" => 'dashboard',
 					"has_submeu" => false,
@@ -533,9 +533,22 @@ if ( !function_exists('user_full_name') ) {
 	 */
 	function user_full_name() {
 		if ( !auth()->user() ) {
-			return;
+			return 'Unknown';
 		}
 
 		return auth()->user()->first_name . ' ' . auth()->user()->last_name;
+	}
+}
+
+if ( !function_exists('is_rtl') ) {
+	/**
+	 * Determines whether the current locale is right-to-left (RTL).
+	 * @return bool Whether locale is RTL.
+	 */
+	function is_rtl() {
+		$app_lang = app()->getLocale();
+		$rtl_locales = ['ar', 'arc', 'dv', 'fa', 'ha', 'he', 'khw', 'ks', 'ku', 'ps', 'ur', 'yi'];
+
+		return in_array($app_lang, $rtl_locales);
 	}
 }

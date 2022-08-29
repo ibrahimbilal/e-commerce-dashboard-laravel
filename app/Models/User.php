@@ -2,14 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Role;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Fortify\TwoFactorAuthenticatable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Laravel\Fortify\TwoFactorAuthenticatable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -21,9 +23,17 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'first_name',
+		'last_name',
+		'email',
+		'password',
+		'mobile',
+		'birth_date',
+		'gender',
+		'role_id',
+		'status',
+		'language',
+		'profile_picture',
     ];
 
     /**
@@ -52,13 +62,27 @@ class User extends Authenticatable implements MustVerifyEmail
 		return $this->belongsTo(Role::class, 'role_id', 'id');
 	}
 
-	// Accessories
-    public function getStatus() {
-        return str_replace('_', ' ', $this->status);
+	/**
+     * Interact with the user's status.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function status(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => str_replace('_', ' ', $value)
+        );
     }
 
-	public function getBirthDate() {
-		// return $this->birth_date ? date("j F, Y", strtotime($this->birth_date)) : '';
-		return $this->birth_date ? date("Y,m,d", strtotime($this->birth_date)) : '';
-	}
+	/**
+     * Interact with the user's birth date.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function birth_date(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value ? date("Y,m,d", strtotime($this->birth_date)) : ''
+        );
+    }
 }

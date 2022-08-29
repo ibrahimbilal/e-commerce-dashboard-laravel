@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
+
 	// Admin Panel Index
 	public function index()
 	{

@@ -18,18 +18,8 @@ Route::get('/', function () {
 	return view('welcome');
 });
 
-Route::prefix('/admin')->middleware(['auth', 'verified'])->group(function () {
-
-	Route::get('', [App\Http\Controllers\AdminController::class, 'index'])->name('index');
-
-	// Settings Pages
-	Route::resource('/general-settings', App\Http\Controllers\SettingController::class)->only(['index', 'store']);
-	Route::post('/general-settings/date-preview', [App\Http\Controllers\SettingController::class, 'ajax_date_preview'])->name('date_preview');
-
-	// Users Pages
-	Route::post('/users/show-code/{user}', [App\Http\Controllers\UserController::class, 'show_codes'])->name('users.show_recovery_code');
-	Route::resource('/users', App\Http\Controllers\UserController::class);
-
-	// Roles Pages
-	Route::resource('/roles', App\Http\Controllers\RoleController::class);
+Route::get('/home', function () {
+	return dd(Auth::user());
 });
+
+require_once('admin.php');

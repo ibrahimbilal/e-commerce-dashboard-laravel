@@ -2,7 +2,7 @@
 <div class="dashbord-menu main-box menu-padding">
     <!-- Menu Header-->
     <div class="menu-header">
-		<a href="{{ route('index') }}">
+		<a href="{{ route('admin.index') }}">
 			<i class="fi-rr-shop"> </i>
 			<span class="title">Admin Panel</span>
 		</a>

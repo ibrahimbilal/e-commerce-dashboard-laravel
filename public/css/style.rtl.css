@@ -532,6 +532,7 @@ header .action-area .action-item.user-area .user-name {
 }
 header .action-area .action-item.user-area .avatar {
   width: 46px;
+  border-radius: 50%;
 }
 header .mobile {
   display: none;
@@ -1055,6 +1056,10 @@ aside {
   padding: 5px;
   width: 80px;
   text-align: center;
+  border-radius: 50%;
+}
+.table-holder table tbody td.customer-img .img-holder img {
+  border-radius: 50%;
 }
 .table-holder table tbody td.comment {
   white-space: break-spaces;

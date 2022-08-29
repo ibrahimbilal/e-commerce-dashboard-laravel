@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Fortify\Fortify;
+use Laravel\Fortify\Contracts\RegisterResponse;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -21,7 +22,12 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->instance(RegisterResponse::class, new class implements RegisterResponse {
+			public function toResponse($request)
+			{
+				return redirect('/admin/users');
+			}
+		});
     }
 
     /**
@@ -46,32 +52,28 @@ class FortifyServiceProvider extends ServiceProvider
             return Limit::perMinute(5)->by($request->session()->get('login.id'));
         });
 
-		Fortify::loginView(function(){
-            return view('admin.auth.login');
-        });
+		// Fortify::loginView(function(){
+        //     return view('admin.auth.login');
+        // });
 
-		Fortify::registerView(function(){
-            return view('admin.auth.register');
-        });
+		// Fortify::requestPasswordResetLinkView(function(){
+        //     return view('admin.auth.forgot-password');
+        // });
 
-		Fortify::requestPasswordResetLinkView(function(){
-            return view('admin.auth.forgot-password');
-        });
+		// Fortify::resetPasswordView(function($request){
+        //     return view('admin.auth.reset-password', ['request' => $request]);
+        // });
 
-		Fortify::resetPasswordView(function($request){
-            return view('admin.auth.reset-password', ['request' => $request]);
-        });
+		// Fortify::verifyEmailView(function(){
+        //     return view('admin.auth.verify-email');
+        // });
 
-		Fortify::verifyEmailView(function(){
-            return view('admin.auth.verify-email');
-        });
+		// Fortify::confirmPasswordView(function(){
+        //     return view('admin.auth.password-confirm');
+        // });
 
-		Fortify::confirmPasswordView(function(){
-            return view('admin.auth.password-confirm');
-        });
-
-		Fortify::twoFactorChallengeView(function(){
-            return view('admin.auth.two-factor-challeng');
-        });
+		// Fortify::twoFactorChallengeView(function(){
+        //     return view('admin.auth.two-factor-challeng');
+        // });
     }
 }

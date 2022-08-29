@@ -62,14 +62,18 @@
 										<td></td>
 										<td class="customer-img">
 											<div class="img-holder">
-												<img src="{{ asset('images/customers/image-1.png') }}" width="70">
+												@if ($user->profile_picture)
+													<img class="avatar me-2" src="{{ URL::asset($user->profile_picture) }}">
+												@else
+													<img src="{{ asset('images/avatars/' . $user->gender . '-avatar.png') }}" width="70">
+												@endif
 											</div>
 										</td>
 										<td class="user-title">{{ $user->first_name }} {{ $user->last_name }}</td>
 										<td>{{ $user->email }}</td>
 										<td>{{ $user->roles->title }}</td>
 										<td>{{ $user->created_at }}</td>
-										<td class="status-title">{{ $user->getStatus() }}</td>
+										<td class="status-title">{{ $user->status }}</td>
 										<td>
 											<div class="btn-group">
 												<a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('users.edit', $user->id ) }}">
@@ -132,7 +136,7 @@
                 selector: 'td:first-child'
             },
             order: [
-                [5, 'desc']
+                [5, 'asc']
             ],
             language: {
                 info: "Show _START_ To _END_ Of _TOTAL_ users",
@@ -269,7 +273,7 @@
 		<script>
 			const Toast = Swal.mixin({
 				toast: true,
-				position: 'top-end',
+				position: 'top-start',
 				showConfirmButton: false,
 				timer: 2500,
 				timerProgressBar: false,

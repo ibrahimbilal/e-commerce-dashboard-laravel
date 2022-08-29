@@ -49,6 +49,10 @@ class Role extends Model
      */
     protected $dates = ['deleted_at'];
 
+	public function users() {
+		$this->hasMany(User::class);
+	}
+
 	/**
      * Get the Role Created Date.
      * @return string

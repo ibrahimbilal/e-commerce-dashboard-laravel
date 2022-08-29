@@ -19,7 +19,7 @@
     @endphp
     @include('admin.inc.page_title', $params)
 
-    <form class="row d-block clearfix" id="add-user" method="POST">
+    <form class="row d-block clearfix" id="add-user" method="POST" enctype="multipart/form-data">
         <div class="col-sm-12 col-lg-9 float-start post-box">
             <div class="main-box box-spaces">
                 <div class="form-item primary mb-3">
@@ -40,11 +40,19 @@
 				<div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 					<label class="item-title" for="password">password:</label>
 					<div class="with-icon">
-						<input class="form-control" id="password" name="password" type="password">
+						<input class="form-control" id="password" name="password" type="password" autocomplete="off">
 						<span class="show-pass"><i class="fi-rr-eye"> </i></span>
 					</div>
 					<button class="btn regular-btn ms-sm-3 mt-2 mt-sm-0 text-nowrap generate-password"
 						type="button">generate</button>
+				</div>
+				<div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
+					<label class="item-title" for="confirm-password">confirm password:</label>
+					<div class="with-icon">
+						<input class="form-control" id="confirm-password" name="password_confirmation"
+							type="password" autocomplete="off">
+						<span class="show-pass"><i class="fi-rr-eye"> </i></span>
+					</div>
 				</div>
                 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
                     <label class="item-title" for="mobile">mobile:</label>
@@ -67,23 +75,17 @@
                 </div>
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
                     <label class="item-title" for="user-role">role:</label>
-                    <select class="form-select" id="user-role" name="user_role">
-						@foreach ( $roles as $role )
+                    <select class="form-select" id="user-role" name="role_id">
+						@forelse ( $roles as $role )
 							<option value="{{ $role->id }}">{{ $role->title }}</option>
-						@endforeach
-                    </select>
-                </div>
-                <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
-                    <label class="item-title" for="user-status">status:</label>
-                    <select class="form-select" id="user-status" name="user_status">
-                        <option value="not_verified">not verified</option>
-                        <option value="verified">verified</option>
-                        <option value="blocked">blocked</option>
+						@empty
+							<option value="">{{ __('no roles created!') }}</option>
+						@endforelse
                     </select>
                 </div>
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
                     <label class="item-title" for="user-language">language:</label>
-                    <select class="form-select" id="user-language" name="user_language">
+                    <select class="form-select" id="user-language" name="language">
                         <option value="en">English</option>
                         <option value="ar">Arabic</option>
                         <option value="fr">French</option>
@@ -93,15 +95,19 @@
                     <div class="item-title">
                         <label class="item-title mb-2" for="profile-picture">Profile Picture:</label>
                     </div>
-                    <div class="item-content"><a class="btn regular-btn gallery-btn" href="javascript:void(0)"
-                            style="width: 150px">Change Image</a>
-                        <div class="selected-img">
-                            <div class="img-holder mt-3"><img class="preview"
-                                    src="{{ asset('images/customers/image-1.png') }}" width="70"><span
-                                    class="overlay"><i class="fi-rr-trash">
-                                    </i><span>remove</span></span></div>
-                        </div>
-                    </div>
+                    <div class="item-content">
+						<label for="pp" class="btn regular-btn" style="width: 150px">
+							Upload Image
+							<input type="file" name="profile_picture" id="pp" accept=".jpg, .jpeg, .png" style="display: none">
+							<input id="remove_pp" type="hidden" name="remove_pp">
+						</label>
+						<div class="selected-img" style="display: none">
+							<div class="img-holder mt-3">
+								<img class="preview" width="70">
+								<span class="overlay"><i class="fi-rr-trash"> </i><span>remove</span></span>
+							</div>
+						</div>
+					</div>
                 </div>
             </div>
         </div>
@@ -123,41 +129,130 @@
     <script src="{{ asset('js/pickadate/picker.date.js') }}" type="text/javascript"></script>
     <script>
 
+		// upload image
+		$('#pp').on('change', function () {
+			var output = $('.selected-img'),
+				file = this.files[0],
+				src = URL.createObjectURL(file);
+
+			output.find('.preview').attr('src', src);
+			output.find('.img-holder').append('<span class="overlay added" style="opacity:1;padding-top:0;color:#FFF;display: flex;justify-content: center;align-items: center;"><i class="rotate fi-rr-spinner" style="color:#FFF;margin: 0;width: 20px;height: 20px;transform-origin: center;text-align: center;line-height: 26px;"></i></span>');
+			output.show(500);
+			$('#remove_pp').val('');
+			setTimeout(() => {
+				output.find('.img-holder').find('.added').fadeOut('100');
+			}, 1500);
+		});
+
+		// remove image
+		$('.overlay').on('click', function() {
+			var output = $('.selected-img');
+			$('#pp').val('');
+			$('#remove_pp').val(true);
+			output.hide(500);
+			output.find('.added').remove();
+			output.find('.preview').removeAttr('src');
+
+		});
+
         // form Ajax Request
         $('form#add-user').on('submit', function(e) {
             e.preventDefault();
-            // var data = $(this).serialize();
-            var data = $(this).serialize();
-            $.ajax({
-                type: 'POST',
-                url: "{{ route('users.store') }}",
-                headers: {
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                },
-                data: data,
-                success: function(res) {
-                    if (res.success) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: res.success,
-                            showConfirmButton: true,
-                            confirmButtonColor: 'var(--main-color)',
-							willClose: () => {
-                                window.location.replace(res.redirect);
-                            }
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            html: '<div class="alerts danger"><ul class="list" style="text-align: start">' +
-                                Object.keys(res.errors).map(k => '<li class="content">' + res.errors[k] + '</li>').join('') + '</ul></div>',
-                            showConfirmButton: true,
-                            confirmButtonColor: 'var(--main-color)',
-                        });
-                    }
-                }
-            });
+
+			var callAjax = false,
+				fileInputElement = document.getElementById("pp");
+
+			if ( fileInputElement.files.length !== 0 ) {
+
+				var fileName = fileInputElement.files[0].name,
+					fileSize = fileInputElement.files[0].size / 1024, // File In KB
+					fileType = fileInputElement.files[0].type,
+					allowTypes = new Array('image/jpeg', 'image/png', 'image/jpg');
+
+					if ($.inArray(fileType, allowTypes) !== -1) {
+						callAjax = true;
+						if (fileSize < 1024) {
+							callAjax = true;
+						} else {
+							Swal.fire({
+								icon: 'error',
+								title: 'Oops...',
+								html: "<div class='alerts danger'><ul class='list' style='text-align: start'><li class='content'>{{ __('The image size is more than 1 MB! Please choose another picture') }}</li></ul></div>",
+								showConfirmButton: true,
+								confirmButtonColor: 'var(--main-color)',
+							});
+							callAjax = false;
+						}
+					} else {
+						Swal.fire({
+							icon: 'error',
+							title: 'Oops...',
+							html: "<div class='alerts danger'><ul class='list' style='text-align: start'><li class='content'>{{ __('Please select an image in the format: JPEG, JPG, PNG') }}</li></ul></div>",
+							showConfirmButton: true,
+							confirmButtonColor: 'var(--main-color)',
+						});
+						callAjax = false;
+					}
+
+			} else {
+				callAjax = true;
+			}
+
+            if ( callAjax ) {
+				var formData = new FormData(this);
+				$.ajax({
+					headers: {
+						"X-CSRF-TOKEN": "{{ csrf_token() }}",
+					},
+					type: 'POST',
+					url: "{{ route('users.store') }}",
+					data: formData,
+					processData: false,
+					contentType: false,
+					cache: false,
+					beforeSend: function() {
+						Swal.fire({
+							title: "{{ __('Please Wait') }}",
+							text: "{{ __('The data you sent is being processed, please be patient!') }}",
+							didOpen: () => {
+								Swal.showLoading()
+							}
+						});
+					},
+					success: function(res) {
+						if (res.success) {
+							Swal.fire({
+								icon: 'success',
+								title: res.success,
+								showConfirmButton: true,
+								confirmButtonColor: 'var(--main-color)',
+								willClose: () => {
+									window.location.replace(res.redirect);
+								}
+							});
+						} else {
+							Swal.fire({
+								icon: 'error',
+								title: 'Oops...',
+								html: '<div class="alerts danger"><ul class="list" style="text-align: start">' +
+									Object.keys(res.errors).map(k => '<li class="content">' + res.errors[k] + '</li>').join('') + '</ul></div>',
+								showConfirmButton: true,
+								confirmButtonColor: 'var(--main-color)',
+							});
+						}
+					},
+					error: function(res) {
+						Swal.fire({
+							icon: 'error',
+							title: 'Oops...',
+							html: '<div class="alerts danger"><ul class="list" style="text-align: start">' +
+								Object.keys(res.responseJSON.errors).map(k => '<li class="content">' + res.responseJSON.errors[k] + '</li>').join('') + '</ul></div>',
+							showConfirmButton: true,
+							confirmButtonColor: 'var(--main-color)',
+						});
+					}
+				});
+			}
         });
     </script>
 @endsection

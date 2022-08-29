@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ is_rtl() ? 'rtl' : 'ltr' }}">
 
 <head>
     <meta charset="UTF-8">
@@ -11,10 +11,14 @@
 
     @yield('stylesheet')
 
+	@php
+		$rtl = is_rtl() ? '.rtl' : ''
+	@endphp
+
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="{{ asset('css/bs.min.css') }}">
+    <link rel="stylesheet" href="{{ asset("css/bs$rtl.min.css") }}">
     <!-- Main Css File -->
-    <link rel="stylesheet" href="{{ asset('css/style.min.css') }}">
+    <link rel="stylesheet" href="{{ asset("css/style$rtl.min.css") }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">

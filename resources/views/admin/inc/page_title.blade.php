@@ -13,7 +13,7 @@
                 <div class="breadcrumbs d-flex justify-content-between align-items-center">
                     {{-- Fixed Items --}}
                     <a class="item text-capitalize d-flex justify-content-between align-items-center"
-                        href="{{ route('index') }}">
+                        href="{{ route('admin.index') }}">
                         <span class="icon">
                             <i class="fi-rr-apps"> </i>
                         </span> dashboard

@@ -62,7 +62,7 @@ return [
     */
 
     // 'home' => RouteServiceProvider::HOME,
-    'home' => '/admin/profile',
+    'home' => '/admin',
 
     /*
     |--------------------------------------------------------------------------
@@ -75,7 +75,7 @@ return [
     |
     */
 
-    'prefix' => '',
+    'prefix' => 'admin',
 
     'domain' => null,
 
@@ -119,7 +119,7 @@ return [
     |
     */
 
-    'views' => true,
+    'views' => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -128,8 +128,8 @@ return [
     */
 
 	'redirects' => [
-        'login' => 'admin',
-        'logout' => 'login',
+		'login' => 'admin',
+        'logout' => 'admin/login',
         'password-confirmation' => 'admin/profile',
         'register' => null,
         'email-verification' => 'admin',
@@ -148,7 +148,7 @@ return [
     */
 
     'features' => [
-        // Features::registration(),
+        Features::registration(),
         Features::resetPasswords(),
         Features::emailVerification(),
         // Features::updateProfileInformation(),

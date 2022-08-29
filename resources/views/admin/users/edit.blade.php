@@ -19,7 +19,8 @@
     @endphp
     @include('admin.inc.page_title', $params)
 
-    <form class="row d-block clearfix" id="edit-user" method="POST">
+    <form class="row d-block clearfix" id="edit-user" method="POST" enctype="multipart/form-data">
+		@method('PUT')
         <div class="col-sm-12 col-lg-9 float-start post-box">
             <div class="main-box box-spaces">
                 <div class="form-item primary mb-3">
@@ -45,110 +46,103 @@
                     <label class="item-title" for="birth-date">Birth Of Date:</label>
                     <div class="position-relative w-100">
                         <input class="form-control" id="birth-date" name="birth_date" type="text"
-                            data-toggle="datepicker" data-value="{{ $user->getBirthDate() }}">
+                            data-toggle="datepicker" data-value="{{ $user->birth_date }}">
                     </div>
                 </div>
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
                     <label class="item-title">gender:</label>
                     <label class="radio-label" for="male">
-                        <input class="input-radio" id="male" name="gender" type="radio" value="male" {{ selected($user->gender, 'male', 'radio') }}>Male
+                        <input class="input-radio" id="male" name="gender" type="radio" value="male" @checked($user->gender == 'male')>Male
                     </label>
                     <label class="radio-label" for="female">
-                        <input class="input-radio" id="female" name="gender" type="radio" value="female" {{ selected($user->gender, 'female', 'radio') }}>Female
+                        <input class="input-radio" id="female" name="gender" type="radio" value="female" @checked($user->gender == 'female')>Female
                     </label>
                 </div>
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
                     <label class="item-title" for="user-role">role:</label>
-                    <select class="form-select" id="user-role" name="user_role">
+                    <select class="form-select" id="user-role" name="role_id">
 						@foreach ( $roles as $role )
-							<option value="{{ $role->id }}" {{ selected($user->role_id, $role->id, 'select') }}>{{ $role->title }}</option>
+							<option value="{{ $role->id }}" @selected($user->role_id == $role->id)>{{ $role->title }}</option>
 						@endforeach
                     </select>
                 </div>
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
                     <label class="item-title" for="user-status">status:</label>
-                    <select class="form-select" id="user-status" name="user_status">
-                        <option value="not_verified" {{ selected($user->status, 'not_verified', 'select') }}>not verified</option>
-                        <option value="verified" {{ selected($user->status, 'verified', 'select') }}>verified</option>
-                        <option value="blocked" {{ selected($user->status, 'blocked', 'select') }}>blocked</option>
+                    <select class="form-select" id="user-status" name="status">
+                        <option value="not_verified" @selected($user->status == 'not_verified')>not verified</option>
+                        <option value="verified" @selected($user->status == 'verified')>verified</option>
+                        <option value="blocked" @selected($user->status == 'blocked')>blocked</option>
                     </select>
                 </div>
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
                     <label class="item-title" for="user-language">language:</label>
-                    <select class="form-select" id="user-language" name="user_language">
-                        <option value="en" {{ selected($user->language, 'en', 'select') }}>English</option>
-                        <option value="ar" {{ selected($user->language, 'ar', 'select') }}>Arabic</option>
-                        <option value="fr" {{ selected($user->language, 'fr', 'select') }}>French</option>
+                    <select class="form-select" id="user-language" name="language">
+                        <option value="en" @selected($user->language == 'en')>English</option>
+                        <option value="ar" @selected($user->language == 'ar')>Arabic</option>
+                        <option value="fr" @selected($user->language == 'fr')>French</option>
                     </select>
                 </div>
                 <div class="form-item second d-flex mt-3 flex-wrap flex-sm-nowrap">
-                    <div class="item-title">
+                    <div class="item-title d-block mb-2">
                         <label class="item-title mb-2" for="profile-picture">Profile Picture:</label>
+						<small>{{ __("The Recommended Dimensions Is:\n500 X 500 (PX)") }}</small>
                     </div>
-                    <div class="item-content"><a class="btn regular-btn gallery-btn" href="javascript:void(0)"
-                            style="width: 150px">Change Image</a>
-                        <div class="selected-img">
-                            <div class="img-holder mt-3"><img class="preview"
-                                    src="{{ asset('images/customers/image-1.png') }}" width="70"><span
-                                    class="overlay"><i class="fi-rr-trash">
-                                    </i><span>remove</span></span></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="main-box box-spaces">
-                <div class="form-item primary">
-                    <h2 class="box-title item-title">Change Password</h2>
-                    <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
-                        <label class="item-title" for="current-password">current password:</label>
-                        <div class="with-icon">
-                            <input class="form-control" id="current-password" name="current_password" type="password"
-                                autocomplete="off">
-                            <span class="show-pass"><i class="fi-rr-eye"> </i></span>
-                        </div>
-                    </div>
-                    <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
-                        <label class="item-title" for="new-password">new password:</label>
-                        <div class="with-icon">
-                            <input class="form-control" id="password" name="password" type="password">
-                            <span class="show-pass"><i class="fi-rr-eye"> </i></span>
-                        </div>
-                        <button class="btn regular-btn ms-sm-3 mt-2 mt-sm-0 text-nowrap generate-password"
-                            type="button">generate</button>
-                    </div>
-                    <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
-                        <label class="item-title" for="confirm-password">confirm password:</label>
-                        <div class="with-icon">
-                            <input class="form-control" id="confirm-password" name="password_confirmation" type="password">
-                            <span class="show-pass"><i class="fi-rr-eye"> </i></span>
-                        </div>
-                    </div>
+                    @if ($user->profile_picture)
+						<div class="item-content">
+							<label for="pp" class="btn regular-btn" style="width: 150px">
+								Change Image
+								<input type="file" name="profile_picture" id="pp" accept=".jpg, .jpeg, .png" style="display: none">
+								<input id="remove_pp" type="hidden" name="remove_pp">
+							</label>
+							<div class="selected-img">
+								<div class="img-holder mt-3">
+									<img class="preview" src="{{ URL::asset('uploads/'. $user->profile_picture) }}" width="70">
+									<span class="overlay"><i class="fi-rr-trash"> </i><span>remove</span></span>
+								</div>
+							</div>
+						</div>
+					@else
+						<div class="item-content">
+							<label for="pp" class="btn regular-btn" style="width: 150px">
+								Upload Image
+								<input type="file" name="profile_picture" id="pp" accept=".jpg, .jpeg, .png" style="display: none">
+								<input id="remove_pp" type="hidden" name="remove_pp">
+							</label>
+							<div class="selected-img" style="display: none">
+								<div class="img-holder mt-3">
+									<img class="preview" width="70">
+									<span class="overlay"><i class="fi-rr-trash"> </i><span>remove</span></span>
+								</div>
+							</div>
+						</div>
+					@endif
                 </div>
             </div>
         </div>
         <div class="col-sm-6 col-lg-3 float-end meta-box">
             <div class="main-box box-spaces">
                 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-                    <label class="item-title meta-title">Registered At:</label><span class="ms-2">{{ format_date($user->created_at) }}</span>
+                    <label class="item-title meta-title">Registered At:</label><span
+                        class="ms-2">{{ format_date($user->created_at) }}</span>
                 </div>
                 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-                    <label class="item-title meta-title">updated at:</label><span class="ms-2">{{ format_date($user->updated_at) }}</span>
+                    <label class="item-title meta-title">updated at:</label><span
+                        class="ms-2">{{ format_date($user->updated_at) }}</span>
                 </div>
                 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-                    <label class="item-title meta-title">Last Logged In:</label><span class="ms-2">26/03/2021
-                        14:58</span>
+                    <label class="item-title meta-title">Last Logged In:</label><span class="ms-2">@isset($sessions) {{ end($sessions)->last_active_formated }} @endisset</span>
                 </div>
                 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-                    <label class="item-title meta-title">Device:</label><span class="ms-2">Samsung Galaxy S20</span>
+                    <label class="item-title meta-title">Device:</label><span class="ms-2">@isset($sessions) {{ ucfirst($sessions[0]->agent->device) }} @endisset</span>
                 </div>
                 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-                    <label class="item-title meta-title">iP Address:</label><span class="ms-2">216.58.217.164</span>
+                    <label class="item-title meta-title">iP Address:</label><span class="ms-2">@isset($sessions) {{ $sessions[0]->ip_address }} @endisset</span>
                 </div>
                 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-                    <label class="item-title meta-title">iP Country:</label><span class="ms-2">United State</span>
+                    <label class="item-title meta-title">iP Country:</label><span class="ms-2">@isset($sessions) {{ $sessions[0]->country }} @endisset</span>
                 </div>
                 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-                    <label class="item-title meta-title">iP City:</label><span class="ms-2">New York</span>
+                    <label class="item-title meta-title">iP City:</label><span class="ms-2">@isset($sessions) {{ $sessions[0]->city }} @endisset</span>
                 </div>
                 <div class="btns-holder d-flex justify-content-between mt-4">
                     <a class="btn trans-btn w-100 text-start delete" data-post-type="user"><span
@@ -162,69 +156,6 @@
         <div class="col-sm-12 col-lg-9 float-start post-box">
             <div class="main-box box-spaces">
                 <div class="form-item primary">
-                    <h2 class="box-title item-title">Two Factor Authentication</h2>
-                    <div class="form-item second d-flex mt-3 flex-wrap flex-sm-nowrap">
-                        <div class="item-title">
-                            <label class="item-title mb-2">status:</label>
-                        </div>
-                        <div class="item-content">
-                            @if (!$user->two_factor_secret)
-                                <p class="mb-0">2FA Is Disabled</p>
-								<small>{{ __('When two factor authentication is enabled, you will be prompted for a secure, random token during authentication. You may retrieve this token from your phone\'s Google Authenticator application.') }}</small><br>
-                                <form method="POST" action="{{ url('user/two-factor-authentication') }}">
-                                    @csrf
-                                    <button class="btn regular-btn mt-2 text-nowrap" type="submit">{{ __('Enable') }}</button>
-                                </form>
-                            @else
-                                <p class="mb-0">You have enabled 2FA.</p>
-                                <small>{{ __('When two factor authentication is enabled, you will be prompted for a secure, random token during authentication. You may retrieve this token from your phone\'s Google Authenticator application.') }}</small><br>
-
-                                @if (session('status') == 'two-factor-authentication-enabled' || !$user->two_factor_confirmed_at)
-									<br>
-									<small>{{ __('To finish enabling two factor authentication, scan the following QR code using your phone\'s authenticator application or enter the setup key and provide the generated OTP code') }}</small><br>
-									<br>
-									{!! $user->twoFactorQrCodeSvg() !!}
-									<br>
-									<br>
-									<p class="mb-0">
-										{{ __('Setup Key') }}: {{ decrypt($user->two_factor_secret) }}
-									</p>
-									<form id="create-two-factor-authentication" method="POST" action="{{ route('two-factor.confirm') }}">
-										@csrf
-										<div class="form-item second mt-3">
-											<input class="form-control" name="code" type="text" required>
-										</div>
-									</form>
-									<button class="btn solid-btn mt-3 me-2 text-nowrap" form="create-two-factor-authentication" type="submit">Confirm</button>
-									<button class="btn trans-btn mt-3 text-nowrap" form="delete-two-factor-authentication" type="submit">Cancle</button>
-                                @endif
-
-                                <div class="recovery-codes-wrapper">
-                                </div>
-
-                                <div class="d-flex justify-content-between">
-									@if ( $user->two_factor_confirmed_at )
-										<button
-											id="show-recovery-codes"
-											class="btn regular-btn me-3 text-nowrap w-100"
-											type="button">Show Recovery Codes</button>
-
-											<button class="btn solid-btn solid-danger-btn text-nowrap" form="delete-two-factor-authentication" type="submit">Disable</button>
-									@endif
-                                </div>
-								<form id="delete-two-factor-authentication" method="POST" action="{{ url('user/two-factor-authentication') }}" style="display: none">
-									@csrf
-									@method('DELETE')
-								</form>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-12 col-lg-9 float-start post-box">
-            <div class="main-box box-spaces">
-                <div class="form-item primary">
                     <h2 class="box-title item-title">Browser Sessions</h2>
                     <div class="form-item second d-flex mt-3 flex-wrap flex-sm-nowrap"><small>If necessary, you may log out of all of your other browser sessions across all of your devices. Some of your recent sessions are listed below; however, this list may not be exhaustive. If you feel your account has been compromised, you should also update your password.</small></div>
                     <div class="form-item second d-flex mt-3 flex-wrap flex-sm-nowrap">
@@ -232,27 +163,37 @@
                             <label class="item-title mb-2">Active Sessions:</label>
                         </div>
                         <div class="item-content">
-                            <div class="sessions-list">
-                                <div class="session-item">
-                                    <div class="icon"> <i class="fi-rr-computer"> </i>
-                                    </div>
-                                    <div class="details">
-                                        <div class="browser">Windows - Chrome</div>
-                                        <div class="status"><span class="ip">127.0.0.1,</span><span
-                                                class="login this">This device</span></div>
-                                    </div>
-                                </div>
-                                <div class="session-item">
-                                    <div class="icon"> <i class="fi-rr-smartphone"> </i>
-                                    </div>
-                                    <div class="details">
-                                        <div class="browser">AndroidOS - Chrome</div>
-                                        <div class="status"><span class="ip">127.0.0.1,</span><span
-                                                class="login">Last active 15 seconds ago</span></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <button class="btn solid-btn mt-3" type="button">Log Out Other Browser Sessions </button>
+                            @if ( $sessions !== null && is_array($sessions) && count($sessions) > 0)
+								<div class="sessions-list">
+									<!-- Other Browser Sessions -->
+									@foreach ($sessions as $session)
+										<div class="session-item">
+											<div class="icon">
+												@if ($session->agent->is_desktop)
+													<i class="fi-rr-computer"> </i>
+												@else
+													<i class="fi-rr-smartphone"> </i>
+												@endif
+											</div>
+											<div class="details">
+												<div class="browser">{{ $session->agent->platform ? $session->agent->platform : 'Unknown' }} - {{ $session->agent->browser ? $session->agent->browser : 'Unknown' }}</div>
+												<div class="status">
+													<span class="ip">{{ $session->ip_address }},</span>
+													<span class="login @if($session->is_current_device) this @endif">
+														@if ($session->is_current_device)
+															{{ __('This device') }}
+														@else
+															{{ __('Last active') }} {{ $session->last_active }}
+														@endif
+													</span>
+												</div>
+											</div>
+										</div>
+									@endforeach
+								</div>
+							@else
+								<p class="mb-0">{{ __('The user has not yet logged into his account') }}</p>
+							@endif
                         </div>
                     </div>
                 </div>
@@ -374,39 +315,118 @@
             }, 'colvis']
         });
 
+		// upload image
+		$('#pp').on('change', function () {
+			var output = $('.selected-img'),
+				file = this.files[0],
+				src = URL.createObjectURL(file);
+
+			output.find('.preview').attr('src', src);
+			output.find('.img-holder').append('<span class="overlay added" style="opacity:1;padding-top:0;color:#FFF;display: flex;justify-content: center;align-items: center;"><i class="rotate fi-rr-spinner" style="color:#FFF;margin: 0;width: 20px;height: 20px;transform-origin: center;text-align: center;line-height: 26px;"></i></span>');
+			output.show(500);
+			$('#remove_pp').val('');
+			setTimeout(() => {
+				output.find('.img-holder').find('.added').fadeOut('100');
+			}, 1500);
+		});
+
+		// remove image
+		$('.overlay').on('click', function() {
+			var output = $('.selected-img');
+			$('#pp').val('');
+			$('#remove_pp').val(true);
+			output.hide(500);
+			output.find('.added').remove();
+			output.find('.preview').removeAttr('src');
+
+		});
+
         // form Ajax Request
         $('form#edit-user').on('submit', function(e) {
             e.preventDefault();
-            var data = $(this).serialize();
-            // var data = $('#user-language').val();
-            $.ajax({
-                type: 'PUT',
-                url: "{{ route('users.update', $user->id) }}",
-                headers: {
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                },
-                data: data,
-                success: function(res) {
-                    if (res.success) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: res.success,
-                            showConfirmButton: true,
-                            confirmButtonColor: 'var(--main-color)',
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            html: '<div class="alerts danger"><ul class="list" style="text-align: start">' +
-                                Object.keys(res.errors).map(k => '<li class="content">' + res
-                                    .errors[k] + '</li>').join('') + '</ul></div>',
-                            showConfirmButton: true,
-                            confirmButtonColor: 'var(--main-color)',
-                        });
-                    }
-                }
-            });
+
+			var callAjax = false,
+				fileInputElement = document.getElementById("pp");
+
+			if ( fileInputElement.files.length !== 0 ) {
+
+				var fileName = fileInputElement.files[0].name,
+					fileSize = fileInputElement.files[0].size / 1024, // File In KB
+					fileType = fileInputElement.files[0].type,
+					allowTypes = new Array('image/jpeg', 'image/png', 'image/jpg');
+
+					if ($.inArray(fileType, allowTypes) !== -1) {
+						callAjax = true;
+						if (fileSize < 1024) {
+							callAjax = true;
+						} else {
+							Swal.fire({
+								icon: 'error',
+								title: 'Oops...',
+								html: "<div class='alerts danger'><ul class='list' style='text-align: start'><li class='content'>{{ __('The image size is more than 1 MB! Please choose another picture') }}</li></ul></div>",
+								showConfirmButton: true,
+								confirmButtonColor: 'var(--main-color)',
+							});
+							callAjax = false;
+						}
+					} else {
+						Swal.fire({
+							icon: 'error',
+							title: 'Oops...',
+							html: "<div class='alerts danger'><ul class='list' style='text-align: start'><li class='content'>{{ __('Please select an image in the format: JPEG, JPG, PNG') }}</li></ul></div>",
+							showConfirmButton: true,
+							confirmButtonColor: 'var(--main-color)',
+						});
+						callAjax = false;
+					}
+
+			} else {
+				callAjax = true;
+			}
+
+			if ( callAjax ) {
+				var formData = new FormData(this);
+				$.ajax({
+					headers: {
+						"X-CSRF-TOKEN": "{{ csrf_token() }}",
+					},
+					type: 'POST',
+					url: "{{ route('users.update', $user->id) }}",
+					data: formData,
+					processData: false,
+					contentType: false,
+					cache: false,
+					success: function(res) {
+						if (res.success) {
+							Swal.fire({
+								icon: 'success',
+								title: res.success,
+								showConfirmButton: true,
+								confirmButtonColor: 'var(--main-color)',
+							});
+						} else {
+							Swal.fire({
+								icon: 'error',
+								title: 'Oops...',
+								html: '<div class="alerts danger"><ul class="list" style="text-align: start">' +
+									Object.keys(res.errors).map(k => '<li class="content">' + res.errors[k] + '</li>').join('') + '</ul></div>',
+								showConfirmButton: true,
+								confirmButtonColor: 'var(--main-color)',
+							});
+						}
+					},
+					error: function(res) {
+						Swal.fire({
+							icon: 'error',
+							title: 'Oops...',
+							html: '<div class="alerts danger"><ul class="list" style="text-align: start">' +
+								Object.keys(res.responseJSON.errors).map(k => '<li class="content">' + res.responseJSON.errors[k] + '</li>').join('') + '</ul></div>',
+							showConfirmButton: true,
+							confirmButtonColor: 'var(--main-color)',
+						});
+					}
+				});
+			}
         });
 
 		// Delete Role

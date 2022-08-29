@@ -2,10 +2,12 @@
 
 namespace App\Actions\Fortify;
 
+use App\Models\Role;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\File;
+use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 
 class CreateNewUser implements CreatesNewUsers
@@ -20,8 +22,9 @@ class CreateNewUser implements CreatesNewUsers
      */
     public function create(array $input)
     {
-        Validator::make($input, [
-            'name' => ['required', 'string', 'max:255'],
+		Validator::make($input, [
+            'first_name' => ['required', 'string', 'max:255'],
+			'last_name'	=> ['required', 'string', 'max:255'],
             'email' => [
                 'required',
                 'string',
@@ -30,12 +33,34 @@ class CreateNewUser implements CreatesNewUsers
                 Rule::unique(User::class),
             ],
             'password' => $this->passwordRules(),
+			'mobile' => ['nullable', 'numeric', 'digits_between:9,15'],
+			'birth_date' => [
+				'nullable',
+				'date',
+				'date_format:Y-m-d',
+				'before_or_equal:' . date("Y-m-d", strtotime('-18 years'))
+			],
+			'gender' => ['required',Rule::in(['male', 'female'])],
+			'role_id' => ['required','numeric', Rule::exists(Role::class, 'id')],
+			'language' => ['required','string'],
+			'profile_picture' => [
+				'nullable',
+			],
         ])->validate();
 
+		// dd($input);
+
         return User::create([
-            'name' => $input['name'],
+            'first_name' => $input['first_name'],
+            'last_name' => $input['last_name'],
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
+            'mobile' => $input['mobile'],
+            'birth_date' => $input['birth_date'],
+            'gender' => $input['gender'],
+            'role_id' => $input['role_id'],
+            'language' => $input['language'],
+            'profile_picture' => $input['profile_picture'],
         ]);
     }
 }
