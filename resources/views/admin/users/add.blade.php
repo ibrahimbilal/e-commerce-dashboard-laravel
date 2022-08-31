@@ -2,19 +2,19 @@
 
 @section('title', 'Edit User')
 
-@section('stylesheet')
-    <!-- Data Tables -->
-    <link href="{{ asset('css/datatables.min.css') }}" rel="stylesheet">
+@push('stylesheet')
     <!-- Date Picker-->
     <link href="{{ asset('css/pickadate.css') }}" rel="stylesheet">
-@endsection
+	<!-- Sweet Alert 2 -->
+	<link href="{{ asset('css/sweetalert2.min.css') }}" rel="stylesheet">
+@endpush
 
 @section('content')
     @php
     // breadcrumbs params
     $params = [
-        'page_title' => 'Add User',
-        'breadcrumbs_items' => [['title' => 'users', 'route_name' => 'users.index'], ['title' => 'add']],
+        'page_title' => __('admin.menu.users.add'),
+        'breadcrumbs_items' => [['title' => __('admin.menu.users.title'), 'route_name' => 'users.index'], ['title' => __('admin.menu.users.add')]],
     ];
     @endphp
     @include('admin.inc.page_title', $params)
@@ -121,9 +121,9 @@
     </form>
 @endsection
 
-@section('scripts')
+@push('scripts')
     <!-- Sweet Alert -->
-    <script src="{{ asset('js/sweetalert2.all.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/sweetalert2.min.js') }}" type="text/javascript"></script>
     <!-- Date Picker-->
     <script src="{{ asset('js/pickadate/picker.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/pickadate/picker.date.js') }}" type="text/javascript"></script>
@@ -159,6 +159,13 @@
         $('form#add-user').on('submit', function(e) {
             e.preventDefault();
 
+			let SwalOptions = {
+				showConfirmButton: true,
+				confirmButtonColor: 'var(--main-color)',
+				confirmButtonText: "{{ __('alerts.btn_text') }}",
+				scrollbarPadding: false,
+			};
+
 			var callAjax = false,
 				fileInputElement = document.getElementById("pp");
 
@@ -175,21 +182,27 @@
 							callAjax = true;
 						} else {
 							Swal.fire({
+								...SwalOptions,
 								icon: 'error',
-								title: 'Oops...',
-								html: "<div class='alerts danger'><ul class='list' style='text-align: start'><li class='content'>{{ __('The image size is more than 1 MB! Please choose another picture') }}</li></ul></div>",
-								showConfirmButton: true,
-								confirmButtonColor: 'var(--main-color)',
+								titleText: "{{ __('alerts.ops') }}",
+								html: ["<div class='alerts danger'>",
+										"<ul class='list' style='text-align: start'>",
+										"<li class='content'>{{ __('alerts.users.request.image_size') }}</li>",
+										"</ul>",
+										"</div>",].join("\n")
 							});
 							callAjax = false;
 						}
 					} else {
 						Swal.fire({
+							...SwalOptions,
 							icon: 'error',
-							title: 'Oops...',
-							html: "<div class='alerts danger'><ul class='list' style='text-align: start'><li class='content'>{{ __('Please select an image in the format: JPEG, JPG, PNG') }}</li></ul></div>",
-							showConfirmButton: true,
-							confirmButtonColor: 'var(--main-color)',
+							titleText: "{{ __('alerts.ops') }}",
+							html: ["<div class='alerts danger'>",
+										"<ul class='list' style='text-align: start'>",
+										"<li class='content'>{{ __('alerts.users.request.image_type') }}</li>",
+										"</ul>",
+										"</div>",].join("\n")
 						});
 						callAjax = false;
 					}
@@ -212,8 +225,9 @@
 					cache: false,
 					beforeSend: function() {
 						Swal.fire({
-							title: "{{ __('Please Wait') }}",
-							text: "{{ __('The data you sent is being processed, please be patient!') }}",
+							...SwalOptions,
+							titleText: "{{ __('alerts.users.request.before_sent_title') }}",
+							text: "{{ __('alerts.users.request.before_sent_text') }}",
 							didOpen: () => {
 								Swal.showLoading()
 							}
@@ -222,37 +236,34 @@
 					success: function(res) {
 						if (res.success) {
 							Swal.fire({
+								...SwalOptions,
 								icon: 'success',
-								title: res.success,
-								showConfirmButton: true,
-								confirmButtonColor: 'var(--main-color)',
+								titleText: res.title,
 								willClose: () => {
 									window.location.replace(res.redirect);
 								}
 							});
 						} else {
 							Swal.fire({
+								...SwalOptions,
 								icon: 'error',
-								title: 'Oops...',
+								titleText: "{{ __('alerts.ops') }}",
 								html: '<div class="alerts danger"><ul class="list" style="text-align: start">' +
 									Object.keys(res.errors).map(k => '<li class="content">' + res.errors[k] + '</li>').join('') + '</ul></div>',
-								showConfirmButton: true,
-								confirmButtonColor: 'var(--main-color)',
 							});
 						}
 					},
 					error: function(res) {
 						Swal.fire({
+							...SwalOptions,
 							icon: 'error',
-							title: 'Oops...',
+							titleText: "{{ __('alerts.ops') }}",
 							html: '<div class="alerts danger"><ul class="list" style="text-align: start">' +
 								Object.keys(res.responseJSON.errors).map(k => '<li class="content">' + res.responseJSON.errors[k] + '</li>').join('') + '</ul></div>',
-							showConfirmButton: true,
-							confirmButtonColor: 'var(--main-color)',
 						});
 					}
 				});
 			}
         });
     </script>
-@endsection
+@endpush

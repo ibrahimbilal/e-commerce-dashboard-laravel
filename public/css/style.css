@@ -441,6 +441,10 @@ html.dark {
   flex: 1 1;
 }
 
+.text-bold {
+  font-weight: 600;
+}
+
 footer {
   grid-area: foot;
   font-size: 12px;
@@ -2883,19 +2887,19 @@ html {
 }
 
 body {
-  font-family: "Montserrat", sans-serif;
-  padding: 15px !important;
+  font-family: "Montserrat", "Noto Kufi Arabic", sans-serif;
+  padding: 15px;
   background-color: var(--body-background);
   color: var(--text-color);
 }
 @media (min-width: 576px) {
   body {
-    padding: 20px !important;
+    padding: 20px;
   }
 }
 @media (min-width: 992px) {
   body {
-    padding: 30px !important;
+    padding: 30px;
   }
 }
 @media (min-width: 992px) {

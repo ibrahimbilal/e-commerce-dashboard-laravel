@@ -201,6 +201,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        App\Providers\ViewServiceProvider::class,
+
 		App\Providers\FortifyServiceProvider::class,
 		Jenssegers\Agent\AgentServiceProvider::class,
 		Stevebauman\Location\LocationServiceProvider::class

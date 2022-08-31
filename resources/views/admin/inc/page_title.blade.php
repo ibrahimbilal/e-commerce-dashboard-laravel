@@ -5,7 +5,7 @@
             <div class="text-capitalize mb-2 mb-sm-0 d-flex justify-content-between align-items-center">
                 <h1 class="page-title">{{ $page_title }}</h1>
 				@if ( isset($add_route_name) )
-					<a class="add-btn btn text-capitalize" href="{{ route($add_route_name) }}"><span class="icon"><i class="fi-rr-add"> </i></span>add new</a>
+					<a class="add-btn btn text-capitalize" href="{{ route($add_route_name) }}"><span class="icon"><i class="fi-rr-add"> </i></span>{{ __('buttons.add_new') }}</a>
 				@endif
             </div>
             <!-- Breadcrumbs-->
@@ -16,11 +16,15 @@
                         href="{{ route('admin.index') }}">
                         <span class="icon">
                             <i class="fi-rr-apps"> </i>
-                        </span> dashboard
+                        </span> {{ __('admin.menu.dashboard') }}
                     </a>
                     <span class="angle">
                         <span class="icon">
-                            <i class="fi-rr-angle-double-right"></i>
+							@if (!is_rtl())
+								<i class="fi-rr-angle-double-right"></i>
+							@else
+								<i class="fi-rr-angle-double-left"></i>
+							@endif
                         </span>
                     </span>
                     {{-- Dynamic Items --}}
@@ -34,7 +38,15 @@
 							@else
 								<span class="item text-capitalize d-flex justify-content-between align-items-center">{{ array_to_object($item)->title }}</span>
 							@endif
-							<span class="angle"><span class="icon"><i class="fi-rr-angle-double-right"></i></span></span>
+							<span class="angle">
+								<span class="icon">
+									@if (!is_rtl())
+										<i class="fi-rr-angle-double-right"></i>
+									@else
+										<i class="fi-rr-angle-double-left"></i>
+									@endif
+								</span>
+							</span>
                         @else
                             <span class="item text-capitalize d-flex justify-content-between align-items-center">{{ array_to_object($item)->title }}</span>
 						@endif

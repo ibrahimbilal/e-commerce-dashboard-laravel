@@ -8,26 +8,40 @@
 			<span class="icon" id="search-btn"><i class="fi-rr-search"> </i></span>
 		</div>
         <form class="search-form d-none d-sm-block">
-            <input class="search-input" type="text" name="s" placeholder="Search Here..." autocomplete="off">
+            <input class="search-input" type="text" name="s" placeholder="{{ __('admin.header.search.placeholder') }}" autocomplete="off">
             <button class="submit" type="submit"><i class="fi-rr-search"> </i></button>
         </form>
     </div>
     <!-- Mobile Search Form-->
     <div class="mobile search-area align-items-center"><span class="close"><i class="fi-rr-cross"> </i></span>
         <form class="search-form d-flex">
-            <input class="search-input" type="text" name="s" placeholder="Search Here..." autocomplete="off">
+            <input class="search-input" type="text" name="s" placeholder="{{ __('admin.header.search.placeholder') }}" autocomplete="off">
             <button class="submit" type="submit"><i class="fi-rr-search"> </i></button>
         </form>
     </div>
     <div class="action-area flex-row-reverse d-flex justify-content-between align-items-center">
         <!-- Full Screen -->
-        <div class="action-item d-flex justify-content-between align-items-center d-none d-sm-flex"><span class="icon"
-                id="expand" tooltip="Full Screen" main-tooltip="Full Screen" alt-tooltip="Exit Full Screen"
-                flow="left"><i class="fi-rr-expand"> </i></span></div>
+        <div class="action-item d-flex justify-content-between align-items-center d-none d-sm-flex">
+			<span class="icon"
+					id="expand"
+					tooltip="{{ __('admin.header.tooltips.full_screen') }}"
+					main-tooltip="{{ __('admin.header.tooltips.full_screen') }}"
+					alt-tooltip="{{ __('admin.header.tooltips.exit_full_screen') }}"
+					flow="left">
+				<i class="fi-rr-expand"> </i>
+			</span>
+		</div>
         <!-- Theme Mode-->
-        <div class="action-item d-flex justify-content-between align-items-center"><span class="icon" id="theme-mode"
-                tooltip="Dark Mode" main-tooltip="Dark Mode" alt-tooltip="Light Mode" flow="left"><i
-                    class="fi-rr-moon-stars"> </i></span></div>
+        <div class="action-item d-flex justify-content-between align-items-center">
+			<span class="icon"
+				id="theme-mode"
+                tooltip="{{ __('admin.header.tooltips.dark_mode') }}"
+				main-tooltip="{{ __('admin.header.tooltips.dark_mode') }}"
+				alt-tooltip="{{ __('admin.header.tooltips.light_mode') }}"
+				flow="left">
+				<i class="fi-rr-moon-stars"> </i>
+			</span>
+		</div>
         <!-- Notifications Button-->
         <div class="action-item d-flex justify-content-between align-items-center relative"><span
                 class="icon header-btn" id="notify" data-window="#notify-window"><i class="fi-rr-bell"> </i><span
@@ -51,8 +65,8 @@
     <!-- Notifications-->
     <div class="float-window main-box" id="notify-window">
         <div class="win-head d-flex justify-content-between align-items-center">
-            <p class="head-title mb-0">Notifications</p><span class="icon mark-as-read"><i class="fi-rr-list-check">
-                </i></span>
+            <p class="head-title mb-0">{{ __('admin.header.notifications.title') }}</p>
+			<span class="icon mark-as-read" title="{{ __('admin.header.mark_all_read') }}"><i class="fi-rr-list-check"> </i></span>
         </div>
         <div class="win-body scrollbar">
             <ul class="notify-list p-0 m-0">
@@ -102,12 +116,13 @@
                 </li>
             </ul>
         </div>
-        <div class="win-footer"> <a class="view-all" href="#">View All</a></div>
+        <div class="win-footer"> <a class="view-all" href="#">{{ __('admin.header.view_all') }}</a></div>
     </div>
     <!-- Messages-->
     <div class="float-window main-box" id="messages-window">
         <div class="win-head d-flex justify-content-between align-items-center">
-            <p class="head-title mb-0">Messages</p><span class="icon mark-as-read"><i class="fi-rr-eye"> </i></span>
+            <p class="head-title mb-0">{{ __('admin.header.messages.title') }}</p>
+			<span class="icon mark-as-read" title="{{ __('admin.header.mark_all_read') }}"><i class="fi-rr-eye"> </i></span>
         </div>
         <div class="win-body scrollbar">
             <ul class="notify-list p-0 m-0">
@@ -129,19 +144,19 @@
                 </li>
             </ul>
         </div>
-        <div class="win-footer"> <a class="view-all" href="#">View All</a></div>
+        <div class="win-footer"> <a class="view-all" href="#">{{ __('admin.header.view_all') }}</a></div>
     </div>
     <!-- User Options-->
     <div class="float-window main-box user-window pb-3" id="user-window">
         <div class="win-body">
             <ul class="notify-list p-0 m-0">
                 <li class="notify-item d-flex align-items-center">
-					<a class="link" href="{{ route('users.profile') }}">My Account</a>
+					<a class="link" href="{{ route('users.profile') }}">{{ __('admin.header.profile') }}</a>
                 </li>
                 <li class="notify-item d-flex align-items-center">
 					<form action="{{route('logout')}}" method="POST">
 						@csrf
-						<button class="btn text-start trans-btn link" type="submit">Logout</button>
+						<button class="btn text-start trans-btn link" type="submit">{{ __('admin.header.logout') }}</button>
 					</form>
 				</li>
             </ul>

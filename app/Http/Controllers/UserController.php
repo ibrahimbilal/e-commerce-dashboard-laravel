@@ -16,6 +16,7 @@ use App\Http\Requests\UpdateUserRequest;
 use Stevebauman\Location\Facades\Location;
 use Laravel\Fortify\Actions\ConfirmPassword;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
+use Laravel\Fortify\Actions\GenerateNewRecoveryCodes;
 
 class UserController extends Controller
 {
@@ -26,10 +27,22 @@ class UserController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function index()
+	public function index(Request $request)
 	{
 		$users = User::all();
-		return view('admin.users.list', compact('users'));
+		$trashed = User::onlyTrashed()->get();
+		$roles = Role::all();
+		$results = $users;
+
+		if ( isset($request->role) ) {
+			$results = User::where('role_id', $request->role)->get();
+		}
+
+		if ( isset($request->trashed) ) {
+			$results = $trashed;
+		}
+
+		return view('admin.users.list', compact('users', 'trashed', 'results', 'roles'));
 	}
 
 	/**
@@ -52,8 +65,9 @@ class UserController extends Controller
 	public function store(NewUserRequest $request, CreatesNewUsers $creator)
 	{
 		// the request will validated by 'NewUserRequest' class
-		// try {
+		try {
 
+			// upload image and return path if upload success
 			if ( $request->hasFile('profile_picture') ) {
 				$file_path = $this->uploadFile($request, 'profile_picture', 'users', 'public');
 				$request->request->remove('profile_picture');
@@ -62,23 +76,22 @@ class UserController extends Controller
 				$request->merge(['profile_picture' => null]);
 			}
 
-			// dd($file_path);
-			// dd($request->validated());
-			// dd($request->request->all());
-
+			// send data to 'Fortify' Register method
 			$user = $creator->create($request->request->all());
 
+			// send verify email
 			event(new Registered($user));
 
 			return response()->json([
-				'success' => 'user successfully Created',
+				'success' => true,
+				'text' => __('alerts.users.response.create'),
 				'redirect' => route('users.index')
 			]);
-		// } catch (\Exception $ex) {
-		// 	return response()->json([
-		// 		'errors' => ['There Is Error!']
-		// 	]);
-		// }
+		} catch (\Exception $ex) {
+			return response()->json([
+				'errors' => [__('alerts.users.response.errors.unknown')]
+			]);
+		}
 	}
 
 	/**
@@ -122,7 +135,7 @@ class UserController extends Controller
 		$sessions = array_to_object($this->sessions($request, $id)->all());
 
 		if (!$user) {
-			return redirect()->route('users.index')->with(['error' => 'The User Dose Not Exist!']);
+			return response()->json(['errors' => [__('alerts.users.response.errors.not_exist')]]);
 		}
 
 		// redirect to profile page if logged in user need to edit his account
@@ -144,19 +157,23 @@ class UserController extends Controller
 	{
 		// the request will validated by 'UpdateUserRequest' class
 		try {
+			$logged_in_user_id = Auth::user()->id;
+
 			// redirect if user dose not exist
 			$user = User::find($id);
 			if (!$user) {
 				return response()->json([
-					'errors' => ['The User Dose Not Exist!']
+					'errors' => [__('alerts.users.response.errors.not_exist')]
 				]);
 			}
 
 			// change application language
 			if ( $request->has('language') ) {
-				$locale = $request->input('language');
-				session()->put('locale', $locale);
-				app()->setLocale($locale);
+				if ( $logged_in_user_id == $id ) {
+					$locale = $request->get('language');
+					session()->put('locale', $locale);
+					app()->setLocale($locale);
+				}
 			}
 
 			// make accoount unverified when change it's status to not_verified
@@ -206,11 +223,14 @@ class UserController extends Controller
 				);
 			}
 
-			return response()->json(['success' => 'Data successfully updated!']);
+			return response()->json([
+				'success' => true,
+				'text' => __('alerts.users.response.update')
+			]);
 
 		} catch (\Exception $ex) {
 			return response()->json([
-				'errors' => ['There Is Error!']
+				'errors' => [__('alerts.users.response.errors.unknown')]
 			]);
 		}
 	}
@@ -224,39 +244,85 @@ class UserController extends Controller
 	public function destroy($id)
 	{
 		try {
+			$logged_in_user_id = Auth::user()->id;
+
+			if ( $logged_in_user_id == $id ) {
+				return response()->json(['errors' => [__('alerts.users.response.errors.not_allowed')]]);
+			}
 
 			$user = User::find($id);
 			if (!$user) {
-				return response()->json(['error' => 'The User Dose Not Exist!']);
+				return response()->json(['errors' => [__('alerts.users.response.errors.not_exist')]]);
 			}
 
 			$user->delete();
 			return response()->json([
-				'success' => 'The User successfully deleted!',
+				'success' => true,
+				'title' => __('alerts.users.response.delete.title'),
+				'text' => __('alerts.users.response.delete.text'),
 				'redirect' => route('users.index')
 			]);
 		} catch (\Exception $ex) {
-			return redirect()->route('users.index')->with(['error' => 'There Is Error!']);
+			return redirect()->route('users.index')->with(['errors' => [__('alerts.users.response.errors.unknown')]]);
 		}
 	}
 
 
 	/**
+	 * Restore the specified resource from trash.
+	 *
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function restore($id) {
+		try {
+			$user = User::onlyTrashed()->where('id', $id);
+
+			if (!$user) {
+				return response()->json(['errors' => [__('alerts.users.response.errors.not_exist')]]);
+			}
+
+			$user->restore();
+			return response()->json([
+				'success' => true,
+				'title' => __('alerts.users.response.restore.title'),
+				'text' => __('alerts.users.response.restore.text'),
+			]);
+		} catch (\Exception $ex) {
+			return redirect()->route('users.index')->with(['errors' => [__('alerts.users.response.errors.unknown')]]);
+		}
+	}
+
+	/**
 	 * show recovery codes
 	 * @param int $user_id
 	 */
-	public function show_codes($user_id)
+	public function show_codes(Request $request)
 	{
-		$user = User::find($user_id);
-		if (!$user) {
-			return redirect()->route('users.index')->with(['error' => 'The User Dose Not Exist!']);
-		}
-
-		$notify = __('Store these recovery codes in a secure password manager. They can be used to recover access to your account if your two factor authentication device is lost.');
+		$user = $request->user();
+		$notify = __('admin.pages.users.two_factor.recovery_codes_notify');
 		$recovery_codes = json_decode(decrypt($user->two_factor_recovery_codes, true));
 
 		return response()->json([
 			'notify' => $notify,
+			'codes' =>  $recovery_codes
+		]);
+	}
+
+
+	/**
+	 * regenerate recovery codes
+	 * @param int $user_id
+	 */
+	public function regenerate_codes(Request $request, GenerateNewRecoveryCodes $generate)
+	{
+		// regenerate recovery codes
+		$generate($request->user());
+
+		// get new recovery codes
+		$recovery_codes = json_decode(decrypt($request->user()->two_factor_recovery_codes, true));
+
+		return response()->json([
 			'codes' =>  $recovery_codes
 		]);
 	}
@@ -269,8 +335,7 @@ class UserController extends Controller
 	 * @param int $id
 	 * @return \Illuminate\Support\Collection
 	 */
-	public function sessions(Request $request, $id = null)
-	{
+	public function sessions(Request $request, $id = null) {
 		if (config('session.driver') !== 'database') {
 			return collect();
 		}
@@ -294,8 +359,8 @@ class UserController extends Controller
 				'is_current_device' => !$id ? ($session->id === $request->session()->getId()) : false,
 				'last_active' => Carbon::createFromTimestamp($session->last_activity)->diffForHumans(),
 				'last_active_formated' => Carbon::createFromTimestamp($session->last_activity)->format('d/m/Y H:i'),
-				'country' => $location && !is_null($location->countryName) ? $location->countryName : __('Unknown'),
-				'city' => $location && !is_null($location->cityName) ? $location->cityName : __('Unknown'),
+				'country' => $location && !is_null($location->countryName) ? $location->countryName : __('admin.unknown'),
+				'city' => $location && !is_null($location->cityName) ? $location->cityName : __('admin.unknown'),
 			];
 		});
 
@@ -304,17 +369,17 @@ class UserController extends Controller
 				[
 					[
 						'agent' => [
-							'is_desktop' => __('Unknown'),
-							'platform' => __('Unknown'),
-							'browser' => __('Unknown'),
-							'device' => __('Unknown'),
+							'is_desktop' => __('admin.unknown'),
+							'platform' => __('admin.unknown'),
+							'browser' => __('admin.unknown'),
+							'device' => __('admin.unknown'),
 						],
-						'ip_address' => __('Unknown'),
+						'ip_address' => __('admin.unknown'),
 						'is_current_device' => false,
-						'last_active' => __('Unknown'),
-						'last_active_formated' => __('Unknown'),
-						'country' => __('Unknown'),
-						'city' => __('Unknown'),
+						'last_active' => __('admin.unknown'),
+						'last_active_formated' => __('admin.unknown'),
+						'country' => __('admin.unknown'),
+						'city' => __('admin.unknown'),
 					]
 				]
 			);
@@ -329,8 +394,7 @@ class UserController extends Controller
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
-	public function logoutSessions(Request $request)
-	{
+	public function logoutSessions(Request $request) {
 		// check if password is currect
 		$confirmed = app(ConfirmPassword::class)(
 			Auth::guard('web'),
@@ -339,7 +403,7 @@ class UserController extends Controller
 		);
 
 		if (!$confirmed) {
-			return redirect()->back()->with(['error' => __('The given password does not match the current password!')]);
+			return redirect()->back()->with(['error' => __('alerts.users.response.confirm_password')]);
 		}
 
 		// logout from other devices
@@ -349,7 +413,7 @@ class UserController extends Controller
 		$this->deleteOtherSessionRecords($request);
 
 		// redirect
-		return back(303)->with(['success' => __('Logged out from other devices successfuly')]);
+		return back(303)->with(['success' => __('alerts.users.response.logout_other_devices')]);
 	}
 
 	/**

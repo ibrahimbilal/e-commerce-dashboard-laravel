@@ -27,5 +27,7 @@ if (localStorage.getItem("collapse_menu") != null) {
 
 // Add RTL To Swiper Slider Automatically
 if (document.dir == "rtl") {
-    document.getElementsByClassName("swiper-container")[0].setAttribute("dir", "rtl");
+	if ( document.getElementsByClassName("swiper-container").length > 0 ) {
+		document.getElementsByClassName("swiper-container")[0].setAttribute("dir", "rtl");
+	}
 }

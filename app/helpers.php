@@ -14,7 +14,7 @@ if (!function_exists('get_dashboard_menu')) {
 					"route_name" => 'admin.index',
 					"active_if" => ['admin.index'],
 					"icon" => 'apps',
-					"title" => 'dashboard',
+					"title" => __('admin.menu.dashboard'),
 					"has_submeu" => false,
 					"badge" => '',
 				]
@@ -24,19 +24,19 @@ if (!function_exists('get_dashboard_menu')) {
 					"route_name" => '',
 					"active_if" => ['products'],
 					"icon" => 'shopping-bag',
-					"title" => 'products',
+					"title" => __('admin.menu.products'),
 					"has_submeu" => true,
 					"badge" => '',
 					"submenu_items" => [
 						[
 							"route_name" => '',
 							"active_if" => ['products', 'attributes'],
-							"title" => 'attributes',
+							"title" => __('admin.menu.attributes'),
 						],
 						[
 							"route_name" => '',
 							"active_if" => ['products', 'reviews'],
-							"title" => 'reviews',
+							"title" => __('admin.menu.reviews'),
 						],
 					]
 				],
@@ -44,7 +44,7 @@ if (!function_exists('get_dashboard_menu')) {
 					"route_name" => '',
 					"active_if" => ['categories'],
 					"icon" => 'folder',
-					"title" => 'categories',
+					"title" => __('admin.menu.categories'),
 					"has_submeu" => false,
 					"badge" => '',
 				],
@@ -52,7 +52,7 @@ if (!function_exists('get_dashboard_menu')) {
 					"route_name" => '',
 					"active_if" => ['tags'],
 					"icon" => 'label',
-					"title" => 'tags',
+					"title" => __('admin.menu.tags'),
 					"has_submeu" => false,
 					"badge" => '',
 				],
@@ -60,7 +60,7 @@ if (!function_exists('get_dashboard_menu')) {
 					"route_name" => '',
 					"active_if" => ['discounts'],
 					"icon" => 'badge-percent',
-					"title" => 'discounts',
+					"title" => __('admin.menu.discounts'),
 					"has_submeu" => false,
 					"badge" => '',
 				],
@@ -70,7 +70,7 @@ if (!function_exists('get_dashboard_menu')) {
 					"route_name" => '',
 					"active_if" => ['customers'],
 					"icon" => 'users',
-					"title" => 'customers',
+					"title" => __('admin.menu.customers'),
 					"has_submeu" => false,
 					"badge" => '',
 				],
@@ -78,7 +78,7 @@ if (!function_exists('get_dashboard_menu')) {
 					"route_name" => '',
 					"active_if" => ['orders'],
 					"icon" => 'box',
-					"title" => 'orders',
+					"title" => __('admin.menu.orders'),
 					"has_submeu" => false,
 					"badge" => '35',
 				],
@@ -86,7 +86,7 @@ if (!function_exists('get_dashboard_menu')) {
 					"route_name" => '',
 					"active_if" => ['invoices'],
 					"icon" => 'document',
-					"title" => 'invoices',
+					"title" => __('admin.menu.invoices'),
 					"has_submeu" => false,
 					"badge" => '',
 				]
@@ -96,14 +96,14 @@ if (!function_exists('get_dashboard_menu')) {
 					"route_name" => '',
 					"active_if" => ['analytics'],
 					"icon" => 'stats',
-					"title" => 'analytics',
+					"title" => __('admin.menu.analytics.title'),
 					"has_submeu" => true,
 					"badge" => '',
 					"submenu_items" => [
 						[
 							"route_name" => '',
 							"active_if" => ['analytics', 'overview'],
-							"title" => 'overview',
+							"title" => __('admin.menu.analytics.0.overview'),
 						]
 					]
 				],
@@ -111,7 +111,7 @@ if (!function_exists('get_dashboard_menu')) {
 					"route_name" => '',
 					"active_if" => ['marketing'],
 					"icon" => 'megaphone',
-					"title" => 'marketing',
+					"title" => __('admin.menu.marketing'),
 					"has_submeu" => false,
 					"badge" => '',
 				]
@@ -121,7 +121,7 @@ if (!function_exists('get_dashboard_menu')) {
 					"route_name" => 'users.index',
 					"active_if" => ['users.index', 'users.create', 'users.edit', 'users.profile'],
 					"icon" => 'user',
-					"title" => 'users',
+					"title" => __('admin.menu.users.title'),
 					"has_submeu" => false,
 					"badge" => '',
 				],
@@ -129,7 +129,7 @@ if (!function_exists('get_dashboard_menu')) {
 					"route_name" => 'roles.index',
 					"active_if" => ['roles.index', 'roles.create', 'roles.edit'],
 					"icon" => 'key',
-					"title" => 'roles',
+					"title" => __('admin.menu.roles'),
 					"has_submeu" => false,
 					"badge" => '',
 				]
@@ -139,7 +139,7 @@ if (!function_exists('get_dashboard_menu')) {
 					"route_name" => '',
 					"active_if" => ['gallery'],
 					"icon" => 'picture',
-					"title" => 'gallery',
+					"title" => __('admin.menu.gallery'),
 					"has_submeu" => false,
 					"badge" => '',
 				],
@@ -147,7 +147,7 @@ if (!function_exists('get_dashboard_menu')) {
 					"route_name" => '',
 					"active_if" => ['languages'],
 					"icon" => 'world',
-					"title" => 'languages',
+					"title" => __('admin.menu.languages'),
 					"has_submeu" => false,
 					"badge" => '',
 				],
@@ -155,39 +155,39 @@ if (!function_exists('get_dashboard_menu')) {
 					"route_name" => '',
 					"active_if" => ['general-settings.index', 'theme_settings', 'store_settings', 'currencies_settings', 'emails_settings', 'payment_settings'],
 					"icon" => 'settings',
-					"title" => 'settings',
+					"title" => __('admin.menu.settings.title'),
 					"has_submeu" => true,
 					"badge" => '',
 					"submenu_items" => [
 						[
 							"route_name" => 'general-settings.index',
 							"active_if" => ['general-settings.index'],
-							"title" => 'general',
+							"title" => __('admin.menu.settings.0.general'),
 						],
 						[
 							"route_name" => '',
 							"active_if" => ['theme_settings'],
-							"title" => 'theme',
+							"title" => __('admin.menu.settings.0.theme'),
 						],
 						[
 							"route_name" => '',
 							"active_if" => ['store_settings'],
-							"title" => 'store',
+							"title" => __('admin.menu.settings.0.store'),
 						],
 						[
 							"route_name" => '',
 							"active_if" => ['currencies_settings'],
-							"title" => 'currencies',
+							"title" => __('admin.menu.settings.0.currencies'),
 						],
 						[
 							"route_name" => '',
 							"active_if" => ['emails_settings'],
-							"title" => 'emails',
+							"title" => __('admin.menu.settings.0.emails'),
 						],
 						[
 							"route_name" => '',
 							"active_if" => ['payment_settings'],
-							"title" => 'payment',
+							"title" => __('admin.menu.settings.0.payment'),
 						]
 					]
 				]
@@ -197,7 +197,7 @@ if (!function_exists('get_dashboard_menu')) {
 					"route_name" => '',
 					"active_if" => ['errors'],
 					"icon" => 'browser',
-					"title" => 'errors',
+					"title" => __('admin.menu.errors'),
 					"has_submeu" => true,
 					"badge" => '',
 					"submenu_items" => [
@@ -237,39 +237,39 @@ if (!function_exists('get_dashboard_menu')) {
 					"route_name" => '',
 					"active_if" => ['errors'],
 					"icon" => 'browser',
-					"title" => 'auth pages',
+					"title" => __('admin.menu.auth.title'),
 					"has_submeu" => true,
 					"badge" => '',
 					"submenu_items" => [
 						[
 							"route_name" => '',
 							"active_if" => ['login'],
-							"title" => 'login',
+							"title" => __('admin.menu.auth.0.login'),
 						],
 						[
 							"route_name" => '',
 							"active_if" => ['register'],
-							"title" => 'register',
+							"title" => __('admin.menu.auth.0.register'),
 						],
 						[
 							"route_name" => '',
 							"active_if" => ['forgot-password'],
-							"title" => 'forgot password',
+							"title" => __('admin.menu.auth.0.forgot_password'),
 						],
 						[
 							"route_name" => '',
 							"active_if" => ['reset-password'],
-							"title" => 'reset password',
+							"title" => __('admin.menu.auth.0.reset_password'),
 						],
 						[
 							"route_name" => '',
 							"active_if" => ['2fa-code'],
-							"title" => '2fa code',
+							"title" => __('admin.menu.auth.0.2fa_code'),
 						],
 						[
 							"route_name" => '',
 							"active_if" => ['2fa-recovery'],
-							"title" => '2fa recovery',
+							"title" => __('admin.menu.auth.0.2fa_recovery'),
 						]
 					]
 				]

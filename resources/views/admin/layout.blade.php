@@ -5,24 +5,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="_token" content="{{ csrf_token() }}">
 
     <!-- Icons -->
     <link rel="stylesheet" href="{{ asset('css/uicons-regular-rounded.css') }}">
 
-    @yield('stylesheet')
-
-	@php
-		$rtl = is_rtl() ? '.rtl' : ''
-	@endphp
+    @stack('stylesheet')
 
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="{{ asset("css/bs$rtl.min.css") }}">
+    <link rel="stylesheet" href="{{ asset('css/bs'.$rtl_ext.'.min.css') }}">
     <!-- Main Css File -->
-    <link rel="stylesheet" href="{{ asset("css/style$rtl.min.css") }}">
+    <link rel="stylesheet" href="{{ asset('css/style'.$rtl_ext.'.min.css') }}">
 
     <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap">
+	@if (!is_rtl())
+		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+	@else
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+	@endif
+
 
     <title>{{ config('app.name') }} | @yield('title', 'Admin Panel')</title>
 
@@ -54,8 +55,11 @@
     <!-- jQuery-->
     <script src="{{ asset('js/jquery.min.js') }}" type="text/javascript"></script>
 
-    @yield('scripts')
+    @stack('scripts')
 
+	@if ( in_array(Route::currentRouteName(), ['users.index']) )
+		@include('admin.inc.bulk-action.bulk_script')
+	@endif
     <!-- Main Site JS Script-->
     <script src="{{ asset('js/script.min.js') }}" type="text/javascript"></script>
 </body>

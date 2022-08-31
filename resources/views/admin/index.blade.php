@@ -2,7 +2,7 @@
 
 @section('title', 'Overview')
 
-@section('stylesheet')
+@push('stylesheet')
     <link rel="stylesheet" href="{{ asset('css/uicons-solid-rounded.css') }}">
 
     <!-- Swiper Slider -->
@@ -10,8 +10,8 @@
     <!-- Chart-->
     <link href="{{ asset('css/apexcharts.css') }}" rel="stylesheet">
     <!-- Data Tables-->
-    <link href="{{ asset('css/datatables.min.css') }}" rel="stylesheet">
-@endsection
+    <link href="{{ asset('css/datatables'.$rtl_ext.'.min.css') }}" rel="stylesheet">
+@endpush
 
 @section('content')
     <div class="slider-holder">
@@ -295,7 +295,7 @@
     </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
     <!-- Charts Script-->
     <script src="{{ asset('js/apexcharts.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/charts.js') }}" type="text/javascript"></script>
@@ -359,4 +359,4 @@
             }, 'colvis']
         });
     </script>
-@endsection
+@endpush

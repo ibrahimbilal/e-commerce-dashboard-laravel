@@ -2,19 +2,21 @@
 
 @section('title', 'Profile')
 
-@section('stylesheet')
+@push('stylesheet')
     <!-- Data Tables -->
     {{-- <link href="{{ asset('css/datatables.min.css') }}" rel="stylesheet"> --}}
     <!-- Date Picker-->
     <link href="{{ asset('css/pickadate.css') }}" rel="stylesheet">
-@endsection
+	<!-- Sweet Alert 2 -->
+	<link href="{{ asset('css/sweetalert2.min.css') }}" rel="stylesheet">
+@endpush
 
 @section('content')
     @php
     // breadcrumbs params
     $params = [
-        'page_title' => 'Profile',
-        'breadcrumbs_items' => [['title' => 'users', 'route_name' => 'users.index'], ['title' => 'profile']],
+        'page_title' => __('admin.menu.users.profile'),
+        'breadcrumbs_items' => [['title' => __('admin.menu.users.title'), 'route_name' => 'users.index'], ['title' => __('admin.menu.users.profile')]],
     ];
     @endphp
     @include('admin.inc.page_title', $params)
@@ -71,15 +73,6 @@
                         @endforeach
                     </select>
                 </div>
-                {{-- <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
-                    <label class="item-title" for="user-status">status:</label>
-                    <select class="form-select" id="user-status" name="status">
-                        <option value="not_verified" @selected($user->status == 'not_verified')>not verified
-                        </option>
-                        <option value="verified" @selected($user->status == 'verified')>verified</option>
-                        <option value="blocked" @selected($user->status == 'blocked')>blocked</option>
-                    </select>
-                </div> --}}
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
                     <label class="item-title" for="user-language">language:</label>
                     <select class="form-select" id="user-language" name="language">
@@ -158,30 +151,33 @@
         <div class="col-sm-6 col-lg-3 float-end meta-box">
             <div class="main-box box-spaces">
                 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-                    <label class="item-title meta-title">Registered At:</label><span
+                    <label class="item-title meta-title">{{ __('metas.registered_at') }}</label><span
                         class="ms-2">{{ format_date($user->created_at) }}</span>
                 </div>
                 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-                    <label class="item-title meta-title">updated at:</label><span
+                    <label class="item-title meta-title">{{ __('metas.updated_at') }}</label><span
                         class="ms-2">{{ format_date($user->updated_at) }}</span>
                 </div>
                 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-                    <label class="item-title meta-title">Last Logged In:</label><span class="ms-2">{{ end($sessions)->last_active_formated }}</span>
+                    <label class="item-title meta-title">{{ __('metas.last_login') }}</label><span class="ms-2">{{ end($sessions)->last_active_formated }}</span>
                 </div>
                 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-                    <label class="item-title meta-title">Device:</label><span class="ms-2">{{ ucfirst($sessions[0]->agent->device) }}</span>
+                    <label class="item-title meta-title">{{ __('metas.device') }}</label><span class="ms-2">{{ ucfirst($sessions[0]->agent->device) }}</span>
                 </div>
                 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-                    <label class="item-title meta-title">iP Address:</label><span class="ms-2">{{ $sessions[0]->ip_address }}</span>
+                    <label class="item-title meta-title">{{ __('metas.ip_address') }}</label><span class="ms-2">{{ $sessions[0]->ip_address }}</span>
                 </div>
                 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-                    <label class="item-title meta-title">iP Country:</label><span class="ms-2">{{ $sessions[0]->country }}</span>
+                    <label class="item-title meta-title">{{ __('metas.ip_country') }}</label><span class="ms-2">{{ $sessions[0]->country }}</span>
                 </div>
                 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-                    <label class="item-title meta-title">iP City:</label><span class="ms-2">{{ $sessions[0]->city }}</span>
+                    <label class="item-title meta-title">{{ __('metas.ip_city') }}</label><span class="ms-2">{{ $sessions[0]->city }}</span>
+                </div>
+                <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
+                    <label class="item-title meta-title">{{ __('metas.account_status.title') }}</label><span class="ms-2">{{ Str::ucfirst(__('metas.account_status.' . $user->status)) }}</span>
                 </div>
                 <div class="btns-holder d-flex justify-content-between mt-4">
-                    <button class="btn solid-btn w-100" type="submit">update</button>
+                    <button class="btn solid-btn w-100" type="submit">{{ __('buttons.update') }}</button>
                 </div>
             </div>
         </div>
@@ -190,32 +186,32 @@
         <div class="col-sm-12 col-lg-9 float-start post-box">
             <div class="main-box box-spaces">
                 <div class="form-item primary">
-                    <h2 class="box-title item-title">Two Factor Authentication</h2>
+                    <h2 class="box-title item-title">{{ __('admin.pages.users.two_factor.title') }}</h2>
                     <div class="form-item second d-flex mt-3 flex-wrap flex-sm-nowrap">
                         <div class="item-title">
-                            <label class="item-title mb-2">status:</label>
+                            <label class="item-title mb-2">{{ __('admin.pages.users.two_factor.sub_section') }}</label>
                         </div>
                         <div class="item-content">
                             @if (!$user->two_factor_secret)
-                                <p class="mb-0">2FA Is Disabled</p>
-								<small>{{ __('When two factor authentication is enabled, you will be prompted for a secure, random token during authentication. You may retrieve this token from your phone\'s Google Authenticator application.') }}</small><br>
+                                <p class="mb-0">{{ __('admin.pages.users.two_factor.status.disable') }}</p>
+								<small>{{ __('admin.pages.users.two_factor.desciption') }}</small><br>
                                 <form method="POST" action="{{ route('two-factor.enable') }}">
                                     @csrf
-									<button class="btn regular-btn mt-2 text-nowrap" type="submit">{{ __('Enable') }}</button>
+									<button class="btn regular-btn mt-2 text-nowrap" type="submit">{{ __('admin.pages.users.two_factor.buttons.enable') }}</button>
                                 </form>
                             @else
-                                <p class="mb-0">You have enabled 2FA.</p>
-                                <small>{{ __('When two factor authentication is enabled, you will be prompted for a secure, random token during authentication. You may retrieve this token from your phone\'s Google Authenticator application.') }}</small><br>
+                                <p class="mb-0">{{ __('admin.pages.users.two_factor.status.enable') }}</p>
+								<small>{{ __('admin.pages.users.two_factor.desciption') }}</small><br>
 
                                 @if (session('status') == 'two-factor-authentication-enabled' || !$user->two_factor_confirmed_at)
 									<br>
-									<small>{{ __('To finish enabling two factor authentication, scan the following QR code using your phone\'s authenticator application or enter the setup key and provide the generated OTP code') }}</small><br>
+									<small>{{ __('admin.pages.users.two_factor.finish') }}</small><br>
 									<br>
 									{!! $user->twoFactorQrCodeSvg() !!}
 									<br>
 									<br>
 									<p class="mb-0">
-										{{ __('Setup Key') }}: {{ decrypt($user->two_factor_secret) }}
+										{{ __('admin.pages.users.two_factor.setup_key') }}: {{ decrypt($user->two_factor_secret) }}
 									</p>
 									<form id="create-two-factor-authentication" method="POST" action="{{ route('two-factor.confirm') }}">
 										@csrf
@@ -223,8 +219,8 @@
 											<input class="form-control" name="code" type="text" required>
 										</div>
 									</form>
-									<button class="btn solid-btn mt-3 me-2 text-nowrap" form="create-two-factor-authentication" type="submit">Confirm</button>
-									<button class="btn trans-btn mt-3 text-nowrap" form="delete-two-factor-authentication" type="submit">Cancle</button>
+									<button class="btn solid-btn mt-3 me-2 text-nowrap" form="create-two-factor-authentication" type="submit">{{ __('admin.pages.users.two_factor.buttons.confirm') }}</button>
+									<button class="btn trans-btn mt-3 text-nowrap" form="delete-two-factor-authentication" type="submit">{{ __('admin.pages.users.two_factor.buttons.cancel') }}</button>
                                 @endif
 
                                 <div class="recovery-codes-wrapper"></div>
@@ -234,9 +230,14 @@
 										<button
 											id="show-recovery-codes"
 											class="btn regular-btn me-3 text-nowrap w-100"
-											type="button">Show Recovery Codes</button>
+											type="button">{{ __('admin.pages.users.two_factor.buttons.show') }}</button>
 
-											<button class="btn solid-btn solid-danger-btn text-nowrap" form="delete-two-factor-authentication" type="submit">Disable</button>
+										<button
+											id="regenerate-recovery-codes"
+											class="btn regular-btn me-3 text-nowrap w-100 d-none"
+											type="button">{{ __('admin.pages.users.two_factor.buttons.generate') }}</button>
+
+											<button class="btn solid-btn solid-danger-btn text-nowrap" form="delete-two-factor-authentication" type="submit">{{ __('admin.pages.users.two_factor.buttons.disable') }}</button>
 									@endif
                                 </div>
 								<form id="delete-two-factor-authentication" method="POST" action="{{ route('two-factor.disable') }}" style="display: none">
@@ -252,14 +253,14 @@
         <div class="col-sm-12 col-lg-9 float-start post-box">
             <div class="main-box box-spaces mb-0">
                 <div class="form-item primary">
-                    <h2 class="box-title item-title">Browser Sessions</h2>
+                    <h2 class="box-title item-title">{{ __('admin.pages.users.sessions.title') }}</h2>
                     <div class="form-item second mt-3">
-						<small>Manage and log out your active sessions on other browsers and devices.</small>
-						<small class="mt-2 d-block">If necessary, you may log out of all of your other browser sessions across all of your devices. Some of your recent sessions are listed below; however, this list may not be exhaustive. If you feel your account has been compromised, you should also update your password.</small>
+						<small>{{ __('admin.pages.users.sessions.desc_1') }}</small>
+						<small class="mt-2 d-block">{{ __('admin.pages.users.sessions.desc_2') }}</small>
 					</div>
                     <div class="form-item second d-flex mt-3 flex-wrap flex-sm-nowrap">
                         <div class="item-title">
-                            <label class="item-title mb-2">Active Sessions:</label>
+                            <label class="item-title mb-2">{{ __('admin.pages.users.sessions.sub_section') }}</label>
                         </div>
                         <div class="item-content">
 							@if (count($sessions) > 0)
@@ -275,14 +276,14 @@
 												@endif
 											</div>
 											<div class="details">
-												<div class="browser">{{ $session->agent->platform ? $session->agent->platform : 'Unknown' }} - {{ $session->agent->browser ? $session->agent->browser : 'Unknown' }}</div>
+												<div class="browser">{{ $session->agent->platform ? $session->agent->platform : __('admin.unknown') }} - {{ $session->agent->browser ? $session->agent->browser : __('admin.unknown') }}</div>
 												<div class="status">
 													<span class="ip">{{ $session->ip_address }},</span>
 													<span class="login @if($session->is_current_device) this @endif">
 														@if ($session->is_current_device)
-															{{ __('This device') }}
+															{{ __('admin.pages.users.sessions.this_device') }}
 														@else
-															{{ __('Last active') }} {{ $session->last_active }}
+															{{ __('admin.pages.users.sessions.last_active') }} {{ $session->last_active }}
 														@endif
 													</span>
 												</div>
@@ -291,7 +292,7 @@
 									@endforeach
 								</div>
 							@endif
-                            <button type="button" data-bs-toggle="modal" data-bs-target="#confirm-password-modal" class="btn solid-btn mt-3">Log Out Other Browser Sessions </button>
+                            <button type="button" data-bs-toggle="modal" data-bs-target="#confirm-password-modal" class="btn solid-btn mt-3">{{ __('buttons.logout_sesstion') }}</button>
                         </div>
                     </div>
                 </div>
@@ -327,11 +328,11 @@
 	</div>
 @endsection
 
-@section('scripts')
+@push('scripts')
     <!-- Bootstrap -->
     <script src="{{ asset('js/bootstrap.min.js') }}" type="text/javascript"></script>
     <!-- Sweet Alert -->
-    <script src="{{ asset('js/sweetalert2.all.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/sweetalert2.min.js') }}" type="text/javascript"></script>
     <!-- Data Table-->
     {{-- <script src="{{ asset('js/datatables.min.js') }}" type="text/javascript"></script> --}}
     <!-- Date Picker-->
@@ -432,6 +433,13 @@
 
 		});
 
+		let SwalOptions = {
+			showConfirmButton: true,
+			confirmButtonColor: 'var(--main-color)',
+			confirmButtonText: "{{ __('alerts.btn_text') }}",
+			scrollbarPadding: false,
+		};
+
         // form Ajax Request
         $('form#edit-user').on('submit', function(e) {
             e.preventDefault();
@@ -452,21 +460,27 @@
 							callAjax = true;
 						} else {
 							Swal.fire({
+								...SwalOptions,
 								icon: 'error',
-								title: 'Oops...',
-								html: "<div class='alerts danger'><ul class='list' style='text-align: start'><li class='content'>{{ __('The image size is more than 1 MB! Please choose another picture') }}</li></ul></div>",
-								showConfirmButton: true,
-								confirmButtonColor: 'var(--main-color)',
+								titleText: "{{ __('alerts.ops') }}",
+								html: ["<div class='alerts danger'>",
+										"<ul class='list' style='text-align: start'>",
+										"<li class='content'>{{ __('The image size is more than 1 MB! Please choose another picture') }}</li>",
+										"</ul>",
+										"</div>",].join("\n")
 							});
 							callAjax = false;
 						}
 					} else {
 						Swal.fire({
+							...SwalOptions,
 							icon: 'error',
-							title: 'Oops...',
-							html: "<div class='alerts danger'><ul class='list' style='text-align: start'><li class='content'>{{ __('Please select an image in the format: JPEG, JPG, PNG') }}</li></ul></div>",
-							showConfirmButton: true,
-							confirmButtonColor: 'var(--main-color)',
+							titleText: "{{ __('alerts.ops') }}",
+							html: ["<div class='alerts danger'>",
+										"<ul class='list' style='text-align: start'>",
+										"<li class='content'>{{ __('Please select an image in the format: JPEG, JPG, PNG') }}</li>",
+										"</ul>",
+										"</div>",].join("\n")
 						});
 						callAjax = false;
 					}
@@ -490,30 +504,29 @@
 					success: function(res) {
 						if (res.success) {
 							Swal.fire({
+								...SwalOptions,
 								icon: 'success',
-								title: res.success,
-								showConfirmButton: true,
-								confirmButtonColor: 'var(--main-color)',
+								titleText: res.success,
 							});
 						} else {
 							Swal.fire({
+								...SwalOptions,
 								icon: 'error',
-								title: 'Oops...',
+								titleText: "{{ __('alerts.ops') }}",
 								html: '<div class="alerts danger"><ul class="list" style="text-align: start">' +
-									Object.keys(res.errors).map(k => '<li class="content">' + res.errors[k] + '</li>').join('') + '</ul></div>',
-								showConfirmButton: true,
-								confirmButtonColor: 'var(--main-color)',
+									Object.keys(res.errors).map(k => '<li class="content">' + res.errors[k] + '</li>').join('') +
+									'</ul></div>',
 							});
 						}
 					},
 					error: function(res) {
 						Swal.fire({
+							...SwalOptions,
 							icon: 'error',
-							title: 'Oops...',
+							titleText: "{{ __('alerts.ops') }}",
 							html: '<div class="alerts danger"><ul class="list" style="text-align: start">' +
-								Object.keys(res.responseJSON.errors).map(k => '<li class="content">' + res.responseJSON.errors[k] + '</li>').join('') + '</ul></div>',
-							showConfirmButton: true,
-							confirmButtonColor: 'var(--main-color)',
+								Object.keys(res.responseJSON.errors).map(k => '<li class="content">' + res.responseJSON.errors[k] + '</li>').join('') +
+								'</ul></div>',
 						});
 					}
 				});
@@ -523,72 +536,66 @@
         // Show Recovery codes
         $('#show-recovery-codes').on('click', function() {
 			var $this = $(this);
-			if ( $this.hasClass('hide') ) {
-				$('.recovery-codes-wrapper').html('');
-				$this.text('Show Recovery Codes');
-				$this.removeClass('hide').addClass('show');
-			} else {
-				$.ajax({
-					type: 'POST',
-					url: "{{ route('users.show_recovery_code', $user->id) }}",
-					headers: {
-						"X-CSRF-TOKEN": "{{ csrf_token() }}",
-					},
-					success: function(res) {
-						$('.recovery-codes-wrapper').append('<small>' + res.notify +
-							'</small><div class="codes-list">' + Object.keys(res.codes).map(k =>
-								'<div class="code">' + res.codes[k] + '</div>').join('') + '</div>');
-						$this.text('Hide Recovery Codes');
-						$this.removeClass('show').addClass('hide');
-					}
-				});
-			}
+			$.ajax({
+				type: 'POST',
+				url: "{{ route('users.show_recovery_code') }}",
+				headers: {
+					"X-CSRF-TOKEN": "{{ csrf_token() }}",
+				},
+				success: function(res) {
+					$('.recovery-codes-wrapper').append('<small>' + res.notify +
+						'</small><div class="codes-list">' + Object.keys(res.codes).map(k =>
+							'<div class="code">' + res.codes[k] + '</div>').join('') + '</div>');
+					// $this.text('Hide Recovery Codes');
+					$this.addClass('d-none');
+					$('#regenerate-recovery-codes').removeClass('d-none');
+				}
+			});
         });
 
-		// Open BS Modal
-
-    </script>
-
-	@if (session('error'))
-		<script>
-			const Toast = Swal.mixin({
-				toast: true,
-				position: 'top-start',
-				showConfirmButton: false,
-				timer: 2500,
-				timerProgressBar: false,
-				didOpen: (toast) => {
-					toast.addEventListener('mouseenter', Swal.stopTimer)
-					toast.addEventListener('mouseleave', Swal.resumeTimer)
+        // Regenerate Recovery codes
+        $('#regenerate-recovery-codes').on('click', function() {
+			var $this = $(this);
+			$.ajax({
+				type: 'POST',
+				url: "{{ route('users.regenerate_recovery_code') }}",
+				headers: {
+					"X-CSRF-TOKEN": "{{ csrf_token() }}",
+				},
+				success: function(res) {
+					$('.recovery-codes-wrapper .codes-list').html('');
+					$('.recovery-codes-wrapper .codes-list').append(Object.keys(res.codes).map(k =>
+							'<div class="code">' + res.codes[k] + '</div>').join(''));
 				}
 			});
+        });
 
+		// toast on errors
+		const Toast = Swal.mixin({
+			toast: true,
+			position: 'top-start',
+			showConfirmButton: false,
+			timer: 2500,
+			timerProgressBar: false,
+			didOpen: (toast) => {
+				toast.addEventListener('mouseenter', Swal.stopTimer)
+				toast.addEventListener('mouseleave', Swal.resumeTimer)
+			}
+		});
+
+		@if (session('error'))
 			Toast.fire({
 				icon: 'error',
-				title: "{{ session('error') }}"
+				titleText: "{{ session('error') }}",
 			});
+		@endif
 
-		</script>
-	@endif
-	@if (session('success'))
-		<script>
-			const Toast = Swal.mixin({
-				toast: true,
-				position: 'top-start',
-				showConfirmButton: false,
-				timer: 2500,
-				timerProgressBar: false,
-				didOpen: (toast) => {
-					toast.addEventListener('mouseenter', Swal.stopTimer)
-					toast.addEventListener('mouseleave', Swal.resumeTimer)
-				}
-			});
 
+		@if (session('success'))
 			Toast.fire({
 				icon: 'success',
-				title: "{{ session('success') }}"
+				titleText: "{{ session('success') }}",
 			});
-
-		</script>
-	@endif
-@endsection
+		@endif
+    </script>
+@endpush

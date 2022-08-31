@@ -49,8 +49,16 @@ class Role extends Model
      */
     protected $dates = ['deleted_at'];
 
+	/**
+     * The relationship counts that should be eager loaded on every query.
+     *
+     * @var array
+     */
+    protected $withCount = ['users'];
+
+	// Relationship with User Table
 	public function users() {
-		$this->hasMany(User::class);
+		return $this->hasMany(User::class, 'role_id', 'id');
 	}
 
 	/**

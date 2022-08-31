@@ -9,14 +9,9 @@
     <!-- Icons-->
     <link href="{{ asset('css/uicons-regular-rounded.css') }}" rel="stylesheet">
 
-	@php
-		$rtl = is_rtl() ? '.rtl' : ''
-	@endphp
-
     <!-- Style-->
-    <link href="{{ asset("css/auth$rtl.min.css") }}" rel="stylesheet">
+    <link href="{{ asset("css/auth$rtl_ext.min.css") }}" rel="stylesheet">
     <!-- Fonts-->
-    <link href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&amp;display=swap" rel="stylesheet">
     <title>@yield('title')</title>
     <!-- async scripts-->
@@ -35,7 +30,7 @@
         </div>
         @yield('form-wrapper')
     </div>
-    @yield('scripts')
+    @stack('scripts')
 </body>
 
 </html>

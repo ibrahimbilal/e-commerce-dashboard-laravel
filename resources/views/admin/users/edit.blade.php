@@ -2,19 +2,21 @@
 
 @section('title', 'Edit User')
 
-@section('stylesheet')
+@push('stylesheet')
     <!-- Data Tables -->
-    <link href="{{ asset('css/datatables.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/datatables'.$rtl_ext.'.min.css') }}" rel="stylesheet">
     <!-- Date Picker-->
     <link href="{{ asset('css/pickadate.css') }}" rel="stylesheet">
-@endsection
+	<!-- Sweet Alert 2 -->
+	<link href="{{ asset('css/sweetalert2.min.css') }}" rel="stylesheet">
+@endpush
 
 @section('content')
     @php
     // breadcrumbs params
     $params = [
-        'page_title' => 'Edit User',
-        'breadcrumbs_items' => [['title' => 'users', 'route_name' => 'users.index'], ['title' => 'edit']],
+        'page_title' => __('admin.menu.users.edit'),
+        'breadcrumbs_items' => [['title' => __('admin.menu.users.title'), 'route_name' => 'users.index'], ['title' => __('admin.menu.users.edit')]],
     ];
     @endphp
     @include('admin.inc.page_title', $params)
@@ -69,9 +71,9 @@
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
                     <label class="item-title" for="user-status">status:</label>
                     <select class="form-select" id="user-status" name="status">
-                        <option value="not_verified" @selected($user->status == 'not_verified')>not verified</option>
-                        <option value="verified" @selected($user->status == 'verified')>verified</option>
-                        <option value="blocked" @selected($user->status == 'blocked')>blocked</option>
+                        <option value="not_verified" @selected($user->status == 'not_verified')>{{ Str::ucfirst(__('metas.account_status.not_verified')) }}</option>
+                        <option value="verified" @selected($user->status == 'verified')>{{ Str::ucfirst(__('metas.account_status.verified')) }}</option>
+                        <option value="blocked" @selected($user->status == 'blocked')>{{ Str::ucfirst(__('metas.account_status.blocked')) }}</option>
                     </select>
                 </div>
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
@@ -90,28 +92,28 @@
                     @if ($user->profile_picture)
 						<div class="item-content">
 							<label for="pp" class="btn regular-btn" style="width: 150px">
-								Change Image
+								{{ __('buttons.change_image') }}
 								<input type="file" name="profile_picture" id="pp" accept=".jpg, .jpeg, .png" style="display: none">
 								<input id="remove_pp" type="hidden" name="remove_pp">
 							</label>
 							<div class="selected-img">
 								<div class="img-holder mt-3">
-									<img class="preview" src="{{ URL::asset('uploads/'. $user->profile_picture) }}" width="70">
-									<span class="overlay"><i class="fi-rr-trash"> </i><span>remove</span></span>
+									<img class="preview" src="{{ URL::asset($user->profile_picture) }}" width="70">
+									<span class="overlay"><i class="fi-rr-trash"> </i><span>{{ __('buttons.remove') }}</span></span>
 								</div>
 							</div>
 						</div>
 					@else
 						<div class="item-content">
 							<label for="pp" class="btn regular-btn" style="width: 150px">
-								Upload Image
+								{{ __('buttons.upload_image') }}
 								<input type="file" name="profile_picture" id="pp" accept=".jpg, .jpeg, .png" style="display: none">
 								<input id="remove_pp" type="hidden" name="remove_pp">
 							</label>
 							<div class="selected-img" style="display: none">
 								<div class="img-holder mt-3">
 									<img class="preview" width="70">
-									<span class="overlay"><i class="fi-rr-trash"> </i><span>remove</span></span>
+									<span class="overlay"><i class="fi-rr-trash"> </i><span>{{ __('buttons.remove') }}</span></span>
 								</div>
 							</div>
 						</div>
@@ -122,32 +124,32 @@
         <div class="col-sm-6 col-lg-3 float-end meta-box">
             <div class="main-box box-spaces">
                 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-                    <label class="item-title meta-title">Registered At:</label><span
+                    <label class="item-title meta-title">{{ __('metas.registered_at') }}</label><span
                         class="ms-2">{{ format_date($user->created_at) }}</span>
                 </div>
                 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-                    <label class="item-title meta-title">updated at:</label><span
+                    <label class="item-title meta-title">{{ __('metas.updated_at') }}</label><span
                         class="ms-2">{{ format_date($user->updated_at) }}</span>
                 </div>
                 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-                    <label class="item-title meta-title">Last Logged In:</label><span class="ms-2">@isset($sessions) {{ end($sessions)->last_active_formated }} @endisset</span>
+                    <label class="item-title meta-title">{{ __('metas.last_login') }}</label><span class="ms-2">{{ end($sessions)->last_active_formated }}</span>
                 </div>
                 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-                    <label class="item-title meta-title">Device:</label><span class="ms-2">@isset($sessions) {{ ucfirst($sessions[0]->agent->device) }} @endisset</span>
+                    <label class="item-title meta-title">{{ __('metas.device') }}</label><span class="ms-2">{{ ucfirst($sessions[0]->agent->device) }}</span>
                 </div>
                 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-                    <label class="item-title meta-title">iP Address:</label><span class="ms-2">@isset($sessions) {{ $sessions[0]->ip_address }} @endisset</span>
+                    <label class="item-title meta-title">{{ __('metas.ip_address') }}</label><span class="ms-2">{{ $sessions[0]->ip_address }}</span>
                 </div>
                 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-                    <label class="item-title meta-title">iP Country:</label><span class="ms-2">@isset($sessions) {{ $sessions[0]->country }} @endisset</span>
+                    <label class="item-title meta-title">{{ __('metas.ip_country') }}</label><span class="ms-2">{{ $sessions[0]->country }}</span>
                 </div>
                 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-                    <label class="item-title meta-title">iP City:</label><span class="ms-2">@isset($sessions) {{ $sessions[0]->city }} @endisset</span>
+                    <label class="item-title meta-title">{{ __('metas.ip_city') }}</label><span class="ms-2">{{ $sessions[0]->city }}</span>
                 </div>
                 <div class="btns-holder d-flex justify-content-between mt-4">
                     <a class="btn trans-btn w-100 text-start delete" data-post-type="user"><span
-                            class="icon me-1"><i class="fi-rr-trash"> </i></span>move to trash</a>
-                    <button class="btn solid-btn" type="submit">update </button>
+                            class="icon me-1"><i class="fi-rr-trash"> </i></span>{{ __('buttons.delete') }}</a>
+                    <button class="btn solid-btn" type="submit">{{ __('buttons.update') }}</button>
                 </div>
             </div>
         </div>
@@ -156,14 +158,17 @@
         <div class="col-sm-12 col-lg-9 float-start post-box">
             <div class="main-box box-spaces">
                 <div class="form-item primary">
-                    <h2 class="box-title item-title">Browser Sessions</h2>
-                    <div class="form-item second d-flex mt-3 flex-wrap flex-sm-nowrap"><small>If necessary, you may log out of all of your other browser sessions across all of your devices. Some of your recent sessions are listed below; however, this list may not be exhaustive. If you feel your account has been compromised, you should also update your password.</small></div>
+                    <h2 class="box-title item-title">{{ __('admin.pages.users.sessions.title') }}</h2>
+                    <div class="form-item second mt-3">
+						<small>{{ __('admin.pages.users.sessions.desc_1') }}</small>
+						<small class="mt-2 d-block">{{ __('admin.pages.users.sessions.desc_2') }}</small>
+					</div>
                     <div class="form-item second d-flex mt-3 flex-wrap flex-sm-nowrap">
                         <div class="item-title">
-                            <label class="item-title mb-2">Active Sessions:</label>
+                            <label class="item-title mb-2">{{ __('admin.pages.users.sessions.sub_section') }}</label>
                         </div>
                         <div class="item-content">
-                            @if ( $sessions !== null && is_array($sessions) && count($sessions) > 0)
+							@if (count($sessions) > 0)
 								<div class="sessions-list">
 									<!-- Other Browser Sessions -->
 									@foreach ($sessions as $session)
@@ -176,14 +181,14 @@
 												@endif
 											</div>
 											<div class="details">
-												<div class="browser">{{ $session->agent->platform ? $session->agent->platform : 'Unknown' }} - {{ $session->agent->browser ? $session->agent->browser : 'Unknown' }}</div>
+												<div class="browser">{{ $session->agent->platform ? $session->agent->platform : __('admin.unknown') }} - {{ $session->agent->browser ? $session->agent->browser : __('admin.unknown') }}</div>
 												<div class="status">
 													<span class="ip">{{ $session->ip_address }},</span>
 													<span class="login @if($session->is_current_device) this @endif">
 														@if ($session->is_current_device)
-															{{ __('This device') }}
+															{{ __('admin.pages.users.sessions.this_device') }}
 														@else
-															{{ __('Last active') }} {{ $session->last_active }}
+															{{ __('admin.pages.users.sessions.last_active') }} {{ $session->last_active }}
 														@endif
 													</span>
 												</div>
@@ -191,9 +196,8 @@
 										</div>
 									@endforeach
 								</div>
-							@else
-								<p class="mb-0">{{ __('The user has not yet logged into his account') }}</p>
 							@endif
+                            <button type="button" data-bs-toggle="modal" data-bs-target="#confirm-password-modal" class="btn solid-btn mt-3">{{ __('buttons.logout_sesstion') }}</button>
                         </div>
                     </div>
                 </div>
@@ -238,9 +242,9 @@
     </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
     <!-- Sweet Alert -->
-    <script src="{{ asset('js/sweetalert2.all.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/sweetalert2.min.js') }}" type="text/javascript"></script>
     <!-- Data Table-->
     <script src="{{ asset('js/datatables.min.js') }}" type="text/javascript"></script>
     <!-- Date Picker-->
@@ -341,6 +345,13 @@
 
 		});
 
+		let SwalOptions = {
+			showConfirmButton: true,
+			confirmButtonColor: 'var(--main-color)',
+			confirmButtonText: "{{ __('alerts.btn_text') }}",
+			scrollbarPadding: false,
+		};
+
         // form Ajax Request
         $('form#edit-user').on('submit', function(e) {
             e.preventDefault();
@@ -361,21 +372,27 @@
 							callAjax = true;
 						} else {
 							Swal.fire({
+								...SwalOptions,
 								icon: 'error',
-								title: 'Oops...',
-								html: "<div class='alerts danger'><ul class='list' style='text-align: start'><li class='content'>{{ __('The image size is more than 1 MB! Please choose another picture') }}</li></ul></div>",
-								showConfirmButton: true,
-								confirmButtonColor: 'var(--main-color)',
+								titleText: "{{ __('alerts.ops') }}",
+								html: ["<div class='alerts danger'>",
+										"<ul class='list' style='text-align: start'>",
+										"<li class='content'>{{ __('alerts.users.request.image_size') }}</li>",
+										"</ul>",
+										"</div>",].join("\n")
 							});
 							callAjax = false;
 						}
 					} else {
 						Swal.fire({
+							...SwalOptions,
 							icon: 'error',
-							title: 'Oops...',
-							html: "<div class='alerts danger'><ul class='list' style='text-align: start'><li class='content'>{{ __('Please select an image in the format: JPEG, JPG, PNG') }}</li></ul></div>",
-							showConfirmButton: true,
-							confirmButtonColor: 'var(--main-color)',
+							titleText: "{{ __('alerts.ops') }}",
+							html: ["<div class='alerts danger'>",
+										"<ul class='list' style='text-align: start'>",
+										"<li class='content'>{{ __('alerts.users.request.image_type') }}</li>",
+										"</ul>",
+										"</div>",].join("\n")
 						});
 						callAjax = false;
 					}
@@ -399,30 +416,27 @@
 					success: function(res) {
 						if (res.success) {
 							Swal.fire({
+								...SwalOptions,
 								icon: 'success',
-								title: res.success,
-								showConfirmButton: true,
-								confirmButtonColor: 'var(--main-color)',
+								titleText: res.text,
 							});
 						} else {
 							Swal.fire({
+								...SwalOptions,
 								icon: 'error',
-								title: 'Oops...',
+								titleText: "{{ __('alerts.ops') }}",
 								html: '<div class="alerts danger"><ul class="list" style="text-align: start">' +
 									Object.keys(res.errors).map(k => '<li class="content">' + res.errors[k] + '</li>').join('') + '</ul></div>',
-								showConfirmButton: true,
-								confirmButtonColor: 'var(--main-color)',
 							});
 						}
 					},
 					error: function(res) {
 						Swal.fire({
+							...SwalOptions,
 							icon: 'error',
-							title: 'Oops...',
+							titleText: "{{ __('alerts.ops') }}",
 							html: '<div class="alerts danger"><ul class="list" style="text-align: start">' +
 								Object.keys(res.responseJSON.errors).map(k => '<li class="content">' + res.responseJSON.errors[k] + '</li>').join('') + '</ul></div>',
-							showConfirmButton: true,
-							confirmButtonColor: 'var(--main-color)',
 						});
 					}
 				});
@@ -433,14 +447,14 @@
 		$('a.trans-btn.delete').on('click', function(e) {
 			e.preventDefault();
 			Swal.fire({
-				title: 'Are you sure?',
-				text: "You won't be able to revert this!",
-				icon: 'warning',
-				showCancelButton: true,
-				confirmButtonColor: 'var(--main-color)',
-				cancelButtonColor: '#d33',
-				confirmButtonText: 'Yes, delete it!',
-				cancelButtonText: 'No, cancel!',
+				...SwalOptions,
+				title: "{{ __('alerts.users.confirm.title') }}",
+                text: "{{ __('alerts.users.confirm.delete.text') }}",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonColor: '#d33',
+                confirmButtonText: "{{ __('alerts.users.confirm.delete.yes') }}",
+                cancelButtonText: "{{ __('alerts.users.confirm.no') }}",
 			}).then((result) => {
 				if (result.isConfirmed) {
 					$.ajax({
@@ -452,8 +466,9 @@
 						success: function(res) {
 							if (res.success) {
 								Swal.fire({
-									title: 'Deleted!',
-									text: 'User has been deleted.',
+									...SwalOptions,
+									titleText: res.title,
+									text: res.text,
 									icon: 'success',
 									willClose: () => {
 										window.location.replace(res.redirect);
@@ -461,8 +476,9 @@
 								});
 							} else {
 								Swal.fire({
+									...SwalOptions,
 									icon: 'error',
-									title: 'Oops...',
+									titleText: "{{ __('alerts.ops') }}",
 									html: '<ul class="errors-list">' + Object.keys(res.errors).map(k =>
 											'<li class="content">' + res.errors[k] + '</li>').join('') +
 										'</ul>',
@@ -475,8 +491,9 @@
 
 				} else if (result.dismiss === Swal.DismissReason.cancel) {
 					Swal.fire({
-						title: 'Cancelled',
-						text: 'User is safe :)',
+						...SwalOptions,
+						title: "{{ __('alerts.users.cancel.title') }}",
+                        text: "{{ __('alerts.users.cancel.delete.text') }}",
 						icon: 'error',
 						timer: 1500,
 						timerProgressBar: true,
@@ -486,4 +503,4 @@
 			})
 		});
     </script>
-@endsection
+@endpush

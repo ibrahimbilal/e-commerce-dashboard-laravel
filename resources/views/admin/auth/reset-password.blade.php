@@ -10,7 +10,6 @@
 			<h2>Reset Password</h2>
 			<p>Your new password must be different from previously used passwords.</p>
 		</div>
-		{{-- @dd($request); --}}
 		<div class="form-body">
 			<form method="POST" action="{{ route('password.update') }}">
 				<input type="hidden" name="token" value="{{ request()->route('token') }}">
@@ -45,7 +44,7 @@
 	</div>
 @endsection
 
-@section('scripts')
+@push('scripts')
 	<script src="{{ asset('js/jquery.min.js') }}" type="text/javascript"></script>
     <script type="text/javascript">
         // Show Password
@@ -60,4 +59,4 @@
             }
         });
     </script>
-@endsection
+@endpush

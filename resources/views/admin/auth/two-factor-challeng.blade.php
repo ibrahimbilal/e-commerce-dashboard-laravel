@@ -5,7 +5,7 @@
 @section('intro', 'Welcome Back')
 
 @section('form-wrapper')
-	<div class="form-wrapper" data-form="code">
+	<div class="form-wrapper" data-form="code" style="@if ($errors->get('recovery_code')) display:none @endif">
 		<div class="form-header">
 			<h2>Two Step Verification</h2>
 			<p>Please confirm access to your account by entering the authentication code provided by your authenticator application.</p>
@@ -28,13 +28,16 @@
 		</div>
 	</div>
 
-	<div class="form-wrapper" data-form="recovery" style="display: none">
+	<div class="form-wrapper" data-form="recovery" style="@if ($errors->get('code')) display:none @elseif(!$errors->all()) display:none @endif">
 		<div class="form-header">
 			<h2>Two Step Verification</h2>
 			<p>Please confirm access to your account by entering one of your emergency recovery codes.</p>
 		</div>
+		@error('recovery_code')
+			<span class="alert danger" role="alert">{{ $message }}</span>
+		@enderror
 		<div class="form-body">
-			<form method="POST" action="{{ url('/two-factor-challenge') }}">
+			<form method="POST" action="{{ url('/admin/two-factor-challenge') }}">
 				@csrf
 				<div class="input-wrapper">
 					<label for="code">Recovery Code</label>
@@ -49,7 +52,7 @@
 	</div>
 @endsection
 
-@section('scripts')
+@push('scripts')
 	<script src="{{ asset('js/jquery.min.js') }}" type="text/javascript"></script>
     <script type="text/javascript">
 		// Toggle Form;
@@ -58,4 +61,4 @@
 			$('.form-wrapper').data('form', formType).toggle();
         });
     </script>
-@endsection
+@endpush

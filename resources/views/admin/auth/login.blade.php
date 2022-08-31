@@ -40,7 +40,7 @@
 	</div>
 @endsection
 
-@section('scripts')
+@push('scripts')
 	<script src="{{ asset('js/jquery.min.js') }}" type="text/javascript"></script>
     <script type="text/javascript">
         // Show Password
@@ -55,4 +55,4 @@
             }
         });
     </script>
-@endsection
+@endpush

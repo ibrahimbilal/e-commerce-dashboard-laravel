@@ -35,6 +35,7 @@ Route::prefix('/admin')->group(function () {
 	Route::middleware(['auth', 'verified'])->group(function () {
 
 		Route::get('', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.index');
+		Route::post('/bulk', [App\Http\Controllers\AdminController::class, 'bulk_action'])->name('admin.bulk_action');
 
 		// Settings Pages
 		Route::resource('/general-settings', App\Http\Controllers\SettingController::class)->only(['index', 'store']);
@@ -42,9 +43,10 @@ Route::prefix('/admin')->group(function () {
 
 		// Users Pages
 		Route::get('/users/profile', [App\Http\Controllers\UserController::class, 'profile'])->name('users.profile');
-		Route::post('/users/show-code/{user}', [App\Http\Controllers\UserController::class, 'show_codes'])->name('users.show_recovery_code');
-		Route::post('/users/logouts/', [App\Http\Controllers\UserController::class, 'logoutSessions'])->name('users.logout_sessions');
-		// Route::post('/users/{user}', [App\Http\Controllers\UserController::class, 'update'])->name('users.update');
+		Route::post('/users/show-code', [App\Http\Controllers\UserController::class, 'show_codes'])->name('users.show_recovery_code');
+		Route::post('/users/generate-code', [App\Http\Controllers\UserController::class, 'regenerate_codes'])->name('users.regenerate_recovery_code');
+		Route::post('/users/logout-sessions/', [App\Http\Controllers\UserController::class, 'logoutSessions'])->name('users.logout_sessions');
+		Route::post('/users/{user}/restore', [App\Http\Controllers\UserController::class, 'restore'])->name('users.restore');
 		Route::resource('/users', App\Http\Controllers\UserController::class);
 
 		// Roles Pages

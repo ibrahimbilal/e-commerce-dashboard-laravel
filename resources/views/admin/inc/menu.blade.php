@@ -2,16 +2,13 @@
 <div class="dashbord-menu main-box menu-padding">
     <!-- Menu Header-->
     <div class="menu-header">
-		<a href="{{ route('admin.index') }}">
+		<a class="brand" href="{{ route('admin.index') }}">
 			<i class="fi-rr-shop"> </i>
 			<span class="title">Admin Panel</span>
 		</a>
     </div>
     <!-- Menu Links-->
     <div class="menu-links d-flex flex-column">
-		@php
-			$menu_groups = array_to_object(get_dashboard_menu())
-		@endphp
 		@foreach ($menu_groups as $menu)
 			<ul class="menu-list-group">
 				@foreach ($menu as $menu_item)
@@ -51,7 +48,7 @@
             <li class="list-item" id="collaps">
 				<a href="javascript:void(0)">
 					<i class="fi-rr-list"> </i>
-					<span class="title">collaps</span>
+					<span class="title">{{ __('admin.menu.collapse') }}</span>
 				</a>
 			</li>
         </ul>
