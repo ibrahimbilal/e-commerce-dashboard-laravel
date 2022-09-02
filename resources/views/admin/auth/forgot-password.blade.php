@@ -2,13 +2,13 @@
 
 @section('title', 'Forgot Password?')
 
-@section('intro', 'Restore Account')
+@section('intro', __('auth.pages.forget.intro'))
 
 @section('form-wrapper')
 	<div class="form-wrapper">
 		<div class="form-header">
-			<h2>Forgot Password?</h2>
-			<p>Enter your email and we'll send you instructions to reset your password.</p>
+			<h2>{{ __('auth.pages.forget.title') }}</h2>
+			<p>{{ __('auth.pages.forget.sub_title') }}</p>
 		</div>
 		@if ( session('status') )
 			<span class="alert success">{{ session('status') }}</span>
@@ -17,18 +17,18 @@
 			<form method="POST" action="{{ route('password.email') }}">
 				@csrf
 				<div class="input-wrapper">
-					<label for="email">Email</label>
-					<input id="email" type="email" name="email" placeholder="john@example.com">
+					<label for="email">{{ __('forms.email') }}</label>
+					<input id="email" type="email" name="email" placeholder="john@example.com" value="{{ old('email') }}">
 					@error('email')
 						<span class="error" role="alert">{{ $message }}</span>
 					@enderror
 				</div>
-				<button type="submit">Send Reset Link</button>
+				<button type="submit">{{ __('buttons.reset_link') }}</button>
 			</form>
 		</div>
 		<div class="form-footer">
 			<p><span class="icon"><i class="fi-rr-angle-small-left"> </i></span>
-				<a class="form-link" href="{{ route('login') }}">Back To Login</a></p>
+				<a class="form-link" href="{{ route('login') }}">{{ __('buttons.back_to_login') }}</a></p>
 		</div>
 	</div>
 @endsection

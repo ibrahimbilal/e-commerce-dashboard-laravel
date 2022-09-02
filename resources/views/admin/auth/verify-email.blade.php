@@ -2,21 +2,21 @@
 
 @section('title', 'Email Verification')
 
-@section('intro', 'Activate Account')
+@section('intro', __('auth.pages.verify.intro'))
 
 @section('form-wrapper')
 	<div class="form-wrapper">
 		<div class="form-header">
-			<h2>Verify Email</h2>
-			<p>You must verify your email address, please check your email for a verification link</p>
+			<h2>{{ __('auth.pages.verify.title') }}</h2>
+			<p>{{ __('auth.pages.verify.sub_title') }}</p>
 		</div>
 		@if ( session('status') == 'verification-link-sent' )
-			<span class="alert success">{{ __('Verification link sent, please check your email.') }}</span>
+			<span class="alert success">{{ __('auth.verification-link-sent') }}</span>
 		@endif
 		<div class="form-body">
 			<form method="POST" action="{{ route('verification.send') }}">
 				@csrf
-				<button type="submit">Resend Email</button>
+				<button type="submit">{{ __('buttons.resend') }}</button>
 			</form>
 		</div>
 	</div>

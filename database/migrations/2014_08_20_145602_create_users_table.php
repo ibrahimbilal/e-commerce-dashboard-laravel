@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('mobile')->nullable();
             $table->date('birth_date')->nullable();
-			$table->unsignedBigInteger('role_id');
+			$table->string('role_name');
 			$table->enum('gender', ['male', 'female']);
             $table->string('status');
             $table->string('language')->nullable();
@@ -30,14 +30,13 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
 			$table->softDeletes();
-
-			$table->foreign('role_id')->references('id')->on('roles');
         });
     }
 
     /**
      * Reverse the migrations.
-     *
+     * $2y$10$7mv70CQw8zxyQtl2W5jmz.ZdZ2t22BDDL4DxszkBAM6JOgHcB9YI2
+	 * storage/users/hwbnTkhbSmF88qS6qG3c3BsGI6719L2lKa3hcHyZ.jpg
      * @return void
      */
     public function down()

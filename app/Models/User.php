@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\Role;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -14,7 +14,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, TwoFactorAuthenticatable;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, TwoFactorAuthenticatable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -29,7 +29,7 @@ class User extends Authenticatable implements MustVerifyEmail
 		'mobile',
 		'birth_date',
 		'gender',
-		'role_id',
+		'role_name',
 		'status',
 		'language',
 		'profile_picture',
@@ -55,11 +55,6 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-	// Relationship with Role Table
-	public function roles() {
-		return $this->belongsTo(Role::class, 'role_id', 'id');
-	}
 
 	/**
      * Interact with the user's status.

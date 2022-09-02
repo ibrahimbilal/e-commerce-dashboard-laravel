@@ -26,46 +26,46 @@
         <div class="col-sm-12 col-lg-9 float-start post-box">
             <div class="main-box box-spaces">
                 <div class="form-item primary mb-3">
-                    <h2 class="box-title item-title">user details</h2>
+                    <h2 class="box-title item-title">{{ __('admin.sections.user_details') }}</h2>
                 </div>
                 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap">
-                    <label class="item-title" for="first-name">first name:</label>
+                    <label class="item-title" for="first-name">{{ __('forms.first_name') }}</label>
                     <input class="form-control" id="first-name" name="first_name" type="text"
                         value="{{ $user->first_name }}">
                 </div>
                 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
-                    <label class="item-title" for="last-name">last name:</label>
+                    <label class="item-title" for="last-name">{{ __('forms.last_name') }}</label>
                     <input class="form-control" id="last-name" name="last_name" type="text"
                         value="{{ $user->last_name }}">
                 </div>
                 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
-                    <label class="item-title" for="email">email address:</label>
+                    <label class="item-title" for="email">{{ __('forms.email') }}</label>
                     <input class="form-control" id="email" name="email" type="email" value="{{ $user->email }}">
                 </div>
                 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
-                    <label class="item-title" for="mobile">mobile:</label>
+                    <label class="item-title" for="mobile">{{ __('forms.mobile') }}</label>
                     <input class="form-control" id="mobile" name="mobile" type="tel" value="{{ $user->mobile }}">
                 </div>
                 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
-                    <label class="item-title" for="birth-date">Birth Of Date:</label>
+                    <label class="item-title" for="birth-date">{{ __('forms.birth_date') }}</label>
                     <div class="position-relative w-100">
                         <input class="form-control" id="birth-date" name="birth_date" type="text"
                             data-toggle="datepicker" data-value="{{ $user->birth_date }}">
                     </div>
                 </div>
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
-                    <label class="item-title">gender:</label>
+                    <label class="item-title">{{ __('forms.gender.title') }}</label>
                     <label class="radio-label" for="male">
                         <input class="input-radio" id="male" name="gender" type="radio" value="male"
-						@checked($user->gender == 'male')>Male
+						@checked($user->gender == 'male')>{{ __('forms.gender.male') }}
                     </label>
                     <label class="radio-label" for="female">
                         <input class="input-radio" id="female" name="gender" type="radio" value="female"
-						@checked($user->gender == 'female')>Female
+						@checked($user->gender == 'female')>{{ __('forms.gender.female') }}
                     </label>
                 </div>
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
-                    <label class="item-title" for="user-role">role:</label>
+                    <label class="item-title" for="user-role">{{ __('forms.role') }}</label>
                     <select class="form-select" id="user-role" name="role_id">
                         @foreach ($roles as $role)
                             <option value="{{ $role->id }}" @selected($user->role_id == $role->id)>
@@ -74,7 +74,7 @@
                     </select>
                 </div>
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
-                    <label class="item-title" for="user-language">language:</label>
+                    <label class="item-title" for="user-language">{{ __('forms.lang') }}</label>
                     <select class="form-select" id="user-language" name="language">
                         <option value="en" @selected($user->language == 'en')>English</option>
                         <option value="ar" @selected($user->language == 'ar')>Arabic</option>
@@ -83,34 +83,34 @@
                 </div>
                 <div class="form-item second d-flex mt-3 flex-wrap flex-sm-nowrap">
                     <div class="item-title d-block mb-2">
-                        <label class="item-title mb-2" for="profile-picture">Profile Picture:</label>
-						<small>{{ __("The Recommended Dimensions Is:\n500 X 500 (PX)") }}</small>
+                        <label class="item-title mb-2" for="profile-picture">{{ __('forms.profile_picture.title') }}</label>
+						<small>{{ __("forms.profile_picture.sub") }}</small>
                     </div>
 					@if ($user->profile_picture)
 						<div class="item-content">
 							<label for="pp" class="btn regular-btn" style="width: 150px">
-								Change Image
+								{{ __('buttons.change_image') }}
 								<input type="file" name="profile_picture" id="pp" accept=".jpg, .jpeg, .png" style="display: none">
 								<input id="remove_pp" type="hidden" name="remove_pp">
 							</label>
 							<div class="selected-img">
 								<div class="img-holder mt-3">
 									<img class="preview" src="{{ URL::asset($user->profile_picture) }}" width="70">
-									<span class="overlay"><i class="fi-rr-trash"> </i><span>remove</span></span>
+									<span class="overlay"><i class="fi-rr-trash"> </i><span>{{ __('buttons.remove') }}</span></span>
 								</div>
 							</div>
 						</div>
 					@else
 						<div class="item-content">
 							<label for="pp" class="btn regular-btn" style="width: 150px">
-								Upload Image
+								{{ __('buttons.upload_image') }}
 								<input type="file" name="profile_picture" id="pp" accept=".jpg, .jpeg, .png" style="display: none">
 								<input id="remove_pp" type="hidden" name="remove_pp">
 							</label>
 							<div class="selected-img" style="display: none">
 								<div class="img-holder mt-3">
 									<img class="preview" width="70">
-									<span class="overlay"><i class="fi-rr-trash"> </i><span>remove</span></span>
+									<span class="overlay"><i class="fi-rr-trash"> </i><span>{{ __('buttons.remove') }}</span></span>
 								</div>
 							</div>
 						</div>
@@ -119,9 +119,9 @@
             </div>
             <div class="main-box box-spaces">
                 <div class="form-item primary">
-                    <h2 class="box-title item-title">Change Password</h2>
+                    <h2 class="box-title item-title">{{ __('admin.sections.password') }}</h2>
                     <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
-                        <label class="item-title" for="current-password">current password:</label>
+                        <label class="item-title" for="current-password">{{ __('forms.current_password') }}</label>
                         <div class="with-icon">
                             <input class="form-control" id="current-password" name="current_password" type="password"
                                 autocomplete="off">
@@ -129,16 +129,16 @@
                         </div>
                     </div>
                     <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
-                        <label class="item-title" for="new-password">new password:</label>
+                        <label class="item-title" for="new-password">{{ __('forms.new_password') }}</label>
                         <div class="with-icon">
                             <input class="form-control" id="password" name="password" type="password" autocomplete="off">
                             <span class="show-pass"><i class="fi-rr-eye"> </i></span>
                         </div>
                         <button class="btn regular-btn ms-sm-3 mt-2 mt-sm-0 text-nowrap generate-password"
-                            type="button">generate</button>
+                            type="button">{{ __('buttons.generate') }}</button>
                     </div>
                     <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
-                        <label class="item-title" for="confirm-password">confirm password:</label>
+                        <label class="item-title" for="confirm-password">{{ __('forms.confirm_password') }}</label>
                         <div class="with-icon">
                             <input class="form-control" id="confirm-password" name="password_confirmation"
                                 type="password" autocomplete="off">
@@ -174,7 +174,7 @@
                     <label class="item-title meta-title">{{ __('metas.ip_city') }}</label><span class="ms-2">{{ $sessions[0]->city }}</span>
                 </div>
                 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-                    <label class="item-title meta-title">{{ __('metas.account_status.title') }}</label><span class="ms-2">{{ Str::ucfirst(__('metas.account_status.' . $user->status)) }}</span>
+                    <label class="item-title meta-title">{{ __('forms.status.title') }}</label><span class="ms-2">{{ Str::ucfirst(__('forms.status.' . $user->status)) }}</span>
                 </div>
                 <div class="btns-holder d-flex justify-content-between mt-4">
                     <button class="btn solid-btn w-100" type="submit">{{ __('buttons.update') }}</button>
@@ -186,7 +186,7 @@
         <div class="col-sm-12 col-lg-9 float-start post-box">
             <div class="main-box box-spaces">
                 <div class="form-item primary">
-                    <h2 class="box-title item-title">{{ __('admin.pages.users.two_factor.title') }}</h2>
+                    <h2 class="box-title item-title">{{ __('admin.sections.two_factor') }}</h2>
                     <div class="form-item second d-flex mt-3 flex-wrap flex-sm-nowrap">
                         <div class="item-title">
                             <label class="item-title mb-2">{{ __('admin.pages.users.two_factor.sub_section') }}</label>
@@ -253,7 +253,7 @@
         <div class="col-sm-12 col-lg-9 float-start post-box">
             <div class="main-box box-spaces mb-0">
                 <div class="form-item primary">
-                    <h2 class="box-title item-title">{{ __('admin.pages.users.sessions.title') }}</h2>
+                    <h2 class="box-title item-title">{{ __('admin.sections.sessions') }}</h2>
                     <div class="form-item second mt-3">
 						<small>{{ __('admin.pages.users.sessions.desc_1') }}</small>
 						<small class="mt-2 d-block">{{ __('admin.pages.users.sessions.desc_2') }}</small>
@@ -506,7 +506,7 @@
 							Swal.fire({
 								...SwalOptions,
 								icon: 'success',
-								titleText: res.success,
+								titleText: res.text,
 							});
 						} else {
 							Swal.fire({
@@ -590,11 +590,31 @@
 			});
 		@endif
 
-
 		@if (session('success'))
 			Toast.fire({
 				icon: 'success',
 				titleText: "{{ session('success') }}",
+			});
+		@endif
+
+		@if (session('status') == 'two-factor-authentication-enabled')
+			Toast.fire({
+				icon: 'success',
+				titleText: "{{ __('admin.pages.users.two_factor.enabled') }}",
+			});
+		@endif
+
+		@if (session('status') == 'two-factor-authentication-confirmed')
+			Toast.fire({
+				icon: 'success',
+				titleText: "{{ __('admin.pages.users.two_factor.confirmed') }}",
+			});
+		@endif
+
+		@if (session('status') == 'two-factor-authentication-disabled')
+			Toast.fire({
+				icon: 'success',
+				titleText: "{{ __('admin.pages.users.two_factor.disabled') }}",
 			});
 		@endif
     </script>

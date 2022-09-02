@@ -2,26 +2,26 @@
 
 @section('title', 'Login')
 
-@section('intro', 'Welcome Back')
+@section('intro', __('auth.pages.login.intro'))
 
 @section('form-wrapper')
 	<div class="form-wrapper">
 		<div class="form-header">
-			<h2>Login</h2>
-			<p>Welcome back! Please login to your account and continue growing your store.</p>
+			<h2>{{ __('auth.pages.login.title') }}</h2>
+			<p>{{ __('auth.pages.login.sub_title') }}</p>
 		</div>
 		<div class="form-body">
 			<form method="POST" action="{{ url('admin/login') }}">
 				@csrf
 				<div class="input-wrapper">
-					<label for="email">Email</label>
+					<label for="email">{{ __('forms.email') }}</label>
 					<input id="email" type="email" name="email" placeholder="john@example.com" value="{{ old('email') }}">
 					@error('email')
 						<span class="error" role="alert">{{ $message }}</span>
 					@enderror
 				</div>
 				<div class="input-wrapper">
-					<label for="password">Password</label>
+					<label for="password">{{ __('forms.password') }}</label>
 					<input id="password" type="password" name="password" placeholder="**********"  value="{{ old('password') }}">
 					<span class="icon show-pass"><i class="fi-rr-eye"> </i></span>
 					@error('password')
@@ -30,11 +30,11 @@
 				</div>
 				<div class="input-wrapper more-action">
 					<label>
-						<input id="remember-me" type="checkbox" name="remember_token" @checked(old('remember_token') == 'on')>Remember Me
+						<input id="remember-me" type="checkbox" name="remember_token" @checked(old('remember_token') == 'on')>{{ __('forms.remember') }}
 					</label>
-					<a class="form-link" href="{{ route('password.email') }}">Forgot Password?</a>
+					<a class="form-link" href="{{ route('password.email') }}">{{ __('forms.forget_password') }}</a>
 				</div>
-				<button type="submit">Sign In</button>
+				<button type="submit">{{ __('buttons.login') }}</button>
 			</form>
 		</div>
 	</div>

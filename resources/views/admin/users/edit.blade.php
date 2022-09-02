@@ -26,42 +26,42 @@
         <div class="col-sm-12 col-lg-9 float-start post-box">
             <div class="main-box box-spaces">
                 <div class="form-item primary mb-3">
-                    <h2 class="box-title item-title">user details</h2>
+                    <h2 class="box-title item-title">{{ __('admin.sections.user_details') }}</h2>
                 </div>
                 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap">
-                    <label class="item-title" for="first-name">first name:</label>
+                    <label class="item-title" for="first-name">{{ __('forms.first_name') }}</label>
                     <input class="form-control" id="first-name" name="first_name" type="text" value="{{ $user->first_name }}">
                 </div>
                 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
-                    <label class="item-title" for="last-name">last name:</label>
+                    <label class="item-title" for="last-name">{{ __('forms.last_name') }}</label>
                     <input class="form-control" id="last-name" name="last_name" type="text" value="{{ $user->last_name }}">
                 </div>
                 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
-                    <label class="item-title" for="email">email address:</label>
+                    <label class="item-title" for="email">{{ __('forms.email') }}</label>
                     <input class="form-control" id="email" name="email" type="email" value="{{ $user->email }}">
                 </div>
                 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
-                    <label class="item-title" for="mobile">mobile:</label>
+                    <label class="item-title" for="mobile">{{ __('forms.mobile') }}</label>
                     <input class="form-control" id="mobile" name="mobile" type="tel" value="{{ $user->mobile }}">
                 </div>
                 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
-                    <label class="item-title" for="birth-date">Birth Of Date:</label>
+                    <label class="item-title" for="birth-date">{{ __('forms.birth_date') }}</label>
                     <div class="position-relative w-100">
                         <input class="form-control" id="birth-date" name="birth_date" type="text"
                             data-toggle="datepicker" data-value="{{ $user->birth_date }}">
                     </div>
                 </div>
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
-                    <label class="item-title">gender:</label>
+                    <label class="item-title">{{ __('forms.gender.title') }}</label>
                     <label class="radio-label" for="male">
-                        <input class="input-radio" id="male" name="gender" type="radio" value="male" @checked($user->gender == 'male')>Male
+                        <input class="input-radio" id="male" name="gender" type="radio" value="male" @checked($user->gender == 'male')>{{ __('forms.gender.male') }}
                     </label>
                     <label class="radio-label" for="female">
-                        <input class="input-radio" id="female" name="gender" type="radio" value="female" @checked($user->gender == 'female')>Female
+                        <input class="input-radio" id="female" name="gender" type="radio" value="female" @checked($user->gender == 'female')>{{ __('forms.gender.female') }}
                     </label>
                 </div>
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
-                    <label class="item-title" for="user-role">role:</label>
+                    <label class="item-title" for="user-role">{{ __('forms.role') }}</label>
                     <select class="form-select" id="user-role" name="role_id">
 						@foreach ( $roles as $role )
 							<option value="{{ $role->id }}" @selected($user->role_id == $role->id)>{{ $role->title }}</option>
@@ -69,15 +69,15 @@
                     </select>
                 </div>
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
-                    <label class="item-title" for="user-status">status:</label>
+                    <label class="item-title" for="user-status">{{ __('forms.status.title') }}</label>
                     <select class="form-select" id="user-status" name="status">
-                        <option value="not_verified" @selected($user->status == 'not_verified')>{{ Str::ucfirst(__('metas.account_status.not_verified')) }}</option>
-                        <option value="verified" @selected($user->status == 'verified')>{{ Str::ucfirst(__('metas.account_status.verified')) }}</option>
-                        <option value="blocked" @selected($user->status == 'blocked')>{{ Str::ucfirst(__('metas.account_status.blocked')) }}</option>
+                        <option value="not_verified" @selected($user->status == 'not_verified')>{{ Str::ucfirst(__('forms.status.not_verified')) }}</option>
+                        <option value="verified" @selected($user->status == 'verified')>{{ Str::ucfirst(__('forms.status.verified')) }}</option>
+                        <option value="blocked" @selected($user->status == 'blocked')>{{ Str::ucfirst(__('forms.status.blocked')) }}</option>
                     </select>
                 </div>
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
-                    <label class="item-title" for="user-language">language:</label>
+                    <label class="item-title" for="user-language">{{ __('forms.lang') }}</label>
                     <select class="form-select" id="user-language" name="language">
                         <option value="en" @selected($user->language == 'en')>English</option>
                         <option value="ar" @selected($user->language == 'ar')>Arabic</option>
@@ -86,8 +86,8 @@
                 </div>
                 <div class="form-item second d-flex mt-3 flex-wrap flex-sm-nowrap">
                     <div class="item-title d-block mb-2">
-                        <label class="item-title mb-2" for="profile-picture">Profile Picture:</label>
-						<small>{{ __("The Recommended Dimensions Is:\n500 X 500 (PX)") }}</small>
+                        <label class="item-title mb-2" for="profile-picture">{{ __('forms.profile_picture.title') }}</label>
+						<small>{{ __("forms.profile_picture.sub") }}</small>
                     </div>
                     @if ($user->profile_picture)
 						<div class="item-content">
@@ -158,7 +158,7 @@
         <div class="col-sm-12 col-lg-9 float-start post-box">
             <div class="main-box box-spaces">
                 <div class="form-item primary">
-                    <h2 class="box-title item-title">{{ __('admin.pages.users.sessions.title') }}</h2>
+                    <h2 class="box-title item-title">{{ __('admin.sections.sessions') }}</h2>
                     <div class="form-item second mt-3">
 						<small>{{ __('admin.pages.users.sessions.desc_1') }}</small>
 						<small class="mt-2 d-block">{{ __('admin.pages.users.sessions.desc_2') }}</small>
@@ -206,7 +206,7 @@
         <div class="col-sm-12 col-lg-9 float-start post-box">
             <div class="main-box box-spaces mb-0">
                 <div class="form-item primary">
-                    <h2 class="box-title item-title">Activities</h2>
+                    <h2 class="box-title item-title">{{ __('admin.sections.activities') }}</h2>
                     <div class="table-holder mt-0">
                         <div class="table-responsive">
                             <table class="table table-striped" id="activities">

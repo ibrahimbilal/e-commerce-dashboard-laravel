@@ -16,9 +16,9 @@
     @php
     // breadcrumbs params
     $params = [
-        'page_title' => __('admin.pages.users.title'),
+        'page_title' => __('admin.menu.users.title'),
         'add_route_name' => 'users.create',
-        'breadcrumbs_items' => ['title' => __('admin.pages.users.title')],
+        'breadcrumbs_items' => ['title' => __('admin.menu.users.title')],
     ];
     @endphp
     @include('admin.inc.page_title', $params)
@@ -82,7 +82,7 @@
 										</td>
 										<td class="user-title">{{ $user->first_name }} {{ $user->last_name }}</td>
 										<td>{{ $user->email }}</td>
-										<td>{{ $user->roles->title }}</td>
+										<td>{{ $user->role_name }}</td>
 										<td>{{ $user->created_at }}</td>
 										<td class="status-title">{{ $user->status }}</td>
 										<td>

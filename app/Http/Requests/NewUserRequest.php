@@ -50,7 +50,7 @@ class NewUserRequest extends FormRequest
 				'before_or_equal:' . date("Y-m-d", strtotime('-18 years'))
 			],
 			'gender' => ['required',Rule::in(['male', 'female'])],
-			'role_id' => ['required','numeric', Rule::exists(Role::class, 'id')],
+			'role_name' => ['required','string', Rule::exists(Role::class, 'name')],
 			'language' => ['required','string'],
 			'profile_picture' => [
 				File::image()

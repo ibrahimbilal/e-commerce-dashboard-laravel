@@ -11,8 +11,14 @@
 
     <!-- Style-->
     <link href="{{ asset("css/auth$rtl_ext.min.css") }}" rel="stylesheet">
-    <!-- Fonts-->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&amp;display=swap" rel="stylesheet">
+
+	<!-- Fonts -->
+	@if (!is_rtl())
+		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+	@else
+		<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+	@endif
+
     <title>@yield('title')</title>
     <!-- async scripts-->
     <script type="text/javascript" async>

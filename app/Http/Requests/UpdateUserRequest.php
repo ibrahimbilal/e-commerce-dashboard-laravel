@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\Role;
+use App\Models\User;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\File;
 use Illuminate\Validation\Rules\Password;
@@ -32,7 +33,7 @@ class UpdateUserRequest extends FormRequest
 			'last_name'	=> ['required', 'string', 'max:255'],
 			'email' => [
 				'required', 'string', 'email', 'max:255',
-				Rule::unique('users', 'id')->ignore($this->user()->id),
+				Rule::unique(User::class, 'id')->ignore($this->user()->id),
 			],
 			'current_password' 	=> ['nullable', 'current_password:web', 'required_with:password'],
 			'password' => [
@@ -42,7 +43,7 @@ class UpdateUserRequest extends FormRequest
 			'mobile' => ['nullable', 'numeric', 'digits_between:9,15'],
 			'birth_date' => ['nullable', 'date', 'date_format:Y-m-d', 'before_or_equal:' . date("Y-m-d", strtotime('-18 years'))],
 			'gender' => ['required', Rule::in(['male', 'female'])],
-			'role_id' => ['required', 'numeric', Rule::exists(Role::class, 'id')],
+			'role_name' => ['required','string', Rule::exists(Role::class, 'name')],
 			'status' => ['sometimes', 'string', Rule::in(['not_verified', 'verified', 'blocked'])],
 			'language' => ['required', 'string'],
 			'profile_picture' => [

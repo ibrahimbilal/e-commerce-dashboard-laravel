@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use Illuminate\Auth\Events\Login;
+use App\Listeners\CheckUserLocale;
 use App\Listeners\ChangeUserStatus;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Event;
@@ -22,6 +24,9 @@ class EventServiceProvider extends ServiceProvider
         ],
 		Verified::class => [
 			ChangeUserStatus::class
+		],
+		Login::class => [
+			CheckUserLocale::class
 		]
     ];
 

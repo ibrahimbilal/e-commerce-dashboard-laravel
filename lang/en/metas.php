@@ -8,10 +8,4 @@ return [
 	'ip_address' => 'IP Address:',
 	'ip_country' => 'IP Country:',
 	'ip_city' => 'IP City:',
-	'account_status' => [
-		'title' => 'Account Status:',
-		'not_verified' => 'Not Verified',
-		'verified' => 'Verified',
-		'blocked' => 'Blocked',
-	],
 ];

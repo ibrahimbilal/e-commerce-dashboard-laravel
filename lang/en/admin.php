@@ -62,7 +62,7 @@ return [
 				'2fa_recovery' => '2fa recovery',
 			]
 		],
-		'collaps' => 'Collapse'
+		'collapse' => 'Collapse'
 	],
 
 	"overview" => [
@@ -99,9 +99,7 @@ return [
 
 	'pages' => [
 		'users' => [
-			'title' => 'Users',
 			'two_factor' => [
-				'title' => 'Two Factor Authentication',
 				'sub_section' => 'Status:',
 				'recovery_codes_notify' => 'Store these recovery codes in a secure password manager. They can be used to recover access to your account if your two factor authentication device is lost.',
 				'desciption' => 'When two factor authentication is enabled, you will be prompted for a secure, random token during authentication. You may retrieve this token from your phone\'s Google Authenticator application.',
@@ -118,10 +116,12 @@ return [
 					'generate' => 'Regenerate Recovery Codes',
 					'cancel' => 'Cancel',
 					'confirm' => 'Confirm',
-				]
+				],
+				'enabled' => 'Two factor authentication enabled, please confirm it.',
+				'disabled' => 'Two factor authentication disabled.',
+				'confirmed' => 'Two factor authentication confirmed.',
 			],
 			'sessions' => [
-				'title' => 'Browser Sessions',
 				'desc_1' => 'Manage and log out your active sessions on other browsers and devices.',
 				'desc_2' => 'If necessary, you may log out of all of your other browser sessions across all of your devices. Some of your recent sessions are listed below; however, this list may not be exhaustive. If you feel your account has been compromised, you should also update your password.',
 				'sub_section' => 'Active Sessions:',
@@ -129,6 +129,14 @@ return [
 				'last_active' => 'Last active',
 			]
 		]
+	],
+
+	'sections' => [
+		'user_details' => 'User Details',
+		'sessions' => 'Browser Sessions',
+		'two_factor' => 'Two Factor Authentication',
+		'activities' => 'Activities',
+		'password' => 'Change Password',
 	],
 
 	'filters' => [

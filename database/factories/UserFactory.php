@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -26,7 +25,7 @@ class UserFactory extends Factory
 			'mobile' => fake()->e164PhoneNumber(),
 			'birth_date' => fake()->date('Y-m-d', '-18 years'),
 			'gender' => fake()->randomElement(['male', 'female']),
-			'role_id' => fake()->numberBetween(9, 12),
+			'role_name' => nullValue(),
 			'status' => 'not_verified',
 			'language' => 'en',
 			'profile_picture' => fake()->imageUrl(500, 500, 'animals', true),

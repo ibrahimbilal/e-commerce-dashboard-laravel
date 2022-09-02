@@ -8,10 +8,4 @@ return [
 	'ip_address' => 'عنوان IP:',
 	'ip_country' => 'دولة IP:',
 	'ip_city' => 'مدينة IP:',
-	'account_status' => [
-		'title' => 'حالة الحساب:',
-		'not_verified' => 'غير مفعل',
-		'verified' => 'مفعل',
-		'blocked' => 'محظور',
-	],
 ];

@@ -2,27 +2,27 @@
 
 @section('title', 'Reset Password')
 
-@section('intro', 'Restore Account')
+@section('intro', __('auth.pages.restore.intro'))
 
 @section('form-wrapper')
 	<div class="form-wrapper">
 		<div class="form-header">
-			<h2>Reset Password</h2>
-			<p>Your new password must be different from previously used passwords.</p>
+			<h2>{{ __('auth.pages.restore.title') }}</h2>
+			<p>{{ __('auth.pages.restore.sub_title') }}</p>
 		</div>
 		<div class="form-body">
 			<form method="POST" action="{{ route('password.update') }}">
 				<input type="hidden" name="token" value="{{ request()->route('token') }}">
 				@csrf
 				<div class="input-wrapper">
-					<label for="email">Email</label>
+					<label for="email">{{ __('forms.email') }}</label>
 					<input id="email" type="email" name="email" placeholder="john@example.com" value="{{ request()->email }}">
 					@error('email')
 						<span class="error" role="alert">{{ $message }}</span>
 					@enderror
 				</div>
 				<div class="input-wrapper">
-					<label for="password">New Password</label>
+					<label for="password">{{ __('forms.new_password') }}</label>
 					<input id="password" type="password" name="password" placeholder="**********"><span
 						class="icon show-pass"><i class="fi-rr-eye"> </i></span>
 					@error('password')
@@ -30,16 +30,16 @@
 					@enderror
 				</div>
 				<div class="input-wrapper">
-					<label for="confirm-password">Confirm Password</label>
+					<label for="confirm-password">{{ __('forms.confirm_password') }}</label>
 					<input id="confirm-password" type="password" name="password_confirmation"
 						placeholder="**********"><span class="icon show-pass"><i class="fi-rr-eye"> </i></span>
 				</div>
-				<button type="submit">Set New Password</button>
+				<button type="submit">{{ __('buttons.set_password') }}</button>
 			</form>
 		</div>
 		<div class="form-footer">
 			<p><span class="icon"><i class="fi-rr-angle-small-left"> </i></span><a class="form-link"
-					href="{{ route('login') }}">Back To Login</a></p>
+					href="{{ route('login') }}">{{ __('buttons.back_to_login') }}</a></p>
 		</div>
 	</div>
 @endsection

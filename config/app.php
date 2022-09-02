@@ -205,7 +205,8 @@ return [
 
 		App\Providers\FortifyServiceProvider::class,
 		Jenssegers\Agent\AgentServiceProvider::class,
-		Stevebauman\Location\LocationServiceProvider::class
+		Stevebauman\Location\LocationServiceProvider::class,
+		Spatie\Permission\PermissionServiceProvider::class,
 
     ],
 

@@ -23,31 +23,31 @@
         <div class="col-sm-12 col-lg-9 float-start post-box">
             <div class="main-box box-spaces">
                 <div class="form-item primary mb-3">
-                    <h2 class="box-title item-title">user details</h2>
+                    <h2 class="box-title item-title">{{ __('admin.sections.user_details') }}</h2>
                 </div>
                 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap">
-                    <label class="item-title" for="first-name">first name:</label>
+                    <label class="item-title" for="first-name">{{ __('forms.first_name') }}</label>
                     <input class="form-control" id="first-name" name="first_name" type="text">
                 </div>
                 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
-                    <label class="item-title" for="last-name">last name:</label>
+                    <label class="item-title" for="last-name">{{ __('forms.last_name') }}</label>
                     <input class="form-control" id="last-name" name="last_name" type="text">
                 </div>
                 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
-                    <label class="item-title" for="email">email address:</label>
+                    <label class="item-title" for="email">{{ __('forms.email') }}</label>
                     <input class="form-control" id="email" name="email" type="email">
                 </div>
 				<div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
-					<label class="item-title" for="password">password:</label>
+					<label class="item-title" for="password">{{ __('forms.password') }}</label>
 					<div class="with-icon">
 						<input class="form-control" id="password" name="password" type="password" autocomplete="off">
 						<span class="show-pass"><i class="fi-rr-eye"> </i></span>
 					</div>
 					<button class="btn regular-btn ms-sm-3 mt-2 mt-sm-0 text-nowrap generate-password"
-						type="button">generate</button>
+						type="button">{{ __('buttons.generate') }}</button>
 				</div>
 				<div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
-					<label class="item-title" for="confirm-password">confirm password:</label>
+					<label class="item-title" for="confirm-password">{{ __('forms.confirm_password') }}</label>
 					<div class="with-icon">
 						<input class="form-control" id="confirm-password" name="password_confirmation"
 							type="password" autocomplete="off">
@@ -55,26 +55,26 @@
 					</div>
 				</div>
                 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
-                    <label class="item-title" for="mobile">mobile:</label>
+                    <label class="item-title" for="mobile">{{ __('forms.mobile') }}</label>
                     <input class="form-control" id="mobile" name="mobile" type="tel">
                 </div>
                 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
-                    <label class="item-title" for="birth-date">Birth Of Date:</label>
+                    <label class="item-title" for="birth-date">{{ __('forms.birth_date') }}</label>
                     <div class="position-relative w-100">
                         <input class="form-control" id="birth-date" name="birth_date" type="text" placeholder="mm/dd/yyyy" data-toggle="datepicker">
                     </div>
                 </div>
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
-                    <label class="item-title">gender:</label>
+                    <label class="item-title">{{ __('forms.gender.title') }}</label>
                     <label class="radio-label" for="male">
-                        <input class="input-radio" id="male" name="gender" type="radio" value="male" checked>Male
+                        <input class="input-radio" id="male" name="gender" type="radio" value="male" checked>{{ __('forms.gender.male') }}
                     </label>
                     <label class="radio-label" for="female">
-                        <input class="input-radio" id="female" name="gender" type="radio" value="female">Female
+                        <input class="input-radio" id="female" name="gender" type="radio" value="female">{{ __('forms.gender.female') }}
                     </label>
                 </div>
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
-                    <label class="item-title" for="user-role">role:</label>
+                    <label class="item-title" for="user-role">{{ __('forms.role') }}</label>
                     <select class="form-select" id="user-role" name="role_id">
 						@forelse ( $roles as $role )
 							<option value="{{ $role->id }}">{{ $role->title }}</option>
@@ -84,7 +84,7 @@
                     </select>
                 </div>
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
-                    <label class="item-title" for="user-language">language:</label>
+                    <label class="item-title" for="user-language">{{ __('forms.lang') }}</label>
                     <select class="form-select" id="user-language" name="language">
                         <option value="en">English</option>
                         <option value="ar">Arabic</option>
@@ -92,19 +92,20 @@
                     </select>
                 </div>
                 <div class="form-item second d-flex mt-3 flex-wrap flex-sm-nowrap">
-                    <div class="item-title">
-                        <label class="item-title mb-2" for="profile-picture">Profile Picture:</label>
+					<div class="item-title d-block mb-2">
+                        <label class="item-title mb-2" for="profile-picture">{{ __('forms.profile_picture.title') }}</label>
+						<small>{{ __("forms.profile_picture.sub") }}</small>
                     </div>
                     <div class="item-content">
 						<label for="pp" class="btn regular-btn" style="width: 150px">
-							Upload Image
+							{{ __('buttons.upload_image') }}
 							<input type="file" name="profile_picture" id="pp" accept=".jpg, .jpeg, .png" style="display: none">
 							<input id="remove_pp" type="hidden" name="remove_pp">
 						</label>
 						<div class="selected-img" style="display: none">
 							<div class="img-holder mt-3">
 								<img class="preview" width="70">
-								<span class="overlay"><i class="fi-rr-trash"> </i><span>remove</span></span>
+								<span class="overlay"><i class="fi-rr-trash"> </i><span>{{ __('buttons.remove') }}</span></span>
 							</div>
 						</div>
 					</div>
@@ -114,7 +115,7 @@
         <div class="col-sm-6 col-lg-3 float-end meta-box">
             <div class="main-box box-spaces">
                 <div class="btns-holder d-flex justify-content-between">
-                    <button class="btn solid-btn w-100" type="submit">create</button>
+                    <button class="btn solid-btn w-100" type="submit">{{ __('buttons.create') }}</button>
                 </div>
             </div>
         </div>

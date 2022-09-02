@@ -2,26 +2,26 @@
 
 @section('title', 'Confirm Password')
 
-@section('intro', 'Secure Account')
+@section('intro', __('auth.pages.confirm.intro'))
 
 @section('form-wrapper')
 	<div class="form-wrapper">
 		<div class="form-header">
-			<h2>Confirm Password</h2>
-			<p>Please confirm your password to activate two factor authentication.</p>
+			<h2>{{ __('auth.pages.confirm.title') }}</h2>
+			<p>{{ __('auth.pages.confirm.sub_title') }}</p>
 		</div>
 		<div class="form-body">
 			<form method="POST" action="{{ route('password.confirm') }}">
 				@csrf
 				<div class="input-wrapper">
-					<label for="password">Confirm Password</label>
+					<label for="password">{{ __('forms.confirm_password') }}</label>
 					<input id="password" type="password" name="password" placeholder="**********"><span
 						class="icon show-pass"><i class="fi-rr-eye"> </i></span>
 					@error('password')
 						<span class="error" role="alert">{{ $message }}</span>
 					@enderror
 				</div>
-				<button type="submit">Confirm</button>
+				<button type="submit">{{ __('buttons.confirm') }}</button>
 			</form>
 		</div>
 	</div>
