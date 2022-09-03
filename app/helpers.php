@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Support\Str;
+use Spatie\Permission\Models\Permission;
+
 // Create Dashboard Menu
 if (!function_exists('get_dashboard_menu')) {
 	/**
@@ -10,270 +13,321 @@ if (!function_exists('get_dashboard_menu')) {
 	{
 		return [
 			[
-				[
-					"route_name" => 'admin.index',
-					"active_if" => ['admin.index'],
-					"icon" => 'apps',
-					"title" => __('admin.menu.dashboard'),
-					"has_submeu" => false,
-					"badge" => '',
-				]
-			],
-			[
-				[
-					"route_name" => '',
-					"active_if" => ['products'],
-					"icon" => 'shopping-bag',
-					"title" => __('admin.menu.products'),
-					"has_submeu" => true,
-					"badge" => '',
-					"submenu_items" => [
-						[
-							"route_name" => '',
-							"active_if" => ['products', 'attributes'],
-							"title" => __('admin.menu.attributes'),
-						],
-						[
-							"route_name" => '',
-							"active_if" => ['products', 'reviews'],
-							"title" => __('admin.menu.reviews'),
-						],
+				'allow_to' => ['view dashboard'],
+				'group_items' => [
+					[
+						"route_name" => 'admin.index',
+						"active_if" => ['admin.index'],
+						"icon" => 'apps',
+						"title" => __('admin.menu.dashboard.title'),
+						"has_submeu" => false,
+						"badge" => '',
+						'permission' => ['view dashboard'],
 					]
-				],
-				[
-					"route_name" => '',
-					"active_if" => ['categories'],
-					"icon" => 'folder',
-					"title" => __('admin.menu.categories'),
-					"has_submeu" => false,
-					"badge" => '',
-				],
-				[
-					"route_name" => '',
-					"active_if" => ['tags'],
-					"icon" => 'label',
-					"title" => __('admin.menu.tags'),
-					"has_submeu" => false,
-					"badge" => '',
-				],
-				[
-					"route_name" => '',
-					"active_if" => ['discounts'],
-					"icon" => 'badge-percent',
-					"title" => __('admin.menu.discounts'),
-					"has_submeu" => false,
-					"badge" => '',
-				],
-			],
-			[
-				[
-					"route_name" => '',
-					"active_if" => ['customers'],
-					"icon" => 'users',
-					"title" => __('admin.menu.customers'),
-					"has_submeu" => false,
-					"badge" => '',
-				],
-				[
-					"route_name" => '',
-					"active_if" => ['orders'],
-					"icon" => 'box',
-					"title" => __('admin.menu.orders'),
-					"has_submeu" => false,
-					"badge" => '35',
-				],
-				[
-					"route_name" => '',
-					"active_if" => ['invoices'],
-					"icon" => 'document',
-					"title" => __('admin.menu.invoices'),
-					"has_submeu" => false,
-					"badge" => '',
 				]
 			],
 			[
-				[
-					"route_name" => '',
-					"active_if" => ['analytics'],
-					"icon" => 'stats',
-					"title" => __('admin.menu.analytics.title'),
-					"has_submeu" => true,
-					"badge" => '',
-					"submenu_items" => [
-						[
-							"route_name" => '',
-							"active_if" => ['analytics', 'overview'],
-							"title" => __('admin.menu.analytics.0.overview'),
+				'allow_to' => ['view products', 'view attributes', 'view reviews', 'view categories', 'view tags', 'view discounts'],
+				'group_items' => [
+					[
+						"route_name" => '',
+						"active_if" => ['products'],
+						"icon" => 'shopping-bag',
+						"title" => __('admin.menu.products.title'),
+						"has_submeu" => true,
+						"badge" => '',
+						'permission' => ['view products'],
+						"submenu_items" => [
+							[
+								"route_name" => '',
+								"active_if" => ['products', 'attributes'],
+								"title" => __('admin.menu.attributes.title'),
+								'permission' => ['view attributes'],
+							],
+							[
+								"route_name" => '',
+								"active_if" => ['products', 'reviews'],
+								"title" => __('admin.menu.reviews.title'),
+								'permission' => ['view reviews'],
+							],
 						]
+					],
+					[
+						"route_name" => '',
+						"active_if" => ['categories'],
+						"icon" => 'folder',
+						"title" => __('admin.menu.categories.title'),
+						"has_submeu" => false,
+						"badge" => '',
+						'permission' => ['view categories'],
+					],
+					[
+						"route_name" => '',
+						"active_if" => ['tags'],
+						"icon" => 'label',
+						"title" => __('admin.menu.tags.title'),
+						"has_submeu" => false,
+						"badge" => '',
+						'permission' => ['view tags'],
+					],
+					[
+						"route_name" => '',
+						"active_if" => ['discounts'],
+						"icon" => 'badge-percent',
+						"title" => __('admin.menu.discounts.title'),
+						"has_submeu" => false,
+						"badge" => '',
+						'permission' => ['view discounts'],
 					]
-				],
-				[
-					"route_name" => '',
-					"active_if" => ['marketing'],
-					"icon" => 'megaphone',
-					"title" => __('admin.menu.marketing'),
-					"has_submeu" => false,
-					"badge" => '',
 				]
 			],
 			[
-				[
-					"route_name" => 'users.index',
-					"active_if" => ['users.index', 'users.create', 'users.edit', 'users.profile'],
-					"icon" => 'user',
-					"title" => __('admin.menu.users.title'),
-					"has_submeu" => false,
-					"badge" => '',
-				],
-				[
-					"route_name" => 'roles.index',
-					"active_if" => ['roles.index', 'roles.create', 'roles.edit'],
-					"icon" => 'key',
-					"title" => __('admin.menu.roles'),
-					"has_submeu" => false,
-					"badge" => '',
+				'allow_to' => ['view customers', 'view orders', 'view invoices'],
+				'group_items' => [
+					[
+						"route_name" => '',
+						"active_if" => ['customers'],
+						"icon" => 'users',
+						"title" => __('admin.menu.customers.title'),
+						"has_submeu" => false,
+						"badge" => '',
+						'permission' => ['view customers'],
+					],
+					[
+						"route_name" => '',
+						"active_if" => ['orders'],
+						"icon" => 'box',
+						"title" => __('admin.menu.orders.title'),
+						"has_submeu" => false,
+						"badge" => '35',
+						'permission' => ['view orders'],
+					],
+					[
+						"route_name" => '',
+						"active_if" => ['invoices'],
+						"icon" => 'document',
+						"title" => __('admin.menu.invoices.title'),
+						"has_submeu" => false,
+						"badge" => '',
+						'permission' => ['view invoices'],
+					]
 				]
 			],
 			[
-				[
-					"route_name" => '',
-					"active_if" => ['gallery'],
-					"icon" => 'picture',
-					"title" => __('admin.menu.gallery'),
-					"has_submeu" => false,
-					"badge" => '',
-				],
-				[
-					"route_name" => '',
-					"active_if" => ['languages'],
-					"icon" => 'world',
-					"title" => __('admin.menu.languages'),
-					"has_submeu" => false,
-					"badge" => '',
-				],
-				[
-					"route_name" => '',
-					"active_if" => ['general-settings.index', 'theme_settings', 'store_settings', 'currencies_settings', 'emails_settings', 'payment_settings'],
-					"icon" => 'settings',
-					"title" => __('admin.menu.settings.title'),
-					"has_submeu" => true,
-					"badge" => '',
-					"submenu_items" => [
-						[
-							"route_name" => 'general-settings.index',
-							"active_if" => ['general-settings.index'],
-							"title" => __('admin.menu.settings.0.general'),
-						],
-						[
-							"route_name" => '',
-							"active_if" => ['theme_settings'],
-							"title" => __('admin.menu.settings.0.theme'),
-						],
-						[
-							"route_name" => '',
-							"active_if" => ['store_settings'],
-							"title" => __('admin.menu.settings.0.store'),
-						],
-						[
-							"route_name" => '',
-							"active_if" => ['currencies_settings'],
-							"title" => __('admin.menu.settings.0.currencies'),
-						],
-						[
-							"route_name" => '',
-							"active_if" => ['emails_settings'],
-							"title" => __('admin.menu.settings.0.emails'),
-						],
-						[
-							"route_name" => '',
-							"active_if" => ['payment_settings'],
-							"title" => __('admin.menu.settings.0.payment'),
+				'allow_to' => ['view analytics', 'view marketing'],
+				'group_items' => [
+					[
+						"route_name" => '',
+						"active_if" => ['analytics'],
+						"icon" => 'stats',
+						"title" => __('admin.menu.analytics.title'),
+						"has_submeu" => true,
+						"badge" => '',
+						'permission' => ['view analytics'],
+						"submenu_items" => [
+							[
+								"route_name" => '',
+								"active_if" => ['analytics', 'overview'],
+								"title" => __('admin.menu.analytics.0.overview'),
+								'permission' => ['view overview'],
+							]
 						]
+					],
+					[
+						"route_name" => '',
+						"active_if" => ['marketing'],
+						"icon" => 'megaphone',
+						"title" => __('admin.menu.marketing.title'),
+						"has_submeu" => false,
+						"badge" => '',
+						'permission' => ['view marketing'],
 					]
 				]
 			],
 			[
-				[
-					"route_name" => '',
-					"active_if" => ['errors'],
-					"icon" => 'browser',
-					"title" => __('admin.menu.errors'),
-					"has_submeu" => true,
-					"badge" => '',
-					"submenu_items" => [
-						[
-							"route_name" => '',
-							"active_if" => ['400'],
-							"title" => '400',
-						],
-						[
-							"route_name" => '',
-							"active_if" => ['401'],
-							"title" => '401',
-						],
-						[
-							"route_name" => '',
-							"active_if" => ['403'],
-							"title" => '403',
-						],
-						[
-							"route_name" => '',
-							"active_if" => ['404'],
-							"title" => '404',
-						],
-						[
-							"route_name" => '',
-							"active_if" => ['500'],
-							"title" => '500',
-						],
-						[
-							"route_name" => '',
-							"active_if" => ['503'],
-							"title" => '503',
-						]
+				'allow_to' => ['view users', 'view roles'],
+				'group_items' => [
+					[
+						"route_name" => 'users.index',
+						"active_if" => ['users.index', 'users.create', 'users.edit', 'users.profile'],
+						"icon" => 'user',
+						"title" => __('admin.menu.users.title'),
+						"has_submeu" => false,
+						"badge" => '',
+						'permission' => ['view users'],
+					],
+					[
+						"route_name" => 'roles.index',
+						"active_if" => ['roles.index', 'roles.create', 'roles.edit'],
+						"icon" => 'key',
+						"title" => __('admin.menu.roles.title'),
+						"has_submeu" => false,
+						"badge" => '',
+						'permission' => ['view roles'],
 					]
+				]
+			],
+			[
+				'allow_to' => [
+					'view gallery',
+					'view languages',
+					'view general_settings',
+					'view theme_settings',
+					'view store_settings',
+					'view currencies_settings',
+					'view emails_settings',
+					'view payment_settings',
 				],
-				[
-					"route_name" => '',
-					"active_if" => ['errors'],
-					"icon" => 'browser',
-					"title" => __('admin.menu.auth.title'),
-					"has_submeu" => true,
-					"badge" => '',
-					"submenu_items" => [
-						[
-							"route_name" => '',
-							"active_if" => ['login'],
-							"title" => __('admin.menu.auth.0.login'),
-						],
-						[
-							"route_name" => '',
-							"active_if" => ['register'],
-							"title" => __('admin.menu.auth.0.register'),
-						],
-						[
-							"route_name" => '',
-							"active_if" => ['forgot-password'],
-							"title" => __('admin.menu.auth.0.forgot_password'),
-						],
-						[
-							"route_name" => '',
-							"active_if" => ['reset-password'],
-							"title" => __('admin.menu.auth.0.reset_password'),
-						],
-						[
-							"route_name" => '',
-							"active_if" => ['2fa-code'],
-							"title" => __('admin.menu.auth.0.2fa_code'),
-						],
-						[
-							"route_name" => '',
-							"active_if" => ['2fa-recovery'],
-							"title" => __('admin.menu.auth.0.2fa_recovery'),
+				'group_items' => [
+					[
+						"route_name" => '',
+						"active_if" => ['gallery'],
+						"icon" => 'picture',
+						"title" => __('admin.menu.gallery.title'),
+						"has_submeu" => false,
+						"badge" => '',
+						'permission' => ['view gallery'],
+					],
+					[
+						"route_name" => '',
+						"active_if" => ['languages'],
+						"icon" => 'world',
+						"title" => __('admin.menu.languages.title'),
+						"has_submeu" => false,
+						"badge" => '',
+						'permission' => ['view languages'],
+					],
+					[
+						"route_name" => '',
+						"active_if" => ['general-settings.index', 'theme_settings', 'store_settings', 'currencies_settings', 'emails_settings', 'payment_settings'],
+						"icon" => 'settings',
+						"title" => __('admin.menu.settings.title'),
+						"has_submeu" => true,
+						"badge" => '',
+						'permission' => ['view general_settings'],
+						"submenu_items" => [
+							[
+								"route_name" => 'general-settings.index',
+								"active_if" => ['general-settings.index'],
+								"title" => __('admin.menu.settings.0.general'),
+								'permission' => ['view general_settings'],
+							],
+							[
+								"route_name" => '',
+								"active_if" => ['theme_settings'],
+								"title" => __('admin.menu.settings.0.theme'),
+								'permission' => ['view theme_settings'],
+							],
+							[
+								"route_name" => '',
+								"active_if" => ['store_settings'],
+								"title" => __('admin.menu.settings.0.store'),
+								'permission' => ['view store_settings'],
+							],
+							[
+								"route_name" => '',
+								"active_if" => ['currencies_settings'],
+								"title" => __('admin.menu.settings.0.currencies'),
+								'permission' => ['view currencies_settings'],
+							],
+							[
+								"route_name" => '',
+								"active_if" => ['emails_settings'],
+								"title" => __('admin.menu.settings.0.emails'),
+								'permission' => ['view emails_settings'],
+							],
+							[
+								"route_name" => '',
+								"active_if" => ['payment_settings'],
+								"title" => __('admin.menu.settings.0.payment'),
+								'permission' => ['view payment_settings'],
+							]
 						]
 					]
 				]
 			],
+			// [
+			// 	[
+			// 		"route_name" => '',
+			// 		"active_if" => ['errors'],
+			// 		"icon" => 'browser',
+			// 		"title" => __('admin.menu.errors'),
+			// 		"has_submeu" => true,
+			// 		"badge" => '',
+			// 		"submenu_items" => [
+			// 			[
+			// 				"route_name" => '',
+			// 				"active_if" => ['400'],
+			// 				"title" => '400',
+			// 			],
+			// 			[
+			// 				"route_name" => '',
+			// 				"active_if" => ['401'],
+			// 				"title" => '401',
+			// 			],
+			// 			[
+			// 				"route_name" => '',
+			// 				"active_if" => ['403'],
+			// 				"title" => '403',
+			// 			],
+			// 			[
+			// 				"route_name" => '',
+			// 				"active_if" => ['404'],
+			// 				"title" => '404',
+			// 			],
+			// 			[
+			// 				"route_name" => '',
+			// 				"active_if" => ['500'],
+			// 				"title" => '500',
+			// 			],
+			// 			[
+			// 				"route_name" => '',
+			// 				"active_if" => ['503'],
+			// 				"title" => '503',
+			// 			]
+			// 		]
+			// 	],
+			// 	[
+			// 		"route_name" => '',
+			// 		"active_if" => ['auth'],
+			// 		"icon" => 'browser',
+			// 		"title" => __('admin.menu.auth.title'),
+			// 		"has_submeu" => true,
+			// 		"badge" => '',
+			// 		"submenu_items" => [
+			// 			[
+			// 				"route_name" => '',
+			// 				"active_if" => ['login'],
+			// 				"title" => __('admin.menu.auth.0.login'),
+			// 			],
+			// 			[
+			// 				"route_name" => '',
+			// 				"active_if" => ['register'],
+			// 				"title" => __('admin.menu.auth.0.register'),
+			// 			],
+			// 			[
+			// 				"route_name" => '',
+			// 				"active_if" => ['forgot-password'],
+			// 				"title" => __('admin.menu.auth.0.forgot_password'),
+			// 			],
+			// 			[
+			// 				"route_name" => '',
+			// 				"active_if" => ['reset-password'],
+			// 				"title" => __('admin.menu.auth.0.reset_password'),
+			// 			],
+			// 			[
+			// 				"route_name" => '',
+			// 				"active_if" => ['2fa-code'],
+			// 				"title" => __('admin.menu.auth.0.2fa_code'),
+			// 			],
+			// 			[
+			// 				"route_name" => '',
+			// 				"active_if" => ['2fa-recovery'],
+			// 				"title" => __('admin.menu.auth.0.2fa_recovery'),
+			// 			]
+			// 		]
+			// 	]
+			// ],
 		];
 	}
 }
@@ -284,9 +338,10 @@ if (!function_exists('list_of_timezons')) {
 	 * @param string $timezone
 	 * @return string
 	 */
-	function toGmtOffset($timezone){
+	function toGmtOffset($timezone)
+	{
 		$userTimeZone = new DateTimeZone($timezone);
-		$offset = $userTimeZone->getOffset(new DateTime("now",new DateTimeZone('GMT'))); // Offset in seconds
+		$offset = $userTimeZone->getOffset(new DateTime("now", new DateTimeZone('GMT'))); // Offset in seconds
 		$seconds = abs($offset);
 		$sign = $offset > 0 ? '+' : '-';
 		$hours = floor($seconds / 3600);
@@ -300,120 +355,121 @@ if (!function_exists('list_of_timezons')) {
 	/**
 	 * list Of Timezons
 	 */
-	function list_of_timezons() {
+	function list_of_timezons()
+	{
 		return [
 			''                     => 'No Timezone',
-			'Pacific/Midway'       => toGmtOffset('Pacific/Midway'       ). " Midway Island",
-            'US/Samoa'             => toGmtOffset('US/Samoa'             ). " Samoa",
-            'US/Hawaii'            => toGmtOffset('US/Hawaii'            ). " Hawaii",
-            'US/Alaska'            => toGmtOffset('US/Alaska'            ). " Alaska",
-            'US/Pacific'           => toGmtOffset('US/Pacific'           ). " Pacific Time (US & Canada)",
-            'America/Tijuana'      => toGmtOffset('America/Tijuana'      ). " Tijuana",
-            'US/Arizona'           => toGmtOffset('US/Arizona'           ). " Arizona",
-            'US/Mountain'          => toGmtOffset('US/Mountain'          ). " Mountain Time (US & Canada)",
-            'America/Chihuahua'    => toGmtOffset('America/Chihuahua'    ). " Chihuahua",
-            'America/Mazatlan'     => toGmtOffset('America/Mazatlan'     ). " Mazatlan",
-            'Canada/Saskatchewan'  => toGmtOffset('Canada/Saskatchewan'  ). " Saskatchewan",
-            'America/Mexico_City'  => toGmtOffset('America/Mexico_City'  ). " Mexico City",
-            'America/Monterrey'    => toGmtOffset('America/Monterrey'    ). " Monterrey",
-            'US/Central'           => toGmtOffset('US/Central'           ). " Central Time (US & Canada)",
-            'America/Bogota'       => toGmtOffset('America/Bogota'       ). " Bogota",
-            'America/Lima'         => toGmtOffset('America/Lima'         ). " Lima",
-            'US/Eastern'           => toGmtOffset('US/Eastern'           ). " Eastern Time (US & Canada)",
-            'US/East-Indiana'      => toGmtOffset('US/East-Indiana'      ). " Indiana (East)",
-            'America/Caracas'      => toGmtOffset('America/Caracas'      ). " Caracas",
-            'America/La_Paz'       => toGmtOffset('America/La_Paz'       ). " La Paz",
-            'America/Santiago'     => toGmtOffset('America/Santiago'     ). " Santiago",
-            'Canada/Atlantic'      => toGmtOffset('Canada/Atlantic'      ). " Atlantic Time (Canada)",
-            'America/Buenos_Aires' => toGmtOffset('America/Buenos_Aires' ). " Buenos Aires",
-            'Atlantic/Stanley'     => toGmtOffset('Atlantic/Stanley'     ). " Stanley",
-            'Canada/Newfoundland'  => toGmtOffset('Canada/Newfoundland'  ). " Newfoundland",
-            'Atlantic/Cape_Verde'  => toGmtOffset('Atlantic/Cape_Verde'  ). " Cape Verde Is.",
-            'Atlantic/Azores'      => toGmtOffset('Atlantic/Azores'      ). " Azores",
-            'Africa/Monrovia'      => toGmtOffset('Africa/Monrovia'      ). " Monrovia",
-            'Africa/Casablanca'    => toGmtOffset('Africa/Casablanca'    ). " Casablanca",
-            'Europe/Dublin'        => toGmtOffset('Europe/Dublin'        ). " Dublin",
-            'Europe/Lisbon'        => toGmtOffset('Europe/Lisbon'        ). " Lisbon",
-            'Europe/London'        => toGmtOffset('Europe/London'        ). " London",
-            'Europe/Amsterdam'     => toGmtOffset('Europe/Amsterdam'     ). " Amsterdam",
-            'Europe/Belgrade'      => toGmtOffset('Europe/Belgrade'      ). " Belgrade",
-            'Europe/Berlin'        => toGmtOffset('Europe/Berlin'        ). " Berlin",
-            'Europe/Bratislava'    => toGmtOffset('Europe/Bratislava'    ). " Bratislava",
-            'Europe/Brussels'      => toGmtOffset('Europe/Brussels'      ). " Brussels",
-            'Europe/Budapest'      => toGmtOffset('Europe/Budapest'      ). " Budapest",
-            'Europe/Copenhagen'    => toGmtOffset('Europe/Copenhagen'    ). " Copenhagen",
-            'Europe/Ljubljana'     => toGmtOffset('Europe/Ljubljana'     ). " Ljubljana",
-            'Europe/Madrid'        => toGmtOffset('Europe/Madrid'        ). " Madrid",
-            'Europe/Paris'         => toGmtOffset('Europe/Paris'         ). " Paris",
-            'Europe/Prague'        => toGmtOffset('Europe/Prague'        ). " Prague",
-            'Europe/Rome'          => toGmtOffset('Europe/Rome'          ). " Rome",
-            'Europe/Sarajevo'      => toGmtOffset('Europe/Sarajevo'      ). " Sarajevo",
-            'Europe/Skopje'        => toGmtOffset('Europe/Skopje'        ). " Skopje",
-            'Europe/Stockholm'     => toGmtOffset('Europe/Stockholm'     ). " Stockholm",
-            'Europe/Vienna'        => toGmtOffset('Europe/Vienna'        ). " Vienna",
-            'Europe/Warsaw'        => toGmtOffset('Europe/Warsaw'        ). " Warsaw",
-            'Europe/Zagreb'        => toGmtOffset('Europe/Zagreb'        ). " Zagreb",
-            'Africa/Cairo'         => toGmtOffset('Africa/Cairo'         ). " Cairo",
-            'Africa/Harare'        => toGmtOffset('Africa/Harare'        ). " Harare",
-            'Europe/Athens'        => toGmtOffset('Europe/Athens'        ). " Athens",
-            'Europe/Bucharest'     => toGmtOffset('Europe/Bucharest'     ). " Bucharest",
-            'Europe/Helsinki'      => toGmtOffset('Europe/Helsinki'      ). " Helsinki",
-            'Europe/Istanbul'      => toGmtOffset('Europe/Istanbul'      ). " Istanbul",
-            'Asia/Jerusalem'       => toGmtOffset('Asia/Jerusalem'       ). " Jerusalem",
-            'Europe/Kiev'          => toGmtOffset('Europe/Kiev'          ). " Kyiv",
-            'Europe/Minsk'         => toGmtOffset('Europe/Minsk'         ). " Minsk",
-            'Europe/Riga'          => toGmtOffset('Europe/Riga'          ). " Riga",
-            'Europe/Sofia'         => toGmtOffset('Europe/Sofia'         ). " Sofia",
-            'Europe/Tallinn'       => toGmtOffset('Europe/Tallinn'       ). " Tallinn",
-            'Europe/Vilnius'       => toGmtOffset('Europe/Vilnius'       ). " Vilnius",
-            'Asia/Baghdad'         => toGmtOffset('Asia/Baghdad'         ). " Baghdad",
-            'Asia/Kuwait'          => toGmtOffset('Asia/Kuwait'          ). " Kuwait",
-            'Africa/Nairobi'       => toGmtOffset('Africa/Nairobi'       ). " Nairobi",
-            'Asia/Riyadh'          => toGmtOffset('Asia/Riyadh'          ). " Riyadh",
-            'Europe/Moscow'        => toGmtOffset('Europe/Moscow'        ). " Moscow",
-            'Europe/Volgograd'     => toGmtOffset('Europe/Volgograd'     ). " Volgograd",
-            'Asia/Baku'            => toGmtOffset('Asia/Baku'            ). " Baku",
-            'Asia/Muscat'          => toGmtOffset('Asia/Muscat'          ). " Muscat",
-            'Asia/Tbilisi'         => toGmtOffset('Asia/Tbilisi'         ). " Tbilisi",
-            'Asia/Yerevan'         => toGmtOffset('Asia/Yerevan'         ). " Yerevan",
-            'Asia/Tehran'          => toGmtOffset('Asia/Tehran'          ). " Tehran",
-            'Asia/Kabul'           => toGmtOffset('Asia/Kabul'           ). " Kabul",
-            'Asia/Karachi'         => toGmtOffset('Asia/Karachi'         ). " Karachi",
-            'Asia/Tashkent'        => toGmtOffset('Asia/Tashkent'        ). " Tashkent",
-            'Asia/Yekaterinburg'   => toGmtOffset('Asia/Yekaterinburg'   ). " Ekaterinburg",
-            'Asia/Kolkata'         => toGmtOffset('Asia/Kolkata'         ). " Kolkata",
-            'Asia/Kathmandu'       => toGmtOffset('Asia/Kathmandu'       ). " Kathmandu",
-            'Asia/Almaty'          => toGmtOffset('Asia/Almaty'          ). " Almaty",
-            'Asia/Dhaka'           => toGmtOffset('Asia/Dhaka'           ). " Dhaka",
-            'Asia/Urumqi'          => toGmtOffset('Asia/Urumqi'          ). " Urumqi",
-            'Asia/Novosibirsk'     => toGmtOffset('Asia/Novosibirsk'     ). " Novosibirsk",
-            'Asia/Bangkok'         => toGmtOffset('Asia/Bangkok'         ). " Bangkok",
-            'Asia/Jakarta'         => toGmtOffset('Asia/Jakarta'         ). " Jakarta",
-            'Asia/Krasnoyarsk'     => toGmtOffset('Asia/Krasnoyarsk'     ). " Krasnoyarsk",
-            'Asia/Chongqing'       => toGmtOffset('Asia/Chongqing'       ). " Chongqing",
-            'Asia/Hong_Kong'       => toGmtOffset('Asia/Hong_Kong'       ). " Hong Kong",
-            'Asia/Kuala_Lumpur'    => toGmtOffset('Asia/Kuala_Lumpur'    ). " Kuala Lumpur",
-            'Australia/Perth'      => toGmtOffset('Australia/Perth'      ). " Perth",
-            'Asia/Singapore'       => toGmtOffset('Asia/Singapore'       ). " Singapore",
-            'Asia/Taipei'          => toGmtOffset('Asia/Taipei'          ). " Taipei",
-            'Asia/Ulaanbaatar'     => toGmtOffset('Asia/Ulaanbaatar'     ). " Ulaan Bataar",
-            'Asia/Irkutsk'         => toGmtOffset('Asia/Irkutsk'         ). " Irkutsk",
-            'Asia/Seoul'           => toGmtOffset('Asia/Seoul'           ). " Seoul",
-            'Asia/Tokyo'           => toGmtOffset('Asia/Tokyo'           ). " Tokyo",
-            'Asia/Yakutsk'         => toGmtOffset('Asia/Yakutsk'         ). " Yakutsk",
-            'Australia/Adelaide'   => toGmtOffset('Australia/Adelaide'   ). " Adelaide",
-            'Australia/Darwin'     => toGmtOffset('Australia/Darwin'     ). " Darwin",
-            'Australia/Brisbane'   => toGmtOffset('Australia/Brisbane'   ). " Brisbane",
-            'Australia/Canberra'   => toGmtOffset('Australia/Canberra'   ). " Canberra",
-            'Pacific/Guam'         => toGmtOffset('Pacific/Guam'         ). " Guam",
-            'Australia/Hobart'     => toGmtOffset('Australia/Hobart'     ). " Hobart",
-            'Australia/Melbourne'  => toGmtOffset('Australia/Melbourne'  ). " Melbourne",
-            'Pacific/Port_Moresby' => toGmtOffset('Pacific/Port_Moresby' ). " Port Moresby",
-            'Australia/Sydney'     => toGmtOffset('Australia/Sydney'     ). " Sydney",
-            'Asia/Vladivostok'     => toGmtOffset('Asia/Vladivostok'     ). " Vladivostok",
-            'Asia/Magadan'         => toGmtOffset('Asia/Magadan'         ). " Magadan",
-            'Pacific/Auckland'     => toGmtOffset('Pacific/Auckland'     ). " Auckland",
-            'Pacific/Fiji'         => toGmtOffset('Pacific/Fiji'         ). " Fiji",
+			'Pacific/Midway'       => toGmtOffset('Pacific/Midway') . " Midway Island",
+			'US/Samoa'             => toGmtOffset('US/Samoa') . " Samoa",
+			'US/Hawaii'            => toGmtOffset('US/Hawaii') . " Hawaii",
+			'US/Alaska'            => toGmtOffset('US/Alaska') . " Alaska",
+			'US/Pacific'           => toGmtOffset('US/Pacific') . " Pacific Time (US & Canada)",
+			'America/Tijuana'      => toGmtOffset('America/Tijuana') . " Tijuana",
+			'US/Arizona'           => toGmtOffset('US/Arizona') . " Arizona",
+			'US/Mountain'          => toGmtOffset('US/Mountain') . " Mountain Time (US & Canada)",
+			'America/Chihuahua'    => toGmtOffset('America/Chihuahua') . " Chihuahua",
+			'America/Mazatlan'     => toGmtOffset('America/Mazatlan') . " Mazatlan",
+			'Canada/Saskatchewan'  => toGmtOffset('Canada/Saskatchewan') . " Saskatchewan",
+			'America/Mexico_City'  => toGmtOffset('America/Mexico_City') . " Mexico City",
+			'America/Monterrey'    => toGmtOffset('America/Monterrey') . " Monterrey",
+			'US/Central'           => toGmtOffset('US/Central') . " Central Time (US & Canada)",
+			'America/Bogota'       => toGmtOffset('America/Bogota') . " Bogota",
+			'America/Lima'         => toGmtOffset('America/Lima') . " Lima",
+			'US/Eastern'           => toGmtOffset('US/Eastern') . " Eastern Time (US & Canada)",
+			'US/East-Indiana'      => toGmtOffset('US/East-Indiana') . " Indiana (East)",
+			'America/Caracas'      => toGmtOffset('America/Caracas') . " Caracas",
+			'America/La_Paz'       => toGmtOffset('America/La_Paz') . " La Paz",
+			'America/Santiago'     => toGmtOffset('America/Santiago') . " Santiago",
+			'Canada/Atlantic'      => toGmtOffset('Canada/Atlantic') . " Atlantic Time (Canada)",
+			'America/Buenos_Aires' => toGmtOffset('America/Buenos_Aires') . " Buenos Aires",
+			'Atlantic/Stanley'     => toGmtOffset('Atlantic/Stanley') . " Stanley",
+			'Canada/Newfoundland'  => toGmtOffset('Canada/Newfoundland') . " Newfoundland",
+			'Atlantic/Cape_Verde'  => toGmtOffset('Atlantic/Cape_Verde') . " Cape Verde Is.",
+			'Atlantic/Azores'      => toGmtOffset('Atlantic/Azores') . " Azores",
+			'Africa/Monrovia'      => toGmtOffset('Africa/Monrovia') . " Monrovia",
+			'Africa/Casablanca'    => toGmtOffset('Africa/Casablanca') . " Casablanca",
+			'Europe/Dublin'        => toGmtOffset('Europe/Dublin') . " Dublin",
+			'Europe/Lisbon'        => toGmtOffset('Europe/Lisbon') . " Lisbon",
+			'Europe/London'        => toGmtOffset('Europe/London') . " London",
+			'Europe/Amsterdam'     => toGmtOffset('Europe/Amsterdam') . " Amsterdam",
+			'Europe/Belgrade'      => toGmtOffset('Europe/Belgrade') . " Belgrade",
+			'Europe/Berlin'        => toGmtOffset('Europe/Berlin') . " Berlin",
+			'Europe/Bratislava'    => toGmtOffset('Europe/Bratislava') . " Bratislava",
+			'Europe/Brussels'      => toGmtOffset('Europe/Brussels') . " Brussels",
+			'Europe/Budapest'      => toGmtOffset('Europe/Budapest') . " Budapest",
+			'Europe/Copenhagen'    => toGmtOffset('Europe/Copenhagen') . " Copenhagen",
+			'Europe/Ljubljana'     => toGmtOffset('Europe/Ljubljana') . " Ljubljana",
+			'Europe/Madrid'        => toGmtOffset('Europe/Madrid') . " Madrid",
+			'Europe/Paris'         => toGmtOffset('Europe/Paris') . " Paris",
+			'Europe/Prague'        => toGmtOffset('Europe/Prague') . " Prague",
+			'Europe/Rome'          => toGmtOffset('Europe/Rome') . " Rome",
+			'Europe/Sarajevo'      => toGmtOffset('Europe/Sarajevo') . " Sarajevo",
+			'Europe/Skopje'        => toGmtOffset('Europe/Skopje') . " Skopje",
+			'Europe/Stockholm'     => toGmtOffset('Europe/Stockholm') . " Stockholm",
+			'Europe/Vienna'        => toGmtOffset('Europe/Vienna') . " Vienna",
+			'Europe/Warsaw'        => toGmtOffset('Europe/Warsaw') . " Warsaw",
+			'Europe/Zagreb'        => toGmtOffset('Europe/Zagreb') . " Zagreb",
+			'Africa/Cairo'         => toGmtOffset('Africa/Cairo') . " Cairo",
+			'Africa/Harare'        => toGmtOffset('Africa/Harare') . " Harare",
+			'Europe/Athens'        => toGmtOffset('Europe/Athens') . " Athens",
+			'Europe/Bucharest'     => toGmtOffset('Europe/Bucharest') . " Bucharest",
+			'Europe/Helsinki'      => toGmtOffset('Europe/Helsinki') . " Helsinki",
+			'Europe/Istanbul'      => toGmtOffset('Europe/Istanbul') . " Istanbul",
+			'Asia/Jerusalem'       => toGmtOffset('Asia/Jerusalem') . " Jerusalem",
+			'Europe/Kiev'          => toGmtOffset('Europe/Kiev') . " Kyiv",
+			'Europe/Minsk'         => toGmtOffset('Europe/Minsk') . " Minsk",
+			'Europe/Riga'          => toGmtOffset('Europe/Riga') . " Riga",
+			'Europe/Sofia'         => toGmtOffset('Europe/Sofia') . " Sofia",
+			'Europe/Tallinn'       => toGmtOffset('Europe/Tallinn') . " Tallinn",
+			'Europe/Vilnius'       => toGmtOffset('Europe/Vilnius') . " Vilnius",
+			'Asia/Baghdad'         => toGmtOffset('Asia/Baghdad') . " Baghdad",
+			'Asia/Kuwait'          => toGmtOffset('Asia/Kuwait') . " Kuwait",
+			'Africa/Nairobi'       => toGmtOffset('Africa/Nairobi') . " Nairobi",
+			'Asia/Riyadh'          => toGmtOffset('Asia/Riyadh') . " Riyadh",
+			'Europe/Moscow'        => toGmtOffset('Europe/Moscow') . " Moscow",
+			'Europe/Volgograd'     => toGmtOffset('Europe/Volgograd') . " Volgograd",
+			'Asia/Baku'            => toGmtOffset('Asia/Baku') . " Baku",
+			'Asia/Muscat'          => toGmtOffset('Asia/Muscat') . " Muscat",
+			'Asia/Tbilisi'         => toGmtOffset('Asia/Tbilisi') . " Tbilisi",
+			'Asia/Yerevan'         => toGmtOffset('Asia/Yerevan') . " Yerevan",
+			'Asia/Tehran'          => toGmtOffset('Asia/Tehran') . " Tehran",
+			'Asia/Kabul'           => toGmtOffset('Asia/Kabul') . " Kabul",
+			'Asia/Karachi'         => toGmtOffset('Asia/Karachi') . " Karachi",
+			'Asia/Tashkent'        => toGmtOffset('Asia/Tashkent') . " Tashkent",
+			'Asia/Yekaterinburg'   => toGmtOffset('Asia/Yekaterinburg') . " Ekaterinburg",
+			'Asia/Kolkata'         => toGmtOffset('Asia/Kolkata') . " Kolkata",
+			'Asia/Kathmandu'       => toGmtOffset('Asia/Kathmandu') . " Kathmandu",
+			'Asia/Almaty'          => toGmtOffset('Asia/Almaty') . " Almaty",
+			'Asia/Dhaka'           => toGmtOffset('Asia/Dhaka') . " Dhaka",
+			'Asia/Urumqi'          => toGmtOffset('Asia/Urumqi') . " Urumqi",
+			'Asia/Novosibirsk'     => toGmtOffset('Asia/Novosibirsk') . " Novosibirsk",
+			'Asia/Bangkok'         => toGmtOffset('Asia/Bangkok') . " Bangkok",
+			'Asia/Jakarta'         => toGmtOffset('Asia/Jakarta') . " Jakarta",
+			'Asia/Krasnoyarsk'     => toGmtOffset('Asia/Krasnoyarsk') . " Krasnoyarsk",
+			'Asia/Chongqing'       => toGmtOffset('Asia/Chongqing') . " Chongqing",
+			'Asia/Hong_Kong'       => toGmtOffset('Asia/Hong_Kong') . " Hong Kong",
+			'Asia/Kuala_Lumpur'    => toGmtOffset('Asia/Kuala_Lumpur') . " Kuala Lumpur",
+			'Australia/Perth'      => toGmtOffset('Australia/Perth') . " Perth",
+			'Asia/Singapore'       => toGmtOffset('Asia/Singapore') . " Singapore",
+			'Asia/Taipei'          => toGmtOffset('Asia/Taipei') . " Taipei",
+			'Asia/Ulaanbaatar'     => toGmtOffset('Asia/Ulaanbaatar') . " Ulaan Bataar",
+			'Asia/Irkutsk'         => toGmtOffset('Asia/Irkutsk') . " Irkutsk",
+			'Asia/Seoul'           => toGmtOffset('Asia/Seoul') . " Seoul",
+			'Asia/Tokyo'           => toGmtOffset('Asia/Tokyo') . " Tokyo",
+			'Asia/Yakutsk'         => toGmtOffset('Asia/Yakutsk') . " Yakutsk",
+			'Australia/Adelaide'   => toGmtOffset('Australia/Adelaide') . " Adelaide",
+			'Australia/Darwin'     => toGmtOffset('Australia/Darwin') . " Darwin",
+			'Australia/Brisbane'   => toGmtOffset('Australia/Brisbane') . " Brisbane",
+			'Australia/Canberra'   => toGmtOffset('Australia/Canberra') . " Canberra",
+			'Pacific/Guam'         => toGmtOffset('Pacific/Guam') . " Guam",
+			'Australia/Hobart'     => toGmtOffset('Australia/Hobart') . " Hobart",
+			'Australia/Melbourne'  => toGmtOffset('Australia/Melbourne') . " Melbourne",
+			'Pacific/Port_Moresby' => toGmtOffset('Pacific/Port_Moresby') . " Port Moresby",
+			'Australia/Sydney'     => toGmtOffset('Australia/Sydney') . " Sydney",
+			'Asia/Vladivostok'     => toGmtOffset('Asia/Vladivostok') . " Vladivostok",
+			'Asia/Magadan'         => toGmtOffset('Asia/Magadan') . " Magadan",
+			'Pacific/Auckland'     => toGmtOffset('Pacific/Auckland') . " Auckland",
+			'Pacific/Fiji'         => toGmtOffset('Pacific/Fiji') . " Fiji",
 		];
 	}
 }
@@ -436,7 +492,8 @@ if (!function_exists('special_char')) {
 	 * @param string $text
 	 * @return int|null
 	 */
-	function special_char($text) {
+	function special_char($text)
+	{
 		return preg_match('/[@_!#$%^&*()<>?\/|}{~:\s]/', $text);
 	}
 }
@@ -471,7 +528,7 @@ if (!function_exists('update_env')) {
 		$new_dub_qut = $newValue_sc > 0 ? '"' : '';
 
 		// URLs don't need to double quotes
-		if ( filter_var($oldValue, FILTER_VALIDATE_URL) && filter_var($newValue, FILTER_VALIDATE_URL) ) {
+		if (filter_var($oldValue, FILTER_VALIDATE_URL) && filter_var($newValue, FILTER_VALIDATE_URL)) {
 			$old_dub_qut = $new_dub_qut = '';
 		}
 
@@ -479,7 +536,8 @@ if (!function_exists('update_env')) {
 		if (file_exists($path)) {
 			// replace current value with new value
 			file_put_contents(
-				$path, str_replace(
+				$path,
+				str_replace(
 					$key . '=' . $old_dub_qut . $oldValue . $old_dub_qut,
 					$key . '=' . $new_dub_qut . $newValue . $new_dub_qut,
 					file_get_contents($path)
@@ -489,7 +547,7 @@ if (!function_exists('update_env')) {
 	}
 }
 
-if ( !function_exists('selected') ) {
+if (!function_exists('selected')) {
 	/**
 	 * check if list item is selected item
 	 * @param string $db_value
@@ -497,7 +555,8 @@ if ( !function_exists('selected') ) {
 	 * @param string $input_type
 	 * @return string
 	 */
-	function selected($db_value, $list_value, $input_type) {
+	function selected($db_value, $list_value, $input_type)
+	{
 
 		switch ($input_type) {
 			case 'select':
@@ -515,24 +574,26 @@ if ( !function_exists('selected') ) {
 	}
 }
 
-if ( !function_exists('format_date') ) {
+if (!function_exists('format_date')) {
 	/**
 	 * change Database date Format
 	 * @param datetime $date
 	 * @return string
 	 */
-	function format_date($date) {
+	function format_date($date)
+	{
 		return date_format($date, 'd/m/Y H:i');
 	}
 }
 
-if ( !function_exists('user_full_name') ) {
+if (!function_exists('user_full_name')) {
 	/**
 	 * User full name
 	 * @return string
 	 */
-	function user_full_name() {
-		if ( !auth()->user() ) {
+	function user_full_name()
+	{
+		if (!auth()->user()) {
 			return 'Unknown';
 		}
 
@@ -540,15 +601,121 @@ if ( !function_exists('user_full_name') ) {
 	}
 }
 
-if ( !function_exists('is_rtl') ) {
+if (!function_exists('is_rtl')) {
 	/**
 	 * Determines whether the current locale is right-to-left (RTL).
 	 * @return bool Whether locale is RTL.
 	 */
-	function is_rtl() {
+	function is_rtl()
+	{
 		$app_lang = app()->getLocale();
 		$rtl_locales = ['ar', 'arc', 'dv', 'fa', 'ha', 'he', 'khw', 'ks', 'ku', 'ps', 'ur', 'yi'];
 
 		return in_array($app_lang, $rtl_locales);
+	}
+}
+
+if (!function_exists('permissions_name')) {
+
+	/**
+	 * Permissions Name
+	 * @param string $perm_name
+	 * @param string $field
+	 * @return string
+	 */
+	function permissions_name($perm_name, $field = 'name')
+	{
+		if (!$perm_name) {
+			return;
+		}
+
+		switch (count(explode(' ', $perm_name))) {
+			case 1:
+				$perm_prefix = '';
+				$perm_text = $perm_name;
+				break;
+			case 2:
+				$perm_prefix = explode(' ', $perm_name)[0];
+				$perm_text = explode(' ', $perm_name)[1];
+				break;
+			case 3:
+				$perm_prefix = explode(' ', $perm_name)[0];
+				$perm_text = explode(' ', $perm_name)[1] . ' ' . explode(' ', $perm_name)[2];
+				break;
+			default:
+				$perm_prefix = '';
+				$perm_text = '';
+				break;
+		}
+
+		switch ($field) {
+			case 'name':
+				return $perm_text;
+				break;
+
+			case 'prefix':
+				return $perm_prefix;
+				break;
+
+			default:
+				return 'Please Select name or prefix!';
+				break;
+		}
+	}
+}
+
+if (!function_exists('grouping_sections_premissions')) {
+
+	/**
+	 * get permissions grouped by sections
+	 * @return collection
+	 */
+	function grouping_sections_premissions()
+	{
+		// our app sections
+		$sections = [
+			'dashboard',
+			'products',
+			'attributes',
+			'reviews',
+			'categories',
+			'tags',
+			'discounts',
+			'customers',
+			'orders',
+			'invoices',
+			'analytics',
+			'marketing',
+			'users',
+			'roles',
+			'gallery',
+			'languages',
+			'settings',
+			'imports',
+			'exports'
+		];
+
+		// get all premissions
+		$permissions = Permission::all();
+
+		// new collection
+		$collection = collect();
+		foreach ($sections as $section) {
+			// put every section permissions in one collect
+			$collection->push($permissions->filter(function ($perm) use ($section) {
+				if (Str::contains($perm->name, $section)) {
+					return $perm->name;
+				}
+			}));
+		}
+
+		// grouping (sections permissions) by section name
+		// return = 'section' => [permissions]
+		$grouped = $collection->groupBy(function ($item, $key) {
+			$name = explode(' ', $item->value('name'));
+			return substr($item->value('name'), -strlen(end($name)));
+		});
+
+		return $grouped;
 	}
 }

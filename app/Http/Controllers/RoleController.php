@@ -2,13 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Role;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+use App\Http\Requests\RolesPermissionsRequest;
 
 class RoleController extends Controller
 {
+
+	/**
+	 * protect controllers, by setting desired middleware in the constructor
+	 */
+	function __construct()
+    {
+        $this->middleware('permission:view roles', ['only' => ['index']]);
+        $this->middleware('permission:add roles', ['only' => ['create', 'store']]);
+        $this->middleware('permission:edit roles', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:permanently_delete roles', ['only' => ['destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -27,7 +40,9 @@ class RoleController extends Controller
      */
     public function create()
     {
-		return view('admin.roles.add');
+		// get permissions grouped by sections
+		$grouped = grouping_sections_premissions();
+		return view('admin.roles.add', compact('grouped'));
     }
 
     /**
@@ -36,36 +51,23 @@ class RoleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(RolesPermissionsRequest $request)
     {
+		// the request will validated by 'RolesPermissionsRequest' class
         try {
-			$data = $request->only('role_title', 'permissions');
 
-			$validator = Validator::make($data, [
-				'role_title' => 'required|string',
-				"permissions"    => "array",
-				"permissions.*"  => "array",
-				"permissions.*.*"  => Rule::in(['on', 'off']),
-			]);
-
-			if ($validator->fails()) {
-				return response()->json(['errors'=> $validator->errors() ]);
-			}
-
-			$role = new Role;
-			$role->title = $request->get('role_title');
-			$role->permissions = json_encode($request->get('permissions'));
-
-			$role->save();
+			$role = Role::create(['name' => $request->input('role_title')]);
+			$role->syncPermissions($request->input('permissions'));
 
 			return response()->json([
-				'success'=>'Role successfully Created',
-				'redirect'=> route('roles.index')
+				'success' => true,
+				'text' => __('alerts.roles.response.create'),
+				'redirect' => route('roles.index')
 			]);
 
 		} catch ( \Exception $ex ) {
 			return response()->json([
-				'errors' => ['There Is Error!']
+				'errors' => [__('alerts.response.errors.unknown')]
 			]);
 		}
     }
@@ -91,9 +93,22 @@ class RoleController extends Controller
     {
 		$role = Role::find($id);
 		if ( !$role ) {
-			return redirect()->route('roles.index')->with(['error' => 'The Role Dose Not Exist!']);
+			return redirect()
+					->route('roles.index')
+					->with([
+						'errors' => __('alerts.roles.response.errors.not_exist')
+					]);
 		}
-		return view('admin.roles.edit', compact('role'));
+
+		// get permissions grouped by sections
+		$grouped = grouping_sections_premissions();
+
+		// get this role permissions
+		$role_permissions = DB::table("role_has_permissions")->where("role_has_permissions.role_id", $id)
+            ->pluck('role_has_permissions.permission_id', 'role_has_permissions.permission_id')
+            ->all();
+
+		return view('admin.roles.edit', compact('role', 'grouped', 'role_permissions'));
     }
 
     /**
@@ -103,37 +118,33 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(RolesPermissionsRequest $request, $id)
     {
+		// the request will validated by 'RolesPermissionsRequest' class
 		try {
 
             $role = Role::find($id);
             if ( !$role ) {
-				return redirect()->route('roles.index')->with(['error' => 'The Role Dose Not Exist!']);
+				return redirect()
+						->route('roles.index')
+						->with([
+							'errors' => __('alerts.roles.response.errors.not_exist')
+						]);
             }
 
-            $data = $request->only('role_title', 'permissions');
+			$role->name = $request->input('role_title');
+			$role->save();
+			$role->syncPermissions($request->input('permissions'));
 
-			$validator = Validator::make($data, [
-				'role_title' => 'required|string',
-				"permissions"    => "array",
-				"permissions.*"  => "array",
-				"permissions.*.*"  => Rule::in(['on', 'off']),
+			return response()->json([
+				'success' => true,
+				'text' => __('alerts.roles.response.update')
 			]);
 
-			if ($validator->fails()) {
-				return response()->json(['errors'=> $validator->errors() ]);
-			}
-
-			$role->title = $request->get('role_title');
-			$role->permissions = json_encode($request->get('permissions'));
-
-			$role->save();
-
-			return response()->json(['success'=>'Data successfully updated!']);
-
         }catch( \Exception $ex ) {
-			return redirect()->route('roles.index')->with(['error' => 'There Is Error!']);
+			return redirect()
+					->route('roles.index')
+					->with(['errors' => [__('alerts.response.errors.unknown')]]);
         }
     }
 
@@ -149,17 +160,25 @@ class RoleController extends Controller
 
             $role = Role::find($id);
 			if ( !$role ) {
-				return response()->json(['error'=>'The Role Dose Not Exist!']);
+				return redirect()
+						->route('roles.index')
+						->with([
+							'errors' => [__('alerts.roles.response.errors.not_exist')]
+						]);
 			}
 
 			$role->delete();
 			return response()->json([
-				'success'=>'The Role successfully deleted!',
-				'redirect'=> route('roles.index')
+				'success' => true,
+				'title' => __('alerts.roles.response.delete.title'),
+				'text' => __('alerts.roles.response.delete.text'),
+				'redirect' => route('roles.index')
 			]);
 
         }catch( \Exception $ex ) {
-            return redirect()->route('roles.index')->with( ['error' => 'There Is Error!'] );
+			return redirect()
+					->route('roles.index')
+					->with(['errors' => [__('alerts.response.errors.unknown')]]);
         }
     }
 }

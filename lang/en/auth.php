@@ -47,7 +47,7 @@ return [
 		'confirm' => [
 			'intro' => 'Account Security',
 			'title' => 'Confirm Password',
-			'sub_title' => 'Please confirm your password to activate two factor authentication.',
+			'sub_title' => 'For security reasons please confirm your password.',
 		],
 		'verify' => [
 			'intro' => 'Activate Account',

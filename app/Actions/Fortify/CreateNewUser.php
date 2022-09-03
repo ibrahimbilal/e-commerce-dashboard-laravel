@@ -2,11 +2,10 @@
 
 namespace App\Actions\Fortify;
 
-use App\Models\Role;
 use App\Models\User;
 use Illuminate\Validation\Rule;
+use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\File;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 
@@ -41,14 +40,12 @@ class CreateNewUser implements CreatesNewUsers
 				'before_or_equal:' . date("Y-m-d", strtotime('-18 years'))
 			],
 			'gender' => ['required',Rule::in(['male', 'female'])],
-			'role_id' => ['required','numeric', Rule::exists(Role::class, 'id')],
+			'role_name' => ['required','numeric', Rule::exists(Role::class, 'id')],
 			'language' => ['required','string'],
 			'profile_picture' => [
 				'nullable',
 			],
         ])->validate();
-
-		// dd($input);
 
         return User::create([
             'first_name' => $input['first_name'],
@@ -58,7 +55,7 @@ class CreateNewUser implements CreatesNewUsers
             'mobile' => $input['mobile'],
             'birth_date' => $input['birth_date'],
             'gender' => $input['gender'],
-            'role_id' => $input['role_id'],
+            'role_name' => $input['role_name'],
             'language' => $input['language'],
             'profile_picture' => $input['profile_picture'],
         ]);

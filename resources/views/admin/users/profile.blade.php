@@ -65,12 +65,15 @@
                     </label>
                 </div>
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
-                    <label class="item-title" for="user-role">{{ __('forms.role') }}</label>
-                    <select class="form-select" id="user-role" name="role_id">
-                        @foreach ($roles as $role)
-                            <option value="{{ $role->id }}" @selected($user->role_id == $role->id)>
-                                {{ $role->title }}</option>
-                        @endforeach
+                    <label class="item-title" for="user-role">{{ __('forms.role.title') }}</label>
+                    <select class="form-select" id="user-role" name="role_name">
+                        @forelse ($roles as $role)
+                            <option value="{{ $role->name }}" @selected($user->role_name == $role->name)>
+                                {{ $role->name }}
+							</option>
+						@empty
+							<option value="">{{ __('forms.role.no_roles')  }}</option>
+						@endforelse
                     </select>
                 </div>
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
@@ -174,7 +177,7 @@
                     <label class="item-title meta-title">{{ __('metas.ip_city') }}</label><span class="ms-2">{{ $sessions[0]->city }}</span>
                 </div>
                 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-                    <label class="item-title meta-title">{{ __('forms.status.title') }}</label><span class="ms-2">{{ Str::ucfirst(__('forms.status.' . $user->status)) }}</span>
+                    <label class="item-title meta-title">{{ __('forms.status.title') }}</label><span class="ms-2">{{ __('forms.status.' . $user->status) }}</span>
                 </div>
                 <div class="btns-holder d-flex justify-content-between mt-4">
                     <button class="btn solid-btn w-100" type="submit">{{ __('buttons.update') }}</button>
@@ -305,10 +308,10 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="staticBackdropLabel">Confirm Password</h5>
+					<h5 class="modal-title" id="staticBackdropLabel">{{ __('auth.pages.confirm.title') }}</h5>
 				</div>
 				<div class="modal-body">
-					<p>For securty reasons please confirm your password.</p>
+					<p>{{ __('auth.pages.confirm.sub_title') }}</p>
 					<form id="conf-pass" method="POST" action="{{ route('users.logout_sessions') }}">
 						@csrf
 						<div class="form-item second">
@@ -320,8 +323,8 @@
 					</form>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn regular-btn" data-bs-dismiss="modal">Close</button>
-					<button type="submit" form="conf-pass" class="btn solid-btn">Confirm</button>
+					<button type="button" class="btn regular-btn" data-bs-dismiss="modal">{{ __('buttons.close') }}</button>
+					<button type="submit" form="conf-pass" class="btn solid-btn">{{ __('buttons.confirm') }}</button>
 				</div>
 			</div>
 		</div>

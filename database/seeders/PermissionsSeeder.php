@@ -30,14 +30,14 @@ class PermissionsSeeder extends Seeder
 			'marketing',
 			'users',
 			'roles',
-			'gallary',
+			'gallery',
 			'languages',
-			'general settings',
-			'theme settings',
-			'store settings',
-			'currencies settings',
-			'emails settings',
-			'payment settings',
+			'general_settings',
+			'theme_settings',
+			'store_settings',
+			'currencies_settings',
+			'emails_settings',
+			'payment_settings',
 		];
 
 		$permissions = [];
@@ -46,34 +46,43 @@ class PermissionsSeeder extends Seeder
 			if ( !in_array($section, ['dashboard',
 										'analytics',
 										'marketing',
-										'general settings',
-										'theme settings',
-										'store settings',
-										'currencies settings',
-										'emails settings',
-										'payment settings',
+										'roles',
+										'general_settings',
+										'theme_settings',
+										'store_settings',
+										'currencies_settings',
+										'emails_settings',
+										'payment_settings',
 										'imports',
 										'exports',
 									]) ) {
+				$permissions[] = 'add ' . $section;
 				$permissions[] = 'edit ' . $section;
-				$permissions[] = 'update ' . $section;
 				$permissions[] = 'delete ' . $section;
-				$permissions[] = 'soft delete ' . $section;
+				$permissions[] = 'permanently_delete ' . $section;
 				$permissions[] = 'restore ' . $section;
 			}
 
-			if ( in_array($section, ['general settings',
-									'theme settings',
-									'store settings',
-									'currencies settings',
-									'emails settings',
-									'payment settings']) ) {
-				$permissions[] = 'update ' . $section;
+			if ( in_array($section, ['general_settings',
+									'theme_settings',
+									'store_settings',
+									'currencies_settings',
+									'emails_settings',
+									'payment_settings']) ) {
+				$permissions[] = 'edit ' . $section;
+			}
+
+			if ( $section == 'roles' ) {
+				$permissions[] = 'add ' . $section;
+				$permissions[] = 'edit ' . $section;
+				$permissions[] = 'permanently_delete ' . $section;
 			}
 		}
 
 		$permissions[] = 'imports';
 		$permissions[] = 'exports';
+
+		// dd($permissions);
 
 		foreach( $permissions as $permission ) {
 			Permission::create(['name' => $permission]);

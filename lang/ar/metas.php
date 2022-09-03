@@ -1,7 +1,8 @@
 <?php
 
 return [
-	'registered_at' => 'تاريخ الانشاء:',
+	'registered_at' => 'تاريخ التسجيل:',
+	'created_at' => 'تاريخ الانشاء:',
 	'updated_at' => 'تاريخ التعديل:',
 	'last_login' => 'آخر تسجيل دخول:',
 	'device' => 'الجهاز:',

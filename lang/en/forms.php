@@ -16,7 +16,10 @@ return [
 		'male' => 'Male',
 		'female' => 'Female',
 	],
-	'role' => 'Role:',
+	'role' => [
+		'title' => 'Role:',
+		'no_roles' => 'No roles created!',
+	],
 	'status' => [
 		'title' => 'Account Status:',
 		'not_verified' => 'Not Verified',

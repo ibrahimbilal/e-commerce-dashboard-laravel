@@ -13,32 +13,62 @@ return [
     |
     */
 	'menu' => [
-		'dashboard' => 'Dashboard',
-		'products' => 'Products',
-		'attributes' => 'Attributes',
-		'reviews' => 'Reviews',
-		'categories' => 'Categories',
-		'tags' => 'Tags',
-		'discounts' => 'Discounts',
-		'customers' => 'Customers',
-		'orders' => 'Orders',
-		'invoices' => 'Invoices',
+		'dashboard' => [
+			'title' => 'Dashboard'
+		],
+		'products' => [
+			'title' => 'Products'
+		],
+		'attributes' => [
+			'title' => 'Attributes'
+		],
+		'reviews' => [
+			'title' => 'Reviews'
+		],
+		'categories' => [
+			'title' => 'Categories'
+		],
+		'tags' => [
+			'title' => 'Tags'
+		],
+		'discounts' => [
+			'title' => 'Discounts',
+		],
+		'customers' => [
+			'title' => 'Customers',
+		],
+		'orders' => [
+			'title' => 'Orders',
+		],
+		'invoices' => [
+			'title' => 'Invoices',
+		],
 		'analytics' => [
 			'title' => 'Analytics',
 			[
 				'overview' => 'Overview'
 			]
 		],
-		'marketing' => 'Marketing',
+		'marketing' => [
+			'title' => 'Marketing',
+		],
 		'users' => [
 			'title' => 'Users',
 			'profile' => 'Profile',
 			'add' => 'Add User',
 			'edit' => 'Edit User',
 		],
-		'roles' => 'Roles',
-		'gallery' => 'Gallery',
-		'languages' => 'Languages',
+		'roles' => [
+			'title' => 'Roles',
+			'add' => 'Add Role',
+			'edit' => 'Edit Role',
+		],
+		'gallery' => [
+			'title' => 'Gallery',
+		],
+		'languages' => [
+			'title' => 'Languages',
+		],
 		'settings' => [
 			'title' => 'Settings',
 			[
@@ -62,7 +92,32 @@ return [
 				'2fa_recovery' => '2fa recovery',
 			]
 		],
-		'collapse' => 'Collapse'
+		'collapse' => 'Collapse',
+		'imports' => [
+			'title' => 'Imports'
+		],
+		'exports' => [
+			'title' => 'Exports'
+		],
+
+		'general_settings' => [
+			'title' => 'General Settings'
+		],
+		'theme_settings' => [
+			'title' => 'Theme Settings'
+		],
+		'store_settings' => [
+			'title' => 'Store Settings'
+		],
+		'currencies_settings' => [
+			'title' => 'Currencies Settings'
+		],
+		'emails_settings' => [
+			'title' => 'Emails Settings'
+		],
+		'payment_settings' => [
+			'title' => 'Payment Settings'
+		],
 	],
 
 	"overview" => [
@@ -128,6 +183,10 @@ return [
 				'this_device' => 'This device',
 				'last_active' => 'Last active',
 			]
+		],
+
+		'roles' => [
+			'no_permissions' => 'There is no permissions created!'
 		]
 	],
 
@@ -137,6 +196,8 @@ return [
 		'two_factor' => 'Two Factor Authentication',
 		'activities' => 'Activities',
 		'password' => 'Change Password',
+		'role_name' => 'Role Name',
+		'permissions' => 'Permissions',
 	],
 
 	'filters' => [
@@ -144,4 +205,20 @@ return [
 		'trashed' => 'Trashed'
 	],
 	'unknown' => 'Unknown',
+
+	/*
+    |--------------------------------------------------------------------------
+    | Prefixs
+    |--------------------------------------------------------------------------
+    */
+
+	'prefix' => [
+		'view' => 'View',
+		'add' => 'Add',
+		'edit' => 'Edit',
+		'delete' => 'Delete',
+		'permanently_delete' => 'Permanently Delete',
+		'restore' => 'Restore',
+		'' => '',
+	]
 ];

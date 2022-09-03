@@ -32,7 +32,7 @@ class AdminController extends Controller
 					if ($rows > 0) {
 						$status = true;
 						$title = __('bulk_action.ajax.actions.delete.title');
-						$text = __('bulk_action.ajax.actions.delete.text', ['type' => __('admin.pages.' . $request->get('type') . '.title')]);
+						$text = __('bulk_action.ajax.actions.delete.text', ['type' => __('admin.menu.' . $request->get('type') . '.title')]);
 					} else {
 						$status = false;
 						$title = __('bulk_action.ajax.actions.delete.no_items');
@@ -45,7 +45,7 @@ class AdminController extends Controller
 					if ($rows > 0) {
 						$status = true;
 						$title = __('bulk_action.ajax.actions.restore.title');
-						$text = __('bulk_action.ajax.actions.restore.text', ['type' => __('admin.pages.' . $request->get('type') . '.title')]);
+						$text = __('bulk_action.ajax.actions.restore.text', ['type' => __('admin.menu.' . $request->get('type') . '.title')]);
 					} else {
 						$status = false;
 						$title = __('bulk_action.ajax.actions.restore.no_items');
@@ -57,7 +57,7 @@ class AdminController extends Controller
 					$rows = $table->onlyTrashed()->whereIn('id', $request->get('items'))->forceDelete();
 					$status = true;
 					$title = __('bulk_action.ajax.actions.delete.title');
-					$text = __('bulk_action.ajax.actions.delete.text', ['type' => __('admin.pages.' . $request->get('type') . '.title')]);
+					$text = __('bulk_action.ajax.actions.delete.text', ['type' => __('admin.menu.' . $request->get('type') . '.title')]);
 					break;
 
 				default:
@@ -75,7 +75,7 @@ class AdminController extends Controller
 
 		} catch (\Exception $ex) {
 			return response()->json([
-				'errors' => ['There Is Error!']
+				'errors' => [__('alerts.response.errors.unknown')]
 			]);
 		}
 	}

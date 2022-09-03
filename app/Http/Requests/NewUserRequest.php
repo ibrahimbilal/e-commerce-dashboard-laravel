@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Role;
 use App\Models\User;
 use Illuminate\Validation\Rule;
+use Spatie\Permission\Models\Role;
 use Illuminate\Validation\Rules\File;
 use App\Http\Traits\UploadFilesTraits;
 use Illuminate\Validation\Rules\Password;

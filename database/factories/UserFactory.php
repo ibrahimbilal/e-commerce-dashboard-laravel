@@ -25,7 +25,7 @@ class UserFactory extends Factory
 			'mobile' => fake()->e164PhoneNumber(),
 			'birth_date' => fake()->date('Y-m-d', '-18 years'),
 			'gender' => fake()->randomElement(['male', 'female']),
-			'role_name' => nullValue(),
+			'role_name' => 'Administrator',
 			'status' => 'not_verified',
 			'language' => 'en',
 			'profile_picture' => fake()->imageUrl(500, 500, 'animals', true),

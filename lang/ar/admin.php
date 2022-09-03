@@ -13,33 +13,62 @@ return [
     |
     */
 	'menu' => [
-		'dashboard' => 'لوحة التحكم',
-		'products' => 'المنتجات',
-		'attributes' => 'الخواص',
-		'reviews' => 'المراجعات',
-		'categories' => 'التصنيفات',
-		'tags' => 'الوسوم',
-		'discounts' => 'الحسومات',
-		'customers' => 'العملاء',
-		'orders' => 'الطلبات',
-		'invoices' => 'الفواتير',
-		'analytics' => 'التحليلات',
+		'dashboard' => [
+			'title' => 'لوحة التحكم'
+		],
+		'products' => [
+			'title' => 'المنتجات'
+		],
+		'attributes' => [
+			'title' => 'الخواص'
+		],
+		'reviews' => [
+			'title' => 'المراجعات'
+		],
+		'categories' => [
+			'title' => 'التصنيفات'
+		],
+		'tags' => [
+			'title' => 'الوسوم'
+		],
+		'discounts' => [
+			'title' => 'الحسومات'
+		],
+		'customers' => [
+			'title' => 'العملاء'
+		],
+		'orders' => [
+			'title' => 'الطلبات'
+		],
+		'invoices' => [
+			'title' => 'الفواتير'
+		],
 		'analytics' => [
 			'title' => 'التحليلات',
 			[
 				'overview' => 'نظرة عامة'
 			]
 		],
-		'marketing' => 'التسويق',
+		'marketing' => [
+			'title' => 'التسويق'
+		],
 		'users' => [
 			'title' => 'المستخدمون',
 			'profile' => 'حسابي',
 			'add' => 'اضافة مستخدم',
 			'edit' => 'تعديل المستخدم',
 		],
-		'roles' => 'الأدوار',
-		'gallery' => 'المعرض',
-		'languages' => 'اللغات',
+		'roles' => [
+			'title' => 'الأدوار',
+			'add' => 'اضافة دور',
+			'edit' => 'تعديل الدور',
+		],
+		'gallery' => [
+			'title' => 'المعرض'
+		],
+		'languages' => [
+			'title' => 'اللغات'
+		],
 		'settings' => [
 			'title' => 'الإعدادات',
 			[
@@ -63,7 +92,31 @@ return [
 				'2fa_recovery' => 'المصادقة الثنائية',
 			]
 		],
-		'collapse' => 'ت. القائمة'
+		'collapse' => 'ت. القائمة',
+		'imports' => [
+			'title' => 'الاستيراد'
+		],
+		'exports' => [
+			'title' => 'التصدير'
+		],
+		'general_settings' => [
+			'title' => 'الإعدادات العامة'
+		],
+		'theme_settings' => [
+			'title' => 'الإعدادات القالب'
+		],
+		'store_settings' => [
+			'title' => 'الإعدادات المتجر'
+		],
+		'currencies_settings' => [
+			'title' => 'الإعدادات العملات'
+		],
+		'emails_settings' => [
+			'title' => 'الإعدادات البريد الالكتروني'
+		],
+		'payment_settings' => [
+			'title' => 'الإعدادات الدفع'
+		],
 	],
 
 	"overview" => [
@@ -129,6 +182,10 @@ return [
 				'this_device' => 'هذا الجهاز',
 				'last_active' => 'آخر نشاط',
 			]
+		],
+
+		'roles' => [
+			'no_permissions' => 'لا توجد أذونات تم إنشاؤها!'
 		]
 	],
 
@@ -143,7 +200,26 @@ return [
 		'two_factor' => 'المصادقة الثنائية',
 		'activities' => 'النشاطات',
 		'password' => 'تغيير كلمة المرور',
+		'role_name' => 'اسم الدور',
+		'permissions' => 'الأذونات',
 	],
 
 	'unknown' => 'غير معروف',
+
+
+	/*
+    |--------------------------------------------------------------------------
+    | Prefixs
+    |--------------------------------------------------------------------------
+    */
+
+	'prefix' => [
+		'view' => 'عرض',
+		'add' => 'إضافة',
+		'edit' => 'تعديل',
+		'delete' => 'حذف',
+		'permanently_delete' => 'حذف بشكل نهائي',
+		'restore' => 'إستعادة',
+		'' => '',
+	]
 ];

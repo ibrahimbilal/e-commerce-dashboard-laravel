@@ -58,13 +58,13 @@
                             <thead>
                                 <tr>
                                     <th></th>
-                                    <th class="text-uppercase">image</th>
-                                    <th class="text-uppercase">name</th>
-                                    <th class="text-uppercase">email</th>
-                                    <th class="text-uppercase">role</th>
-                                    <th class="text-uppercase">registered date</th>
-                                    <th class="text-uppercase">status</th>
-                                    <th class="text-uppercase">action</th>
+                                    <th class="text-uppercase">{{ __('tables.columns.image') }}</th>
+                                    <th class="text-uppercase">{{ __('tables.columns.name') }}</th>
+                                    <th class="text-uppercase">{{ __('tables.columns.email') }}</th>
+                                    <th class="text-uppercase">{{ __('tables.columns.role') }}</th>
+                                    <th class="text-uppercase">{{ __('tables.columns.register_date') }}</th>
+                                    <th class="text-uppercase">{{ __('tables.columns.status') }}</th>
+                                    <th class="text-uppercase">{{ __('tables.columns.action') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -84,7 +84,7 @@
 										<td>{{ $user->email }}</td>
 										<td>{{ $user->role_name }}</td>
 										<td>{{ $user->created_at }}</td>
-										<td class="status-title">{{ $user->status }}</td>
+										<td class="status-title">{{ __('forms.status.' . $user->status) }}</td>
 										<td>
 											<div class="btn-group">
 												@if (!$user->deleted_at)
@@ -107,13 +107,13 @@
                             <tfoot>
                                 <tr>
                                     <th></th>
-                                    <th class="text-uppercase">image</th>
-                                    <th class="text-uppercase">name</th>
-                                    <th class="text-uppercase">email</th>
-                                    <th class="text-uppercase">role</th>
-                                    <th class="text-uppercase">registered date</th>
-                                    <th class="text-uppercase">status</th>
-                                    <th class="text-uppercase">action</th>
+                                    <th class="text-uppercase">{{ __('tables.columns.image') }}</th>
+                                    <th class="text-uppercase">{{ __('tables.columns.name') }}</th>
+                                    <th class="text-uppercase">{{ __('tables.columns.email') }}</th>
+                                    <th class="text-uppercase">{{ __('tables.columns.role') }}</th>
+                                    <th class="text-uppercase">{{ __('tables.columns.register_date') }}</th>
+                                    <th class="text-uppercase">{{ __('tables.columns.status') }}</th>
+                                    <th class="text-uppercase">{{ __('tables.columns.action') }}</th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -156,22 +156,36 @@
                 [5, 'asc']
             ],
             language: {
-                info: "Show _START_ To _END_ Of _TOTAL_ users",
+                info: "{{ __('tables.words.show') }} _START_ {{ __('tables.words.to') }} _END_ {{ __('tables.words.of') }} _TOTAL_ {{ __('tables.words.users') }}",
+				search: "{{ __('tables.words.search') }}",
+				zeroRecords: "{{ __('tables.zeroRecords') }}",
                 buttons: {
-                    pageLength: 'Show %d',
-                    colvis: 'Columns'
-                }
+                    pageLength: "{{ __('tables.words.show') }} %d {{ __('tables.words.users') }}",
+                    colvis: "{{ __('tables.words.colvis') }}",
+					print: "{{ __('tables.words.print') }}",
+                },
+				paginate: {
+					first: "{{ __('tables.buttons.first') }}",
+					previous: "{{ __('tables.buttons.prev') }}",
+					next: "{{ __('tables.buttons.next') }}",
+					last: "{{ __('tables.buttons.last') }}"
+				},
+				select: {
+					rows: {
+						_: "%d {{ __('tables.words.row_selected') }}"
+					},
+				}
             },
             stateSave: false,
             paging: true,
             searching: true,
             lengthMenu: [
                 [10, 25, 50, 75, 100],
-                ['10 users', '25 users', '50 users', '75 users', '100 users']
+                ["10 {{ __('tables.words.users') }}", "25 {{ __('tables.words.users') }}", "50 {{ __('tables.words.users') }}", "75 {{ __('tables.words.users') }}", "100 {{ __('tables.words.users') }}"]
             ],
             buttons: ($(window).width() > 578) ? ['pageLength', 'print', {
                 extend: 'collection',
-                text: 'Export',
+				text: "{{ __('tables.words.export') }}",
                 className: 'btn btn-group',
                 buttons: [{
                         extend: 'excelHtml5',
@@ -188,7 +202,7 @@
                 ]
             }, 'colvis'] : ['pageLength', {
                 extend: 'collection',
-                text: 'Export',
+				text: "{{ __('tables.words.export') }}",
                 className: 'btn btn-group',
                 buttons: [{
                         extend: 'excelHtml5',
@@ -240,13 +254,13 @@
 				parentRow = $(this).parents('tr');
 			Swal.fire({
 				...SwalOptions,
-				title: "{{ __('alerts.users.confirm.title') }}",
-                text: "{{ __('alerts.users.confirm.delete.text') }}",
+				title: "{{ __('alerts.confirm.title') }}",
+                text: "{{ __('alerts.confirm.delete.text') }}",
                 icon: 'warning',
                 showCancelButton: true,
                 cancelButtonColor: '#d33',
-                confirmButtonText: "{{ __('alerts.users.confirm.delete.yes') }}",
-                cancelButtonText: "{{ __('alerts.users.confirm.no') }}",
+                confirmButtonText: "{{ __('alerts.confirm.delete.yes') }}",
+                cancelButtonText: "{{ __('alerts.confirm.no') }}",
 			}).then((result) => {
 				if (result.isConfirmed) {
 					$.ajax({
@@ -281,8 +295,8 @@
 				} else if (result.dismiss === Swal.DismissReason.cancel) {
 					Swal.fire({
 						...SwalOptions,
-						title: "{{ __('alerts.users.cancel.title') }}",
-                        text: "{{ __('alerts.users.cancel.delete.text') }}",
+						title: "{{ __('alerts.cancel.title') }}",
+                        text: "{{ __('alerts.cancel.delete.text') }}",
 						icon: 'error',
 						timer: 1500,
 						timerProgressBar: true,
@@ -300,13 +314,13 @@
 				parentRow = $(this).parents('tr');
 			Swal.fire({
 				...SwalOptions,
-				title: "{{ __('alerts.users.confirm.title') }}",
-                text: "{{ __('alerts.users.confirm.restore.text') }}",
+				title: "{{ __('alerts.confirm.title') }}",
+                text: "{{ __('alerts.confirm.restore.text') }}",
                 icon: 'warning',
                 showCancelButton: true,
                 cancelButtonColor: '#d33',
-                confirmButtonText: "{{ __('alerts.users.confirm.restore.yes') }}",
-                cancelButtonText: "{{ __('alerts.users.confirm.no') }}",
+                confirmButtonText: "{{ __('alerts.confirm.restore.yes') }}",
+                cancelButtonText: "{{ __('alerts.confirm.no') }}",
 			}).then((result) => {
 				if (result.isConfirmed) {
 					$.ajax({
@@ -341,8 +355,8 @@
 				} else if (result.dismiss === Swal.DismissReason.cancel) {
 					Swal.fire({
 						...SwalOptions,
-						title: "{{ __('alerts.users.cancel.title') }}",
-                        text: "{{ __('alerts.users.cancel.restore.text') }}",
+						title: "{{ __('alerts.cancel.title') }}",
+                        text: "{{ __('alerts.cancel.restore.text') }}",
 						icon: 'error',
 						timer: 1500,
 						timerProgressBar: true,
@@ -364,10 +378,10 @@
 			}
 		});
 
-		@if (session('error'))
+		@if (session('errors'))
 			Toast.fire({
 				icon: 'error',
-				titleText: "{{ session('error') }}",
+				titleText: "{{ session('errors') }}",
 			});
 		@endif
 

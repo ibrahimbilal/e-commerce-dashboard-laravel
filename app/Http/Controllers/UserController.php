@@ -23,6 +23,19 @@ class UserController extends Controller
 	use UploadFilesTraits;
 
 	/**
+	 * protect controllers, by setting desired middleware in the constructor
+	 */
+	function __construct()
+    {
+        $this->middleware('permission:view users', ['only' => ['index']]);
+        $this->middleware('permission:add users', ['only' => ['create', 'store']]);
+        $this->middleware('permission:edit users', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:delete users', ['only' => ['destroy']]);
+        $this->middleware('permission:restore users', ['only' => ['restore']]);
+        // $this->middleware('permission:permanently_delete users', ['only' => ['destroy']]);
+    }
+
+	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return \Illuminate\Http\Response
@@ -31,18 +44,18 @@ class UserController extends Controller
 	{
 		$users = User::all();
 		$trashed = User::onlyTrashed()->get();
-		$roles = Role::all();
+		// $roles = Role::all();
 		$results = $users;
 
-		if ( isset($request->role) ) {
-			$results = User::where('role_id', $request->role)->get();
-		}
+		// if ( isset($request->role) ) {
+		// 	$results = User::where('role_id', $request->role)->get();
+		// }
 
 		if ( isset($request->trashed) ) {
 			$results = $trashed;
 		}
 
-		return view('admin.users.list', compact('users', 'trashed', 'results', 'roles'));
+		return view('admin.users.list', compact('users', 'trashed', 'results'));
 	}
 
 	/**
@@ -78,6 +91,7 @@ class UserController extends Controller
 
 			// send data to 'Fortify' Register method
 			$user = $creator->create($request->request->all());
+			$user->assignRole($request->input('role_name'));
 
 			// send verify email
 			event(new Registered($user));
@@ -89,7 +103,7 @@ class UserController extends Controller
 			]);
 		} catch (\Exception $ex) {
 			return response()->json([
-				'errors' => [__('alerts.users.response.errors.unknown')]
+				'errors' => [__('alerts.response.errors.unknown')]
 			]);
 		}
 	}
@@ -135,7 +149,11 @@ class UserController extends Controller
 		$sessions = array_to_object($this->sessions($request, $id)->all());
 
 		if (!$user) {
-			return response()->json(['errors' => [__('alerts.users.response.errors.not_exist')]]);
+			return redirect()
+					->route('users.index')
+					->with([
+						'errors' => __('alerts.users.response.errors.not_exist')
+					]);
 		}
 
 		// redirect to profile page if logged in user need to edit his account
@@ -163,7 +181,7 @@ class UserController extends Controller
 			$user = User::find($id);
 			if (!$user) {
 				return response()->json([
-					'errors' => [__('alerts.users.response.errors.not_exist')]
+					'errors' => __('alerts.users.response.errors.not_exist')
 				]);
 			}
 
@@ -199,6 +217,10 @@ class UserController extends Controller
 				$user->save();
 			}
 
+			// change user role
+			DB::table('model_has_roles')->where('model_id', $id)->delete();
+			$user->assignRole($request->input('role_name'));
+
 			// don't update password if user didn't change it
 			// profile picture has updated currently
 			if (is_null($request->get('current_password')) && is_null($request->get('password'))) {
@@ -230,7 +252,7 @@ class UserController extends Controller
 
 		} catch (\Exception $ex) {
 			return response()->json([
-				'errors' => [__('alerts.users.response.errors.unknown')]
+				'errors' => [__('alerts.response.errors.unknown')]
 			]);
 		}
 	}
@@ -263,7 +285,7 @@ class UserController extends Controller
 				'redirect' => route('users.index')
 			]);
 		} catch (\Exception $ex) {
-			return redirect()->route('users.index')->with(['errors' => [__('alerts.users.response.errors.unknown')]]);
+			return redirect()->route('users.index')->with(['errors' => [__('alerts.response.errors.unknown')]]);
 		}
 	}
 
@@ -289,7 +311,7 @@ class UserController extends Controller
 				'text' => __('alerts.users.response.restore.text'),
 			]);
 		} catch (\Exception $ex) {
-			return redirect()->route('users.index')->with(['errors' => [__('alerts.users.response.errors.unknown')]]);
+			return redirect()->route('users.index')->with(['errors' => [__('alerts.response.errors.unknown')]]);
 		}
 	}
 

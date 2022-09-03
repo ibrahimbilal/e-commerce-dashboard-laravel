@@ -61,19 +61,23 @@
                     </label>
                 </div>
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
-                    <label class="item-title" for="user-role">{{ __('forms.role') }}</label>
-                    <select class="form-select" id="user-role" name="role_id">
-						@foreach ( $roles as $role )
-							<option value="{{ $role->id }}" @selected($user->role_id == $role->id)>{{ $role->title }}</option>
-						@endforeach
+                    <label class="item-title" for="user-role">{{ __('forms.role.title') }}</label>
+                    <select class="form-select" id="user-role" name="role_name">
+                        @forelse ($roles as $role)
+                            <option value="{{ $role->name }}" @selected($user->role_name == $role->name)>
+                                {{ $role->name }}
+							</option>
+						@empty
+							<option value="">{{ __('forms.role.no_roles')  }}</option>
+						@endforelse
                     </select>
                 </div>
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
                     <label class="item-title" for="user-status">{{ __('forms.status.title') }}</label>
                     <select class="form-select" id="user-status" name="status">
-                        <option value="not_verified" @selected($user->status == 'not_verified')>{{ Str::ucfirst(__('forms.status.not_verified')) }}</option>
-                        <option value="verified" @selected($user->status == 'verified')>{{ Str::ucfirst(__('forms.status.verified')) }}</option>
-                        <option value="blocked" @selected($user->status == 'blocked')>{{ Str::ucfirst(__('forms.status.blocked')) }}</option>
+                        <option value="not_verified" @selected($user->status == 'not_verified')>{{ __('forms.status.not_verified') }}</option>
+                        <option value="verified" @selected($user->status == 'verified')>{{ __('forms.status.verified') }}</option>
+                        <option value="blocked" @selected($user->status == 'blocked')>{{ __('forms.status.blocked') }}</option>
                     </select>
                 </div>
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
@@ -448,13 +452,13 @@
 			e.preventDefault();
 			Swal.fire({
 				...SwalOptions,
-				title: "{{ __('alerts.users.confirm.title') }}",
-                text: "{{ __('alerts.users.confirm.delete.text') }}",
+				title: "{{ __('alerts.confirm.title') }}",
+                text: "{{ __('alerts.confirm.delete.text') }}",
                 icon: 'warning',
                 showCancelButton: true,
                 cancelButtonColor: '#d33',
-                confirmButtonText: "{{ __('alerts.users.confirm.delete.yes') }}",
-                cancelButtonText: "{{ __('alerts.users.confirm.no') }}",
+                confirmButtonText: "{{ __('alerts.confirm.delete.yes') }}",
+                cancelButtonText: "{{ __('alerts.confirm.no') }}",
 			}).then((result) => {
 				if (result.isConfirmed) {
 					$.ajax({
@@ -482,8 +486,6 @@
 									html: '<ul class="errors-list">' + Object.keys(res.errors).map(k =>
 											'<li class="content">' + res.errors[k] + '</li>').join('') +
 										'</ul>',
-									showConfirmButton: true,
-									confirmButtonColor: 'var(--main-color)',
 								});
 							}
 						}
@@ -492,8 +494,8 @@
 				} else if (result.dismiss === Swal.DismissReason.cancel) {
 					Swal.fire({
 						...SwalOptions,
-						title: "{{ __('alerts.users.cancel.title') }}",
-                        text: "{{ __('alerts.users.cancel.delete.text') }}",
+						title: "{{ __('alerts.cancel.title') }}",
+                        text: "{{ __('alerts.cancel.delete.text') }}",
 						icon: 'error',
 						timer: 1500,
 						timerProgressBar: true,

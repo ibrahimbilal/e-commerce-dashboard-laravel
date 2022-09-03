@@ -57,18 +57,6 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
 	/**
-     * Interact with the user's status.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
-     */
-    protected function status(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => str_replace('_', ' ', $value)
-        );
-    }
-
-	/**
      * Interact with the user's birth date.
      *
      * @return \Illuminate\Database\Eloquent\Casts\Attribute

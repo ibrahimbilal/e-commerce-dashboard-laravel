@@ -16,7 +16,7 @@
                         href="{{ route('admin.index') }}">
                         <span class="icon">
                             <i class="fi-rr-apps"> </i>
-                        </span> {{ __('admin.menu.dashboard') }}
+                        </span> {{ __('admin.menu.dashboard.title') }}
                     </a>
                     <span class="angle">
                         <span class="icon">

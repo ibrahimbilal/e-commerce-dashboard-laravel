@@ -2,12 +2,14 @@
 
 return [
 	'create' => 'إنشاء',
+	'publish' => 'نشر',
 	'update' => 'تحديث',
 	'delete' => 'نقل إلى المهملات',
 	'edit' => 'تعديل',
 	'trash' => 'حذف',
 	'restore' => 'إستعادة',
 	'confirm' => 'تأكيد',
+	'close' => 'إغلاق',
 	'resend' => 'إعادة إرسال البريد الالكتروني',
 	'change_image' => 'تغيير الصورة',
 	'upload_image' => 'رفع صورة',
@@ -21,4 +23,6 @@ return [
 	'set_password' => 'تعيين كلمة مرور جديدة',
 	'use_code' => 'استخدم رمز المصادقة',
 	'use_recovery_code' => 'استخدام رمز الاسترداد',
+	'select_all' => 'تحديد الكل',
+	'unselect_all' => 'إلغاء تحديد الكل',
 ];

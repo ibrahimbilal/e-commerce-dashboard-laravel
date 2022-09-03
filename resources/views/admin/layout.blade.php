@@ -18,12 +18,8 @@
     <link rel="stylesheet" href="{{ asset('css/style'.$rtl_ext.'.min.css') }}">
 
     <!-- Fonts -->
-	@if (!is_rtl())
-		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-	@else
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
-	@endif
-
 
     <title>{{ config('app.name') }} | @yield('title', 'Admin Panel')</title>
 

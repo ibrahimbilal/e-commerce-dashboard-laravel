@@ -2,12 +2,14 @@
 
 return [
 	'create' => 'Create',
+	'publish' => 'Publish',
 	'update' => 'Update',
 	'delete' => 'Move to trash',
 	'edit' => 'Edit',
 	'trash' => 'Trash',
 	'restore' => 'Restore',
 	'confirm' => 'Confirm',
+	'close' => 'Close',
 	'resend' => 'Resend Email',
 	'change_image' => 'Change Image',
 	'upload_image' => 'Upload Image',
@@ -21,4 +23,6 @@ return [
 	'set_password' => 'Set New Password',
 	'use_code' => 'Use an authentication code',
 	'use_recovery_code' => 'Use a recovery code',
+	'select_all' => 'Select All',
+	'unselect_all' => 'Unselect All',
 ];

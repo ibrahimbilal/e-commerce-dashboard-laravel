@@ -74,12 +74,12 @@
                     </label>
                 </div>
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
-                    <label class="item-title" for="user-role">{{ __('forms.role') }}</label>
-                    <select class="form-select" id="user-role" name="role_id">
+                    <label class="item-title" for="user-role">{{ __('forms.role.title') }}</label>
+                    <select class="form-select" id="user-role" name="role_name">
 						@forelse ( $roles as $role )
-							<option value="{{ $role->id }}">{{ $role->title }}</option>
+							<option value="{{ $role->name }}">{{ $role->name }}</option>
 						@empty
-							<option value="">{{ __('no roles created!') }}</option>
+							<option value="">{{ __('forms.role.no_roles')  }}</option>
 						@endforelse
                     </select>
                 </div>
@@ -188,7 +188,7 @@
 								titleText: "{{ __('alerts.ops') }}",
 								html: ["<div class='alerts danger'>",
 										"<ul class='list' style='text-align: start'>",
-										"<li class='content'>{{ __('alerts.users.request.image_size') }}</li>",
+										"<li class='content'>{{ __('alerts.request.image_size') }}</li>",
 										"</ul>",
 										"</div>",].join("\n")
 							});
@@ -201,7 +201,7 @@
 							titleText: "{{ __('alerts.ops') }}",
 							html: ["<div class='alerts danger'>",
 										"<ul class='list' style='text-align: start'>",
-										"<li class='content'>{{ __('alerts.users.request.image_type') }}</li>",
+										"<li class='content'>{{ __('alerts.request.image_type') }}</li>",
 										"</ul>",
 										"</div>",].join("\n")
 						});
@@ -227,8 +227,8 @@
 					beforeSend: function() {
 						Swal.fire({
 							...SwalOptions,
-							titleText: "{{ __('alerts.users.request.before_sent_title') }}",
-							text: "{{ __('alerts.users.request.before_sent_text') }}",
+							titleText: "{{ __('alerts.request.before_sent_title') }}",
+							text: "{{ __('alerts.request.before_sent_text') }}",
 							didOpen: () => {
 								Swal.showLoading()
 							}
@@ -239,7 +239,7 @@
 							Swal.fire({
 								...SwalOptions,
 								icon: 'success',
-								titleText: res.title,
+								titleText: res.text,
 								willClose: () => {
 									window.location.replace(res.redirect);
 								}
