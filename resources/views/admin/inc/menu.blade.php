@@ -13,7 +13,7 @@
 			@canany($menu->allow_to)
 				<ul class="menu-list-group">
 					@foreach ($menu->group_items as $menu_item)
-						@can($menu_item->permission)
+						@canany($menu_item->permission)
 							<li class="list-item {{ $menu_item->has_submeu ? 'has-submenu' : '' }} {{ in_array(Route::currentRouteName(), $menu_item->active_if) ? 'active' : '' }}">
 								<a href="{{ $menu_item->route_name ? route($menu_item->route_name ) : 'javascript:void(0)' }}">
 									<i class="fi-rr-{{ $menu_item->icon }}"> </i>

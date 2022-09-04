@@ -5,7 +5,9 @@
             <div class="text-capitalize mb-2 mb-sm-0 d-flex justify-content-between align-items-center">
                 <h1 class="page-title">{{ $page_title }}</h1>
 				@if ( isset($add_route_name) )
-					<a class="add-btn btn text-capitalize" href="{{ route($add_route_name) }}"><span class="icon"><i class="fi-rr-add"> </i></span>{{ __('buttons.add_new') }}</a>
+					@can($permissions)
+						<a class="add-btn btn text-capitalize" href="{{ route($add_route_name) }}"><span class="icon"><i class="fi-rr-add"> </i></span>{{ __('buttons.add_new') }}</a>
+					@endcan
 				@endif
             </div>
             <!-- Breadcrumbs-->

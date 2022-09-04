@@ -204,7 +204,14 @@ if (!function_exists('get_dashboard_menu')) {
 						"title" => __('admin.menu.settings.title'),
 						"has_submeu" => true,
 						"badge" => '',
-						'permission' => ['view general_settings'],
+						'permission' => [
+							'view general_settings',
+							'view theme_settings',
+							'view store_settings',
+							'view currencies_settings',
+							'view emails_settings',
+							'view payment_settings',
+						],
 						"submenu_items" => [
 							[
 								"route_name" => 'general-settings.index',
