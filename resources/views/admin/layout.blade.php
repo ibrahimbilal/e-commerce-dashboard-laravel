@@ -53,9 +53,9 @@
 
     @stack('scripts')
 
-	@if ( in_array(Route::currentRouteName(), ['users.index']) )
+	{{-- @if ( in_array(Route::currentRouteName(), ['users.index']) )
 		@include('admin.inc.bulk-action.bulk_script')
-	@endif
+	@endif --}}
     <!-- Main Site JS Script-->
     <script src="{{ asset('js/script.min.js') }}" type="text/javascript"></script>
 </body>

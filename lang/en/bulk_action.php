@@ -4,10 +4,10 @@ return [
 	// form
 	'submit' => 'apply',
 	'option' => [
-		'bulk' => 'bulk action',
-		'delete' => 'delete',
-		'restore' => 'restore',
-		'force_delete' => 'permanently delete'
+		'bulk' => 'Bulk Action',
+		'delete' => 'Delete',
+		'restore' => 'Restore',
+		'force_delete' => 'Permanently Delete'
 	],
 
 	// alerts

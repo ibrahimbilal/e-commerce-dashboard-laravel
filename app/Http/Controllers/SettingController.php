@@ -5,9 +5,19 @@ namespace App\Http\Controllers;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\SaveSettingsRequest;
 
 class SettingController extends Controller
 {
+	/**
+	 * protect controllers, by setting desired middleware in the constructor
+	 */
+	function __construct()
+    {
+        $this->middleware('permission:view general_settings', ['only' => ['index']]);
+        $this->middleware('permission:edit general_settings', ['only' => ['store']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -40,44 +50,19 @@ class SettingController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(SaveSettingsRequest $request)
     {
-		$data = $request->only(
-			'site_title',
-			'tagline',
-			'site_description',
-			'site_url',
-			'timezone',
-			'date_formate',
-			'date_formate_custom',
-			'time_formate',
-			'time_formate_custom'
-		);
 
-		$validator = Validator::make($data, [
-            'site_title' 			=> 'required|string|min:4',
-            'tagline' 				=> 'required|string',
-            'site_description' 		=> 'required|string',
-            'site_url' 				=> 'required|url',
-            'timezone' 				=> 'required|string|timezone',
-            'date_formate' 			=> 'required|string',
-            'date_formate_custom' 	=> 'required_if:date_formate,custom|string',
-            'time_formate' 			=> 'required|string',
-            'time_formate_custom' 	=> 'required_if:time_formate,custom|string',
-        ]);
-
-        if ($validator->fails()) {
-			return response()->json(['errors'=> $validator->errors() ]);
-        }
 
 		// make 'time_formate_custom' empty if not set
 		if ( !$request->has('time_formate_custom') ) {
-			$data['time_formate_custom'] = '';
+			// $data['time_formate_custom'] = '';
+			$request->merge(['time_formate_custom' => '']);
 		}
 
 		// make 'date_formate_custom' empty if not set
 		if ( !$request->has('date_formate_custom') ) {
-			$data['date_formate_custom'] = '';
+			$request->merge(['date_formate_custom' => '']);
 		}
 
 		// Change values in .env file
@@ -96,15 +81,17 @@ class SettingController extends Controller
 			config(['app.timezone' => $request->get('timezone')]);
 		}
 
-		foreach( $data as $key => $value ) {
+		foreach( $request->request->all() as $key => $value ) {
 			Setting::updateOrCreate(
 				['setting_key' =>  $key],
 				['setting_value' =>  $value],
 			);
 		}
 
-		// return redirect()->route('general_settings')->with('status', 'Changes Saved Successfuly!');
-		return response()->json(['success'=>'Your settings successfully updated!']);
+		return response()->json([
+			'success' => true,
+			'title' => __('alerts.settings.response.success')
+		]);
     }
 
     /**

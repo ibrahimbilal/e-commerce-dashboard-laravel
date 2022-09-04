@@ -124,6 +124,28 @@
 					@endif
                 </div>
             </div>
+			<div class="main-box box-spaces">
+                <div class="form-item primary">
+                    <h2 class="box-title item-title">{{ __('admin.sections.password') }}</h2>
+                    <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
+                        <label class="item-title" for="new-password">{{ __('forms.new_password') }}</label>
+                        <div class="with-icon">
+                            <input class="form-control" id="password" name="password" type="password" autocomplete="off">
+                            <span class="show-pass"><i class="fi-rr-eye"> </i></span>
+                        </div>
+                        <button class="btn regular-btn ms-sm-3 mt-2 mt-sm-0 text-nowrap generate-password"
+                            type="button">{{ __('buttons.generate') }}</button>
+                    </div>
+                    <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
+                        <label class="item-title" for="confirm-password">{{ __('forms.confirm_password') }}</label>
+                        <div class="with-icon">
+                            <input class="form-control" id="confirm-password" name="password_confirmation"
+                                type="password" autocomplete="off">
+                            <span class="show-pass"><i class="fi-rr-eye"> </i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="col-sm-6 col-lg-3 float-end meta-box">
             <div class="main-box box-spaces">
@@ -201,7 +223,7 @@
 									@endforeach
 								</div>
 							@endif
-                            <button type="button" data-bs-toggle="modal" data-bs-target="#confirm-password-modal" class="btn solid-btn mt-3">{{ __('buttons.logout_sesstion') }}</button>
+                            {{-- <button type="button" data-bs-toggle="modal" data-bs-target="#confirm-password-modal" class="btn solid-btn mt-3">{{ __('buttons.logout_sesstion') }}</button> --}}
                         </div>
                     </div>
                 </div>
@@ -409,7 +431,7 @@
 				var formData = new FormData(this);
 				$.ajax({
 					headers: {
-						"X-CSRF-TOKEN": "{{ csrf_token() }}",
+						'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
 					},
 					type: 'POST',
 					url: "{{ route('users.update', $user->id) }}",
@@ -417,6 +439,16 @@
 					processData: false,
 					contentType: false,
 					cache: false,
+					beforeSend: function() {
+						Swal.fire({
+							...SwalOptions,
+							titleText: "{{ __('alerts.request.before_sent_title') }}",
+							text: "{{ __('alerts.request.before_sent_text') }}",
+							didOpen: () => {
+								Swal.showLoading()
+							}
+						});
+					},
 					success: function(res) {
 						if (res.success) {
 							Swal.fire({

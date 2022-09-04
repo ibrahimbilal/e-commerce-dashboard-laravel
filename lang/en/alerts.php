@@ -8,6 +8,7 @@ return [
 	// Global Errors
 	'errors' => [
 		'unknown' => 'There Is Error!',
+		'no_permissions' => 'You do not have the right permissions!',
 	],
 
 	'confirm' => [
@@ -51,6 +52,10 @@ return [
 				'title' => 'Deleted!',
 				'text' => 'User successfully deleted!',
 			],
+			'force_delete' => [
+				'title' => 'Permanently Deleted!',
+				'text' => 'User successfully permanently deleted!',
+			],
 			'restore' => [
 				'title' => 'Restored!',
 				'text' => 'User successfully restored!',
@@ -76,6 +81,12 @@ return [
 			'errors' => [
 				'not_exist' => 'The Role Dose Not Exist!',
 			]
+		]
+	],
+
+	'settings' => [
+		'response' => [
+			'success' => 'Settings successfully updated!'
 		]
 	]
 ];

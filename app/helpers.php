@@ -246,88 +246,6 @@ if (!function_exists('get_dashboard_menu')) {
 					]
 				]
 			],
-			// [
-			// 	[
-			// 		"route_name" => '',
-			// 		"active_if" => ['errors'],
-			// 		"icon" => 'browser',
-			// 		"title" => __('admin.menu.errors'),
-			// 		"has_submeu" => true,
-			// 		"badge" => '',
-			// 		"submenu_items" => [
-			// 			[
-			// 				"route_name" => '',
-			// 				"active_if" => ['400'],
-			// 				"title" => '400',
-			// 			],
-			// 			[
-			// 				"route_name" => '',
-			// 				"active_if" => ['401'],
-			// 				"title" => '401',
-			// 			],
-			// 			[
-			// 				"route_name" => '',
-			// 				"active_if" => ['403'],
-			// 				"title" => '403',
-			// 			],
-			// 			[
-			// 				"route_name" => '',
-			// 				"active_if" => ['404'],
-			// 				"title" => '404',
-			// 			],
-			// 			[
-			// 				"route_name" => '',
-			// 				"active_if" => ['500'],
-			// 				"title" => '500',
-			// 			],
-			// 			[
-			// 				"route_name" => '',
-			// 				"active_if" => ['503'],
-			// 				"title" => '503',
-			// 			]
-			// 		]
-			// 	],
-			// 	[
-			// 		"route_name" => '',
-			// 		"active_if" => ['auth'],
-			// 		"icon" => 'browser',
-			// 		"title" => __('admin.menu.auth.title'),
-			// 		"has_submeu" => true,
-			// 		"badge" => '',
-			// 		"submenu_items" => [
-			// 			[
-			// 				"route_name" => '',
-			// 				"active_if" => ['login'],
-			// 				"title" => __('admin.menu.auth.0.login'),
-			// 			],
-			// 			[
-			// 				"route_name" => '',
-			// 				"active_if" => ['register'],
-			// 				"title" => __('admin.menu.auth.0.register'),
-			// 			],
-			// 			[
-			// 				"route_name" => '',
-			// 				"active_if" => ['forgot-password'],
-			// 				"title" => __('admin.menu.auth.0.forgot_password'),
-			// 			],
-			// 			[
-			// 				"route_name" => '',
-			// 				"active_if" => ['reset-password'],
-			// 				"title" => __('admin.menu.auth.0.reset_password'),
-			// 			],
-			// 			[
-			// 				"route_name" => '',
-			// 				"active_if" => ['2fa-code'],
-			// 				"title" => __('admin.menu.auth.0.2fa_code'),
-			// 			],
-			// 			[
-			// 				"route_name" => '',
-			// 				"active_if" => ['2fa-recovery'],
-			// 				"title" => __('admin.menu.auth.0.2fa_recovery'),
-			// 			]
-			// 		]
-			// 	]
-			// ],
 		];
 	}
 }
@@ -544,33 +462,6 @@ if (!function_exists('update_env')) {
 				)
 			);
 		}
-	}
-}
-
-if (!function_exists('selected')) {
-	/**
-	 * check if list item is selected item
-	 * @param string $db_value
-	 * @param string $list_value
-	 * @param string $input_type
-	 * @return string
-	 */
-	function selected($db_value, $list_value, $input_type)
-	{
-
-		switch ($input_type) {
-			case 'select':
-				$sel = 'selected';
-				break;
-			case 'checkbox':
-			case 'radio':
-				$sel = 'checked';
-				break;
-			default:
-				$sel = 'selected';
-				break;
-		}
-		return $db_value == $list_value ? $sel : '';
 	}
 }
 

@@ -25,4 +25,5 @@ return [
 	'use_recovery_code' => 'استخدام رمز الاسترداد',
 	'select_all' => 'تحديد الكل',
 	'unselect_all' => 'إلغاء تحديد الكل',
+	'save_changes' => 'حفظ التغييرات',
 ];

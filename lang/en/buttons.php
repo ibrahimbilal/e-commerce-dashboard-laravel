@@ -25,4 +25,5 @@ return [
 	'use_recovery_code' => 'Use a recovery code',
 	'select_all' => 'Select All',
 	'unselect_all' => 'Unselect All',
+	'save_changes' => 'Save Changes',
 ];

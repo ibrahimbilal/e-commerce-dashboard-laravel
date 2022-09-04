@@ -198,6 +198,7 @@ return [
 		'password' => 'Change Password',
 		'role_name' => 'Role Name',
 		'permissions' => 'Permissions',
+		'general_settings' => 'General Settings'
 	],
 
 	'filters' => [

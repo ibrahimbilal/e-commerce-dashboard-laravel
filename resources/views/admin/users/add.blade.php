@@ -216,7 +216,7 @@
 				var formData = new FormData(this);
 				$.ajax({
 					headers: {
-						"X-CSRF-TOKEN": "{{ csrf_token() }}",
+						'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
 					},
 					type: 'POST',
 					url: "{{ route('users.store') }}",

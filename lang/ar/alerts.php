@@ -8,6 +8,7 @@ return [
 	// Global Errors
 	'errors' => [
 		'unknown' => 'هنالك خطأ!',
+		'no_permissions' => 'ليس لديك الأذونات الصحيحة!',
 	],
 
 	'confirm' => [
@@ -78,6 +79,12 @@ return [
 			'errors' => [
 				'not_exist' => 'الدور غير موجود!',
 			]
+		]
+	],
+
+	'settings' => [
+		'response' => [
+			'success' => 'تم تحديث الإعدادات بنجاح!'
 		]
 	]
 ];

@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('mobile')->nullable();
             $table->date('birth_date')->nullable();
-			$table->string('role_name');
+			$table->string('role_name')->default('not_verified');
 			$table->enum('gender', ['male', 'female']);
             $table->string('status');
             $table->string('language')->nullable();

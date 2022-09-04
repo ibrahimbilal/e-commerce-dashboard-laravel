@@ -22,7 +22,6 @@
     @include('admin.inc.page_title', $params)
 
     <form class="row d-block clearfix" id="edit-user" method="POST" enctype="multipart/form-data">
-		@method('PUT')
         <div class="col-sm-12 col-lg-9 float-start post-box">
             <div class="main-box box-spaces">
                 <div class="form-item primary mb-3">
@@ -63,18 +62,6 @@
                         <input class="input-radio" id="female" name="gender" type="radio" value="female"
 						@checked($user->gender == 'female')>{{ __('forms.gender.female') }}
                     </label>
-                </div>
-                <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
-                    <label class="item-title" for="user-role">{{ __('forms.role.title') }}</label>
-                    <select class="form-select" id="user-role" name="role_name">
-                        @forelse ($roles as $role)
-                            <option value="{{ $role->name }}" @selected($user->role_name == $role->name)>
-                                {{ $role->name }}
-							</option>
-						@empty
-							<option value="">{{ __('forms.role.no_roles')  }}</option>
-						@endforelse
-                    </select>
                 </div>
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
                     <label class="item-title" for="user-language">{{ __('forms.lang') }}</label>
@@ -178,6 +165,9 @@
                 </div>
                 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
                     <label class="item-title meta-title">{{ __('forms.status.title') }}</label><span class="ms-2">{{ __('forms.status.' . $user->status) }}</span>
+                </div>
+                <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
+                    <label class="item-title meta-title">{{ __('forms.role.title') }}</label><span class="ms-2">{{ $user->role_name }}</span>
                 </div>
                 <div class="btns-holder d-flex justify-content-between mt-4">
                     <button class="btn solid-btn w-100" type="submit">{{ __('buttons.update') }}</button>
@@ -496,14 +486,24 @@
 				var formData = new FormData(this);
 				$.ajax({
 					headers: {
-						"X-CSRF-TOKEN": "{{ csrf_token() }}",
+						'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
 					},
 					type: 'POST',
-					url: "{{ route('users.update', $user->id) }}",
+					url: "{{ route('users.update_profile') }}",
 					data: formData,
 					processData: false,
 					contentType: false,
 					cache: false,
+					beforeSend: function() {
+						Swal.fire({
+							...SwalOptions,
+							titleText: "{{ __('alerts.request.before_sent_title') }}",
+							text: "{{ __('alerts.request.before_sent_text') }}",
+							didOpen: () => {
+								Swal.showLoading()
+							}
+						});
+					},
 					success: function(res) {
 						if (res.success) {
 							Swal.fire({

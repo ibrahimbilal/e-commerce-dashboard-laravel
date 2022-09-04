@@ -202,6 +202,7 @@ return [
 		'password' => 'تغيير كلمة المرور',
 		'role_name' => 'اسم الدور',
 		'permissions' => 'الأذونات',
+		'general_settings' => 'الإعدادات العامة'
 	],
 
 	'unknown' => 'غير معروف',

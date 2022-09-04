@@ -9,12 +9,16 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\NewUserRequest;
 use App\Http\Traits\UploadFilesTraits;
 use Illuminate\Auth\Events\Registered;
+use App\Http\Requests\BulkActionRequest;
 use App\Http\Requests\UpdateUserRequest;
 use Stevebauman\Location\Facades\Location;
+use App\Http\Requests\UpdateProfileRequest;
 use Laravel\Fortify\Actions\ConfirmPassword;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Fortify\Actions\GenerateNewRecoveryCodes;
 
@@ -30,9 +34,9 @@ class UserController extends Controller
         $this->middleware('permission:view users', ['only' => ['index']]);
         $this->middleware('permission:add users', ['only' => ['create', 'store']]);
         $this->middleware('permission:edit users', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:delete users', ['only' => ['destroy']]);
-        $this->middleware('permission:restore users', ['only' => ['restore']]);
-        // $this->middleware('permission:permanently_delete users', ['only' => ['destroy']]);
+        $this->middleware('permission:delete users', ['only' => ['destroy', 'bulk_destroy']]);
+        $this->middleware('permission:restore users', ['only' => ['restore', 'bulk_restore']]);
+        $this->middleware('permission:permanently_delete users', ['only' => ['force_delete', 'bulk_force_delete']]);
     }
 
 	/**
@@ -42,20 +46,24 @@ class UserController extends Controller
 	 */
 	public function index(Request $request)
 	{
+		// get all users
 		$users = User::all();
+		// get deleted users
 		$trashed = User::onlyTrashed()->get();
-		// $roles = Role::all();
+		// get roles names
+		$roles = Role::all()->sortBy('name');
+		// using for loop
 		$results = $users;
 
-		// if ( isset($request->role) ) {
-		// 	$results = User::where('role_id', $request->role)->get();
-		// }
+		if ( isset($request->role) ) {
+			$results = User::role($request->role)->get();
+		}
 
 		if ( isset($request->trashed) ) {
 			$results = $trashed;
 		}
 
-		return view('admin.users.list', compact('users', 'trashed', 'results'));
+		return view('admin.users.list', compact('users', 'trashed', 'results', 'roles'));
 	}
 
 	/**
@@ -65,7 +73,7 @@ class UserController extends Controller
 	 */
 	public function create()
 	{
-		$roles = Role::all();
+		$roles = Role::all()->sortBy('name');
 		return view('admin.users.add', compact('roles'));
 	}
 
@@ -102,9 +110,7 @@ class UserController extends Controller
 				'redirect' => route('users.index')
 			]);
 		} catch (\Exception $ex) {
-			return response()->json([
-				'errors' => [__('alerts.response.errors.unknown')]
-			]);
+			return response()->json(['errors' => [__('alerts.errors.unknown')]]);
 		}
 	}
 
@@ -129,7 +135,7 @@ class UserController extends Controller
 	public function profile(Request $request)
 	{
 		$user = Auth::user();
-		$roles = Role::all();
+		$roles = Role::all()->sortBy('name');
 		$sessions = array_to_object($this->sessions($request)->all());
 
 		return view('admin.users.profile', compact('user', 'roles', 'sessions'));
@@ -144,7 +150,7 @@ class UserController extends Controller
 	public function edit(Request $request, $id)
 	{
 		$logged_in_user_id = Auth::user()->id;
-		$roles = Role::all();
+		$roles = Role::all()->sortBy('name');
 		$user = User::find($id);
 		$sessions = array_to_object($this->sessions($request, $id)->all());
 
@@ -175,7 +181,6 @@ class UserController extends Controller
 	{
 		// the request will validated by 'UpdateUserRequest' class
 		try {
-			$logged_in_user_id = Auth::user()->id;
 
 			// redirect if user dose not exist
 			$user = User::find($id);
@@ -185,15 +190,6 @@ class UserController extends Controller
 				]);
 			}
 
-			// change application language
-			if ( $request->has('language') ) {
-				if ( $logged_in_user_id == $id ) {
-					$locale = $request->get('language');
-					session()->put('locale', $locale);
-					app()->setLocale($locale);
-				}
-			}
-
 			// make accoount unverified when change it's status to not_verified
 			if ( $request->has('status') ) {
 				if (($user->status !== $request->get('status')) && $request->get('status') == 'not_verified') {
@@ -201,6 +197,13 @@ class UserController extends Controller
 						'email_verified_at' => null
 					])->save();
 				}
+			}
+
+			// send verify email if email changed
+			if ($request->get('email') !== $user->email &&
+				$user instanceof MustVerifyEmail) {
+				$this->updateVerifiedUser($user, $request->get('email'));
+				$request->merge(['status' => 'not_verified']);
 			}
 
 			// upload profile picture
@@ -223,6 +226,90 @@ class UserController extends Controller
 
 			// don't update password if user didn't change it
 			// profile picture has updated currently
+			if (is_null($request->get('password'))) {
+				$user->update(
+					$request->except([
+						'password',
+						'password_confirmation',
+						'profile_picture'
+					])
+				);
+			} else {
+				// except this fields from update
+				// this fields doesn't exist in database
+				// profile picture has updated currently
+
+				// hash the password
+				$request->merge(['password' => Hash::make( $request->input('password') )]);
+
+				$user->update(
+					$request->except([
+						'password_confirmation',
+						'profile_picture'
+					])
+				);
+			}
+
+			return response()->json([
+				'success' => true,
+				'text' => __('alerts.users.response.update')
+			]);
+
+		} catch (\Exception $ex) {
+			return response()->json(['errors' => [__('alerts.errors.unknown')]]);
+		}
+	}
+
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param  \Illuminate\Http\UpdateProfileRequest $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function update_profile(UpdateProfileRequest $request)
+	{
+		// the request will validated by 'UpdateUserRequest' class
+		try {
+			$logged_in_user_id = Auth::user()->id;
+
+			// redirect if user dose not exist
+			$user = User::find($logged_in_user_id);
+			if (!$user) {
+				return response()->json([
+					'errors' => __('alerts.users.response.errors.not_exist')
+				]);
+			}
+
+			// change application language
+			if ( $request->has('language') ) {
+				$locale = $request->get('language');
+				session()->put('locale', $locale);
+				app()->setLocale($locale);
+			}
+
+			// send verify email if email changed
+			if ($request->get('email') !== $user->email &&
+				$user instanceof MustVerifyEmail) {
+				$this->updateVerifiedUser($user, $request->get('email'));
+				$request->merge(['status' => 'not_verified']);
+			}
+
+			// upload profile picture
+			// store file path to database
+			if ( $request->hasFile('profile_picture') ) {
+				$file_path = $this->uploadFile($request, 'profile_picture', 'users', 'public');
+				$user->profile_picture = 'storage/' . $file_path;
+				$user->save();
+			}
+
+			// remove profile picture
+			if ( $request->has('remove_pp') && $request->get('remove_pp') ) {
+				$user->profile_picture = null;
+				$user->save();
+			}
+
+			// don't update password if user didn't change it
+			// profile picture has updated currently
 			if (is_null($request->get('current_password')) && is_null($request->get('password'))) {
 				$user->update(
 					$request->except([
@@ -236,6 +323,10 @@ class UserController extends Controller
 				// except this fields from update
 				// this fields doesn't exist in database
 				// profile picture has updated currently
+
+				// hash the password
+				$request->merge(['password' => Hash::make( $request->input('password') )]);
+
 				$user->update(
 					$request->except([
 						'current_password',
@@ -251,9 +342,120 @@ class UserController extends Controller
 			]);
 
 		} catch (\Exception $ex) {
+			return response()->json(['errors' => [__('alerts.errors.unknown')]]);
+		}
+	}
+
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param \Illuminate\Http\BulkActionRequest $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function bulk_destroy(BulkActionRequest $request) {
+		try {
+			$logged_in_user_id = Auth::user()->id;
+
+			if ( in_array($logged_in_user_id, $request->get('items')) ) {
+				return response()->json(['errors' => [__('alerts.users.response.errors.not_allowed')]]);
+			}
+
+			$users = User::whereIn('id', $request->get('items'));
+			$rows = $users->delete();
+
+			if ($rows > 0) {
+				$status = true;
+				$title = __('bulk_action.ajax.actions.delete.title');
+				$text = __('bulk_action.ajax.actions.delete.text', ['type' => __('admin.menu.users.title')]);
+			} else {
+				$status = false;
+				$title = __('bulk_action.ajax.actions.delete.no_items');
+				$text = __('');
+			}
+
 			return response()->json([
-				'errors' => [__('alerts.response.errors.unknown')]
+				'success' => $status,
+				'title' => $title,
+				'text' => $text
 			]);
+		} catch (\Exception $ex) {
+			return response()->json(['errors' => [__('alerts.errors.unknown')]]);
+		}
+	}
+
+
+	/**
+	 * Restore the specified resource from trash.
+	 *
+	 * @param \Illuminate\Http\BulkActionRequest $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function bulk_restore(BulkActionRequest $request) {
+		try {
+			$users = User::onlyTrashed()->whereIn('id', $request->get('items'));
+
+			if (!$users) {
+				return response()->json(['errors' => [__('alerts.users.response.errors.not_exist')]]);
+			}
+
+			$rows = $users->restore();
+			if ($rows > 0) {
+				$status = true;
+				$title = __('bulk_action.ajax.actions.restore.title');
+				$text = __('bulk_action.ajax.actions.restore.text', ['type' => __('admin.menu.users.title')]);
+			} else {
+				$status = false;
+				$title = __('bulk_action.ajax.actions.restore.no_items');
+				$text = __('');
+			}
+
+			return response()->json([
+				'success' => $status,
+				'title' => $title,
+				'text' => $text
+			]);
+		} catch (\Exception $ex) {
+			return response()->json(['errors' => [__('alerts.errors.unknown')]]);
+		}
+	}
+
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param \Illuminate\Http\BulkActionRequest $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function bulk_force_delete(BulkActionRequest $request) {
+		try {
+			$logged_in_user_id = Auth::user()->id;
+
+			if ( in_array($logged_in_user_id, $request->get('items')) ) {
+				return response()->json(['errors' => [__('alerts.users.response.errors.not_allowed')]]);
+			}
+
+			$users = User::onlyTrashed()->whereIn('id', $request->get('items'));
+			if (!$users) {
+				return response()->json(['errors' => [__('alerts.users.response.errors.not_exist')]]);
+			}
+
+			$rows = $users->forceDelete();
+			if ($rows > 0) {
+				$status = true;
+				$title = __('bulk_action.ajax.actions.delete.title');
+				$text = __('bulk_action.ajax.actions.delete.text', ['type' => __('admin.menu.users.title')]);
+			} else {
+				$status = false;
+				$title = __('bulk_action.ajax.actions.delete.no_items');
+				$text = __('');
+			}
+
+			return response()->json([
+				'success' => $status,
+				'title' => $title,
+				'text' => $text
+			]);
+		} catch (\Exception $ex) {
+			return response()->json(['errors' => [__('alerts.errors.unknown')]]);
 		}
 	}
 
@@ -263,8 +465,7 @@ class UserController extends Controller
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function destroy($id)
-	{
+	public function destroy($id) {
 		try {
 			$logged_in_user_id = Auth::user()->id;
 
@@ -285,7 +486,7 @@ class UserController extends Controller
 				'redirect' => route('users.index')
 			]);
 		} catch (\Exception $ex) {
-			return redirect()->route('users.index')->with(['errors' => [__('alerts.response.errors.unknown')]]);
+			return response()->json(['errors' => [__('alerts.errors.unknown')]]);
 		}
 	}
 
@@ -311,7 +512,37 @@ class UserController extends Controller
 				'text' => __('alerts.users.response.restore.text'),
 			]);
 		} catch (\Exception $ex) {
-			return redirect()->route('users.index')->with(['errors' => [__('alerts.response.errors.unknown')]]);
+			return response()->json(['errors' => [__('alerts.errors.unknown')]]);
+		}
+	}
+
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function force_delete($id) {
+		try {
+			$logged_in_user_id = Auth::user()->id;
+
+			if ( $logged_in_user_id == $id ) {
+				return response()->json(['errors' => [__('alerts.users.response.errors.not_allowed')]]);
+			}
+
+			$user = User::onlyTrashed()->where('id', $id);
+			if (!$user) {
+				return response()->json(['errors' => [__('alerts.users.response.errors.not_exist')]]);
+			}
+
+			$user->forceDelete();
+			return response()->json([
+				'success' => true,
+				'title' => __('alerts.users.response.force_delete.title'),
+				'text' => __('alerts.users.response.force_delete.text'),
+				'redirect' => route('users.index')
+			]);
+		} catch (\Exception $ex) {
+			return response()->json(['errors' => [__('alerts.errors.unknown')]]);
 		}
 	}
 
@@ -468,4 +699,22 @@ class UserController extends Controller
 			->where('id', '!=', $request->session()->getId())
 			->delete();
 	}
+
+
+	/**
+     * Update the given verified user's profile information.
+     *
+     * @param  mixed  $user
+     * @param  array  $input
+     * @return void
+     */
+    protected function updateVerifiedUser($user, $input)
+    {
+        $user->forceFill([
+            'email' => $input,
+            'email_verified_at' => null,
+        ])->save();
+
+        $user->sendEmailVerificationNotification();
+    }
 }

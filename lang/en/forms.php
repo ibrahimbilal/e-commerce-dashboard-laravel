@@ -34,4 +34,22 @@ return [
 	'remember' => 'Remember Me',
 	'code' => 'Authentication Code',
 	'recovery_code' => 'Recovery Code',
+	'site_title' => 'Site Title:',
+	'tagline' => [
+		'title' => 'Tagline:',
+		'sub' => 'In A Few Words, Explain What This Site Is About.',
+	],
+	'site_description' => 'Site Description:',
+	'site_url' => 'Site URL:',
+	'favicon' => [
+		'title' => 'Favicon:',
+		'sub' => 'Site Icons Should Be Square And At Least 512×512 Pixels.',
+	],
+	'timezone' => 'Timezone:',
+	'date_format' => 'Date Format:',
+	'time_format' => 'Time Format:',
+	'custom' => 'Custom',
+	'utc_time' => 'UTC Time Is:',
+	'server_time' => 'Server Time Is:',
+	'date_time_doc' => 'Documentation on date and time formatting.',
 ];
