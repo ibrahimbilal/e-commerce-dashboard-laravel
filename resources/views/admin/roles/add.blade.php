@@ -72,7 +72,7 @@
 																		</label>
 																		<span class="text-capitalize ms-2">
 																			{{ __('admin.prefix.' . permissions_name($item->name, 'prefix')) }}
-																			{{ __('admin.menu.' . permissions_name($item->name, 'name') . '.title') }}
+																			{{-- {{ __('admin.menu.' . permissions_name($item->name, 'name') . '.title') }} --}}
 																		</span>
 																	</div>
 																@endforeach

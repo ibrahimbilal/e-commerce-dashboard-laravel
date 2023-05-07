@@ -59,6 +59,13 @@ Route::prefix('/admin')->group(function () {
 
 		// Roles Pages
 		Route::resource('/roles', App\Http\Controllers\RoleController::class);
+
+		// Languages Pages
+		Route::resource('/langs', App\Http\Controllers\LanguageController::class)->except(['show', 'edit']);
+		Route::get('langs/{slug?}', [App\Http\Controllers\LanguageController::class, 'edit'])->where('slug', '[A-Za-z]+')->name('langs.edit');
+		// Route::get('/langs', [App\Http\Controllers\LanguageController::class, 'index'])->name('langs.index');
+		// Route::get('/langs/create', [App\Http\Controllers\LanguageController::class, 'create'])->name('langs.index');
+		// Route::get('/langs', [App\Http\Controllers\LanguageController::class, 'index'])->name('langs.index');
 	});
 
 });

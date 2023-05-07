@@ -68,6 +68,8 @@ return [
 		],
 		'languages' => [
 			'title' => 'Languages',
+			'add' => 'Add Language',
+			'edit' => 'Edit Language',
 		],
 		'settings' => [
 			'title' => 'Settings',

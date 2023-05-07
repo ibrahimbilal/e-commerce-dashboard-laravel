@@ -1,297 +1,297 @@
 [
-    {
-        "type": "header",
-        "version": "5.2.0",
-        "comment": "Export to JSON plugin for PHPMyAdmin"
-    },
-    {
-        "type": "database",
-        "name": "e-commerce-dashboard"
-    },
-    {
-        "type": "table",
-        "name": "permissions",
-        "database": "e-commerce-dashboard",
-        "data": [
-            {
-                "name": "add attributes"
-            },
-            {
-                "name": "add categories"
-            },
-            {
-                "name": "add customers"
-            },
-            {
-                "name": "add discounts"
-            },
-            {
-                "name": "add gallery"
-            },
-            {
-                "name": "add invoices"
-            },
-            {
-                "name": "add languages"
-            },
-            {
-                "name": "add orders"
-            },
-            {
-                "name": "add products"
-            },
-            {
-                "name": "add reviews"
-            },
-            {
-                "name": "add roles"
-            },
-            {
-                "name": "add tags"
-            },
-            {
-                "name": "add users"
-            },
-            {
-                "name": "delete attributes"
-            },
-            {
-                "name": "delete categories"
-            },
-            {
-                "name": "delete customers"
-            },
-            {
-                "name": "delete discounts"
-            },
-            {
-                "name": "delete gallery"
-            },
-            {
-                "name": "delete invoices"
-            },
-            {
-                "name": "delete languages"
-            },
-            {
-                "name": "delete orders"
-            },
-            {
-                "name": "delete products"
-            },
-            {
-                "name": "delete reviews"
-            },
-            {
-                "name": "delete tags"
-            },
-            {
-                "name": "delete users"
-            },
-            {
-                "name": "edit attributes"
-            },
-            {
-                "name": "edit categories"
-            },
-            {
-                "name": "edit currencies_settings"
-            },
-            {
-                "name": "edit customers"
-            },
-            {
-                "name": "edit discounts"
-            },
-            {
-                "name": "edit emails_settings"
-            },
-            {
-                "name": "edit gallery"
-            },
-            {
-                "name": "edit general_settings"
-            },
-            {
-                "name": "edit invoices"
-            },
-            {
-                "name": "edit languages"
-            },
-            {
-                "name": "edit orders"
-            },
-            {
-                "name": "edit payment_settings"
-            },
-            {
-                "name": "edit products"
-            },
-            {
-                "name": "edit reviews"
-            },
-            {
-                "name": "edit roles"
-            },
-            {
-                "name": "edit store_settings"
-            },
-            {
-                "name": "edit tags"
-            },
-            {
-                "name": "edit theme_settings"
-            },
-            {
-                "name": "edit users"
-            },
-            {
-                "name": "exports"
-            },
-            {
-                "name": "imports"
-            },
-            {
-                "name": "permanently_delete attributes"
-            },
-            {
-                "name": "permanently_delete categories"
-            },
-            {
-                "name": "permanently_delete customers"
-            },
-            {
-                "name": "permanently_delete discounts"
-            },
-            {
-                "name": "permanently_delete gallery"
-            },
-            {
-                "name": "permanently_delete invoices"
-            },
-            {
-                "name": "permanently_delete languages"
-            },
-            {
-                "name": "permanently_delete orders"
-            },
-            {
-                "name": "permanently_delete products"
-            },
-            {
-                "name": "permanently_delete reviews"
-            },
-            {
-                "name": "permanently_delete roles"
-            },
-            {
-                "name": "permanently_delete tags"
-            },
-            {
-                "name": "permanently_delete users"
-            },
-            {
-                "name": "restore attributes"
-            },
-            {
-                "name": "restore categories"
-            },
-            {
-                "name": "restore customers"
-            },
-            {
-                "name": "restore discounts"
-            },
-            {
-                "name": "restore gallery"
-            },
-            {
-                "name": "restore invoices"
-            },
-            {
-                "name": "restore languages"
-            },
-            {
-                "name": "restore orders"
-            },
-            {
-                "name": "restore products"
-            },
-            {
-                "name": "restore reviews"
-            },
-            {
-                "name": "restore tags"
-            },
-            {
-                "name": "restore users"
-            },
-            {
-                "name": "view analytics"
-            },
-            {
-                "name": "view attributes"
-            },
-            {
-                "name": "view categories"
-            },
-            {
-                "name": "view currencies_settings"
-            },
-            {
-                "name": "view customers"
-            },
-            {
-                "name": "view dashboard"
-            },
-            {
-                "name": "view discounts"
-            },
-            {
-                "name": "view emails_settings"
-            },
-            {
-                "name": "view gallery"
-            },
-            {
-                "name": "view general_settings"
-            },
-            {
-                "name": "view invoices"
-            },
-            {
-                "name": "view languages"
-            },
-            {
-                "name": "view marketing"
-            },
-            {
-                "name": "view orders"
-            },
-            {
-                "name": "view payment_settings"
-            },
-            {
-                "name": "view products"
-            },
-            {
-                "name": "view reviews"
-            },
-            {
-                "name": "view roles"
-            },
-            {
-                "name": "view store_settings"
-            },
-            {
-                "name": "view tags"
-            },
-            {
-                "name": "view theme_settings"
-            },
-            {
-                "name": "view users"
-            }
-        ]
-    }
+	{
+		"type": "header",
+		"version": "5.2.0",
+		"comment": "Export to JSON plugin for PHPMyAdmin"
+	},
+	{
+		"type": "database",
+		"name": "e-commerce-dashboard"
+	},
+	{
+		"type": "table",
+		"name": "permissions",
+		"database": "e-commerce-dashboard",
+		"data": [
+			{
+				"name": "add attributes"
+			},
+			{
+				"name": "add categories"
+			},
+			{
+				"name": "add customers"
+			},
+			{
+				"name": "add discounts"
+			},
+			{
+				"name": "add gallery"
+			},
+			{
+				"name": "add invoices"
+			},
+			{
+				"name": "add languages"
+			},
+			{
+				"name": "add orders"
+			},
+			{
+				"name": "add products"
+			},
+			{
+				"name": "add reviews"
+			},
+			{
+				"name": "add roles"
+			},
+			{
+				"name": "add tags"
+			},
+			{
+				"name": "add users"
+			},
+			{
+				"name": "delete attributes"
+			},
+			{
+				"name": "delete categories"
+			},
+			{
+				"name": "delete customers"
+			},
+			{
+				"name": "delete discounts"
+			},
+			{
+				"name": "delete gallery"
+			},
+			{
+				"name": "delete invoices"
+			},
+			{
+				"name": "delete languages"
+			},
+			{
+				"name": "delete orders"
+			},
+			{
+				"name": "delete products"
+			},
+			{
+				"name": "delete reviews"
+			},
+			{
+				"name": "delete tags"
+			},
+			{
+				"name": "delete users"
+			},
+			{
+				"name": "edit attributes"
+			},
+			{
+				"name": "edit categories"
+			},
+			{
+				"name": "edit currencies_settings"
+			},
+			{
+				"name": "edit customers"
+			},
+			{
+				"name": "edit discounts"
+			},
+			{
+				"name": "edit emails_settings"
+			},
+			{
+				"name": "edit gallery"
+			},
+			{
+				"name": "edit general_settings"
+			},
+			{
+				"name": "edit invoices"
+			},
+			{
+				"name": "edit languages"
+			},
+			{
+				"name": "edit orders"
+			},
+			{
+				"name": "edit payment_settings"
+			},
+			{
+				"name": "edit products"
+			},
+			{
+				"name": "edit reviews"
+			},
+			{
+				"name": "edit roles"
+			},
+			{
+				"name": "edit store_settings"
+			},
+			{
+				"name": "edit tags"
+			},
+			{
+				"name": "edit theme_settings"
+			},
+			{
+				"name": "edit users"
+			},
+			{
+				"name": "exports"
+			},
+			{
+				"name": "imports"
+			},
+			{
+				"name": "permanently_delete attributes"
+			},
+			{
+				"name": "permanently_delete categories"
+			},
+			{
+				"name": "permanently_delete customers"
+			},
+			{
+				"name": "permanently_delete discounts"
+			},
+			{
+				"name": "permanently_delete gallery"
+			},
+			{
+				"name": "permanently_delete invoices"
+			},
+			{
+				"name": "permanently_delete languages"
+			},
+			{
+				"name": "permanently_delete orders"
+			},
+			{
+				"name": "permanently_delete products"
+			},
+			{
+				"name": "permanently_delete reviews"
+			},
+			{
+				"name": "permanently_delete roles"
+			},
+			{
+				"name": "permanently_delete tags"
+			},
+			{
+				"name": "permanently_delete users"
+			},
+			{
+				"name": "restore attributes"
+			},
+			{
+				"name": "restore categories"
+			},
+			{
+				"name": "restore customers"
+			},
+			{
+				"name": "restore discounts"
+			},
+			{
+				"name": "restore gallery"
+			},
+			{
+				"name": "restore invoices"
+			},
+			{
+				"name": "restore languages"
+			},
+			{
+				"name": "restore orders"
+			},
+			{
+				"name": "restore products"
+			},
+			{
+				"name": "restore reviews"
+			},
+			{
+				"name": "restore tags"
+			},
+			{
+				"name": "restore users"
+			},
+			{
+				"name": "view analytics"
+			},
+			{
+				"name": "view attributes"
+			},
+			{
+				"name": "view categories"
+			},
+			{
+				"name": "view currencies_settings"
+			},
+			{
+				"name": "view customers"
+			},
+			{
+				"name": "view dashboard"
+			},
+			{
+				"name": "view discounts"
+			},
+			{
+				"name": "view emails_settings"
+			},
+			{
+				"name": "view gallery"
+			},
+			{
+				"name": "view general_settings"
+			},
+			{
+				"name": "view invoices"
+			},
+			{
+				"name": "view languages"
+			},
+			{
+				"name": "view marketing"
+			},
+			{
+				"name": "view orders"
+			},
+			{
+				"name": "view payment_settings"
+			},
+			{
+				"name": "view products"
+			},
+			{
+				"name": "view reviews"
+			},
+			{
+				"name": "view roles"
+			},
+			{
+				"name": "view store_settings"
+			},
+			{
+				"name": "view tags"
+			},
+			{
+				"name": "view theme_settings"
+			},
+			{
+				"name": "view users"
+			}
+		]
+	}
 ]

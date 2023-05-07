@@ -10,6 +10,8 @@ return [
 		'status' => 'Status',
 		'action' => 'Action',
 		'role_name' => 'Role name',
+		'lang_name' => 'Language name',
+		'lang_code' => 'Language Code',
 	],
 	'buttons' => [
 		'next' => 'Next',
@@ -29,6 +31,7 @@ return [
 		'print' => 'Print',
 		'colvis' => 'Columns',
 		'row_selected' => 'Item selected',
+		'langs' => 'Languages'
 	],
 
 

@@ -83,6 +83,23 @@ return [
 			]
 		]
 	],
+	'langs' => [
+		'response' => [
+			'create' => 'Language successfully Created',
+			'update' => 'Language successfully updated!',
+			'delete' => [
+				'title' => 'Deleted!',
+				'text' => 'Language successfully deleted!',
+			],
+			'restore' => [
+				'title' => 'Restored!',
+				'text' => 'Language successfully restored!',
+			],
+			'errors' => [
+				'not_exist' => 'The Language Dose Not Exist!',
+			]
+		]
+	],
 
 	'settings' => [
 		'response' => [

@@ -10,6 +10,8 @@ return [
 		'status' => 'الحالة',
 		'action' => 'الاجراء',
 		'role_name' => 'اسم الدور',
+		'lang_name' => 'اسم اللغة',
+		'lang_code' => 'رمز اللغة',
 	],
 	'buttons' => [
 		'next' => 'التالي',
@@ -29,6 +31,7 @@ return [
 		'print' => 'طباعة',
 		'colvis' => 'الأعمدة',
 		'row_selected' => 'عنصر محدد',
+		'langs' => 'لغات'
 	],
 
 	'zeroRecords' => 'لا توجد بيانات متوفرة في الجدول!'
