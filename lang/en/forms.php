@@ -118,4 +118,34 @@ return [
 		'title' => 'Active Recommendations?',
 		'tooltip' => 'check this if you want show Recommendations Section On Thank You Page.'
 	],
+	'currency' => [
+		'title' => 'Currency:',
+		'tooltip' => 'This will be the default currency of your store.',
+	],
+	'currency_pos' => [
+		'title' => 'Currency Position:',
+		'options' => [
+			'left' => 'Left',
+			'right' => 'Right',
+			'left_space' => 'Left With Space',
+			'right_space' => 'Right With Space',
+		]
+	],
+	'thousand_sep' => 'Thousand Separator:',
+	'decimal_sep' => 'Decimal Separator:',
+	'decimals_num' => 'Number of decimals:',
+	'multi_currencies' => 'Enable Multi Currencies?',
+	'currencies_display' => [
+		'title' => 'Dropdown Display:',
+		'options' => [
+			'full' => 'Full [ United State Dollar ($) ]',
+			'code' => 'Code [ USD ]',
+			'symbol' => 'Symbol [ $ ]',
+			'code_symbol' => 'Code + Symbol [ USD ($) ]',
+		]
+	],
+	'choose_currencies' => [
+		'title' => 'Choose Currencies:',
+		'tooltip' => 'Choose the currencies you want your store to support.'
+	],
 ];

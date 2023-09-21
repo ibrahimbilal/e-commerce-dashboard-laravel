@@ -118,4 +118,35 @@ return [
 		'title' => 'تفعيل التوصيات؟',
 		'tooltip' => 'حدد هذا إذا كنت تريد عرض قسم التوصيات في صفحة الشكر.'
 	],
+	'currency' => [
+		'title' => 'العملة:',
+		'tooltip' => 'ستكون هذه هي العملة الافتراضية لمتجرك.',
+	],
+	'currency_pos' => 'مكان العملة:',
+	'currency_pos' => [
+		'title' => 'مكان العملة:',
+		'options' => [
+			'left' => 'يسار',
+			'right' => 'يمين',
+			'left_space' => 'يسار مع مسافة',
+			'right_space' => 'يمين مع مسافة',
+		]
+	],
+	'thousand_sep' => 'فاصلة الألف:',
+	'decimal_sep' => 'الفاصلة العشرية:',
+	'decimals_num' => 'عدد الكسور العشرية:',
+	'multi_currencies' => 'تفعيل العملات المتعددة؟',
+	'currencies_display' => [
+		'title' => 'عرض القائمة المنسدلة',
+		'options' => [
+			'full' => 'كامل [ United State Dollar ($) ]',
+			'code' => 'اختصار [ USD ]',
+			'symbol' => 'رمز [ $ ]',
+			'code_symbol' => 'اختصار + رمز [ USD ($) ]',
+		]
+	],
+	'choose_currencies' => [
+		'title' => 'اختر العملات:',
+		'tooltip' => 'اختر العملات التي تريد أن يدعمها متجرك.'
+	],
 ];

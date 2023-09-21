@@ -205,6 +205,8 @@ return [
 		'store_address' => 'Store Address',
 		'store_settings' => 'Store Settings',
 		'store_sections_settings' => 'Store Sections Settings',
+		'currencies_settings' => 'Currencies Settings',
+		'multi_currencies' => 'Multi Currencies',
 	],
 
 	'filters' => [

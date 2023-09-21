@@ -1,6 +1,6 @@
 @extends('admin.layout')
 
-@section('title', 'Theme Settings')
+@section('title', 'Store Settings')
 
 @push('stylesheet')
     <!-- Sweet Alert 2 -->
@@ -179,7 +179,7 @@
                     </label>
                 </div>
 
-                <div class="form-item second d-flex align-items-center mt-3 @if(isset($datas['social_share']) && $datas['social_share'] == false) d-none @endif" id="social-share-items">
+                <div class="form-item second d-flex align-items-center mt-3 @if(!isset($datas['social_share']) || $datas['social_share'] == false) d-none @endif" id="social-share-items">
                     <label class="item-title">{{ __('forms.enable_share_on') }}</label>
                     <label class="icon-checkbox">
                         <input type="checkbox"

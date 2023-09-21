@@ -27,4 +27,5 @@ return [
 	'select_all' => 'Select All',
 	'unselect_all' => 'Unselect All',
 	'save_changes' => 'Save Changes',
+	'add_currency' => 'Add New Currency',
 ];

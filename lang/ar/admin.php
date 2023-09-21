@@ -209,6 +209,8 @@ return [
 		'store_address' => 'عنوان المتجر',
 		'store_settings' => 'إعدادات المتجر',
 		'store_sections_settings' => 'إعدادات أقسام المتجر',
+		'currencies_settings' => 'إعدادات العملاء',
+		'multi_currencies' => 'عملات متعددة',
 	],
 
 	'unknown' => 'غير معروف',

@@ -27,4 +27,5 @@ return [
 	'select_all' => 'تحديد الكل',
 	'unselect_all' => 'إلغاء تحديد الكل',
 	'save_changes' => 'حفظ التغييرات',
+	'add_currency' => 'إضافة عملة جديدة',
 ];

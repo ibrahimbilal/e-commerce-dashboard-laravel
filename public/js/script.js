@@ -327,11 +327,6 @@ jQuery(() => {
         $(this).parents('.repeater').siblings().find('.icon').removeClass('active');
     });
 
-    // Add New Address
-    $('.add-repeater-item .btn').on('click', function () {
-        $(".repeater-holder").append($(".repeater-holder .repeater:first").clone());
-    });
-
 	// Remove Address
 	$(document).on('click', '.repeater-holder .remove', function () {
         $(this).parents('.repeater').remove();

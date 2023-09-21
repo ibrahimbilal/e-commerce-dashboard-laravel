@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin\Settings;
 
 use App\Models\Setting;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Settings\ThemeSettingsRequest;
 
@@ -25,7 +24,6 @@ class ThemeSettingController extends Controller
      */
     public function index()
     {
-
 
 		$settings = Setting::where('setting_key', '=', 'logo_width')
 							->orWhere('setting_key', '=', 'mobile_logo_width')
