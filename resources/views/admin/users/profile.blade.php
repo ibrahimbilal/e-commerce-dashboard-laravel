@@ -149,7 +149,7 @@
                         class="ms-2">{{ format_date($user->updated_at) }}</span>
                 </div>
                 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-                    <label class="item-title meta-title">{{ __('metas.last_login') }}</label><span class="ms-2">{{ end($sessions)->last_active_formated }}</span>
+                    <label class="item-title meta-title">{{ __('metas.last_login') }}</label><span class="ms-2">{{ $sessions[0]->last_active_formated }}</span>
                 </div>
                 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
                     <label class="item-title meta-title">{{ __('metas.device') }}</label><span class="ms-2">{{ ucfirst($sessions[0]->agent->device) }}</span>

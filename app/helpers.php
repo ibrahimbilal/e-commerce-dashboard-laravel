@@ -200,7 +200,14 @@ if (!function_exists('get_dashboard_menu')) {
 					],
 					[
 						"route_name" => '',
-						"active_if" => ['general-settings.index', 'theme_settings', 'store_settings', 'currencies_settings', 'emails_settings', 'payment_settings'],
+						"active_if" => [
+							'general-settings.index',
+							'theme-settings.index',
+							'store-settings.index',
+							'currencies-settings.index',
+							'emails-settings.index',
+							'payment-settings.index'
+						],
 						"icon" => 'settings',
 						"title" => __('admin.menu.settings.title'),
 						"has_submeu" => true,
@@ -221,32 +228,32 @@ if (!function_exists('get_dashboard_menu')) {
 								'permission' => ['view general_settings'],
 							],
 							[
-								"route_name" => '',
-								"active_if" => ['theme_settings'],
+								"route_name" => 'theme-settings.index',
+								"active_if" => ['theme-settings.index'],
 								"title" => __('admin.menu.settings.0.theme'),
 								'permission' => ['view theme_settings'],
 							],
 							[
-								"route_name" => '',
-								"active_if" => ['store_settings'],
+								"route_name" => 'store-settings.index',
+								"active_if" => ['store-settings.index'],
 								"title" => __('admin.menu.settings.0.store'),
 								'permission' => ['view store_settings'],
 							],
 							[
 								"route_name" => '',
-								"active_if" => ['currencies_settings'],
+								"active_if" => ['currencies-settings.index'],
 								"title" => __('admin.menu.settings.0.currencies'),
 								'permission' => ['view currencies_settings'],
 							],
 							[
 								"route_name" => '',
-								"active_if" => ['emails_settings'],
+								"active_if" => ['emails-settings.index'],
 								"title" => __('admin.menu.settings.0.emails'),
 								'permission' => ['view emails_settings'],
 							],
 							[
 								"route_name" => '',
-								"active_if" => ['payment_settings'],
+								"active_if" => ['payment-settings.index'],
 								"title" => __('admin.menu.settings.0.payment'),
 								'permission' => ['view payment_settings'],
 							]
@@ -258,7 +265,7 @@ if (!function_exists('get_dashboard_menu')) {
 	}
 }
 
-if (!function_exists('list_of_timezons')) {
+if (!function_exists('toGmtOffset')) {
 	/**
 	 * Get GMT time From timezone
 	 * @param string $timezone
@@ -284,7 +291,7 @@ if (!function_exists('list_of_timezons')) {
 	function list_of_timezons()
 	{
 		return [
-			''                     => 'No Timezone',
+			''                     => __('forms.no_timezone'),
 			'Pacific/Midway'       => toGmtOffset('Pacific/Midway') . " Midway Island",
 			'US/Samoa'             => toGmtOffset('US/Samoa') . " Samoa",
 			'US/Hawaii'            => toGmtOffset('US/Hawaii') . " Hawaii",
@@ -400,6 +407,280 @@ if (!function_exists('list_of_timezons')) {
 	}
 }
 
+if ( !function_exists('list_of_countries') ) {
+	/**
+	 * list Of Countries
+	 */
+	function list_of_countries() {
+		return [
+			'AF' => "Afghanistan",
+			'AL' => "Albania",
+			'DZ' => "Algeria",
+			'AS' => "American Samoa",
+			'AD' => "Andorra",
+			'AO' => "Angola",
+			'AI' => "Anguilla",
+			'AQ' => "Antarctica",
+			'AG' => "Antigua and Barbuda",
+			'AR' => "Argentina",
+			'AM' => "Armenia",
+			'AW' => "Aruba",
+			'AU' => "Australia",
+			'AT' => "Austria",
+			'AZ' => "Azerbaijan",
+			'BS' => "Bahamas",
+			'BH' => "Bahrain",
+			'BD' => "Bangladesh",
+			'BB' => "Barbados",
+			'BY' => "Belarus",
+			'BE' => "Belgium",
+			'BZ' => "Belize",
+			'BJ' => "Benin",
+			'BM' => "Bermuda",
+			'BT' => "Bhutan",
+			'BO' => "Bolivia",
+			'BA' => "Bosnia and Herzegovina",
+			'BW' => "Botswana",
+			'BV' => "Bouvet Island",
+			'BR' => "Brazil",
+			'BQ' => "British Antarctic Territory",
+			'IO' => "British Indian Ocean Territory",
+			'VG' => "British Virgin Islands",
+			'BN' => "Brunei",
+			'BG' => "Bulgaria",
+			'BF' => "Burkina Faso",
+			'BI' => "Burundi",
+			'KH' => "Cambodia",
+			'CM' => "Cameroon",
+			'CA' => "Canada",
+			'CT' => "Canton and Enderbury Islands",
+			'CV' => "Cape Verde",
+			'KY' => "Cayman Islands",
+			'CF' => "Central African Republic",
+			'TD' => "Chad",
+			'CL' => "Chile",
+			'CN' => "China",
+			'CX' => "Christmas Island",
+			'CC' => "Cocos [Keeling] Islands",
+			'CO' => "Colombia",
+			'KM' => "Comoros",
+			'CG' => "Congo - Brazzaville",
+			'CD' => "Congo - Kinshasa",
+			'CK' => "Cook Islands",
+			'CR' => "Costa Rica",
+			'HR' => "Croatia",
+			'CU' => "Cuba",
+			'CY' => "Cyprus",
+			'CZ' => "Czech Republic",
+			'CI' => "Côte d'Ivoire",
+			'DK' => "Denmark",
+			'DJ' => "Djibouti",
+			'DM' => "Dominica",
+			'DO' => "Dominican Republic",
+			'NQ' => "Dronning Maud Land",
+			'DD' => "East Germany",
+			'EC' => "Ecuador",
+			'EG' => "Egypt",
+			'SV' => "El Salvador",
+			'GQ' => "Equatorial Guinea",
+			'ER' => "Eritrea",
+			'EE' => "Estonia",
+			'ET' => "Ethiopia",
+			'FK' => "Falkland Islands",
+			'FO' => "Faroe Islands",
+			'FJ' => "Fiji",
+			'FI' => "Finland",
+			'FR' => "France",
+			'GF' => "French Guiana",
+			'PF' => "French Polynesia",
+			'TF' => "French Southern Territories",
+			'FQ' => "French Southern and Antarctic Territories",
+			'GA' => "Gabon",
+			'GM' => "Gambia",
+			'GE' => "Georgia",
+			'DE' => "Germany",
+			'GH' => "Ghana",
+			'GI' => "Gibraltar",
+			'GR' => "Greece",
+			'GL' => "Greenland",
+			'GD' => "Grenada",
+			'GP' => "Guadeloupe",
+			'GU' => "Guam",
+			'GT' => "Guatemala",
+			'GG' => "Guernsey",
+			'GN' => "Guinea",
+			'GW' => "Guinea-Bissau",
+			'GY' => "Guyana",
+			'HT' => "Haiti",
+			'HM' => "Heard Island and McDonald Islands",
+			'HN' => "Honduras",
+			'HK' => "Hong Kong SAR China",
+			'HU' => "Hungary",
+			'IS' => "Iceland",
+			'IN' => "India",
+			'ID' => "Indonesia",
+			'IR' => "Iran",
+			'IQ' => "Iraq",
+			'IE' => "Ireland",
+			'IM' => "Isle of Man",
+			'IL' => "Israel",
+			'IT' => "Italy",
+			'JM' => "Jamaica",
+			'JP' => "Japan",
+			'JE' => "Jersey",
+			'JT' => "Johnston Island",
+			'JO' => "Jordan",
+			'KZ' => "Kazakhstan",
+			'KE' => "Kenya",
+			'KI' => "Kiribati",
+			'KW' => "Kuwait",
+			'KG' => "Kyrgyzstan",
+			'LA' => "Laos",
+			'LV' => "Latvia",
+			'LB' => "Lebanon",
+			'LS' => "Lesotho",
+			'LR' => "Liberia",
+			'LY' => "Libya",
+			'LI' => "Liechtenstein",
+			'LT' => "Lithuania",
+			'LU' => "Luxembourg",
+			'MO' => "Macau SAR China",
+			'MK' => "Macedonia",
+			'MG' => "Madagascar",
+			'MW' => "Malawi",
+			'MY' => "Malaysia",
+			'MV' => "Maldives",
+			'ML' => "Mali",
+			'MT' => "Malta",
+			'MH' => "Marshall Islands",
+			'MQ' => "Martinique",
+			'MR' => "Mauritania",
+			'MU' => "Mauritius",
+			'YT' => "Mayotte",
+			'FX' => "Metropolitan France",
+			'MX' => "Mexico",
+			'FM' => "Micronesia",
+			'MI' => "Midway Islands",
+			'MD' => "Moldova",
+			'MC' => "Monaco",
+			'MN' => "Mongolia",
+			'ME' => "Montenegro",
+			'MS' => "Montserrat",
+			'MA' => "Morocco",
+			'MZ' => "Mozambique",
+			'MM' => "Myanmar [Burma]",
+			'NA' => "Namibia",
+			'NR' => "Nauru",
+			'NP' => "Nepal",
+			'NL' => "Netherlands",
+			'AN' => "Netherlands Antilles",
+			'NT' => "Neutral Zone",
+			'NC' => "New Caledonia",
+			'NZ' => "New Zealand",
+			'NI' => "Nicaragua",
+			'NE' => "Niger",
+			'NG' => "Nigeria",
+			'NU' => "Niue",
+			'NF' => "Norfolk Island",
+			'KP' => "North Korea",
+			'VD' => "North Vietnam",
+			'MP' => "Northern Mariana Islands",
+			'NO' => "Norway",
+			'OM' => "Oman",
+			'PC' => "Pacific Islands Trust Territory",
+			'PK' => "Pakistan",
+			'PW' => "Palau",
+			'PS' => "Palestinian Territories",
+			'PA' => "Panama",
+			'PZ' => "Panama Canal Zone",
+			'PG' => "Papua New Guinea",
+			'PY' => "Paraguay",
+			'YD' => "People's Democratic Republic of Yemen",
+			'PE' => "Peru",
+			'PH' => "Philippines",
+			'PN' => "Pitcairn Islands",
+			'PL' => "Poland",
+			'PT' => "Portugal",
+			'PR' => "Puerto Rico",
+			'QA' => "Qatar",
+			'RO' => "Romania",
+			'RU' => "Russia",
+			'RW' => "Rwanda",
+			'RE' => "Réunion",
+			'BL' => "Saint Barthélemy",
+			'SH' => "Saint Helena",
+			'KN' => "Saint Kitts and Nevis",
+			'LC' => "Saint Lucia",
+			'MF' => "Saint Martin",
+			'PM' => "Saint Pierre and Miquelon",
+			'VC' => "Saint Vincent and the Grenadines",
+			'WS' => "Samoa",
+			'SM' => "San Marino",
+			'SA' => "Saudi Arabia",
+			'SN' => "Senegal",
+			'RS' => "Serbia",
+			'CS' => "Serbia and Montenegro",
+			'SC' => "Seychelles",
+			'SL' => "Sierra Leone",
+			'SG' => "Singapore",
+			'SK' => "Slovakia",
+			'SI' => "Slovenia",
+			'SB' => "Solomon Islands",
+			'SO' => "Somalia",
+			'ZA' => "South Africa",
+			'GS' => "South Georgia and the South Sandwich Islands",
+			'KR' => "South Korea",
+			'ES' => "Spain",
+			'LK' => "Sri Lanka",
+			'SD' => "Sudan",
+			'SR' => "Suriname",
+			'SJ' => "Svalbard and Jan Mayen",
+			'SZ' => "Swaziland",
+			'SE' => "Sweden",
+			'CH' => "Switzerland",
+			'SY' => "Syria",
+			'ST' => "São Tomé and Príncipe",
+			'TW' => "Taiwan",
+			'TJ' => "Tajikistan",
+			'TZ' => "Tanzania",
+			'TH' => "Thailand",
+			'TL' => "Timor-Leste",
+			'TG' => "Togo",
+			'TK' => "Tokelau",
+			'TO' => "Tonga",
+			'TT' => "Trinidad and Tobago",
+			'TN' => "Tunisia",
+			'TR' => "Turkey",
+			'TM' => "Turkmenistan",
+			'TC' => "Turks and Caicos Islands",
+			'TV' => "Tuvalu",
+			'UM' => "U.S. Minor Outlying Islands",
+			'PU' => "U.S. Miscellaneous Pacific Islands",
+			'VI' => "U.S. Virgin Islands",
+			'UG' => "Uganda",
+			'UA' => "Ukraine",
+			'SU' => "Union of Soviet Socialist Republics",
+			'AE' => "United Arab Emirates",
+			'GB' => "United Kingdom",
+			'US' => "United States",
+			'ZZ' => "Unknown or Invalid Region",
+			'UY' => "Uruguay",
+			'UZ' => "Uzbekistan",
+			'VU' => "Vanuatu",
+			'VA' => "Vatican City",
+			'VE' => "Venezuela",
+			'VN' => "Vietnam",
+			'WK' => "Wake Island",
+			'WF' => "Wallis and Futuna",
+			'EH' => "Western Sahara",
+			'YE' => "Yemen",
+			'ZM' => "Zambia",
+			'ZW' => "Zimbabwe",
+			'AX' => "Åland Islands"
+		];
+	}
+}
+
 if (!function_exists('array_to_object')) {
 	/**
 	 * Convert array to object
@@ -412,13 +693,13 @@ if (!function_exists('array_to_object')) {
 	}
 }
 
-if (!function_exists('special_char')) {
+if (!function_exists('has_special_char')) {
 	/**
 	 * Check if string has a special character
 	 * @param string $text
 	 * @return int|null
 	 */
-	function special_char($text)
+	function has_special_char($text)
 	{
 		return preg_match('/[@_!#$%^&*()<>?\/|}{~:\s]/', $text);
 	}
@@ -446,8 +727,8 @@ if (!function_exists('update_env')) {
 		}
 
 		// check if a value has a special character
-		$oldValue_sc = special_char($oldValue);
-		$newValue_sc = special_char($newValue);
+		$oldValue_sc = has_special_char($oldValue);
+		$newValue_sc = has_special_char($newValue);
 
 		// add double quotes before and after value if it has special character
 		$old_dub_qut = $oldValue_sc > 0 ? '"' : '';
@@ -528,19 +809,20 @@ if (!function_exists('permissions_name')) {
 			return;
 		}
 
-		switch (count(explode(' ', $perm_name))) {
+		$perm_name_parts = explode(' ', $perm_name);
+		$perm_name_parts_count = count($perm_name_parts);
+
+		switch ($perm_name_parts_count) {
 			case 1:
 				$perm_prefix = '';
 				$perm_text = $perm_name;
 				break;
+
 			case 2:
-				$perm_prefix = explode(' ', $perm_name)[0];
-				$perm_text = explode(' ', $perm_name)[1];
+				$perm_prefix = $perm_name_parts[0];
+				$perm_text = $perm_name_parts[1];
 				break;
-			case 3:
-				$perm_prefix = explode(' ', $perm_name)[0];
-				$perm_text = explode(' ', $perm_name)[1] . ' ' . explode(' ', $perm_name)[2];
-				break;
+
 			default:
 				$perm_prefix = '';
 				$perm_text = '';
@@ -589,7 +871,12 @@ if (!function_exists('grouping_sections_premissions')) {
 			'roles',
 			'gallery',
 			'languages',
-			'settings',
+			'general_settings',
+			'theme_settings',
+			'store_settings',
+			'currencies_settings',
+			'emails_settings',
+			'payment_settings',
 			'imports',
 			'exports'
 		];

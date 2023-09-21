@@ -1,12 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin\Settings;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\Setting;
 use Illuminate\Http\Request;
-use App\Http\Requests\SaveSettingsRequest;
+use App\Http\Requests\Settings\GeneralSettingsRequest;
 
-class SettingController extends Controller
+class GeneralSettingController extends Controller
 {
 	/**
 	 * protect controllers, by setting desired middleware in the constructor
@@ -24,7 +26,16 @@ class SettingController extends Controller
      */
     public function index()
     {
-		$settings = Setting::all();
+		$settings = Setting::where('setting_key', '=', 'site_title')
+							->orWhere('setting_key', '=', 'tagline')
+							->orWhere('setting_key', '=', 'site_description')
+							->orWhere('setting_key', '=', 'site_url')
+							->orWhere('setting_key', '=', 'timezone')
+							->orWhere('setting_key', '=', 'date_formate')
+							->orWhere('setting_key', '=', 'time_formate')
+							->orWhere('setting_key', '=', 'time_formate_custom')
+							->orWhere('setting_key', '=', 'date_formate_custom')
+							->get();
 		$datas = [];
 		foreach ($settings as $col) {
 			// Compact only inputs data
@@ -49,7 +60,7 @@ class SettingController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(SaveSettingsRequest $request)
+    public function store(GeneralSettingsRequest $request)
     {
 
 

@@ -45,6 +45,7 @@ return [
 		'title' => 'Favicon:',
 		'sub' => 'Site Icons Should Be Square And At Least 512×512 Pixels.',
 	],
+	'no_timezone' => 'No Timezone',
 	'timezone' => 'Timezone:',
 	'date_format' => 'Date Format:',
 	'time_format' => 'Time Format:',
@@ -52,4 +53,69 @@ return [
 	'utc_time' => 'UTC Time Is:',
 	'server_time' => 'Server Time Is:',
 	'date_time_doc' => 'Documentation on date and time formatting.',
+
+	'logo' => 'logo:',
+	'logo_width' => 'logo Width:',
+	'mobile_logo' => 'Mobile logo:',
+	'mobile_logo_width' => 'Mobile logo Width:',
+	'main_color' => 'Main Color:',
+	'main_color_hover' => 'Main Color (Hover):',
+	'boxes_color' => 'Boxes Color:',
+	'bg_color' => 'Background Color:',
+	'active_bg_color' => 'Background Color (Active):',
+	'badge_color' => 'Badge Color:',
+	'text_color' => 'Text Color:',
+
+	'dark_logo' => 'Logo (Dark):',
+	'dark_mobile_logo' => 'Mobile logo (Dark):',
+	'dark_main_color' => 'Main Color (Dark):',
+	'dark_main_color_hover' => 'Main Color Hover (Dark):',
+	'dark_boxes_color' => 'Boxes Color (Dark):',
+	'dark_bg_color' => 'Background Color (Dark):',
+	'dark_active_bg_color' => 'Background Color Active (Dark):',
+	'dark_badge_color' => 'Badge Color (Dark):',
+	'dark_text_color' => 'Text Color (Dark):',
+
+	'country' => 'Country:',
+	'select_country' => '-- Select Country --',
+	'state' => 'State:',
+	'city' => 'City:',
+	'address' => [
+		1 => [
+			'title' => 'Address 1',
+			'placeholder' => 'Street name and house number',
+		],
+		2 => [
+			'title' => 'Address 2',
+			'placeholder' => 'Apartment, suite, unit, etc. (optional)',
+		]
+	],
+	'postcode' => 'Postcode:',
+
+	'allow_reviews' => [
+		'title' => 'Allow Reviews?',
+		'tooltip' => 'check this if you want allow reviews on your store.'
+	],
+	'allow_geust_reviews' => 'Allow Guest Review?',
+	'allow_geust_checkout' => [
+		'title' => 'Allow Guest Checkout?',
+		'tooltip' => 'check this if you want guest visitors checkout without create account.'
+	],
+	'active_wishlist' => 'Active Wishlist?',
+	'active_compare' => 'Active Compare?',
+	'allow_out_of_stock' => [
+		'title' => 'Allow Out Of Stock products?',
+		'tooltip' => 'check this if you want keep showing out of stock products.'
+	],
+	'enable_social_share' => 'Enable Social Share?',
+	'enable_share_on' => 'Enable Share on:',
+
+	'active_recently_viewed' => [
+		'title' => 'Active Recently Viewed?',
+		'tooltip' => 'check this if you want show Recently Viewed Section.'
+	],
+	'active_recommendations' => [
+		'title' => 'Active Recommendations?',
+		'tooltip' => 'check this if you want show Recommendations Section On Thank You Page.'
+	],
 ];

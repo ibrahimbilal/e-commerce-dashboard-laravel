@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Settings;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SaveSettingsRequest extends FormRequest
+class GeneralSettingsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

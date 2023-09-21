@@ -13,6 +13,7 @@ return [
 	'resend' => 'Resend Email',
 	'change_image' => 'Change Image',
 	'upload_image' => 'Upload Image',
+	'select_image' => 'Select Image',
 	'remove' => 'Remove',
 	'logout_sesstion' => 'Log Out Other Browser Sessions',
 	'add_new' => 'Add New',

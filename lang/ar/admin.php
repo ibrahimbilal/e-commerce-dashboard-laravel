@@ -148,8 +148,8 @@ return [
 		'tooltips' => [
 			'full_screen' => 'الشاشة الكاملة',
 			'exit_full_screen' => 'إنهاء الشاشة الكاملة',
-			'dark_mode' => 'الوضع الليلي',
-			'light_mode' => 'الوضع النهاري',
+			'dark_mode' => 'الوضع المظلم',
+			'light_mode' => 'الوضع المضيء',
 		]
 	],
 
@@ -204,7 +204,11 @@ return [
 		'password' => 'تغيير كلمة المرور',
 		'role_name' => 'اسم الدور',
 		'permissions' => 'الأذونات',
-		'general_settings' => 'الإعدادات العامة'
+		'general_settings' => 'الإعدادات العامة',
+		'theme_settings' => 'إعدادات الموضوع',
+		'store_address' => 'عنوان المتجر',
+		'store_settings' => 'إعدادات المتجر',
+		'store_sections_settings' => 'إعدادات أقسام المتجر',
 	],
 
 	'unknown' => 'غير معروف',

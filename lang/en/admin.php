@@ -200,7 +200,11 @@ return [
 		'password' => 'Change Password',
 		'role_name' => 'Role Name',
 		'permissions' => 'Permissions',
-		'general_settings' => 'General Settings'
+		'general_settings' => 'General Settings',
+		'theme_settings' => 'Theme Settings',
+		'store_address' => 'Store Address',
+		'store_settings' => 'Store Settings',
+		'store_sections_settings' => 'Store Sections Settings',
 	],
 
 	'filters' => [
