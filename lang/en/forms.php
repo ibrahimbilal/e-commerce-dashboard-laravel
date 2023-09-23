@@ -148,4 +148,72 @@ return [
 		'title' => 'Choose Currencies:',
 		'tooltip' => 'Choose the currencies you want your store to support.'
 	],
+
+	'email_from' => [
+		'title' => '"From" Name:',
+		'tooltip' => 'How the sender name appears in outgoing emails from your store.'
+	],
+	'email_address' => [
+		'title' => '"From" Address:',
+		'tooltip' => 'How the sender email appears in outgoing emails from your store.'
+	],
+	'email_main_color' => [
+		'title' => 'Main color:',
+		'tooltip' => 'The base color for store email templates. Default #2C2CCC.'
+	],
+	'email_bg_color' => [
+		'title' => 'Background color:',
+		'tooltip' => 'The background color for store email templates. Default #F7F7F7.'
+	],
+	'email_body_bg_color' => [
+		'title' => 'Body Background color:',
+		'tooltip' => 'The main body background color. Default #FFFFFF.'
+	],
+	'email_text_color' => [
+		'title' => 'Text color:',
+		'tooltip' => 'The main body text color. Default #333333.'
+	],
+	'email_rec' => [
+		'users' => 'Recipient Are Store Users',
+		'customer' => 'Recipient Is Customer'
+	],
+	'email_new_order' => [
+		'title' => 'New Order Placed:',
+		'tooltip' => 'Sent email when a new order is placed.'
+	],
+	'email_out_stock' => [
+		'title' => 'Out Of Stock:',
+		'tooltip' => 'Sent email when product is out of stock'
+	],
+	'email_order_canceled' => [
+		'title' => 'Order Canceled:',
+		'tooltip' => 'Sent email when customer canceled the order'
+	],
+	'email_order_confirmed' => [
+		'title' => 'Order Confirmed:',
+		'tooltip' => 'Sent email automatically after purchase'
+	],
+	'email_order_shipped' => [
+		'title' => 'Order Shipped:',
+		'tooltip' => 'Sent email automatically when an order is marked as shipped'
+	],
+	'email_order_completed' => [
+		'title' => 'Order Completed:',
+		'tooltip' => 'Sent automatically when an order is marked as completed'
+	],
+	'email_order_refunded' => [
+		'title' => 'Order Refunded:',
+		'tooltip' => 'Sent automatically when a refund is issued'
+	],
+	'send_to' => [
+		'title' => 'Send To:',
+		'tooltip' => 'Custom Recipients: you should choose recipients from the list. Recipients By Role: all members in the role will be receive the email.',
+		'options' => [
+			'no' => 'Select Type',
+			'custom' => 'Custom Recipients',
+			'by_role' => 'Recipients By Role',
+		],
+		'placeholder' => 'Select Recipients'
+	],
+
 ];

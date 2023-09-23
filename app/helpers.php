@@ -246,7 +246,7 @@ if (!function_exists('get_dashboard_menu')) {
 								'permission' => ['view currencies_settings'],
 							],
 							[
-								"route_name" => '',
+								"route_name" => 'emails-settings.index',
 								"active_if" => ['emails-settings.index'],
 								"title" => __('admin.menu.settings.0.emails'),
 								'permission' => ['view emails_settings'],
@@ -711,7 +711,6 @@ if (!function_exists('update_env')) {
 	 * Update .env File Values
 	 * @param string $key
 	 * @param string $value
-	 * @param string $delim
 	 */
 	function update_env($key, $newValue): void
 	{

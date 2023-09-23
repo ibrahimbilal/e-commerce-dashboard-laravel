@@ -156,8 +156,8 @@
         // Date Preview
         $('input[name=time_formate_custom], input[name=date_formate_custom]').on('change', function() {
 
-            var previewEl = $(this).next('#preview'),
-                format = $(this).val();
+            const previewEl = $(this).next('#preview');
+			const format = $(this).val();
 
             $.ajax({
                 type: 'POST',
@@ -185,7 +185,7 @@
 				scrollbarPadding: false,
 			};
 
-            var data = $(this).serialize();
+            const data = $(this).serialize();
             $.ajax({
                 type: 'POST',
                 url: "{{ route('general-settings.store') }}",

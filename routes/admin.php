@@ -46,6 +46,9 @@ Route::prefix('/admin')->group(function () {
 		// Settings [Currencies]
 		Route::resource('/currencies-settings', App\Http\Controllers\Admin\Settings\CurrencySettingController::class)->only(['index', 'store']);
 		Route::post('/currencies-settings/get-multi-currencies-component', [App\Http\Controllers\Admin\Settings\CurrencySettingController::class, 'multi_currencies'])->name('multi_currencies');
+		// Settings [Emails]
+		Route::resource('/emails-settings', App\Http\Controllers\Admin\Settings\EmailSettingController::class)->only(['index', 'store']);
+		Route::post('/emails-settings/recipients-type', [App\Http\Controllers\Admin\Settings\EmailSettingController::class, 'recipients_type'])->name('recipients_type');
 
 		// Users
 		Route::get('/users/profile', [App\Http\Controllers\Admin\UserController::class, 'profile'])->name('users.profile');

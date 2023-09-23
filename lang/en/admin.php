@@ -207,6 +207,8 @@ return [
 		'store_sections_settings' => 'Store Sections Settings',
 		'currencies_settings' => 'Currencies Settings',
 		'multi_currencies' => 'Multi Currencies',
+		'emails_settings' => 'Emails Settings',
+		'emails_notification_settings' => 'Emails Notifications Settings',
 	],
 
 	'filters' => [

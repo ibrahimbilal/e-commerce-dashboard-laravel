@@ -111,7 +111,7 @@ return [
 			'title' => 'الإعدادات المتجر'
 		],
 		'currencies_settings' => [
-			'title' => 'الإعدادات العملات'
+			'title' => 'إعدادات العملات'
 		],
 		'emails_settings' => [
 			'title' => 'الإعدادات البريد الالكتروني'
@@ -209,8 +209,10 @@ return [
 		'store_address' => 'عنوان المتجر',
 		'store_settings' => 'إعدادات المتجر',
 		'store_sections_settings' => 'إعدادات أقسام المتجر',
-		'currencies_settings' => 'إعدادات العملاء',
+		'currencies_settings' => 'إعدادات العملات',
 		'multi_currencies' => 'عملات متعددة',
+		'emails_settings' => 'إعدادات البريد الإلكتروني',
+		'emails_notification_settings' => 'إعدادات إشعارات البريد الإلكتروني',
 	],
 
 	'unknown' => 'غير معروف',

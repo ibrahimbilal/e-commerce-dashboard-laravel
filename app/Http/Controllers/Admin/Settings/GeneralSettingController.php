@@ -62,11 +62,8 @@ class GeneralSettingController extends Controller
      */
     public function store(GeneralSettingsRequest $request)
     {
-
-
 		// make 'time_formate_custom' empty if not set
 		if ( !$request->has('time_formate_custom') ) {
-			// $data['time_formate_custom'] = '';
 			$request->merge(['time_formate_custom' => '']);
 		}
 
@@ -87,8 +84,8 @@ class GeneralSettingController extends Controller
 
 		// Change Timezone in Config File
 		if ( $request->has('timezone') ) {
-			// update_env('APP_URL', $data['site_url']);
-			config(['app.timezone' => $request->get('timezone')]);
+			// update app timezone
+			update_env('APP_TIMEZONE', $request->get('timezone') );
 		}
 
 		foreach( $request->request->all() as $key => $value ) {
