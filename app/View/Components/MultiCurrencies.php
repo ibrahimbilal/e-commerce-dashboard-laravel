@@ -2,6 +2,7 @@
 
 namespace App\View\Components;
 
+use App\Models\Setting;
 use Illuminate\View\Component;
 
 class MultiCurrencies extends Component
@@ -25,6 +26,19 @@ class MultiCurrencies extends Component
      */
     public function render()
     {
-        return view('components.multi-currencies');
+		$settings = Setting::where('setting_key', '=', 'main_currency')
+							->orWhere('setting_key', '=', 'multi_currencies')
+							->get();
+		$sets = [];
+		foreach ($settings as $col) {
+			// Compact only inputs data
+			$sets[$col->setting_key] = $col->setting_value;
+
+			if ( $col->setting_key == 'multi_currencies' ) {
+				$sets[$col->setting_key] = json_decode($col->setting_value);
+			}
+		}
+
+        return view('components.multi-currencies', compact('sets'));
     }
 }

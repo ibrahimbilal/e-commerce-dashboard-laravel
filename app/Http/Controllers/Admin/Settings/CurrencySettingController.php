@@ -95,7 +95,7 @@ class CurrencySettingController extends Controller
 
 		// return $request->all();
 		$output = View::make("components.multi-currencies")
-						->with("datas", [
+						->with("sets", [
 							'main_currency' => $main_curr,
 							'multi_currencies' => $multi_curr
 						])->render();
