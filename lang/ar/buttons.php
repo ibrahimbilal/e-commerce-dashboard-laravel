@@ -10,6 +10,7 @@ return [
 	'restore' => 'إستعادة',
 	'confirm' => 'تأكيد',
 	'close' => 'إغلاق',
+	'save' => 'حفظ',
 	'resend' => 'إعادة إرسال البريد الالكتروني',
 	'change_image' => 'تغيير الصورة',
 	'upload_image' => 'رفع صورة',

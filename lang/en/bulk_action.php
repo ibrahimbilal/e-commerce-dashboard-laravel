@@ -5,6 +5,7 @@ return [
 	'submit' => 'apply',
 	'option' => [
 		'bulk' => 'Bulk Action',
+		'edit' => 'Edit',
 		'delete' => 'Delete',
 		'restore' => 'Restore',
 		'force_delete' => 'Permanently Delete'

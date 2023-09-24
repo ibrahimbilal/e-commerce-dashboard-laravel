@@ -9,6 +9,11 @@
 				<option value="force_delete">{{ __('bulk_action.option.force_delete') }}</option>
 			@endcan
 		@else
+			@isset($edit_perms)
+				@can($edit_perms)
+					<option value="delete">{{ __('bulk_action.option.edit') }}</option>
+				@endcan
+			@endisset
 			@can($delete_perms)
 				<option value="delete">{{ __('bulk_action.option.delete') }}</option>
 			@endcan

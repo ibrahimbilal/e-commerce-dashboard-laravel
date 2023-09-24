@@ -36,20 +36,6 @@ Route::prefix('/admin')->group(function () {
 
 		Route::get('', [App\Http\Controllers\Admin\AdminController::class, 'index'])->name('admin.index');
 
-		// Settings [General]
-		Route::resource('/general-settings', App\Http\Controllers\Admin\Settings\GeneralSettingController::class)->only(['index', 'store']);
-		Route::post('/general-settings/date-preview', [App\Http\Controllers\Admin\Settings\GeneralSettingController::class, 'ajax_date_preview'])->name('date_preview');
-		// Settings [Theme]
-		Route::resource('/theme-settings', App\Http\Controllers\Admin\Settings\ThemeSettingController::class)->only(['index', 'store']);
-		// Settings [Store]
-		Route::resource('/store-settings', App\Http\Controllers\Admin\Settings\StoreSettingController::class)->only(['index', 'store']);
-		// Settings [Currencies]
-		Route::resource('/currencies-settings', App\Http\Controllers\Admin\Settings\CurrencySettingController::class)->only(['index', 'store']);
-		Route::post('/currencies-settings/get-multi-currencies-component', [App\Http\Controllers\Admin\Settings\CurrencySettingController::class, 'multi_currencies'])->name('multi_currencies');
-		// Settings [Emails]
-		Route::resource('/emails-settings', App\Http\Controllers\Admin\Settings\EmailSettingController::class)->only(['index', 'store']);
-		Route::post('/emails-settings/recipients-type', [App\Http\Controllers\Admin\Settings\EmailSettingController::class, 'recipients_type'])->name('recipients_type');
-
 		// Users
 		Route::get('/users/profile', [App\Http\Controllers\Admin\UserController::class, 'profile'])->name('users.profile');
 		Route::post('/users/profile', [App\Http\Controllers\Admin\UserController::class, 'update_profile'])->name('users.update_profile');
@@ -70,12 +56,31 @@ Route::prefix('/admin')->group(function () {
 		// Roles Pages
 		Route::resource('/roles', App\Http\Controllers\Admin\RoleController::class);
 
+		// Gallery Pages
+		Route::resource('/gallery', App\Http\Controllers\Admin\GalleryController::class);
+		Route::post('/gallery/get-metas', [App\Http\Controllers\Admin\GalleryController::class, 'get_image_meta'])->name('get_metas');
+
 		// Languages Pages
 		Route::resource('/langs', App\Http\Controllers\Admin\LanguageController::class)->except(['show', 'edit']);
 		Route::get('langs/{slug?}', [App\Http\Controllers\Admin\LanguageController::class, 'edit'])->where('slug', '[A-Za-z]+')->name('langs.edit');
 		// Route::get('/langs', [App\Http\Controllers\LanguageController::class, 'index'])->name('langs.index');
 		// Route::get('/langs/create', [App\Http\Controllers\LanguageController::class, 'create'])->name('langs.index');
 		// Route::get('/langs', [App\Http\Controllers\LanguageController::class, 'index'])->name('langs.index');
+
+		// Settings [General]
+		Route::resource('/general-settings', App\Http\Controllers\Admin\Settings\GeneralSettingController::class)->only(['index', 'store']);
+		Route::post('/general-settings/date-preview', [App\Http\Controllers\Admin\Settings\GeneralSettingController::class, 'ajax_date_preview'])->name('date_preview');
+		// Settings [Theme]
+		Route::resource('/theme-settings', App\Http\Controllers\Admin\Settings\ThemeSettingController::class)->only(['index', 'store']);
+		// Settings [Store]
+		Route::resource('/store-settings', App\Http\Controllers\Admin\Settings\StoreSettingController::class)->only(['index', 'store']);
+		// Settings [Currencies]
+		Route::resource('/currencies-settings', App\Http\Controllers\Admin\Settings\CurrencySettingController::class)->only(['index', 'store']);
+		Route::post('/currencies-settings/get-multi-currencies-component', [App\Http\Controllers\Admin\Settings\CurrencySettingController::class, 'multi_currencies'])->name('multi_currencies');
+		// Settings [Emails]
+		Route::resource('/emails-settings', App\Http\Controllers\Admin\Settings\EmailSettingController::class)->only(['index', 'store']);
+		Route::post('/emails-settings/recipients-type', [App\Http\Controllers\Admin\Settings\EmailSettingController::class, 'recipients_type'])->name('recipients_type');
+
 	});
 
 });

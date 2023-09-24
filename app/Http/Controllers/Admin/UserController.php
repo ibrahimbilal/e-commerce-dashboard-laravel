@@ -94,7 +94,7 @@ class UserController extends Controller
 			if ( $request->hasFile('profile_picture') ) {
 				$file_path = $this->uploadFile($request, 'profile_picture', 'users', 'public');
 				$request->request->remove('profile_picture');
-				$request->merge(['profile_picture' => 'storage/' . $file_path]);
+				$request->merge(['profile_picture' => 'storage/' . $file_path->getData()->path]);
 			} else {
 				$request->merge(['profile_picture' => null]);
 			}
@@ -300,7 +300,7 @@ class UserController extends Controller
 			// store file path to database
 			if ( $request->hasFile('profile_picture') ) {
 				$file_path = $this->uploadFile($request, 'profile_picture', 'users', 'public');
-				$user->profile_picture = 'storage/' . $file_path;
+				$user->profile_picture = 'storage/' . $file_path->getData()->path;
 				$user->save();
 			}
 

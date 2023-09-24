@@ -98,6 +98,18 @@ return [
 			]
 		]
 	],
+	'images' => [
+		'response' => [
+			'update' => 'تم تحديث الصورة بنجاح!',
+			'delete' => [
+				'title' => 'تم الحذف!',
+				'text' => 'تم حذف الصورة بنجاح!',
+			],
+			'errors' => [
+				'not_exist' => 'الصورة غير موجودة!',
+			]
+		]
+	],
 
 	'settings' => [
 		'response' => [

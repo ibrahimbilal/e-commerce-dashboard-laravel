@@ -62,7 +62,7 @@ return [
 			],
 			'errors' => [
 				'not_allowed' => 'You are not allowed to delete your account!',
-				'not_exist' => 'The User Dose Not Exist!',
+				'not_exist' => 'The User Does Not Exist!',
 			]
 		]
 	],
@@ -79,7 +79,7 @@ return [
 				'text' => 'Role successfully restored!',
 			],
 			'errors' => [
-				'not_exist' => 'The Role Dose Not Exist!',
+				'not_exist' => 'The Role Does Not Exist!',
 			]
 		]
 	],
@@ -96,7 +96,19 @@ return [
 				'text' => 'Language successfully restored!',
 			],
 			'errors' => [
-				'not_exist' => 'The Language Dose Not Exist!',
+				'not_exist' => 'The Language Does Not Exist!',
+			]
+		]
+	],
+	'images' => [
+		'response' => [
+			'update' => 'Image successfully updated!',
+			'delete' => [
+				'title' => 'Deleted!',
+				'text' => 'Image successfully deleted!',
+			],
+			'errors' => [
+				'not_exist' => 'The Image Does Not Exist!',
 			]
 		]
 	],

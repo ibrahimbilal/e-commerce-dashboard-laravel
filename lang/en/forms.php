@@ -1,6 +1,7 @@
 <?php
 
 return [
+	'search' => 'Search:',
 	'first_name' => 'First Name:',
 	'last_name' => 'Last Name:',
 	'email' => 'Email Address:',

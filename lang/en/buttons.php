@@ -10,6 +10,7 @@ return [
 	'restore' => 'Restore',
 	'confirm' => 'Confirm',
 	'close' => 'Close',
+	'save' => 'Save',
 	'resend' => 'Resend Email',
 	'change_image' => 'Change Image',
 	'upload_image' => 'Upload Image',

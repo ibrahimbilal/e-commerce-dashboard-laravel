@@ -181,8 +181,8 @@ if (!function_exists('get_dashboard_menu')) {
 				],
 				'group_items' => [
 					[
-						"route_name" => '',
-						"active_if" => ['gallery'],
+						"route_name" => 'gallery.index',
+						"active_if" => ['gallery.index'],
 						"icon" => 'picture',
 						"title" => __('admin.menu.gallery.title'),
 						"has_submeu" => false,

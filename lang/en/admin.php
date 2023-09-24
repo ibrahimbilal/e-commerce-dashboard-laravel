@@ -189,6 +189,10 @@ return [
 
 		'roles' => [
 			'no_permissions' => 'There is no permissions created!'
+		],
+
+		'gallery' => [
+			'no_images' => 'There is no images uploaded!'
 		]
 	],
 

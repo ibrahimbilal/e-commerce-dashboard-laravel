@@ -5,6 +5,7 @@ return [
 	'submit' => 'تنفيذ',
 	'option' => [
 		'bulk' => 'الاجراءات الجماعية',
+		'edit' => 'تعديل',
 		'delete' => 'حذف',
 		'restore' => 'إستعادة',
 		'force_delete' => 'حذف نهائي'

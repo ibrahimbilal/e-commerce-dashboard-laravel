@@ -304,20 +304,20 @@ jQuery(() => {
     });
 
 	// Gallery Items Select in Gallery Page
-	$('.gallery-page .img-item').on('click', function (e) {
-        e.preventDefault();
-        if (!$(this).hasClass('selected')) {
-            $(this).addClass('selected').siblings().removeClass('selected');
-            $('.gallery-page .meta-box').removeClass('hide');
-            $('.gallery-page .post-box').removeClass('open');
-            var selectedImage = $('.gallery-page .img-item.selected').find('img').attr('src');
-            $('.img-view img').attr('src', selectedImage);
-        } else {
-            $(this).removeClass('selected');
-            $('.gallery-page .meta-box').addClass('hide');
-            $('.gallery-page .post-box').addClass('open');
-        }
-    });
+	// $('.gallery-page .img-item').on('click', function (e) {
+    //     e.preventDefault();
+    //     if (!$(this).hasClass('selected')) {
+    //         $(this).addClass('selected').siblings().removeClass('selected');
+    //         $('.gallery-page .meta-box').removeClass('hide');
+    //         $('.gallery-page .post-box').removeClass('open');
+    //         var selectedImage = $('.gallery-page .img-item.selected').find('img').attr('src');
+    //         $('.img-view img').attr('src', selectedImage);
+    //     } else {
+    //         $(this).removeClass('selected');
+    //         $('.gallery-page .meta-box').addClass('hide');
+    //         $('.gallery-page .post-box').addClass('open');
+    //     }
+    // });
 
     // Toggle Addresses
     $(document).on('click', '.repeater-holder .repeater-title h5, .repeater-holder .repeater-title .icon', function () {

@@ -26,9 +26,7 @@ class BulkActionRequest extends FormRequest
 	{
 		return [
 			'items' =>  ['required', 'array'],
-			'items.*' =>  ['required', 'numeric', Rule::exists($this->type, 'id')],
-            // 'action' => ['required', 'string', Rule::in(['delete', 'restore', 'force_delete'])],
-            // 'type' => ['required', 'string']
+			'items.*' =>  ['required', 'numeric', Rule::exists($this->type, 'id')]
 		];
 	}
 
