@@ -5,8 +5,8 @@
 				<option
 					value="{{ $code }}"
 					@isset($current) @selected($current == $code) @endisset
-					@if (isset($datas['main_currency']) && $datas['main_currency'] == $code) {{ 'disabled' }} @endif
-					@if (isset($datas['multi_currencies']) && in_array($code, $datas['multi_currencies'])) {{ 'disabled' }} @endif
+					@if (isset($sets['main_currency']) && $sets['main_currency'] == $code) {{ 'disabled' }} @endif
+					@if (isset($sets['multi_currencies']) && in_array($code, $sets['multi_currencies'])) {{ 'disabled' }} @endif
 					>
 					{{ $name }}
 				</option>

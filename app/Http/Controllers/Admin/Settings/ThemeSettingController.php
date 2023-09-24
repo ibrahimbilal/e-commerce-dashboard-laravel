@@ -42,12 +42,12 @@ class ThemeSettingController extends Controller
 							->orWhere('setting_key', '=', 'dark_menu_active_bg')
 							->orWhere('setting_key', '=', 'dark_text_color')
 							->get();
-		$datas = [];
+		$sets = [];
 		foreach ($settings as $col) {
 			// Compact only inputs data
-			$datas[$col->setting_key] = $col->setting_value;
+			$sets[$col->setting_key] = $col->setting_value;
 		}
-		return view('admin.settings.theme', compact('datas'));
+		return view('admin.settings.theme', compact('sets'));
     }
 
 

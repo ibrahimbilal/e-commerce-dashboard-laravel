@@ -28,28 +28,28 @@
                 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap">
                     <label class="item-title" for="site-title">{{ __('forms.site_title') }}</label>
                     <input class="form-control" id="site-title" name="site_title" type="text"
-                        value="@isset($datas['site_title']) {{ $datas['site_title'] }} @endisset"
+                        value="@isset($sets['site_title']) {{ $sets['site_title'] }} @endisset"
                         value="{{ old('site_title') }}">
                 </div>
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
                     <label class="item-title mt-1" for="tagline">{{ __('forms.tagline.title') }}</label>
                     <div class="input-holder w-100">
                         <input class="form-control" id="tagline" name="tagline" type="text"
-							value="@isset($datas['tagline']) {{ $datas['tagline'] }} @endisset"
+							value="@isset($sets['tagline']) {{ $sets['tagline'] }} @endisset"
 							value="{{ old('tagline') }}">
                         <small>{{ __('forms.tagline.sub') }}</small>
                     </div>
                 </div>
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
                     <label class="item-title mt-1" for="site-desc">{{ __('forms.site_description') }}</label>
-                    <textarea class="form-control" id="site-desc" name="site_description" rows="4" style="resize:none">@isset($datas['site_description']) {{ $datas['site_description'] }} @endisset {{ old('site_description') }}</textarea>
+                    <textarea class="form-control" id="site-desc" name="site_description" rows="4" style="resize:none">@isset($sets['site_description']) {{ $sets['site_description'] }} @endisset {{ old('site_description') }}</textarea>
                 </div>
                 <hr>
                 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap">
                     <label class="item-title" for="site-url">{{ __('forms.site_url') }}</label>
                     <input class="form-control" id="site-url" name="site_url" type="url"
                         placeholder="https://example.com/"
-						value="@isset($datas['site_url']) {{ $datas['site_url'] }} @endisset"
+						value="@isset($sets['site_url']) {{ $sets['site_url'] }} @endisset"
                         value="{{ old('site_url') }}">
                 </div>
                 <div class="form-item second d-flex mt-3 flex-wrap">
@@ -76,12 +76,12 @@
                     <div class="input-holder w-100">
                         <select class="form-select" id="timezone" name="timezone">
                             @foreach (list_of_timezons() as $key => $val)
-                                <option value="{{ $key }}" @isset($datas['timezone']) @selected($datas['timezone'] == $key) @endisset>{{ $val }}</option>
+                                <option value="{{ $key }}" @isset($sets['timezone']) @selected($sets['timezone'] == $key) @endisset>{{ $val }}</option>
                             @endforeach
                         </select>
                         <small>{{ __('forms.utc_time') }} {{ now() }}</small><br>
-						@isset( $datas['timezone'] )
-							<small>{{ __('forms.server_time') }} {{ now($datas['timezone']) }}</small>
+						@isset( $sets['timezone'] )
+							<small>{{ __('forms.server_time') }} {{ now($sets['timezone']) }}</small>
 						@endisset
                     </div>
                 </div>
@@ -91,20 +91,20 @@
 						@foreach (['F j, Y', 'Y-m-d', 'm/d/Y', 'd/m/Y'] as $k => $date_formate )
 							<label class="radio-label w-100 mb-3">
 								<input class="input-radio" type="radio" name="date_formate" value="{{ $date_formate }}"
-									@isset($datas['date_formate']) @checked($datas['date_formate'] == $date_formate) @endisset
-									{{ !isset($datas['date_formate']) && $k == 0 ? 'checked' : '' }}
+									@isset($sets['date_formate']) @checked($sets['date_formate'] == $date_formate) @endisset
+									{{ !isset($sets['date_formate']) && $k == 0 ? 'checked' : '' }}
 									{{ old('date_formate') == $date_formate ? 'checked' : '' }}>{{ date($date_formate) }}
 							</label>
 						@endforeach
                         <label class="radio-label w-100 mb-3">
                             <input class="input-radio" type="radio" name="date_formate" value="custom"
-								@isset($datas['date_formate']) @checked($datas['date_formate'] == 'custom') @endisset
+								@isset($sets['date_formate']) @checked($sets['date_formate'] == 'custom') @endisset
                                 {{ old('date_formate') == 'custom' ? 'checked' : '' }}>{{ __('forms.custom') }}
                             <input class="text-center me-2" type="text" name="date_formate_custom"
                                 placeholder="d-M-Y" style="width: 70px"
-                                value="{{ isset($datas['date_formate_custom']) ? $datas['date_formate_custom'] : '' }}"
+                                value="{{ isset($sets['date_formate_custom']) ? $sets['date_formate_custom'] : '' }}"
                                 value="{{ old('date_formate_custom') }}"
-                                {{ isset($datas['date_formate']) && $datas['date_formate'] !== 'custom' ? 'disabled' : '' }}><span
+                                {{ isset($sets['date_formate']) && $sets['date_formate'] !== 'custom' ? 'disabled' : '' }}><span
                                 id="preview">10-Dec-2022</span>
                         </label>
                     </div>
@@ -115,21 +115,21 @@
 						@foreach (['g:i a', 'g:i A', 'H:i'] as $k => $time_formate )
 							<label class="radio-label w-100 mb-3">
 								<input class="input-radio" type="radio" name="time_formate" value="{{ $time_formate }}"
-									@isset($datas['time_formate']) @checked($datas['time_formate'] == $time_formate) @endisset
-									{{ !isset($datas['time_formate']) && $k == 0 ? 'checked' : '' }}
+									@isset($sets['time_formate']) @checked($sets['time_formate'] == $time_formate) @endisset
+									{{ !isset($sets['time_formate']) && $k == 0 ? 'checked' : '' }}
 									{{ old('time_formate') == $time_formate ? 'checked' : '' }}>{{ date($time_formate) }}
 							</label>
 						@endforeach
                         </label>
                         <label class="radio-label w-100">
                             <input class="input-radio" type="radio" name="time_formate" value="custom"
-								@if (isset($datas['time_formate'])) @checked($datas['time_formate'] == 'custom') @endif
+								@if (isset($sets['time_formate'])) @checked($sets['time_formate'] == 'custom') @endif
                                 {{ old('time_formate') == 'custom' ? 'checked' : '' }}>{{ __('forms.custom') }}
                             <input class="text-center me-2" type="text" name="time_formate_custom"
                                 placeholder="g:i a" style="width: 70px"
-                                value="{{ isset($datas['time_formate_custom']) ? $datas['time_formate_custom'] : '' }}"
+                                value="{{ isset($sets['time_formate_custom']) ? $sets['time_formate_custom'] : '' }}"
                                 value="{{ old('time_formate_custom') }}"
-                                {{ isset($datas['time_formate']) && $datas['time_formate'] !== 'custom' ? 'disabled' : '' }}><span
+                                {{ isset($sets['time_formate']) && $sets['time_formate'] !== 'custom' ? 'disabled' : '' }}><span
                                 id="preview">9:23 pm</span>
                         </label>
 						<a class="mt-3 d-inline-block" href="https://www.php.net/manual/en/datetime.format.php"

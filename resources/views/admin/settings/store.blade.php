@@ -31,7 +31,7 @@
                     <select class="form-select" id="country" name="country">
                         <option value="">{{ __('forms.select_country') }}</option>
                         @foreach (list_of_countries() as $code => $country )
-							<option value="{{ $code }}" @isset($datas['country']) @selected($datas['country'] == $code) @endisset>{{ $country }}</option>
+							<option value="{{ $code }}" @isset($sets['country']) @selected($sets['country'] == $code) @endisset>{{ $country }}</option>
 						@endforeach
                     </select>
                 </div>
@@ -40,7 +40,7 @@
                     <input class="form-control"
 							id="state"
 							name="state"
-							value="@isset($datas['state']){{ $datas['state'] }}@endisset"
+							value="@isset($sets['state']){{ $sets['state'] }}@endisset"
 							type="text"
 							autocomplete="on">
                 </div>
@@ -49,7 +49,7 @@
                     <input class="form-control"
 							id="city"
 							name="city"
-							value="@isset($datas['city']){{ $datas['city'] }}@endisset"
+							value="@isset($sets['city']){{ $sets['city'] }}@endisset"
 							type="text"
 							autocomplete="on">
                 </div>
@@ -58,7 +58,7 @@
                     <input class="form-control"
 							id="address-1"
 							name="address_1"
-							value="@isset($datas['address_1']){{ $datas['address_1'] }}@endisset"
+							value="@isset($sets['address_1']){{ $sets['address_1'] }}@endisset"
 							type="text"
 							autocomplete="on"
 							placeholder="{{ __('forms.address.1.placeholder') }}">
@@ -68,7 +68,7 @@
                     <input class="form-control"
 							id="address-2"
 							name="address_2"
-							value="@isset($datas['address_2']){{ $datas['address_2'] }}@endisset"
+							value="@isset($sets['address_2']){{ $sets['address_2'] }}@endisset"
 							type="text"
 							autocomplete="on"
 							placeholder="{{ __('forms.address.2.placeholder') }}">
@@ -78,7 +78,7 @@
                     <input class="form-control"
 							id="postcode"
 							name="postcode"
-							value="@isset($datas['postcode']){{ $datas['postcode'] }}@endisset"
+							value="@isset($sets['postcode']){{ $sets['postcode'] }}@endisset"
 							type="text"
 							autocomplete="on">
                 </div>
@@ -97,7 +97,7 @@
 								type="checkbox"
 								name="reviews"
 								value="1"
-								@isset($datas['reviews']) @checked($datas['reviews'] == true) @endisset>
+								@isset($sets['reviews']) @checked($sets['reviews'] == true) @endisset>
 						<span class="slider"></span>
                     </label>
                 </div>
@@ -109,7 +109,7 @@
 						type="checkbox"
 						name="guest_reviews"
 						value="1"
-						@isset($datas['guest_reviews']) @checked($datas['guest_reviews'] == true) @endisset>
+						@isset($sets['guest_reviews']) @checked($sets['guest_reviews'] == true) @endisset>
 						<span class="slider"></span>
                     </label>
                 </div>
@@ -123,7 +123,7 @@
 						type="checkbox"
 						name="guest_checkout"
 						value="1"
-						@isset($datas['guest_checkout']) @checked($datas['guest_checkout'] == true) @endisset>
+						@isset($sets['guest_checkout']) @checked($sets['guest_checkout'] == true) @endisset>
 						<span class="slider"></span>
                     </label>
                 </div>
@@ -135,7 +135,7 @@
 						type="checkbox"
 						name="wishlist"
 						value="1"
-						@isset($datas['wishlist']) @checked($datas['wishlist'] == true) @endisset>
+						@isset($sets['wishlist']) @checked($sets['wishlist'] == true) @endisset>
 						<span class="slider"></span>
                     </label>
                 </div>
@@ -147,7 +147,7 @@
 						type="checkbox"
 						name="compare"
 						value="1"
-						@isset($datas['compare']) @checked($datas['compare'] == true) @endisset>
+						@isset($sets['compare']) @checked($sets['compare'] == true) @endisset>
 						<span class="slider"></span>
                     </label>
                 </div>
@@ -161,7 +161,7 @@
 						type="checkbox"
 						name="out_of_stock_products"
 						value="1"
-                        @isset($datas['out_of_stock_products']) @checked($datas['out_of_stock_products'] == true) @endisset>
+                        @isset($sets['out_of_stock_products']) @checked($sets['out_of_stock_products'] == true) @endisset>
 						<span class="slider"></span>
                     </label>
                 </div>
@@ -174,46 +174,46 @@
 						value="1"
 						data-toggle="social-share-items"
 						name="social_share"
-						@isset($datas['social_share']) @checked($datas['social_share'] == true) @endisset>
+						@isset($sets['social_share']) @checked($sets['social_share'] == true) @endisset>
 						<span class="slider"></span>
                     </label>
                 </div>
 
-                <div class="form-item second d-flex align-items-center mt-3 @if(!isset($datas['social_share']) || $datas['social_share'] == false) d-none @endif" id="social-share-items">
+                <div class="form-item second d-flex align-items-center mt-3 @if(!isset($sets['social_share']) || $sets['social_share'] == false) d-none @endif" id="social-share-items">
                     <label class="item-title">{{ __('forms.enable_share_on') }}</label>
                     <label class="icon-checkbox">
                         <input type="checkbox"
 						name="share_on[]"
 						value="facebook"
-						@isset($datas['share_on']) @checked(in_array('facebook', json_decode($datas['share_on']))) @endisset>
+						@isset($sets['share_on']) @checked(in_array('facebook', json_decode($sets['share_on']))) @endisset>
 						<span class="icon facebook"><i class="fi-brands-facebook"> </i></span>
                     </label>
                     <label class="icon-checkbox">
                         <input type="checkbox"
 						name="share_on[]"
 						value="twitter"
-						@isset($datas['share_on']) @checked(in_array('twitter', json_decode($datas['share_on']))) @endisset>
+						@isset($sets['share_on']) @checked(in_array('twitter', json_decode($sets['share_on']))) @endisset>
 						<span class="icon twitter"><i class="fi-brands-twitter"> </i></span>
                     </label>
                     <label class="icon-checkbox">
                         <input type="checkbox"
 						name="share_on[]"
 						value="instagram"
-						@isset($datas['share_on']) @checked(in_array('instagram', json_decode($datas['share_on']))) @endisset>
+						@isset($sets['share_on']) @checked(in_array('instagram', json_decode($sets['share_on']))) @endisset>
 						<span class="icon instagram"><i class="fi-brands-instagram"> </i></span>
                     </label>
                     <label class="icon-checkbox">
                         <input type="checkbox"
 						name="share_on[]"
 						value="whatsapp"
-						@isset($datas['share_on']) @checked(in_array('whatsapp', json_decode($datas['share_on']))) @endisset>
+						@isset($sets['share_on']) @checked(in_array('whatsapp', json_decode($sets['share_on']))) @endisset>
 						<span class="icon whatsapp"><i class="fi-brands-whatsapp"> </i></span>
                     </label>
                     <label class="icon-checkbox">
                         <input type="checkbox"
 						name="share_on[]"
 						value="mail"
-						@isset($datas['share_on']) @checked(in_array('mail', json_decode($datas['share_on']))) @endisset>
+						@isset($sets['share_on']) @checked(in_array('mail', json_decode($sets['share_on']))) @endisset>
 						<span class="icon envelope"><i class="fi-rr-envelope"> </i></span>
                     </label>
                 </div>
@@ -232,7 +232,7 @@
 						type="checkbox"
 						name="recently_viewed"
 						value="1"
-						@isset($datas['recently_viewed']) @checked($datas['recently_viewed'] == true) @endisset>
+						@isset($sets['recently_viewed']) @checked($sets['recently_viewed'] == true) @endisset>
 						<span class="slider"></span>
                     </label>
                 </div>
@@ -246,7 +246,7 @@
 						type="checkbox"
 						name="recommend"
 						value="1"
-						@isset($datas['recommend']) @checked($datas['recommend'] == true) @endisset>
+						@isset($sets['recommend']) @checked($sets['recommend'] == true) @endisset>
 						<span class="slider"></span>
                     </label>
                 </div>

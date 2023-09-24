@@ -41,12 +41,12 @@ class StoreSettingController extends Controller
 			->orWhere('setting_key', '=', 'recently_viewed')
 			->orWhere('setting_key', '=', 'recommend')
 			->get();
-		$datas = [];
+		$sets = [];
 		foreach ($settings as $col) {
 			// Compact only inputs data
-			$datas[$col->setting_key] = $col->setting_value;
+			$sets[$col->setting_key] = $col->setting_value;
 		}
-		return view('admin.settings.store', compact('datas'));
+		return view('admin.settings.store', compact('sets'));
 	}
 
 
@@ -59,37 +59,24 @@ class StoreSettingController extends Controller
 	public function store(StoreSettingsRequest $request)
 	{
 
-		// make 'reviews' empty if not set
-		if (!($request->has('address_2') ||
-			$request->has('reviews') ||
-			$request->has('guest_reviews') ||
-			$request->has('guest_checkout') ||
-			$request->has('wishlist') ||
-			$request->has('compare') ||
-			$request->has('out_of_stock_products') ||
-			$request->has('social_share') ||
-			$request->has('recently_viewed') ||
-			$request->has('recommend')
-		)) {
-			$fields = [
-				'address_2',
-				'reviews',
-				'guest_reviews',
-				'guest_checkout',
-				'wishlist',
-				'compare',
-				'out_of_stock_products',
-				'social_share',
-				'recently_viewed',
-				'recommend',
-			];
+		// make fields empty if not set
+		$fields = [
+			'address_2',
+			'reviews',
+			'guest_reviews',
+			'guest_checkout',
+			'wishlist',
+			'compare',
+			'out_of_stock_products',
+			'social_share',
+			'recently_viewed',
+			'recommend',
+		];
 
-
-			// make checkboxs fields empty if not set
-			foreach ($fields as $field) {
-				if (empty($request->$field)) {
-					$request->merge([$field => '']);
-				}
+		// set fields empty if not set
+		foreach ($fields as $field) {
+			if (!$request->has($field)) {
+				$request->merge([$field => '']);
 			}
 		}
 

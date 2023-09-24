@@ -30,7 +30,7 @@
 					<span class="icon info ms-2" tooltip="{{ __('forms.currency.tooltip') }}" flow="up"><i class="fi-rr-info"></i></span></label>
                     <select class="form-select" id="main-currency" name="main_currency">
                         @foreach (currencies_list() as $code => $name)
-                            <option value="{{ $code }}" @isset($datas['main_currency']) @selected($datas['main_currency'] == $code) @endisset>{{ $name }}</option>
+                            <option value="{{ $code }}" @isset($sets['main_currency']) @selected($sets['main_currency'] == $code) @endisset>{{ $name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -46,7 +46,7 @@
                             ];
                         @endphp
                         @foreach ($curr_pos as $pos => $title)
-                            <option value="{{ $pos }}" @isset($datas['currency_position']) @selected($datas['currency_position'] == $pos) @endisset>{{ $title }}</option>
+                            <option value="{{ $pos }}" @isset($sets['currency_position']) @selected($sets['currency_position'] == $pos) @endisset>{{ $title }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -76,12 +76,12 @@
 						value="1"
 						data-toggle="multi-currencies-items"
 						name="enable_multi_currencies"
-						@isset($datas['enable_multi_currencies']) @checked($datas['enable_multi_currencies'] == true) @endisset>
+						@isset($sets['enable_multi_currencies']) @checked($sets['enable_multi_currencies'] == true) @endisset>
 						<span class="slider"></span>
                     </label>
                 </div>
 
-				<div class="form-item d-flex flex-column @if(!isset($datas['enable_multi_currencies']) || $datas['enable_multi_currencies'] == false) d-none @endif" id="multi-currencies-items">
+				<div class="form-item d-flex flex-column @if(!isset($sets['enable_multi_currencies']) || $sets['enable_multi_currencies'] == false) d-none @endif" id="multi-currencies-items">
 					<div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 						<label class="item-title" for="currencies-display">{{ __('forms.currencies_display.title') }}</label>
 						<select class="form-select" id="currencies-display" name="currencies_display">
@@ -95,7 +95,7 @@
 							@endphp
 							@foreach ($curr_dis as $dis => $title)
 								<option value="{{ $dis }}"
-									@isset($datas['currencies_display']) @selected($datas['currencies_display'] == $dis) @endisset>
+									@isset($sets['currencies_display']) @selected($sets['currencies_display'] == $dis) @endisset>
 									{{ $title }}</option>
 							@endforeach
 						</select>
@@ -105,8 +105,8 @@
 						<span class="icon info ms-2" tooltip="{{ __('forms.choose_currencies.tooltip') }}" flow="up"><i class="fi-rr-info"> </i></span></label>
 						<div class="input-holder w-100">
 							<div class="repeater-holder">
-								@if (isset($datas['multi_currencies']) && !empty($datas['multi_currencies']))
-									@foreach ( $datas['multi_currencies'] as $current )
+								@if (isset($sets['multi_currencies']) && !empty($sets['multi_currencies']))
+									@foreach ( $sets['multi_currencies'] as $current )
 										<x-multi-currencies :current="$current"></x-multi-currencies>
 									@endforeach
 								@endif

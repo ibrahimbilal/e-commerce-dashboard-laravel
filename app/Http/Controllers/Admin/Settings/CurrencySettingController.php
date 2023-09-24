@@ -35,16 +35,16 @@ class CurrencySettingController extends Controller
 							->orWhere('setting_key', '=', 'currencies_display')
 							->orWhere('setting_key', '=', 'multi_currencies')
 							->get();
-		$datas = [];
+		$sets = [];
 		foreach ($settings as $col) {
 			// Compact only inputs data
-			$datas[$col->setting_key] = $col->setting_value;
+			$sets[$col->setting_key] = $col->setting_value;
 
 			if ( $col->setting_key == 'multi_currencies' ) {
-				$datas[$col->setting_key] = json_decode($col->setting_value);
+				$sets[$col->setting_key] = json_decode($col->setting_value);
 			}
 		}
-		return view('admin.settings.currencies', compact('datas'));
+		return view('admin.settings.currencies', compact('sets'));
     }
 
 
@@ -56,21 +56,16 @@ class CurrencySettingController extends Controller
      */
     public function store(CurrencySettingsRequest $request)
     {
-		// make 'reviews' empty if not set
-		if (!$request->has('enable_multi_currencies') ||
-			!$request->has('multi_currencies')
-		) {
-			$fields = [
-				'enable_multi_currencies',
-				'multi_currencies',
-			];
+		// make fields empty if not set
+		$fields = [
+			'enable_multi_currencies',
+			'multi_currencies',
+		];
 
-
-			// make fields empty if not set
-			foreach ($fields as $field) {
-				if (empty($request->$field)) {
-					$request->merge([$field => '']);
-				}
+		// set fields empty if not set
+		foreach ($fields as $field) {
+			if (!$request->has($field)) {
+				$request->merge([$field => '']);
 			}
 		}
 

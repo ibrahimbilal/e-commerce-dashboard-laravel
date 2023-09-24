@@ -36,22 +36,12 @@ class GeneralSettingController extends Controller
 							->orWhere('setting_key', '=', 'time_formate_custom')
 							->orWhere('setting_key', '=', 'date_formate_custom')
 							->get();
-		$datas = [];
+		$sets = [];
 		foreach ($settings as $col) {
 			// Compact only inputs data
-			$datas[$col->setting_key] = $col->setting_value;
+			$sets[$col->setting_key] = $col->setting_value;
 		}
-		return view('admin.settings.general', compact('datas'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+		return view('admin.settings.general', compact('sets'));
     }
 
     /**
@@ -62,14 +52,18 @@ class GeneralSettingController extends Controller
      */
     public function store(GeneralSettingsRequest $request)
     {
-		// make 'time_formate_custom' empty if not set
-		if ( !$request->has('time_formate_custom') ) {
-			$request->merge(['time_formate_custom' => '']);
-		}
 
-		// make 'date_formate_custom' empty if not set
-		if ( !$request->has('date_formate_custom') ) {
-			$request->merge(['date_formate_custom' => '']);
+		// make fields empty if not set
+		$fields = [
+			'time_formate_custom',
+			'date_formate_custom',
+		];
+
+		// set fields empty if not set
+		foreach ($fields as $field) {
+			if (!$request->has($field)) {
+				$request->merge([$field => '']);
+			}
 		}
 
 		// Change values in .env file

@@ -31,14 +31,14 @@
                     </div>
                     <div class="item-content">
 						<a class="btn regular-btn gallery-btn" href="javascript:void(0)" style="width: 150px">
-							@if(isset( $datas['logo'] ))
+							@if(isset( $sets['logo'] ))
 								{{ __('buttons.change_image') }}
 							@else
 								{{ __('buttons.select_image') }}
 							@endif
 						</a>
 						<input type="hidden" name="logo" value="">
-                        <div class="selected-img @if(!isset( $datas['logo'] )) d-none @endif">
+                        <div class="selected-img @if(!isset( $sets['logo'] )) d-none @endif">
                             <div class="img-holder mt-3">
 								<img class="preview p-1" src="{{ asset('images/full-logo.png') }}" width="70">
 									<span class="overlay"><i class="fi-rr-trash">
@@ -52,14 +52,14 @@
                     </div>
                     <div class="item-content">
 						<a class="btn regular-btn gallery-btn" href="javascript:void(0)" style="width: 150px">
-							@if(isset( $datas['dark_logo'] ))
+							@if(isset( $sets['dark_logo'] ))
 								{{ __('buttons.change_image') }}
 							@else
 								{{ __('buttons.select_image') }}
 							@endif
 						</a>
 						<input type="hidden" name="dark_logo" value="">
-                        <div class="selected-img @if(!isset( $datas['dark_logo'] )) d-none @endif">
+                        <div class="selected-img @if(!isset( $sets['dark_logo'] )) d-none @endif">
                             <div class="img-holder mt-3">
 								<img class="preview p-1" src="{{ asset('images/full-logo.png') }}" width="70">
 								<span class="overlay"><i class="fi-rr-trash"></i><span>{{ __('buttons.remove') }}</span></span>
@@ -76,9 +76,9 @@
 								min="0"
 								max="300"
 								step="10"
-								value="@isset($datas['logo_width']){{ $datas['logo_width'] }}@endisset"
+								value="@isset($sets['logo_width']){{ $sets['logo_width'] }}@endisset"
 								oninput="rangevalue.value=value">
-						<output class="text-center ms-2" id="rangevalue">{{ $datas['logo_width'] }}</output>
+						<output class="text-center ms-2" id="rangevalue">{{ $sets['logo_width'] }}</output>
                     </div>
                 </div>
                 <hr>
@@ -88,14 +88,14 @@
                     </div>
                     <div class="item-content">
 						<a class="btn regular-btn gallery-btn" href="javascript:void(0)" style="width: 150px">
-							@if(isset( $datas['mobile_logo'] ))
+							@if(isset( $sets['mobile_logo'] ))
 								{{ __('buttons.change_image') }}
 							@else
 								{{ __('buttons.select_image') }}
 							@endif
 						</a>
 						<input type="hidden" name="mobile_logo" value="">
-                        <div class="selected-img @if(!isset( $datas['mobile_logo'] )) d-none @endif">
+                        <div class="selected-img @if(!isset( $sets['mobile_logo'] )) d-none @endif">
                             <div class="img-holder mt-3">
 								<img class="preview p-1" src="{{ asset('images/full-logo.png') }}" width="70">
 								<span class="overlay"><i class="fi-rr-trash"></i><span>{{ __('buttons.remove') }}</span></span>
@@ -109,14 +109,14 @@
                     </div>
                     <div class="item-content">
 						<a class="btn regular-btn gallery-btn" href="javascript:void(0)" style="width: 150px">
-							@if(isset( $datas['dark_mobile_logo'] ))
+							@if(isset( $sets['dark_mobile_logo'] ))
 								{{ __('buttons.change_image') }}
 							@else
 								{{ __('buttons.select_image') }}
 							@endif
 						</a>
 						<input type="hidden" name="dark_mobile_logo" value="">
-                        <div class="selected-img @if(!isset( $datas['dark_mobile_logo'] )) d-none @endif">
+                        <div class="selected-img @if(!isset( $sets['dark_mobile_logo'] )) d-none @endif">
                             <div class="img-holder mt-3">
 								<img class="preview p-1" src="{{ asset('images/full-logo.png') }}" width="70">
 								<span class="overlay"><i class="fi-rr-trash"></i><span>{{ __('buttons.remove') }}</span></span>
@@ -133,10 +133,10 @@
 								min="0"
 								max="300"
 								step="10"
-								value="@isset($datas['mobile_logo_width']){{ $datas['mobile_logo_width'] }}@endisset"
+								value="@isset($sets['mobile_logo_width']){{ $sets['mobile_logo_width'] }}@endisset"
 								oninput="rangevalue_1.value=value"
 						>
-						<output class="text-center ms-2" id="rangevalue_1">{{ $datas['mobile_logo_width'] }}</output>
+						<output class="text-center ms-2" id="rangevalue_1">{{ $sets['mobile_logo_width'] }}</output>
                     </div>
                 </div>
                 <hr>
@@ -147,7 +147,7 @@
                             <input class="form-control-color"
 								type="color"
 								name="main_color"
-								value="@isset($datas['main_color']){{ $datas['main_color'] }}@endisset"
+								value="@isset($sets['main_color']){{ $sets['main_color'] }}@endisset"
                                 title="Choose your color">
                         </div>
                     </div>
@@ -157,7 +157,7 @@
                             <input class="form-control-color"
 								type="color"
 								name="main_color_hover"
-								value="@isset($datas['main_color_hover']){{ $datas['main_color_hover'] }}@endisset"
+								value="@isset($sets['main_color_hover']){{ $sets['main_color_hover'] }}@endisset"
                                 title="Choose your color">
                         </div>
                     </div>
@@ -167,7 +167,7 @@
                             <input class="form-control-color"
 								type="color"
 								name="body_background"
-								value="@isset($datas['body_background']){{ $datas['body_background'] }}@endisset"
+								value="@isset($sets['body_background']){{ $sets['body_background'] }}@endisset"
 								title="Choose your color">
                         </div>
                     </div>
@@ -177,7 +177,7 @@
                             <input class="form-control-color"
 								type="color"
 								name="menu_active_bg"
-								value="@isset($datas['menu_active_bg']){{ $datas['menu_active_bg'] }}@endisset"
+								value="@isset($sets['menu_active_bg']){{ $sets['menu_active_bg'] }}@endisset"
                                 title="Choose your color">
                         </div>
                     </div>
@@ -187,7 +187,7 @@
                             <input class="form-control-color"
 								type="color"
 								name="box_bg_color"
-								value="@isset($datas['box_bg_color']){{ $datas['box_bg_color'] }}@endisset"
+								value="@isset($sets['box_bg_color']){{ $sets['box_bg_color'] }}@endisset"
 								title="Choose your color">
                         </div>
                     </div>
@@ -197,7 +197,7 @@
                             <input class="form-control-color"
 								type="color"
 								name="text_color"
-								value="@isset($datas['text_color']){{ $datas['text_color'] }}@endisset"
+								value="@isset($sets['text_color']){{ $sets['text_color'] }}@endisset"
                                 title="Choose your color">
                         </div>
                     </div>
@@ -207,7 +207,7 @@
                             <input class="form-control-color"
 								type="color"
 								name="menu_badge_bg"
-								value="@isset($datas['menu_badge_bg']){{ $datas['menu_badge_bg'] }}@endisset"
+								value="@isset($sets['menu_badge_bg']){{ $sets['menu_badge_bg'] }}@endisset"
 								title="Choose your color">
                         </div>
                     </div>
@@ -220,7 +220,7 @@
                             <input class="form-control-color dark"
 								type="color"
 								name="dark_main_color"
-								value="@isset($datas['dark_main_color']){{ $datas['dark_main_color'] }}@endisset"
+								value="@isset($sets['dark_main_color']){{ $sets['dark_main_color'] }}@endisset"
                                 title="Choose your color">
                         </div>
                     </div>
@@ -230,7 +230,7 @@
                             <input class="form-control-color dark"
 								type="color"
 								name="dark_main_color_hover"
-								value="@isset($datas['dark_main_color_hover']){{ $datas['dark_main_color_hover'] }}@endisset"
+								value="@isset($sets['dark_main_color_hover']){{ $sets['dark_main_color_hover'] }}@endisset"
 								title="Choose your color">
                         </div>
                     </div>
@@ -241,7 +241,7 @@
                             <input class="form-control-color dark"
 								type="color"
 								name="dark_body_background"
-								value="@isset($datas['dark_body_background']){{ $datas['dark_body_background'] }}@endisset"
+								value="@isset($sets['dark_body_background']){{ $sets['dark_body_background'] }}@endisset"
                                 title="Choose your color">
                         </div>
                     </div>
@@ -252,7 +252,7 @@
                             <input class="form-control-color dark"
 								type="color"
 								name="dark_menu_active_bg"
-								value="@isset($datas['dark_menu_active_bg']){{ $datas['dark_menu_active_bg'] }}@endisset"
+								value="@isset($sets['dark_menu_active_bg']){{ $sets['dark_menu_active_bg'] }}@endisset"
                                 title="Choose your color">
                         </div>
                     </div>
@@ -262,7 +262,7 @@
                             <input class="form-control-color dark"
 								type="color"
 								name="dark_box_bg_color"
-								value="@isset($datas['dark_box_bg_color']){{ $datas['dark_box_bg_color'] }}@endisset"
+								value="@isset($sets['dark_box_bg_color']){{ $sets['dark_box_bg_color'] }}@endisset"
                                 title="Choose your color">
                         </div>
                     </div>
@@ -274,7 +274,7 @@
                             <input class="form-control-color dark"
 								type="color"
 								name="dark_text_color"
-								value="@isset($datas['dark_text_color']){{ $datas['dark_text_color'] }}@endisset"
+								value="@isset($sets['dark_text_color']){{ $sets['dark_text_color'] }}@endisset"
                                 title="Choose your color">
                         </div>
                     </div>
@@ -284,7 +284,7 @@
                             <input class="form-control-color dark"
 								type="color"
 								name="dark_menu_badge_bg"
-								value="@isset($datas['dark_menu_badge_bg']){{ $datas['dark_menu_badge_bg'] }}@endisset"
+								value="@isset($sets['dark_menu_badge_bg']){{ $sets['dark_menu_badge_bg'] }}@endisset"
                                 title="Choose your color">
                         </div>
                     </div>
