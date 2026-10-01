@@ -76,7 +76,6 @@
 </div>
 </div>
 </div>
-<x-pagination :paginator="$reviews" />
 </div>
 </div>
 @endsection

@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 
 class PermissionsSeeder extends Seeder
 {
@@ -86,6 +87,8 @@ class PermissionsSeeder extends Seeder
 
         $permissions = array_values(array_unique($permissions));
 
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
+
         foreach ($permissions as $permission) {
             Permission::firstOrCreate([
                 'name' => $permission,
@@ -97,6 +100,8 @@ class PermissionsSeeder extends Seeder
             'name' => 'admin',
             'guard_name' => $guard,
         ]);
+
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
 
         $adminRole->syncPermissions(
             Permission::query()->where('guard_name', $guard)->pluck('name')

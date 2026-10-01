@@ -51,7 +51,6 @@
 </div>
 </div>
 </div>
-<x-pagination :paginator="$orderStatuses" />
 </div>
 </div>
 @endsection

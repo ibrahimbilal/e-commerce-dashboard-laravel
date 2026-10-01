@@ -56,9 +56,6 @@
 </tbody>
 </table>
 </div>
-@if (isset($subscribers) && method_exists($subscribers, 'hasPages'))
-<x-pagination :paginator="$subscribers" />
-@endif
 </div>
 </div>
 </div>

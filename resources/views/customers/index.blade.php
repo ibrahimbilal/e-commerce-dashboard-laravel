@@ -63,7 +63,6 @@
 </div>
 </div>
 </div>
-<x-pagination :paginator="$customers" />
 </div>
 </div>
 @endsection

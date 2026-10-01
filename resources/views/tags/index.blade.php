@@ -65,7 +65,6 @@
 </div>
 </div>
 </div>
-<x-pagination :paginator="$tags" />
 </div>
 </div>
 @endsection

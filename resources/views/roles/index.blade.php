@@ -61,7 +61,6 @@
 </div>
 </div>
 </div>
-<x-pagination :paginator="$roles" />
 </div>
 </div>
 @endsection

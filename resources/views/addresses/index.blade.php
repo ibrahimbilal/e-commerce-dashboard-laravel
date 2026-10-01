@@ -50,7 +50,6 @@
 </tbody>
 </table>
 </div>
-<x-pagination :paginator="$addresses" />
 </div>
 </div>
 </div>

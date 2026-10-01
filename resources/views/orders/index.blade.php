@@ -83,7 +83,6 @@
 </div>
 </div>
 </div>
-<x-pagination :paginator="$orders" />
 </div>
 </div>
 @endsection

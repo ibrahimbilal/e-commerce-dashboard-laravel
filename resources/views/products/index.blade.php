@@ -98,7 +98,6 @@
 </div>
 </div>
 </div>
-<x-pagination :paginator="$products" />
 </div>
 </div>
 @endsection

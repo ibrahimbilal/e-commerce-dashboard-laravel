@@ -73,7 +73,6 @@
 </div>
 </div>
 </div>
-<x-pagination :paginator="$discounts" />
 </div>
 </div>
 @endsection

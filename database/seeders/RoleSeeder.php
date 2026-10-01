@@ -5,12 +5,15 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 
 class RoleSeeder extends Seeder
 {
     public function run(): void
     {
         $guard = 'web';
+
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
 
         $manager = Role::firstOrCreate(['name' => 'manager', 'guard_name' => $guard]);
         $viewer = Role::firstOrCreate(['name' => 'viewer', 'guard_name' => $guard]);

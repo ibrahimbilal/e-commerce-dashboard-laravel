@@ -62,7 +62,6 @@
 </div>
 </div>
 </div>
-<x-pagination :paginator="$attributeList" />
 </div>
 </div>
 @endsection

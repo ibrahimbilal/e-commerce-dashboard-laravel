@@ -78,7 +78,6 @@
 </div>
 </div>
 </div>
-<x-pagination :paginator="$categories" />
 </div>
 </div>
 @endsection
