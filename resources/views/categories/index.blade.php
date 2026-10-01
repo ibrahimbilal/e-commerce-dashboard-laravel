@@ -67,7 +67,7 @@
 </label>
 </td>
 <td>
-<x-resource-actions :model="$category" resource="categories" destroy-label="category" />
+<x-resource-actions :model="$category" resource="categories" destroy-label="category" :show="false" />
 </td>
 </tr>
 @empty
