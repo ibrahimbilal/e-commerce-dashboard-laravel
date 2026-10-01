@@ -32,14 +32,17 @@ class CreateNewUser implements CreatesNewUsers
             'profile_picture' => ['nullable', 'string', 'max:191'],
         ])->validate();
 
-        return User::create([
+        $user = User::create([
             'first_name' => $input['first_name'],
             'last_name' => $input['last_name'],
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
             'mobile' => $input['mobile'] ?? null,
             'profile_picture' => $input['profile_picture'] ?? null,
-            'email_verified_at' => now(),
         ]);
+
+        $user->markEmailAsVerified();
+
+        return $user;
     }
 }
