@@ -25,7 +25,7 @@ Route::prefix('/admin')->group(function () {
 	// verify email
 	Route::get('/email/verify', function () {
 		return view('admin.auth.verify-email');
-	})->name('verification.notice');
+	})->name('admin.verification.notice');
 
 	// two factor authentication
 	Route::get('/two-factor-challeng', function () {
@@ -57,7 +57,7 @@ Route::prefix('/admin')->group(function () {
 		Route::resource('/roles', App\Http\Controllers\Admin\RoleController::class)->names('admin.roles');
 
 		// Gallery Pages
-		Route::resource('/gallery', App\Http\Controllers\Admin\GalleryController::class);
+		Route::resource('/gallery', App\Http\Controllers\Admin\GalleryController::class)->names('admin.gallery');
 		Route::post('/gallery/get-metas', [App\Http\Controllers\Admin\GalleryController::class, 'get_image_meta'])->name('get_metas');
 
 		// Languages Pages

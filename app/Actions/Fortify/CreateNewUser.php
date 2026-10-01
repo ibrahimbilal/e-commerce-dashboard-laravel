@@ -3,61 +3,58 @@
 namespace App\Actions\Fortify;
 
 use App\Models\User;
-use Illuminate\Validation\Rule;
-use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
+use Spatie\Permission\Models\Role;
 
 class CreateNewUser implements CreatesNewUsers
 {
     use PasswordValidationRules;
 
     /**
-     * Validate and create a newly registered user.
-     *
-     * @param  array  $input
-     * @return \App\Models\User
+     * @param  array<string, mixed>  $input
      */
-    public function create(array $input)
+    public function create(array $input): User
     {
-		Validator::make($input, [
-            'first_name' => ['required', 'string', 'max:255'],
-			'last_name'	=> ['required', 'string', 'max:255'],
+        Validator::make($input, [
+            'first_name' => ['required', 'string', 'max:50'],
+            'last_name' => ['required', 'string', 'max:50'],
             'email' => [
                 'required',
                 'string',
                 'email',
-                'max:255',
+                'max:50',
                 Rule::unique(User::class),
             ],
             'password' => $this->passwordRules(),
-			'mobile' => ['nullable', 'numeric', 'digits_between:9,15'],
-			'birth_date' => [
-				'nullable',
-				'date',
-				'date_format:Y-m-d',
-				'before_or_equal:' . date("Y-m-d", strtotime('-18 years'))
-			],
-			'gender' => ['required',Rule::in(['male', 'female'])],
-			'role_name' => ['required','string', Rule::exists(Role::class, 'name')],
-			'language' => ['required','string'],
-			'profile_picture' => [
-				'nullable',
-			],
+            'mobile' => ['nullable', 'string', 'max:20'],
+            'profile_picture' => ['nullable', 'string', 'max:191'],
+            'roles' => ['nullable', 'array'],
+            'roles.*' => ['string', Rule::exists('roles', 'name')->where('guard_name', 'web')],
+            'role_name' => ['nullable', 'string', Rule::exists('roles', 'name')->where('guard_name', 'web')],
         ])->validate();
 
-        return User::create([
+        $user = User::create([
             'first_name' => $input['first_name'],
             'last_name' => $input['last_name'],
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
-            'mobile' => $input['mobile'],
-            'birth_date' => $input['birth_date'],
-            'gender' => $input['gender'],
-            'role_name' => $input['role_name'],
-            'language' => $input['language'],
-            'profile_picture' => $input['profile_picture'],
+            'mobile' => $input['mobile'] ?? null,
+            'profile_picture' => $input['profile_picture'] ?? null,
+            'email_verified_at' => now(),
         ]);
+
+        $roleNames = $input['roles'] ?? [];
+        if (! empty($input['role_name'])) {
+            $roleNames[] = $input['role_name'];
+        }
+
+        if ($roleNames !== []) {
+            $user->syncRoles(array_values(array_unique($roleNames)));
+        }
+
+        return $user;
     }
 }
