@@ -2,17 +2,19 @@
 
 @section('title', 'E-Commerce Project')
 
-@push('styles')
-<link href="{{ asset('assets/css/datatables.min.css') }}" rel="stylesheet"/>
-@endpush
 
 @section('content')
 <div class="page-header">
 <div class="row">
 <div class="col-12 d-flex align-items-sm-center justify-content-sm-between flex-column flex-sm-row">
 
-<div class="text-capitalize mb-2 mb-sm-0 d-flex align-items-sm-center">
+<div class="text-capitalize mb-2 mb-sm-0 d-flex align-items-sm-center justify-content-between w-100">
 <h1 class="page-title">invoices</h1>
+@if (Route::has('invoices.create'))
+@can('add invoices')
+<a class="add-btn btn text-capitalize" href="{{ route('invoices.create') }}"><span class="icon"><i class="fi-rr-add"> </i></span>add new</a>
+@endcan
+@endif
 </div>
 
 <div class="page-breadcrumbs d-flex align-items-sm-center justify-content-start justify-content-sm-end">
@@ -73,102 +75,4 @@
 </div>
 @endsection
 
-@push('scripts')
-<script async="" src="{{ asset('assets/js/async.js') }}" type="text/javascript"></script>
-<script src="{{ asset('assets/js/datatables.min.js') }}" type="text/javascript"></script>
-<script>
-      // Data Tables
-      let product_table = $('#invoices').DataTable({
-      	dom: 'Bfrtip',
-      	columnDefs: [
-      		{
-      			orderable: false,
-      			className: 'select-checkbox',
-      			targets: 0
-      		},
-      		{ 
-      			bSortable: false, 
-      			aTargets: [ 0, 5] 
-      		},
-      		{ 
-      			bSearchable: false, 
-      			aTargets: [ 0, 5] 
-      		}
-      	],
-      	select: {
-      		style: 'os',
-      		selector: 'td:first-child'
-      	},
-      	order: [
-      		[4, 'desc']
-      	],
-      	language: {
-      		info: "Show _START_ To _END_ Of _TOTAL_ invoices",
-      		buttons: {
-      			pageLength: 'Show %d',
-      			colvis: 'Columns'
-      		}
-      	},
-      	stateSave: true,
-      	paging: true,
-      	searching: true,
-      	lengthMenu: [[ 10, 15, 25, 50, 75, 100 ], ['10 invoices', '15 invoices', '25 invoices', '50 invoices', '75 invoices', '100 invoices']],
-      	buttons: ($(window).width() > 578) ? ['pageLength', 'print', {
-      		extend: 'collection',
-      		text: 'Export',
-      		className: 'btn btn-group',
-      		buttons: [
-      			{
-      				extend: 'excelHtml5',
-      				className: 'dropdown-item'
-      			},
-      			{
-      				extend: 'csvHtml5',
-      				className: 'dropdown-item'
-      			},
-      			{
-      				extend: 'pdfHtml5',
-      				className: 'dropdown-item'
-      			}
-      		]
-      	}, 'colvis'] : ['pageLength', {
-      		extend: 'collection',
-      		text: 'Export',
-      		className: 'btn btn-group',
-      		buttons: [
-      			{
-      				extend: 'excelHtml5',
-      				className: 'dropdown-item'
-      			},
-      			{
-      				extend: 'csvHtml5',
-      				className: 'dropdown-item'
-      			},
-      			{
-      				extend: 'pdfHtml5',
-      				className: 'dropdown-item'
-      			}
-      		]
-      	}, 'colvis']
-      });
-      product_table.on("click", "th.select-checkbox", function() {
-      	if ($("th.select-checkbox").hasClass("selected")) {
-      		product_table.rows().deselect();
-      		$("th.select-checkbox").removeClass("selected");
-      	} else {
-      		product_table.rows().select();
-      		$("th.select-checkbox").addClass("selected");
-      	}
-      }).on("select deselect", function() {
-      	("Some selection or deselection going on")
-      	if (product_table.rows({
-      		selected: true
-      		}).count() !== product_table.rows().count()) {
-      		$("th.select-checkbox").removeClass("selected");
-      	} else {
-      		$("th.select-checkbox").addClass("selected");
-      	}
-      });
-    </script>
-@endpush
 

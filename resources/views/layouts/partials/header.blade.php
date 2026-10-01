@@ -4,9 +4,14 @@
         ? trim(($authUser->first_name ?? '').' '.($authUser->last_name ?? '')) ?: ($authUser->email ?? 'Account')
         : 'Account';
     $roleName = $authUser?->getRoleNames()?->first();
-    $profileUrl = $authUser
-        ? (Route::has('users.profile') ? route('users.profile') : route('users.edit', $authUser))
-        : '#';
+    $profileUrl = null;
+    if ($authUser) {
+        if ($authUser->can('edit users') && Route::has('users.edit')) {
+            $profileUrl = route('users.edit', $authUser);
+        } elseif (Route::has('profile.edit')) {
+            $profileUrl = route('profile.edit');
+        }
+    }
 @endphp
 <header class="main-box d-flex justify-content-between align-items-center">
 <!-- Search Form-->
@@ -51,7 +56,9 @@
 <div class="float-window main-box user-window" id="user-window">
 <div class="win-body">
 <ul class="notify-list p-0">
+@if ($profileUrl)
 <li class="notify-item d-flex align-items-center"><a class="link" href="{{ $profileUrl }}">My Account</a></li>
+@endif
 <li class="notify-item d-flex align-items-center"><form method="POST" action="{{ route('logout') }}" class="d-inline w-100">@csrf<button type="submit" class="link border-0 bg-transparent p-0 text-start">Logout</button></form></li>
 </ul>
 </div>

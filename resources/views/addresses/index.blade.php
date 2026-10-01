@@ -7,7 +7,9 @@
 <div class="row">
 <div class="col-12 d-flex align-items-sm-center justify-content-sm-between flex-column flex-sm-row">
 <h1 class="page-title text-capitalize">addresses</h1>
+@can('add addresses')
 <a class="add-btn btn text-capitalize" href="{{ route('addresses.create') }}"><span class="icon"><i class="fi-rr-plus"> </i></span>add</a>
+@endcan
 </div>
 </div>
 </div>

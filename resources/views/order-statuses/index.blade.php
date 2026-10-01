@@ -2,16 +2,15 @@
 
 @section('title', 'E-Commerce Project')
 
-@push('styles')
-<link href="{{ asset('assets/css/datatables.min.css') }}" rel="stylesheet"/>
-@endpush
 
 @section('content')
 <div class="page-header">
 <div class="row">
 <div class="col-12 d-flex align-items-sm-center justify-content-sm-between flex-column flex-sm-row">
 <div class="text-capitalize mb-2 mb-sm-0 d-flex justify-content-between align-items-center">
-<h1 class="page-title">order statuses</h1><a class="add-btn btn text-capitalize" href="{{ route('order-statuses.create') }}"><span class="icon"><i class="fi-rr-add"> </i></span>add new</a>
+<h1 class="page-title">order statuses</h1>@can('add orders')
+<a class="add-btn btn text-capitalize" href="{{ route('order-statuses.create') }}"><span class="icon"><i class="fi-rr-add"> </i></span>add new</a>
+@endcan
 </div>
 <div class="page-breadcrumbs d-flex align-items-sm-center justify-content-start justify-content-sm-end">
 <div class="breadcrumbs d-flex justify-content-between align-items-center"><a class="item text-capitalize d-flex justify-content-between align-items-center" href="{{ route('dashboard') }}"><span class="icon"><i class="fi-rr-apps"> </i></span>dashboard</a><span class="angle"><span class="icon"><i class="fi-rr-angle-double-right"> </i></span></span><a class="item text-capitalize d-flex justify-content-between align-items-center" href="{{ route('orders.index') }}">orders</a><span class="angle"><span class="icon"><i class="fi-rr-angle-double-right"> </i></span></span><span class="item text-capitalize d-flex justify-content-between align-items-center">statuses</span>

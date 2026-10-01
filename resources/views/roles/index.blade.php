@@ -2,9 +2,6 @@
 
 @section('title', 'E-Commerce Project')
 
-@push('styles')
-<link href="{{ asset('assets/css/datatables.min.css') }}" rel="stylesheet"/>
-@endpush
 
 @section('content')
 <div class="page-header">
@@ -12,7 +9,9 @@
 <div class="col-12 d-flex align-items-sm-center justify-content-sm-between flex-column flex-sm-row">
 
 <div class="text-capitalize mb-2 mb-sm-0 d-flex justify-content-between align-items-center">
-<h1 class="page-title">roles</h1><a class="add-btn btn text-capitalize" href="{{ route('roles.create') }}"><span class="icon"><i class="fi-rr-add"> </i></span>add new</a>
+<h1 class="page-title">roles</h1>@can('add roles')
+<a class="add-btn btn text-capitalize" href="{{ route('roles.create') }}"><span class="icon"><i class="fi-rr-add"> </i></span>add new</a>
+@endcan
 </div>
 
 <div class="page-breadcrumbs d-flex align-items-sm-center justify-content-start justify-content-sm-end">
@@ -66,24 +65,3 @@
 </div>
 @endsection
 
-@push('scripts')
-<script async="" src="{{ asset('assets/js/async.js') }}" type="text/javascript"></script>
-<script src="{{ asset('assets/js/datatables.min.js') }}" type="text/javascript"></script>
-<script>
-      let product_table = $('#roles').DataTable({
-      	dom: 'Bfrtip',
-      	columnDefs: [
-      		{ bSortable: false, aTargets: [3] },
-      		{ bSearchable: false, aTargets: [3] }
-      	],
-      	order: [[0, 'asc']],
-      	language: {
-      		info: "Show _START_ To _END_ Of _TOTAL_ Roles",
-      		buttons: { pageLength: 'Show %d', colvis: 'Columns' }
-      	},
-      	stateSave: true,
-      	paging: false,
-      	searching: true,
-      });
-    </script>
-@endpush
