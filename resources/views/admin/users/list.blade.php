@@ -21,18 +21,6 @@
         'breadcrumbs_items' => ['title' => __('admin.menu.users.title')],
 		'permissions' => 'add users'
     ];
-    $userRestoreRouteName = Route::has('admin.users.restore')
-        ? 'admin.users.restore'
-        : (Route::has('users.restore') ? 'users.restore' : null);
-    $userForceDeleteRouteName = Route::has('admin.users.force_delete')
-        ? 'admin.users.force_delete'
-        : (Route::has('users.force_delete') ? 'users.force_delete' : null);
-    $userBulkRestoreRoute = Route::has('admin.users.bulk_restore')
-        ? route('admin.users.bulk_restore')
-        : (Route::has('users.bulk_restore') ? route('users.bulk_restore') : '');
-    $userBulkForceDeleteRoute = Route::has('admin.users.bulk_force_delete')
-        ? route('admin.users.bulk_force_delete')
-        : (Route::has('users.bulk_force_delete') ? route('users.bulk_force_delete') : '');
     @endphp
     @include('admin.inc.page_title', $params)
     <div class="row">
@@ -128,24 +116,20 @@
 													@endcan
                                                 @else
 													@can('restore users')
-                                                        @if ($userRestoreRouteName)
 														<a class="btn btn-primary btn-rounded me-2 py-1" id="restore"
 															data-id="{{ $user->id }}"
-															href="{{ route($userRestoreRouteName, $user->id) }}">
+															href="{{ route('admin.users.restore', $user->id) }}">
 															<span class="icon"><i class="fi-rr-time-past">
 																</i></span>{{ __('buttons.restore') }}
 														</a>
-                                                        @endif
 													@endcan
 													@can('permanently_delete users')
-                                                        @if ($userForceDeleteRouteName)
 														<a class="btn btn-danger btn-rounded me-2 py-1" id="force-delete"
 															data-id="{{ $user->id }}"
-															href="{{ route($userForceDeleteRouteName, $user->id) }}">
+															href="{{ route('admin.users.force_delete', $user->id) }}">
 															<span class="icon"><i class="fi-rr-trash">
 																</i></span>{{ __('bulk_action.option.force_delete') }}
 														</a>
-                                                        @endif
 													@endcan
                                                 @endif
                                             </div>
@@ -604,10 +588,10 @@
 							routeName = "{{ route('users.bulk_delete') }}";
 							break;
 						case 'restore':
-							routeName = @json($userBulkRestoreRoute);
+							routeName = "{{ route('users.bulk_restore') }}";
 							break;
 						case 'force_delete':
-							routeName = @json($userBulkForceDeleteRoute);
+							routeName = "{{ route('users.bulk_force_delete') }}";
 							break;
 						default:
 							routeName = '';
