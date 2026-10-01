@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Discount;
+use App\Support\DiscountQuery;
 use App\Support\IndexListing;
 use Illuminate\Http\Request;
 
@@ -23,16 +24,8 @@ class DiscountController extends Controller
 
         $counts = [
             'all' => Discount::query()->count(),
-            'active' => Discount::query()->where('active', true)
-                ->where(function ($query) {
-                    $query->whereNull('end_date')->orWhere('end_date', '>=', now());
-                })->count(),
-            'expired' => Discount::query()->where(function ($query) {
-                $query->where('active', false)
-                    ->orWhere(function ($inner) {
-                        $inner->whereNotNull('end_date')->where('end_date', '<', now());
-                    });
-            })->count(),
+            'active' => DiscountQuery::activeWithinDates()->count(),
+            'expired' => DiscountQuery::expiredByDate()->count(),
             'trashed' => Discount::query()->onlyTrashed()->count(),
         ];
 
@@ -43,19 +36,11 @@ class DiscountController extends Controller
         }
 
         if ($request->query('active') === '1') {
-            $query->where('active', true)
-                ->where(function ($builder) {
-                    $builder->whereNull('end_date')->orWhere('end_date', '>=', now());
-                });
+            $query->whereIn('id', DiscountQuery::activeWithinDates()->select('id'));
         }
 
         if ($request->query('expired') === '1') {
-            $query->where(function ($builder) {
-                $builder->where('active', false)
-                    ->orWhere(function ($inner) {
-                        $inner->whereNotNull('end_date')->where('end_date', '<', now());
-                    });
-            });
+            $query->whereIn('id', DiscountQuery::expiredByDate()->select('id'));
         }
 
         if ($search = $request->query('search')) {

@@ -47,15 +47,19 @@ class Handler extends ExceptionHandler
             //
         });
 
-		$this->renderable(function (\Spatie\Permission\Exceptions\UnauthorizedException $e, $request) {
-			if ( $request->method() !== 'GET' ) {
-				return response()->json([
-					'title' => __('alerts.ops'),
-					'errors' => [__('alerts.errors.no_permissions')],
-					'text' => __('alerts.errors.no_permissions'),
-					'responseStatus'  => 403
-				]);
-			}
-		});
+        $this->renderable(function (\Spatie\Permission\Exceptions\UnauthorizedException $e, $request) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'title' => __('alerts.ops'),
+                    'errors' => [__('alerts.errors.no_permissions')],
+                    'text' => __('alerts.errors.no_permissions'),
+                    'responseStatus' => 403,
+                ], 403);
+            }
+
+            if ($request->method() !== 'GET') {
+                abort(403);
+            }
+        });
     }
 }

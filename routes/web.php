@@ -49,7 +49,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/analytics/overview', [AnalyticsController::class, 'overview'])->name('analytics.overview');
     Route::get('/marketing', [MarketingController::class, 'index'])->name('marketing.index');
+    Route::post('/marketing/subscribers', [MarketingController::class, 'store'])->name('marketing.subscribers.store');
+    Route::put('/marketing/subscribers/{subscriber}', [MarketingController::class, 'update'])->name('marketing.subscribers.update');
+    Route::delete('/marketing/subscribers/{subscriber}', [MarketingController::class, 'destroy'])->name('marketing.subscribers.destroy');
     Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery.index');
+    Route::post('/gallery', [GalleryController::class, 'store'])->name('gallery.store');
+    Route::put('/gallery/{gallery}', [GalleryController::class, 'update'])->name('gallery.update');
     Route::delete('/gallery/{gallery}', [GalleryController::class, 'destroy'])->name('gallery.destroy');
     Route::get('/languages', [LanguageController::class, 'index'])->name('languages.index');
 

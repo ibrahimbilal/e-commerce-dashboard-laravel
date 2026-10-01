@@ -20,7 +20,7 @@ class ReviewController extends Controller
 
     public function index(Request $request)
     {
-        $filterKeys = ['search', 'trashed'];
+        $filterKeys = ['search', 'trashed', 'rating'];
         $filters = IndexListing::activeFilters($request, $filterKeys);
 
         $counts = [
@@ -28,14 +28,32 @@ class ReviewController extends Controller
             'trashed' => Review::query()->onlyTrashed()->count(),
         ];
 
+        for ($star = 1; $star <= 5; $star++) {
+            $counts['star_'.$star] = Review::query()->where('rate', $star)->count();
+        }
+
         $query = Review::with(['customer', 'product.locales']);
 
         if ($request->query('trashed') === '1') {
             $query->onlyTrashed();
         }
 
+        if ($rating = $request->query('rating')) {
+            $query->where('rate', (int) $rating);
+        }
+
         if ($search = $request->query('search')) {
-            $query->where('comment', 'like', '%'.$search.'%');
+            $query->where(function ($builder) use ($search) {
+                $builder->where('comment', 'like', '%'.$search.'%')
+                    ->orWhereHas('customer', function ($customerQuery) use ($search) {
+                        $customerQuery->where('email', 'like', '%'.$search.'%')
+                            ->orWhere('first_name', 'like', '%'.$search.'%')
+                            ->orWhere('last_name', 'like', '%'.$search.'%');
+                    })
+                    ->orWhereHas('product.locales', function ($localeQuery) use ($search) {
+                        $localeQuery->where('name', 'like', '%'.$search.'%');
+                    });
+            });
         }
 
         $reviews = $query->latest('id')->paginate(20)->withQueryString();

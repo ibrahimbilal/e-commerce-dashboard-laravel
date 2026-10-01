@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Support\IndexListing;
+use App\Support\ReferentialDeleteGuard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -110,8 +111,16 @@ class CustomerController extends Controller
         return redirect()->route('customers.show', $customer)->with('status', 'Customer updated.');
     }
 
-    public function destroy(Customer $customer)
+    public function destroy(Request $request, Customer $customer)
     {
+        if ($blocked = ReferentialDeleteGuard::blockIfInUse(
+            $request,
+            $customer,
+            'Cannot delete this customer because they have orders.'
+        )) {
+            return $blocked;
+        }
+
         $customer->delete();
 
         return redirect()->route('customers.index')->with('status', 'Customer deleted.');

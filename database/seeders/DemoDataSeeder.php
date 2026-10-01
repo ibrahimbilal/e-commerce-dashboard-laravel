@@ -17,8 +17,10 @@ use App\Models\Product;
 use App\Models\ProductAttribute;
 use App\Models\ProductLocale;
 use App\Models\Review;
+use App\Models\Subscriber;
 use App\Models\Tag;
 use App\Models\User;
+use App\Support\DemoImageGenerator;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -51,6 +53,7 @@ class DemoDataSeeder extends Seeder
         $this->seedReviews($customers, $products);
         $this->seedInvoices();
         $this->seedGalleries();
+        $this->seedSubscribers($customers);
     }
 
     private function seedStaffUsers(): void
@@ -147,13 +150,17 @@ class DemoDataSeeder extends Seeder
                 'new' => $i % 4 === 0,
             ]);
 
+            $productName = 'Demo Product '.($i + 1);
+
             ProductLocale::query()->create([
                 'product_id' => $product->id,
                 'locale' => 'en',
-                'name' => 'Demo Product '.($i + 1),
+                'name' => $productName,
                 'description' => 'Seeded demo product '.($i + 1),
                 'product_slug' => 'demo-product-'.($i + 1),
             ]);
+
+            $this->assignDemoProductImage($product, $productName);
 
             $product->categories()->attach($categories->random(rand(1, 2))->pluck('id'));
             $product->tags()->attach($tags->random(rand(1, 3))->pluck('id'));
@@ -167,8 +174,6 @@ class DemoDataSeeder extends Seeder
                 'attribute_2_id' => $size->id,
             ]);
 
-            $this->assignDemoProductImage($product);
-
             $this->variants[] = $variant;
             $products->push($product);
         }
@@ -181,7 +186,7 @@ class DemoDataSeeder extends Seeder
                 'product_slug' => 'featured-'.$product->id,
             ]);
             $product->update(['featured' => true, 'sale_price' => (int) ($product->regular_price * 0.8)]);
-            $this->assignDemoProductImage($product);
+            $this->assignDemoProductImage($product, 'Featured Product '.$product->id);
         }
 
         Product::query()->latest('id')->limit(4)->get()->each->delete();
@@ -387,21 +392,41 @@ class DemoDataSeeder extends Seeder
         Invoice::query()->latest('id')->limit(2)->get()->each->delete();
     }
 
-    private function assignDemoProductImage(Product $product): void
+    private function assignDemoProductImage(Product $product, string $label): void
     {
-        Storage::disk('public')->makeDirectory('demo/products');
+        $path = DemoImageGenerator::writeProductImage($product->id, $label, $product->id);
 
-        $relative = 'demo/products/product-'.$product->id.'.png';
+        if ($path) {
+            $product->forceFill(['product_img' => $path])->save();
+        }
+    }
 
-        if (! Storage::disk('public')->exists($relative)) {
-            $png = base64_decode(
-                'iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFUlEQVR42mNk+M9Qz0AEYBxVSF+FABJADveWkH6oAAAAAElFTkSuQmCC',
-                true
-            );
-            Storage::disk('public')->put($relative, $png !== false ? $png : '');
+    /**
+     * @param  \Illuminate\Support\Collection<int, Customer>  $customers
+     */
+    private function seedSubscribers($customers): void
+    {
+        if (Subscriber::query()->count() > 0) {
+            return;
         }
 
-        $product->forceFill(['product_img' => 'storage/'.$relative])->save();
+        foreach ($customers->take(15) as $customer) {
+            Subscriber::query()->create([
+                'email' => $customer->email,
+                'customer_id' => $customer->id,
+                'is_subscriber' => true,
+                'token' => Str::random(16),
+            ]);
+        }
+
+        for ($i = 0; $i < 10; $i++) {
+            Subscriber::query()->create([
+                'email' => 'subscriber'.($i + 1).'@demo.example.com',
+                'customer_id' => null,
+                'is_subscriber' => fake()->boolean(85),
+                'token' => Str::random(16),
+            ]);
+        }
     }
 
     private function seedGalleries(): void

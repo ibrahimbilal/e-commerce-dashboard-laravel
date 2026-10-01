@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Attribute;
 use App\Support\IndexListing;
+use App\Support\ReferentialDeleteGuard;
 use Illuminate\Http\Request;
 
 class AttributeController extends Controller
@@ -80,8 +81,16 @@ class AttributeController extends Controller
         return redirect()->route('attributes.index')->with('status', 'Attribute updated.');
     }
 
-    public function destroy(Attribute $attribute)
+    public function destroy(Request $request, Attribute $attribute)
     {
+        if ($blocked = ReferentialDeleteGuard::blockIfInUse(
+            $request,
+            $attribute,
+            'Cannot delete this attribute because it is used on order line items.'
+        )) {
+            return $blocked;
+        }
+
         $attribute->delete();
 
         return redirect()->route('attributes.index')->with('status', 'Attribute deleted.');

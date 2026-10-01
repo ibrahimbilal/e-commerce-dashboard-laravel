@@ -34,7 +34,15 @@ class InvoiceController extends Controller
         }
 
         if ($search = $request->query('search')) {
-            $query->where('invoice_no', 'like', '%'.$search.'%');
+            $query->where(function ($builder) use ($search) {
+                $builder->where('invoice_no', 'like', '%'.$search.'%')
+                    ->orWhere('order_id', 'like', '%'.$search.'%')
+                    ->orWhereHas('order.customer', function ($customerQuery) use ($search) {
+                        $customerQuery->where('email', 'like', '%'.$search.'%')
+                            ->orWhere('first_name', 'like', '%'.$search.'%')
+                            ->orWhere('last_name', 'like', '%'.$search.'%');
+                    });
+            });
         }
 
         $invoices = $query->latest('id')->paginate(20)->withQueryString();

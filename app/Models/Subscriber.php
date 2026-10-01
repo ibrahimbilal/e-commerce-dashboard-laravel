@@ -24,4 +24,19 @@ class Subscriber extends Model
     {
         return $this->belongsTo(Customer::class);
     }
+
+    public function getFirstNameAttribute(): ?string
+    {
+        return $this->customer?->first_name;
+    }
+
+    public function getLastNameAttribute(): ?string
+    {
+        return $this->customer?->last_name;
+    }
+
+    public function getCountryAttribute(): ?string
+    {
+        return $this->customer?->addresses()->value('city');
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Support\IndexListing;
+use App\Support\ReferentialDeleteGuard;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
@@ -118,8 +119,16 @@ class CategoryController extends Controller
         return redirect()->route('categories.index')->with('status', 'Category updated.');
     }
 
-    public function destroy(Category $category)
+    public function destroy(Request $request, Category $category)
     {
+        if ($blocked = ReferentialDeleteGuard::blockIfInUse(
+            $request,
+            $category,
+            'Cannot delete this category while products are assigned to it.'
+        )) {
+            return $blocked;
+        }
+
         $category->delete();
 
         return redirect()->route('categories.index')->with('status', 'Category deleted.');

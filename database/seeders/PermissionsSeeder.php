@@ -46,7 +46,6 @@ class PermissionsSeeder extends Seeder
             if (! in_array($section, [
                 'dashboard',
                 'analytics',
-                'marketing',
                 'roles',
                 'general_settings',
                 'theme_settings',
