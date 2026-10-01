@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Gallery;
 use App\Support\IndexListing;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -41,7 +42,7 @@ class GalleryController extends Controller
         return view('gallery.index', compact('galleries', 'counts', 'filters'));
     }
 
-    public function destroy(Gallery $gallery): JsonResponse
+    public function destroy(Request $request, Gallery $gallery): JsonResponse|RedirectResponse
     {
         $storagePath = 'public/'.$gallery->url;
 
@@ -67,10 +68,16 @@ class GalleryController extends Controller
 
         $gallery->delete();
 
-        return response()->json([
-            'success' => true,
-            'title' => __('alerts.images.response.delete.title'),
-            'text' => __('alerts.images.response.delete.text'),
-        ]);
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'title' => __('alerts.images.response.delete.title'),
+                'text' => __('alerts.images.response.delete.text'),
+            ]);
+        }
+
+        return redirect()
+            ->back(302, [], route('gallery.index'))
+            ->with('status', 'Image deleted.');
     }
 }

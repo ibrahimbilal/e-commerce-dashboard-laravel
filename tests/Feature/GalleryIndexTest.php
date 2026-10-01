@@ -42,4 +42,43 @@ class GalleryIndexTest extends TestCase
         $response->assertViewHas('counts', fn (array $counts) => ($counts['all'] ?? 0) === 20);
         $response->assertViewHas('filters');
     }
+
+    public function test_gallery_destroy_redirects_with_status_for_html_requests(): void
+    {
+        $gallery = Gallery::query()->create([
+            'url' => 'demo/to-delete.jpg',
+            'metas' => null,
+            'sizes_url' => null,
+            'user_id' => $this->admin->id,
+        ]);
+
+        $indexUrl = route('gallery.index');
+
+        $this->actingAs($this->admin)
+            ->from($indexUrl)
+            ->delete(route('gallery.destroy', $gallery))
+            ->assertRedirect($indexUrl)
+            ->assertSessionHas('status', 'Image deleted.');
+
+        $this->assertSoftDeleted($gallery);
+    }
+
+    public function test_gallery_destroy_returns_json_for_ajax_requests(): void
+    {
+        $gallery = Gallery::query()->create([
+            'url' => 'demo/ajax-delete.jpg',
+            'metas' => null,
+            'sizes_url' => null,
+            'user_id' => $this->admin->id,
+        ]);
+
+        $this->actingAs($this->admin)
+            ->deleteJson(route('gallery.destroy', $gallery))
+            ->assertOk()
+            ->assertJson([
+                'success' => true,
+            ]);
+
+        $this->assertSoftDeleted($gallery);
+    }
 }
