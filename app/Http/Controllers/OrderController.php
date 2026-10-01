@@ -8,6 +8,7 @@ use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\ProductAttribute;
+use App\Support\CouponQuery;
 use App\Support\IndexListing;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -164,8 +165,39 @@ class OrderController extends Controller
             'customers' => Customer::orderBy('first_name')->orderBy('last_name')->get(),
             'addresses' => $addressesQuery->get(),
             'orderStatuses' => OrderStatus::orderBy('title')->get(),
-            'coupons' => Coupon::orderBy('title')->get(),
+            'coupons' => $this->couponsForOrderForm($order),
+            'productVariants' => $this->productVariantsForOrderForm(),
         ];
+    }
+
+    private function productVariantsForOrderForm()
+    {
+        return ProductAttribute::query()
+            ->with([
+                'product.locales' => fn ($query) => $query->where('locale', 'en'),
+                'attributeOne',
+                'attributeTwo',
+            ])
+            ->orderBy('id')
+            ->get();
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection<int, Coupon>
+     */
+    private function couponsForOrderForm(?Order $order = null)
+    {
+        return Coupon::query()
+            ->orderBy('title')
+            ->get()
+            ->filter(function (Coupon $coupon) use ($order) {
+                if ($order && (int) $order->coupon_id === (int) $coupon->id) {
+                    return true;
+                }
+
+                return CouponQuery::isUsableForNewSelection($coupon);
+            })
+            ->values();
     }
 
     /**
