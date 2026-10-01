@@ -5,19 +5,6 @@
 @section('content')
 @php
     $galleries = $galleries ?? collect();
-    $galleryFilterTabs = [['label' => 'All', 'key' => 'all', 'params' => []]];
-    foreach ($counts ?? [] as $tabKey => $tabCount) {
-        if (in_array($tabKey, ['all'], true)) {
-            continue;
-        }
-        $paramKey = $tabKey === 'trashed' ? 'trashed' : $tabKey;
-        $paramValue = $tabKey === 'trashed' ? '1' : '1';
-        $galleryFilterTabs[] = [
-            'label' => ucwords(str_replace(['_', '-'], ' ', (string) $tabKey)),
-            'key' => $tabKey,
-            'params' => [$paramKey => $paramValue],
-        ];
-    }
 @endphp
 <div class="page-header">
 <div class="row">
@@ -34,7 +21,7 @@
 </div>
 
 <div class="row">
-<x-index-list-toolbar :counts="$counts ?? []" :filters="$filters ?? []" :tabs="$galleryFilterTabs" route="gallery.index"/>
+<x-soft-delete-index-toolbar :counts="$counts ?? []" :filters="$filters ?? []" route="gallery.index"/>
 <div class="col-12">
 <div class="main-box box-spaces">
 <div class="row g-3">
