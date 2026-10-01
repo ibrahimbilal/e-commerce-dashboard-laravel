@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Coupon;
+use App\Support\CouponQuery;
 use App\Support\IndexListing;
 use Illuminate\Http\Request;
 
@@ -23,16 +24,8 @@ class CouponController extends Controller
 
         $counts = [
             'all' => Coupon::query()->count(),
-            'active' => Coupon::query()->where('active', true)
-                ->where(function ($query) {
-                    $query->whereNull('expired_at')->orWhere('expired_at', '>=', now());
-                })->count(),
-            'expired' => Coupon::query()->where(function ($query) {
-                $query->where('active', false)
-                    ->orWhere(function ($inner) {
-                        $inner->whereNotNull('expired_at')->where('expired_at', '<', now());
-                    });
-            })->count(),
+            'active' => CouponQuery::activeWithinDates()->count(),
+            'expired' => CouponQuery::expiredByDate()->count(),
             'trashed' => Coupon::query()->onlyTrashed()->count(),
         ];
 
@@ -43,19 +36,11 @@ class CouponController extends Controller
         }
 
         if ($request->query('active') === '1') {
-            $query->where('active', true)
-                ->where(function ($builder) {
-                    $builder->whereNull('expired_at')->orWhere('expired_at', '>=', now());
-                });
+            $query->whereIn('id', CouponQuery::activeWithinDates()->select('id'));
         }
 
         if ($request->query('expired') === '1') {
-            $query->where(function ($builder) {
-                $builder->where('active', false)
-                    ->orWhere(function ($inner) {
-                        $inner->whereNotNull('expired_at')->where('expired_at', '<', now());
-                    });
-            });
+            $query->whereIn('id', CouponQuery::expiredByDate()->select('id'));
         }
 
         if ($search = $request->query('search')) {
