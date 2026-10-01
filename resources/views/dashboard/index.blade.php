@@ -11,9 +11,25 @@
     $stats = $stats ?? [];
     $recentOrders = collect($recentOrders ?? []);
     $topProducts = collect($topProducts ?? []);
-    $recentProducts = collect($recentProducts ?? []);
-    $swiperProducts = $topProducts->isNotEmpty() ? $topProducts : $recentProducts;
     $productPlaceholder = asset('assets/images/product-placeholder.svg');
+    $formatDashboardStat = static function ($value): string {
+        if (! is_numeric($value)) {
+            return '0';
+        }
+        $number = (float) $value;
+        if ($number < 10000) {
+            return (string) (int) round($number);
+        }
+        if ($number >= 1000000) {
+            return number_format($number / 1000000, 1, '.', '').'M';
+        }
+
+        return number_format($number / 1000, 1, '.', '').'K';
+    };
+    $customersStat = data_get($stats, 'customers', 0);
+    $ordersStat = data_get($stats, 'orders', 0);
+    $salesStat = data_get($stats, 'revenue', 0);
+    $subscribersStat = data_get($stats, 'subscribers', 0);
 @endphp
 <div class="page-header">
 <div class="row">
@@ -31,53 +47,37 @@
 </div>
 
 <div class="slider-holder">
+
 <div class="swiper-container">
 <div class="swiper-wrapper">
-@forelse ($swiperProducts as $productRow)
-@php
-    $productId = data_get($productRow, 'product_id') ?? data_get($productRow, 'id');
-    $productName = (string) data_get($productRow, 'name', '—');
-    $quantitySold = data_get($productRow, 'quantity_sold');
-    $imageUrl = data_get($productRow, 'image_url');
-    $imageSrc = filled($imageUrl) ? $imageUrl : $productPlaceholder;
-    $price = data_get($productRow, 'price');
-    $regularPrice = data_get($productRow, 'regular_price');
-    $showStrike = is_numeric($regularPrice) && is_numeric($price) && (float) $regularPrice > (float) $price;
-@endphp
 <div class="swiper-slide main-box box-spaces d-flex justify-content-between align-items-center">
-<div class="img me-3 flex-shrink-0"><img alt="{{ $productName }}" src="{{ $imageSrc }}" width="70"/></div>
-<div class="detail-holder flex-grow-1 text-start">
-@if ($productId && Route::has('products.edit'))
-@can('edit products')
-<a class="text-decoration-none text-body" href="{{ route('products.edit', $productId) }}"><p class="text-start m-0 text-capitalize">{{ $productName }}</p></a>
-@else
-<p class="text-start m-0 text-capitalize">{{ $productName }}</p>
-@endcan
-@else
-<p class="text-start m-0 text-capitalize">{{ $productName }}</p>
-@endif
-<p class="text-start m-0 mb-0">
-@if (is_numeric($price))
-<span>${{ number_format((float) $price) }}</span>
-@else
-<span>—</span>
-@endif
-@if ($showStrike)
-<del class="text-muted ms-1">${{ number_format((float) $regularPrice) }}</del>
-@endif
-@if (is_numeric($quantitySold))
-<span class="text-muted small ms-1">({{ number_format((int) $quantitySold) }} sold)</span>
-@endif
-</p>
-</div>
-</div>
-@empty
-<div class="swiper-slide main-box box-spaces d-flex justify-content-between align-items-center">
+<div class="icon-holder"><span class="mauve"><i class="fi-rr-users"> </i></span></div>
 <div class="detail-holder">
-<p class="text-start m-0 mb-0 text-muted">No products to highlight yet.</p>
+<p class="text-start m-0">{{ $formatDashboardStat($customersStat) }}</p>
+<p class="text-start m-0">Customers</p>
 </div>
 </div>
-@endforelse
+<div class="swiper-slide main-box box-spaces d-flex justify-content-between align-items-center">
+<div class="icon-holder"><span class="green"><i class="fi-rr-box"> </i></span></div>
+<div class="detail-holder">
+<p class="text-start m-0">{{ $formatDashboardStat($ordersStat) }}</p>
+<p class="text-start m-0">Orders</p>
+</div>
+</div>
+<div class="swiper-slide main-box box-spaces d-flex justify-content-between align-items-center">
+<div class="icon-holder"><span class="red"><i class="fi-rr-dollar"> </i></span></div>
+<div class="detail-holder">
+<p class="text-start m-0">{{ $formatDashboardStat($salesStat) }}</p>
+<p class="text-start m-0">Sales</p>
+</div>
+</div>
+<div class="swiper-slide main-box box-spaces d-flex justify-content-between align-items-center">
+<div class="icon-holder"><span class="orange"><i class="fi-rr-paper-plane"> </i></span></div>
+<div class="detail-holder">
+<p class="text-start m-0">{{ $formatDashboardStat($subscribersStat) }}</p>
+<p class="text-start m-0">Subscribers</p>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -179,22 +179,28 @@
 @php
     $productId = data_get($productRow, 'product_id') ?? data_get($productRow, 'id');
     $productName = (string) data_get($productRow, 'name', '—');
-    $quantitySold = data_get($productRow, 'quantity_sold')
-        ?? data_get($productRow, 'units_sold')
-        ?? data_get($productRow, 'sold')
-        ?? 0;
+    $imageUrl = data_get($productRow, 'image_url');
+    $imageSrc = filled($imageUrl) ? $imageUrl : $productPlaceholder;
+    $price = data_get($productRow, 'price');
 @endphp
 <div class="list-item d-flex align-items-center justify-content-between">
+<div class="img"><img alt="{{ $productName }}" src="{{ $imageSrc }}"/></div>
 @if ($productId && Route::has('products.edit'))
 @can('edit products')
-<a class="title text-start w-100 text-capitalize text-decoration-none" href="{{ route('products.edit', $productId) }}">{{ $productName }}</a>
+<a class="title text-start w-100 ps-4 text-capitalize text-decoration-none" href="{{ route('products.edit', $productId) }}">{{ $productName }}</a>
 @else
-<div class="title text-start w-100 text-capitalize">{{ $productName }}</div>
+<div class="title text-start w-100 ps-4 text-capitalize">{{ $productName }}</div>
 @endcan
 @else
-<div class="title text-start w-100 text-capitalize">{{ $productName }}</div>
+<div class="title text-start w-100 ps-4 text-capitalize">{{ $productName }}</div>
 @endif
-<div class="text-muted text-nowrap ms-2">{{ number_format((int) $quantitySold) }} sold</div>
+<div class="price">
+@if (is_numeric($price))
+${{ number_format((float) $price) }}
+@else
+—
+@endif
+</div>
 </div>
 @empty
 <p class="text-muted mb-0 py-3">No sales data yet.</p>
