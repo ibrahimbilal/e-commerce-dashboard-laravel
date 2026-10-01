@@ -2,11 +2,18 @@
 
 @section('title', 'Dashboard')
 
+@push('styles')
+<link href="{{ asset('assets/css/swiper-bundle.min.css') }}" rel="stylesheet"/>
+@endpush
+
 @section('content')
 @php
     $stats = $stats ?? [];
-    $recentOrders = $recentOrders ?? collect();
-    $topProducts = $topProducts ?? collect();
+    $recentOrders = collect($recentOrders ?? []);
+    $topProducts = collect($topProducts ?? []);
+    $recentProducts = collect($recentProducts ?? []);
+    $swiperProducts = $topProducts->isNotEmpty() ? $topProducts : $recentProducts;
+    $productPlaceholder = asset('assets/images/product-placeholder.svg');
 @endphp
 <div class="page-header">
 <div class="row">
@@ -19,6 +26,61 @@
 <a class="item text-capitalize d-flex justify-content-between align-items-center" href="{{ route('dashboard') }}"><span class="icon"><i class="fi-rr-apps"></i></span>dashboard</a>
 </div>
 </div>
+</div>
+</div>
+</div>
+
+<div class="slider-holder">
+<div class="swiper-container">
+<div class="swiper-wrapper">
+@forelse ($swiperProducts as $productRow)
+@php
+    $productId = data_get($productRow, 'product_id') ?? data_get($productRow, 'id');
+    $productName = (string) data_get($productRow, 'name', '—');
+    $quantitySold = data_get($productRow, 'quantity_sold');
+    $imageUrl = data_get($productRow, 'image_url');
+    if (filled($imageUrl)) {
+        $imageSrc = str_starts_with($imageUrl, 'http://') || str_starts_with($imageUrl, 'https://')
+            ? $imageUrl
+            : asset(ltrim($imageUrl, '/'));
+    } else {
+        $imageSrc = $productPlaceholder;
+    }
+    $price = data_get($productRow, 'price');
+    $regularPrice = data_get($productRow, 'regular_price');
+    $showStrike = is_numeric($regularPrice) && is_numeric($price) && (float) $regularPrice > (float) $price;
+    $editUrl = ($productId && Route::has('products.edit')) ? route('products.edit', $productId) : null;
+@endphp
+<div class="swiper-slide main-box box-spaces d-flex justify-content-between align-items-center">
+<div class="img me-3 flex-shrink-0"><img alt="{{ $productName }}" src="{{ $imageSrc }}" width="70"/></div>
+<div class="detail-holder flex-grow-1 text-start">
+@if ($editUrl)
+<a class="text-decoration-none text-body" href="{{ $editUrl }}"><p class="text-start m-0 text-capitalize">{{ $productName }}</p></a>
+@else
+<p class="text-start m-0 text-capitalize">{{ $productName }}</p>
+@endif
+<p class="text-start m-0 mb-0">
+@if (is_numeric($price))
+<span>${{ number_format((float) $price) }}</span>
+@else
+<span>—</span>
+@endif
+@if ($showStrike)
+<del class="text-muted ms-1">${{ number_format((float) $regularPrice) }}</del>
+@endif
+@if (is_numeric($quantitySold))
+<span class="text-muted small ms-1">({{ number_format((int) $quantitySold) }} sold)</span>
+@endif
+</p>
+</div>
+</div>
+@empty
+<div class="swiper-slide main-box box-spaces d-flex justify-content-between align-items-center">
+<div class="detail-holder">
+<p class="text-start m-0 mb-0 text-muted">No products to highlight yet.</p>
+</div>
+</div>
+@endforelse
 </div>
 </div>
 </div>
@@ -118,8 +180,8 @@
 <div class="list-holder">
 @forelse ($topProducts as $productRow)
 @php
-    $productId = data_get($productRow, 'id') ?? data_get($productRow, 'product_id');
-    $productName = data_get($productRow, 'name', '—');
+    $productId = data_get($productRow, 'product_id') ?? data_get($productRow, 'id');
+    $productName = (string) data_get($productRow, 'name', '—');
     $quantitySold = data_get($productRow, 'quantity_sold')
         ?? data_get($productRow, 'units_sold')
         ?? data_get($productRow, 'sold')
@@ -131,7 +193,7 @@
 @else
 <div class="title text-start w-100 text-capitalize">{{ $productName }}</div>
 @endif
-<div class="text-muted text-nowrap ms-2">{{ number_format($quantitySold) }} sold</div>
+<div class="text-muted text-nowrap ms-2">{{ number_format((int) $quantitySold) }} sold</div>
 </div>
 @empty
 <p class="text-muted mb-0 py-3">No sales data yet.</p>
@@ -141,3 +203,20 @@
 </div>
 </div>
 @endsection
+
+@push('scripts')
+<script async="" src="{{ asset('assets/js/async.js') }}" type="text/javascript"></script>
+<script src="{{ asset('assets/js/swiper-bundle.min.js') }}" type="text/javascript"></script>
+<script>
+if (document.querySelectorAll('.swiper-container').length > 0 && typeof Swiper !== 'undefined') {
+	var swiper = new Swiper('.swiper-container', {
+		freeMode: true,
+		slidesPerView: 'auto',
+		pagination: false,
+		speed: 500,
+		grabCursor: true,
+		touchStartTime: 5000,
+	});
+}
+</script>
+@endpush
