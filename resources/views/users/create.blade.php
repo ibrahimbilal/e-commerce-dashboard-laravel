@@ -49,14 +49,7 @@
 <label class="item-title" for="mobile">mobile:</label>
 <input class="form-control" id="mobile" name="mobile" type="tel" value="{{ old('mobile') }}"/>
 </div>
-<div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
-<label class="item-title" for="user-role">role:</label>
-<select class="form-select" id="user-role" name="role" required>
-@foreach ($roles as $role)
-<option value="{{ $role->id }}" @selected((string) old('role') === (string) $role->id)>{{ $role->title }}</option>
-@endforeach
-</select>
-</div>
+@include('components.user-roles-field')
 <input type="hidden" name="profile_picture" value="{{ old('profile_picture') }}"/>
 <div class="form-item second d-flex mt-3 flex-wrap flex-sm-nowrap">
 <div class="item-title">

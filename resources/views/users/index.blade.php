@@ -62,10 +62,19 @@
 </td>
 <td class="user-title">{{ trim(($user->first_name ?? '') . ' ' . ($user->last_name ?? '')) ?: '—' }}</td>
 <td>{{ $user->email }}</td>
-<td>{{ $user->roleRelation->title ?? '—' }}</td>
+<td>
+@if ($user->getRoleNames()->isNotEmpty())
+@foreach ($user->getRoleNames() as $roleName)
+<span class="badge bg-secondary me-1 text-capitalize">{{ $roleName }}</span>
+@endforeach
+@else
+—
+@endif
+</td>
 <td>{{ $user->created_at?->format('H:i d/m/Y') ?? '—' }}</td>
 <td>
 <div class="btn-group">
+<a class="btn btn-primary btn-rounded me-2 py-1" href="{{ route('users.show', $user) }}"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a>
 <a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('users.edit', $user) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a>
 <form method="POST" action="{{ route('users.destroy', $user) }}" class="d-inline destroy-resource-form">@csrf
 @method('DELETE')

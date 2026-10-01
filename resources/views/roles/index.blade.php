@@ -30,16 +30,21 @@
 <table class="table table-striped" id="roles">
 <thead>
 <tr>
-<th class="text-uppercase">Role title</th>
+<th class="text-uppercase">Role name</th>
+<th class="text-uppercase text-center">Permissions</th>
+<th class="text-uppercase text-center">Users</th>
 <th class="text-uppercase">action</th>
 </tr>
 </thead>
 <tbody>
 @forelse ($roles as $role)
 <tr>
-<td class="prod-title">{{ $role->title }}</td>
+<td class="prod-title">{{ $role->name }}</td>
+<td class="text-center">{{ $role->permissions->count() }}</td>
+<td class="text-center">{{ $role->users_count }}</td>
 <td>
 <div class="btn-group">
+<a class="btn btn-primary btn-rounded me-2 py-1" href="{{ route('roles.show', $role) }}"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a>
 <a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('roles.edit', $role) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a>
 <form method="POST" action="{{ route('roles.destroy', $role) }}" class="d-inline destroy-resource-form">@csrf
 @method('DELETE')
@@ -48,7 +53,7 @@
 </td>
 </tr>
 @empty
-<tr><td colspan="2" class="text-center text-muted py-4">No roles found.</td></tr>
+<tr><td colspan="4" class="text-center text-muted py-4">No roles found.</td></tr>
 @endforelse
 </tbody>
 </table>
@@ -64,71 +69,20 @@
 <script async="" src="{{ asset('assets/js/async.js') }}" type="text/javascript"></script>
 <script src="{{ asset('assets/js/datatables.min.js') }}" type="text/javascript"></script>
 <script>
-      // Data Tables
       let product_table = $('#roles').DataTable({
       	dom: 'Bfrtip',
       	columnDefs: [
-      		{ 
-      			bSortable: false, 
-      			aTargets: [ 1] 
-      		},
-      		{ 
-      			bSearchable: false, 
-      			aTargets: [ 1] 
-      		}
+      		{ bSortable: false, aTargets: [3] },
+      		{ bSearchable: false, aTargets: [3] }
       	],
-      	order: [
-      		[0, 'asc']
-      	],
+      	order: [[0, 'asc']],
       	language: {
       		info: "Show _START_ To _END_ Of _TOTAL_ Roles",
-      		buttons: {
-      			pageLength: 'Show %d',
-      			colvis: 'Columns'
-      		}
+      		buttons: { pageLength: 'Show %d', colvis: 'Columns' }
       	},
       	stateSave: true,
-      	paging: true,
+      	paging: false,
       	searching: true,
-      	lengthMenu: [[ 10, 15, 25, 50, 75, 100 ], ['10 Roles', '15 Roles', '25 Roles', '50 Roles', '75 Roles', '100 Roles']],
-      	buttons: ($(window).width() > 578) ? ['pageLength', 'print', {
-      		extend: 'collection',
-      		text: 'Export',
-      		className: 'btn btn-group',
-      		buttons: [
-      			{
-      				extend: 'excelHtml5',
-      				className: 'dropdown-item'
-      			},
-      			{
-      				extend: 'csvHtml5',
-      				className: 'dropdown-item'
-      			},
-      			{
-      				extend: 'pdfHtml5',
-      				className: 'dropdown-item'
-      			}
-      		]
-      	}, 'colvis'] : ['pageLength', {
-      		extend: 'collection',
-      		text: 'Export',
-      		className: 'btn btn-group',
-      		buttons: [
-      			{
-      				extend: 'excelHtml5',
-      				className: 'dropdown-item'
-      			},
-      			{
-      				extend: 'csvHtml5',
-      				className: 'dropdown-item'
-      			},
-      			{
-      				extend: 'pdfHtml5',
-      				className: 'dropdown-item'
-      			}
-      		]
-      	}, 'colvis']
       });
     </script>
 @endpush
-

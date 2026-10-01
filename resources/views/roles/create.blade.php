@@ -25,8 +25,8 @@
 <div class="col-sm-12">
 <div class="main-box box-spaces">
 <div class="form-item primary">
-<h2 class="box-title item-title">role title</h2>
-<input class="form-control" id="role-name" name="title" type="text" value="{{ old('title') }}"/>
+<h2 class="box-title item-title">role name</h2>
+<input class="form-control" id="role-name" name="name" type="text" value="{{ old('name') }}" required maxlength="255"/>
 </div>
 </div>
 </div>
@@ -38,25 +38,12 @@
 </div>
 <div class="select-all"><a class="btn btn-primary btn-rounded me-2 py-1 text-capitalize" href="javascript:void(0)" id="role-perms-select-all">select all</a></div>
 </div>
-<div class="tabs-holder">
-<div class="tabs-boxs border-none">
-<div class="tab-box active">
-@include('components.role-permissions-table')
-</div>
-</div>
-</div>
+@include('components.spatie-role-permissions-matrix', ['permissions' => $permissions])
 </div>
 </div>
 <div class="col-sm-12 col-lg-4">
 <div class="main-box box-spaces">
-<div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-<label class="item-title meta-title">created at: </label><span class="ms-2">—</span>
-</div>
-<div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-<label class="item-title meta-title">updated at:</label><span class="ms-2">—</span>
-</div>
 <div class="btns-holder d-flex justify-content-between mt-4">
-<button class="btn trans-btn w-100 text-start delete" data-post-type="role" type="button"><span class="icon me-1"><i class="fi-rr-trash"> </i></span>move to trash</button>
 <button class="btn solid-btn" type="submit">publish </button>
 </div>
 </div>
@@ -67,9 +54,4 @@
 @push('scripts')
 <script async="" src="{{ asset('assets/js/async.js') }}" type="text/javascript"></script>
 <script src="{{ asset('assets/js/sweetalert2.all.min.js') }}" type="text/javascript"></script>
-<script>
-document.getElementById('role-perms-select-all')?.addEventListener('click', function () {
-    document.querySelectorAll('.role-perm-switch').forEach(function (el) { el.checked = true; });
-});
-</script>
 @endpush
