@@ -71,7 +71,9 @@
 <li class="list-item has-submenu"><a href="javascript:void(0)"><i class="fi-rr-browser"> </i><span class="title">auth pages</span><span class="icon"><i class="fi-rr-angle-small-down"> </i></span></a>
 <ul class="submenu">
 <li class="list-item"><a href="{{ route('login') }}" target="_blank"><i class="fi-rr-circle"> </i><span class="title">login</span></a></li>
+@if (Route::has('register'))
 <li class="list-item"><a href="{{ route('register') }}" target="_blank"><i class="fi-rr-circle"> </i><span class="title">register</span></a></li>
+@endif
 <li class="list-item"><a href="{{ route('password.request') }}" target="_blank"><i class="fi-rr-circle"> </i><span class="title">forgot-password</span></a></li>
 <li class="list-item"><a href="{{ route('password.reset', 'sample-token') }}" target="_blank"><i class="fi-rr-circle"> </i><span class="title">reset-password</span></a></li>
 <li class="list-item"><a href="{{ route('two-factor.login') }}" target="_blank"><i class="fi-rr-circle"> </i><span class="title">2fa-code</span></a></li>

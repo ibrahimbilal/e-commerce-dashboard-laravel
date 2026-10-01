@@ -17,7 +17,7 @@ class ProductController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('permission:view products', ['only' => ['index', 'show']]);
+        $this->middleware('permission:view products', ['only' => ['index']]);
         $this->middleware('permission:add products', ['only' => ['create', 'store']]);
         $this->middleware('permission:edit products', ['only' => ['edit', 'update']]);
         $this->middleware('permission:delete products', ['only' => ['destroy']]);
@@ -98,7 +98,7 @@ class ProductController extends Controller
                 ->orderBy('title')
                 ->get(),
             'tags' => Tag::orderBy('title')->get(),
-            'attributes' => Attribute::orderBy('attribute_key')->orderBy('attribute_value')->get(),
+            'attributeList' => Attribute::orderBy('attribute_key')->orderBy('attribute_value')->get(),
             'langs' => Lang::query()->where('active', true)->orderBy('id')->get(),
         ];
     }

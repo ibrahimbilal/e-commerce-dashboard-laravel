@@ -11,6 +11,14 @@ use Illuminate\Support\Facades\Storage;
 
 class LanguageController extends Controller
 {
+	public function __construct()
+	{
+		$this->middleware('permission:view languages', ['only' => ['index', 'edit']]);
+		$this->middleware('permission:add languages', ['only' => ['create', 'store']]);
+		$this->middleware('permission:edit languages', ['only' => ['update']]);
+		$this->middleware('permission:delete languages', ['only' => ['destroy']]);
+	}
+
 	/**
      * Display a listing of the resource.
      *

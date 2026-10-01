@@ -19,7 +19,6 @@ class UserFactory extends Factory
 			'email_verified_at' => now(),
 			'password' => Hash::make('password'),
 			'mobile' => substr(fake()->e164PhoneNumber(), 0, 20),
-			'role' => 1,
 			'profile_picture' => null,
         ];
     }

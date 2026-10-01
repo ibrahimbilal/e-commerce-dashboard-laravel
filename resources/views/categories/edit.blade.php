@@ -72,6 +72,8 @@
 </div>
 </div>
 @include('components.category-parent-select')
+</div>
+</div>
 <div class="col-sm-12 col-lg-9 float-start post-box">
 <div class="main-box box-spaces mb-0">
 <div class="form-item primary">

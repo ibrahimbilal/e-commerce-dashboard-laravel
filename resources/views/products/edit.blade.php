@@ -108,24 +108,24 @@
 <div class="tab-box active" id="general">
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap">
 <label class="item-title" for="product-sku">product SKU:<span class="icon info ms-2" flow="up" tooltip="A stock keeping unit is a unique identifier for an item sold by a retailer."><i class="fi-rr-info"> </i></span></label>
-<input class="form-control" id="product-sku" name="product_sku" type="text" value="{{ old('product_sku', $product->product_sku ?? '') }}" />
+<input class="form-control" id="product-sku" name="sku" type="text" value="{{ old('sku', $product->sku ?? '') }}" />
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="product-quantity">product quantity:<span class="icon info ms-2" flow="up" tooltip="total number of product in the stock."><i class="fi-rr-info"> </i></span></label>
-<input class="form-control" id="product-quantity" name="product_quantity" type="text" value="{{ old('product_quantity', $product->product_quantity ?? '') }}" />
+<input class="form-control" id="product-quantity" name="quantity" type="text" value="{{ old('quantity', $product->quantity ?? '') }}" />
 </div>
 <div class="form-item second d-flex align-items-center mt-3">
 <label class="item-title" for="product-new">product is new:<span class="icon info ms-2" flow="up" tooltip='check this if you want add "new" sticker to the product.'><i class="fi-rr-info"> </i></span></label>
 <label class="switch text-start">
 <input type="hidden" name="new" value="0"/>
-<input class="switch" id="product-new" name="new" type="checkbox" value="1" @checked(old(\'new\', $product->new ?? false))/><span class="slider"></span>
+<input class="switch" id="product-new" name="new" type="checkbox" value="1" @checked(old('new', $product->new ?? false))/><span class="slider"></span>
 </label>
 </div>
 <div class="form-item second d-flex align-items-center mt-3">
 <label class="item-title" for="product-featured">product is featured:<span class="icon info ms-2" flow="up" tooltip='check this if you want add "featured" sticker to the product.'><i class="fi-rr-info"> </i></span></label>
 <label class="switch text-start">
 <input type="hidden" name="featured" value="0"/>
-<input class="switch" id="product-featured" name="featured" type="checkbox" value="1" @checked(old(\'featured\', $product->featured ?? false))/><span class="slider"></span>
+<input class="switch" id="product-featured" name="featured" type="checkbox" value="1" @checked(old('featured', $product->featured ?? false))/><span class="slider"></span>
 </label>
 </div>
 <div class="form-item second d-flex mt-3 flex-wrap flex-sm-nowrap">
@@ -169,7 +169,7 @@
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="last-sale-date">Last Day Of Sale:<span class="icon info ms-2" flow="up" tooltip="the date which sale will be end."><i class="fi-rr-info"> </i></span></label>
 <div class="position-relative w-100">
-<input class="form-control" data-toggle="datepicker" id="last-sale-date" name="last_sale_date" type="text" value="{{ old('last_sale_date', $product->last_sale_date ?? '') }}" />
+<input class="form-control" data-toggle="datepicker" id="last-sale-date" name="schedule_sale" type="text" value="{{ old('schedule_sale', $product->schedule_sale ?? '') }}" />
 </div>
 </div>
 </div>

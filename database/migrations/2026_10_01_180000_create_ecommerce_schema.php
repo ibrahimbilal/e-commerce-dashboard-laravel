@@ -305,17 +305,19 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::table('tags', function (Blueprint $table) {
-            $table->dropForeign(['parent_id']);
-        });
+        if (Schema::getConnection()->getDriverName() !== 'sqlite') {
+            Schema::table('tags', function (Blueprint $table) {
+                $table->dropForeign(['parent_id']);
+            });
 
-        Schema::table('categories', function (Blueprint $table) {
-            $table->dropForeign(['parent_id']);
-        });
+            Schema::table('categories', function (Blueprint $table) {
+                $table->dropForeign(['parent_id']);
+            });
 
-        Schema::table('subscribers_list', function (Blueprint $table) {
-            $table->dropForeign(['customer_id']);
-        });
+            Schema::table('subscribers_list', function (Blueprint $table) {
+                $table->dropForeign(['customer_id']);
+            });
+        }
 
         Schema::dropIfExists('reviews');
         Schema::dropIfExists('invoices');

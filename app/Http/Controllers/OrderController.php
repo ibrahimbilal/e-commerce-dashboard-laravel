@@ -7,6 +7,7 @@ use App\Models\Coupon;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderStatus;
+use App\Models\ProductAttribute;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -41,7 +42,10 @@ class OrderController extends Controller
 
         $order = DB::transaction(function () use ($payload) {
             $items = $payload['items'] ?? [];
-            $payload['order']['amount'] = $this->amountFromLineItems($items);
+            $payload['order']['amount'] = $this->computeOrderAmount(
+                $items,
+                $payload['order']['coupon_id'] ?? null
+            );
             $order = Order::create($payload['order']);
             $this->persistOrderItems($order, $items);
 
@@ -75,11 +79,13 @@ class OrderController extends Controller
         DB::transaction(function () use ($order, $payload) {
             if ($payload['items'] !== null) {
                 $this->persistOrderItems($order, $payload['items']);
-                $payload['order']['amount'] = $this->amountFromLineItems($payload['items']);
-            } else {
-                $order->load('items');
-                $payload['order']['amount'] = $this->amountFromItems($order->items);
             }
+
+            $itemsForAmount = $payload['items'] ?? $this->orderItemsToLineFormat($order->items()->get());
+            $payload['order']['amount'] = $this->computeOrderAmount(
+                $itemsForAmount,
+                $payload['order']['coupon_id'] ?? null
+            );
 
             $order->update($payload['order']);
         });
@@ -130,17 +136,19 @@ class OrderController extends Controller
             'items' => ['nullable', 'array'],
             'items.*.product_attribute_id' => ['required', 'integer', 'exists:products_attributes,id'],
             'items.*.quantity' => ['required', 'integer', 'min:1'],
-            'items.*.price' => ['required', 'integer'],
         ];
 
         $validated = $request->validate($rules);
 
-        $customerId = $validated['customer_id'] ?? $validated['customer'];
+        $customerId = (int) ($validated['customer_id'] ?? $validated['customer']);
         $couponId = $validated['coupon_id'] ?? $validated['coupon'] ?? null;
 
-        $this->assertCouponUsable($couponId, (int) $customerId, $order);
+        $this->assertAddressBelongsToCustomer((int) $validated['address_id'], $customerId);
+        $this->assertCouponUsable($couponId, $customerId, $order);
 
-        $items = $request->has('items') ? ($validated['items'] ?? []) : null;
+        $items = $request->has('items')
+            ? $this->resolveOrderLineItems($validated['items'] ?? [])
+            : null;
 
         return [
             'order' => [
@@ -153,6 +161,118 @@ class OrderController extends Controller
             ],
             'items' => $items,
         ];
+    }
+
+    private function assertAddressBelongsToCustomer(int $addressId, int $customerId): void
+    {
+        if (! Address::query()->whereKey($addressId)->where('customer_id', $customerId)->exists()) {
+            throw ValidationException::withMessages([
+                'address_id' => ['The selected address does not belong to this customer.'],
+            ]);
+        }
+    }
+
+    /**
+     * @param  array<int, array<string, mixed>>  $rawItems
+     * @return array<int, array{product_attribute_id: int, quantity: int, price: int}>
+     */
+    private function resolveOrderLineItems(array $rawItems): array
+    {
+        $resolved = [];
+
+        foreach ($rawItems as $row) {
+            $variant = ProductAttribute::query()
+                ->with('product')
+                ->find($row['product_attribute_id']);
+
+            if (! $variant?->product) {
+                throw ValidationException::withMessages([
+                    'items' => ['One or more product variants are invalid.'],
+                ]);
+            }
+
+            $product = $variant->product;
+            $unitPrice = (int) ($product->sale_price ?? $product->regular_price ?? 0);
+
+            $resolved[] = [
+                'product_attribute_id' => (int) $variant->id,
+                'quantity' => (int) $row['quantity'],
+                'price' => max(0, $unitPrice),
+            ];
+        }
+
+        return $resolved;
+    }
+
+    /**
+     * @param  iterable<int, \App\Models\OrderItem>  $orderItems
+     * @return array<int, array{product_attribute_id: int, quantity: int, price: int}>
+     */
+    private function orderItemsToLineFormat(iterable $orderItems): array
+    {
+        $lines = [];
+        foreach ($orderItems as $item) {
+            $lines[] = [
+                'product_attribute_id' => (int) $item->product_attribute_id,
+                'quantity' => (int) $item->quantity,
+                'price' => (int) $item->price,
+            ];
+        }
+
+        return $lines;
+    }
+
+    /**
+     * Subtotal = sum(quantity × unit price) with unit price from each line (server-resolved on write).
+     *
+     * @param  array<int, array{product_attribute_id: int, quantity: int, price: int}>  $items
+     */
+    private function computeOrderSubtotal(array $items): int
+    {
+        $subtotal = (int) array_sum(array_map(
+            fn (array $item) => $item['quantity'] * $item['price'],
+            $items
+        ));
+
+        return max(0, $subtotal);
+    }
+
+    /**
+     * Subtotal from line items, then coupon from coupons.type / coupons.discount:
+     * type "fixed" → subtract round(discount); otherwise percent → subtract round(subtotal × discount / 100).
+     * Final amount = max(0, subtotal − deduction).
+     *
+     * @param  array<int, array{product_attribute_id: int, quantity: int, price: int}>  $items
+     */
+    private function computeOrderAmount(array $items, ?int $couponId): int
+    {
+        $subtotal = $this->computeOrderSubtotal($items);
+
+        return $this->applyCouponDiscount($subtotal, $couponId);
+    }
+
+    private function applyCouponDiscount(int $subtotal, ?int $couponId): int
+    {
+        if (! $couponId) {
+            return $subtotal;
+        }
+
+        $coupon = Coupon::query()->find($couponId);
+
+        if (! $coupon) {
+            return $subtotal;
+        }
+
+        $deduction = 0;
+        $type = strtolower((string) ($coupon->type ?? 'percent'));
+
+        if ($type === 'fixed') {
+            $deduction = (int) round((float) $coupon->discount);
+        } else {
+            $deduction = (int) round($subtotal * ((float) $coupon->discount / 100));
+        }
+
+        return max(0, $subtotal - $deduction);
     }
 
     /**
@@ -169,25 +289,6 @@ class OrderController extends Controller
                 'price' => $item['price'],
             ]);
         }
-    }
-
-    /**
-     * @param  array<int, array<string, mixed>>  $items
-     */
-    private function amountFromLineItems(array $items): int
-    {
-        return (int) array_sum(array_map(
-            fn (array $item) => $item['quantity'] * $item['price'],
-            $items
-        ));
-    }
-
-    /**
-     * @param  \Illuminate\Support\Collection<int, \App\Models\OrderItem>|\Illuminate\Database\Eloquent\Collection  $items
-     */
-    private function amountFromItems($items): int
-    {
-        return (int) $items->sum(fn ($item) => $item->quantity * $item->price);
     }
 
     private function assertCouponUsable(?int $couponId, int $customerId, ?Order $order = null): void
