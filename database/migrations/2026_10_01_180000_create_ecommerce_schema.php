@@ -107,7 +107,7 @@ return new class extends Migration
             $table->string('category_slug', 191)->nullable();
             $table->string('cat_img', 191)->nullable();
             $table->boolean('active')->default(true);
-            $table->unsignedInteger('parent_id');
+            $table->unsignedInteger('parent_id')->nullable();
             $table->text('locale');
             $table->string('meta_title', 191)->nullable();
             $table->string('meta_keywords', 191)->nullable();
@@ -123,7 +123,7 @@ return new class extends Migration
             $table->string('title', 50);
             $table->string('tag_slug', 191)->nullable();
             $table->boolean('deleted')->default(false);
-            $table->unsignedInteger('parent_id');
+            $table->unsignedInteger('parent_id')->nullable();
             $table->text('locale');
             $table->string('meta_title', 191)->nullable();
             $table->string('meta_keywords', 191)->nullable();
@@ -135,7 +135,7 @@ return new class extends Migration
 
         Schema::create('product_locales', function (Blueprint $table) {
             $table->unsignedInteger('product_id');
-            $table->text('locale');
+            $table->string('locale', 10);
             $table->string('name', 100);
             $table->string('description', 255)->nullable();
             $table->string('product_slug', 191)->nullable();
@@ -143,6 +143,7 @@ return new class extends Migration
             $table->string('meta_keywords', 191)->nullable();
             $table->string('meta_description', 191)->nullable();
 
+            $table->primary(['product_id', 'locale']);
             $table->foreign('product_id')->references('id')->on('products')->cascadeOnDelete();
         });
 
@@ -201,7 +202,7 @@ return new class extends Migration
         Schema::create('subscribers_list', function (Blueprint $table) {
             $table->increments('id');
             $table->string('email', 100);
-            $table->unsignedInteger('customer_id')->default(0);
+            $table->unsignedInteger('customer_id')->nullable();
             $table->string('token', 100)->nullable();
             $table->boolean('is_subscriber')->default(true);
             $table->timestamp('created_at')->useCurrent();
@@ -232,7 +233,7 @@ return new class extends Migration
             $table->unsignedInteger('address_id');
             $table->integer('amount');
             $table->unsignedInteger('order_status_id');
-            $table->unsignedInteger('coupon_id')->default(0);
+            $table->unsignedInteger('coupon_id')->nullable();
             $table->unsignedInteger('updated_by')->default(0);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->nullable();
@@ -241,7 +242,7 @@ return new class extends Migration
             $table->foreign('customer_id')->references('id')->on('customers')->cascadeOnDelete();
             $table->foreign('address_id')->references('id')->on('addresses')->cascadeOnDelete();
             $table->foreign('order_status_id')->references('id')->on('order_statuses')->cascadeOnDelete();
-            $table->foreign('coupon_id')->references('id')->on('coupons');
+            $table->foreign('coupon_id')->references('id')->on('coupons')->nullOnDelete();
         });
 
         Schema::create('order_items', function (Blueprint $table) {
@@ -252,7 +253,7 @@ return new class extends Migration
             $table->integer('price');
 
             $table->foreign('order_id')->references('id')->on('orders')->cascadeOnDelete();
-            $table->foreign('product_attribute_id')->references('id')->on('products_attributes')->cascadeOnDelete();
+            $table->foreign('product_attribute_id')->references('id')->on('products_attributes')->restrictOnDelete();
         });
 
         Schema::create('customer_coupons_usage', function (Blueprint $table) {
@@ -290,15 +291,15 @@ return new class extends Migration
         });
 
         Schema::table('subscribers_list', function (Blueprint $table) {
-            $table->foreign('customer_id')->references('id')->on('customers');
+            $table->foreign('customer_id')->references('id')->on('customers')->nullOnDelete();
         });
 
         Schema::table('categories', function (Blueprint $table) {
-            $table->foreign('parent_id')->references('id')->on('categories');
+            $table->foreign('parent_id')->references('id')->on('categories')->nullOnDelete();
         });
 
         Schema::table('tags', function (Blueprint $table) {
-            $table->foreign('parent_id')->references('id')->on('tags');
+            $table->foreign('parent_id')->references('id')->on('tags')->nullOnDelete();
         });
     }
 
