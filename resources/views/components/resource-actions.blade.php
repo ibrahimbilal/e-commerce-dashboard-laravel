@@ -51,7 +51,7 @@
     <form method="POST" action="{{ route($restoreRoute, $model) }}" class="d-inline">
         @csrf
         @method('PATCH')
-        <button type="submit" class="btn btn-success btn-rounded me-2 py-1">
+        <button type="submit" class="btn btn-primary btn-rounded me-2 py-1">
             <span class="icon"><i class="fi-rr-undo"> </i></span>restore
         </button>
     </form>
