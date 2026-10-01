@@ -2,23 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
     public function index()
     {
-        $users = User::with('roleRelation')->latest('id')->paginate(20);
+        $users = User::with('roles')->latest('id')->paginate(20);
 
         return view('users.index', compact('users'));
     }
 
     public function create()
     {
-        $roles = Role::orderBy('title')->get();
+        $roles = $this->presentRoles(
+            Role::query()->where('guard_name', 'web')->orderBy('name')->get()
+        );
 
         return view('users.create', compact('roles'));
     }
@@ -28,30 +31,42 @@ class UserController extends Controller
         $data = $request->validate([
             'email' => ['required', 'email', 'max:50', 'unique:users,email'],
             'password' => ['required', 'string', 'min:8'],
-            'role' => ['required', 'integer', 'exists:roles,id'],
             'first_name' => ['nullable', 'string', 'max:50'],
             'last_name' => ['nullable', 'string', 'max:50'],
             'mobile' => ['nullable', 'string', 'max:20'],
             'profile_picture' => ['nullable', 'string', 'max:191'],
+            'roles' => ['nullable', 'array'],
+            'roles.*' => ['string', Rule::exists('roles', 'name')->where('guard_name', 'web')],
+            'role' => ['nullable', 'integer', Rule::exists('roles', 'id')],
         ]);
 
-        $data['password'] = Hash::make($data['password']);
+        $user = User::create([
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'first_name' => $data['first_name'] ?? null,
+            'last_name' => $data['last_name'] ?? null,
+            'mobile' => $data['mobile'] ?? null,
+            'profile_picture' => $data['profile_picture'] ?? null,
+        ]);
 
-        $user = User::create($data);
+        $user->syncRoles($this->resolveRoleNames($request));
 
         return redirect()->route('users.show', $user)->with('status', 'User created.');
     }
 
     public function show(User $user)
     {
-        $user->load('roleRelation');
+        $user->load('roles');
 
         return view('users.show', compact('user'));
     }
 
     public function edit(User $user)
     {
-        $roles = Role::orderBy('title')->get();
+        $user->load('roles');
+        $roles = $this->presentRoles(
+            Role::query()->where('guard_name', 'web')->orderBy('name')->get()
+        );
 
         return view('users.edit', compact('user', 'roles'));
     }
@@ -61,20 +76,29 @@ class UserController extends Controller
         $data = $request->validate([
             'email' => ['required', 'email', 'max:50', 'unique:users,email,'.$user->id],
             'password' => ['nullable', 'string', 'min:8'],
-            'role' => ['required', 'integer', 'exists:roles,id'],
             'first_name' => ['nullable', 'string', 'max:50'],
             'last_name' => ['nullable', 'string', 'max:50'],
             'mobile' => ['nullable', 'string', 'max:20'],
             'profile_picture' => ['nullable', 'string', 'max:191'],
+            'roles' => ['nullable', 'array'],
+            'roles.*' => ['string', Rule::exists('roles', 'name')->where('guard_name', 'web')],
+            'role' => ['nullable', 'integer', Rule::exists('roles', 'id')],
         ]);
 
+        $payload = [
+            'email' => $data['email'],
+            'first_name' => $data['first_name'] ?? null,
+            'last_name' => $data['last_name'] ?? null,
+            'mobile' => $data['mobile'] ?? null,
+            'profile_picture' => $data['profile_picture'] ?? null,
+        ];
+
         if (! empty($data['password'])) {
-            $data['password'] = Hash::make($data['password']);
-        } else {
-            unset($data['password']);
+            $payload['password'] = Hash::make($data['password']);
         }
 
-        $user->update($data);
+        $user->update($payload);
+        $user->syncRoles($this->resolveRoleNames($request));
 
         return redirect()->route('users.show', $user)->with('status', 'User updated.');
     }
@@ -84,5 +108,31 @@ class UserController extends Controller
         $user->delete();
 
         return redirect()->route('users.index')->with('status', 'User deleted.');
+    }
+
+    /**
+     * @param  \Illuminate\Support\Collection<int, Role>|\Illuminate\Database\Eloquent\Collection<int, Role>  $roles
+     */
+    private function presentRoles($roles)
+    {
+        return $roles->each(fn (Role $role) => $role->setAttribute('title', $role->name));
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function resolveRoleNames(Request $request): array
+    {
+        if ($request->filled('roles')) {
+            return array_values($request->input('roles', []));
+        }
+
+        if ($request->filled('role')) {
+            $role = Role::query()->find($request->input('role'));
+
+            return $role ? [$role->name] : [];
+        }
+
+        return [];
     }
 }

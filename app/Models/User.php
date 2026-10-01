@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -19,7 +18,6 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         'email',
         'password',
-        'role',
         'first_name',
         'last_name',
         'mobile',
@@ -35,11 +33,24 @@ class User extends Authenticatable implements MustVerifyEmail
 
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'role' => 'integer',
     ];
 
-    public function roleRelation(): BelongsTo
+    /**
+     * Blade compatibility for legacy roleRelation->title (Spatie roles).
+     */
+    public function getRoleRelationAttribute(): ?object
     {
-        return $this->belongsTo(Role::class, 'role');
+        $role = $this->relationLoaded('roles')
+            ? $this->roles->first()
+            : $this->roles()->first();
+
+        if (! $role) {
+            return null;
+        }
+
+        return (object) [
+            'id' => $role->id,
+            'title' => $role->name,
+        ];
     }
 }

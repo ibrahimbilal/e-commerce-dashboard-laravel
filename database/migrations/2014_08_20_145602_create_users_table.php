@@ -13,7 +13,6 @@ return new class extends Migration
             $table->string('email', 50);
             $table->string('password', 191);
             $table->rememberToken();
-            $table->unsignedInteger('role')->default(1);
             $table->string('first_name', 50)->nullable();
             $table->string('last_name', 50)->nullable();
             $table->string('mobile', 20)->nullable();
@@ -21,8 +20,6 @@ return new class extends Migration
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->nullable();
             $table->softDeletes();
-
-            $table->foreign('role')->references('id')->on('roles');
         });
     }
 
