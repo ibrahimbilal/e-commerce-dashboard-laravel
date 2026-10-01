@@ -64,9 +64,9 @@
     $idx = is_numeric($index) ? (int) $index : $loop->index;
     $paId = is_array($row) ? ($row['product_attribute_id'] ?? '') : '';
     $qty = is_array($row) ? ($row['quantity'] ?? 1) : 1;
-    $price = is_array($row) ? ($row['price'] ?? '') : '';
+    $unitPrice = is_array($row) ? (int) ($row['price'] ?? 0) : 0;
 @endphp
-<tr class="order-item-row" data-row-index="{{ $idx }}">
+<tr class="order-item-row" data-row-index="{{ $idx }}" @if($unitPrice > 0) data-unit-price="{{ $unitPrice }}" @endif>
 <td>
 <select class="form-select js-order-item-variant" name="items[{{ $idx }}][product_attribute_id]" required>
 <option value="">Select variant</option>
@@ -81,11 +81,11 @@
 <td>
 <input class="form-control js-order-item-qty" name="items[{{ $idx }}][quantity]" type="number" min="1" step="1" value="{{ $qty }}" required/>
 </td>
-<td>
-<input class="form-control js-order-item-price" name="items[{{ $idx }}][price]" type="number" min="0" step="1" value="{{ $price }}" required/>
+<td class="align-middle">
+<span class="js-order-item-unit-price text-muted">{{ $unitPrice > 0 ? '$'.number_format($unitPrice) : 'Set on save' }}</span>
 </td>
 <td class="text-end align-middle">
-<span class="js-order-line-total">0</span>
+<span class="js-order-line-total">{{ $unitPrice > 0 ? number_format($unitPrice * (int) $qty) : '—' }}</span>
 </td>
 <td class="text-end align-middle">
 <button type="button" class="btn trans-btn btn-sm js-remove-order-item" title="Remove row"><i class="fi-rr-trash"></i></button>
@@ -99,7 +99,7 @@
 <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
 <button type="button" class="btn regular-btn" id="js-add-order-item">Add line item</button>
 <div class="form-item second mb-0">
-<strong>Items subtotal:</strong> $<span id="order-items-running-total">0</span>
+<strong>Subtotal (estimate):</strong> $<span id="order-items-running-total">0</span>
 </div>
 </div>
 </div>
@@ -116,11 +116,11 @@
 <td>
 <input class="form-control js-order-item-qty" name="items[__INDEX__][quantity]" type="number" min="1" step="1" value="1" required/>
 </td>
-<td>
-<input class="form-control js-order-item-price" name="items[__INDEX__][price]" type="number" min="0" step="1" value="" required/>
+<td class="align-middle">
+<span class="js-order-item-unit-price text-muted">Set on save</span>
 </td>
 <td class="text-end align-middle">
-<span class="js-order-line-total">0</span>
+<span class="js-order-line-total">—</span>
 </td>
 <td class="text-end align-middle">
 <button type="button" class="btn trans-btn btn-sm js-remove-order-item" title="Remove row"><i class="fi-rr-trash"></i></button>
@@ -137,22 +137,37 @@ $(function () {
             );
         }
     }
+    function unitPriceForRow($row) {
+        var p = parseInt($row.attr('data-unit-price'), 10);
+        return isNaN(p) ? 0 : p;
+    }
     function lineTotal($row) {
         var q = parseFloat($row.find('.js-order-item-qty').val()) || 0;
-        var p = parseFloat($row.find('.js-order-item-price').val()) || 0;
+        var p = unitPriceForRow($row);
+        if (p <= 0) {
+            return null;
+        }
         return Math.round(q * p);
     }
     function refreshOrderItemsTotals() {
         var sum = 0;
+        var hasPartial = false;
         $('#order-items-body .order-item-row').each(function () {
-            var lt = lineTotal($(this));
-            $(this).find('.js-order-line-total').text(lt);
-            sum += lt;
+            var $row = $(this);
+            var lt = lineTotal($row);
+            if (lt === null) {
+                hasPartial = true;
+                $row.find('.js-order-line-total').text('—');
+            } else {
+                $row.find('.js-order-line-total').text(lt.toLocaleString('en-US'));
+                sum += lt;
+            }
         });
-        $('#order-items-running-total').text(sum);
+        var display = hasPartial && sum === 0 ? '0' : sum.toLocaleString('en-US');
+        $('#order-items-running-total').text(display);
         var $orderAmount = $('#order-amount-display');
         if ($orderAmount.length) {
-            $orderAmount.text(sum.toLocaleString('en-US'));
+            $orderAmount.text(display);
         }
     }
     function nextOrderItemIndex() {
@@ -176,7 +191,8 @@ $(function () {
     $('#js-add-order-item').on('click', function () {
         $('#order-items-empty-row').remove();
         var idx = nextOrderItemIndex();
-        var html = $('#order-item-row-template').html().replace(/__INDEX__/g, idx);
+        var html = $('#product-variant-row-template').length ? null : null;
+        html = $('#order-item-row-template').html().replace(/__INDEX__/g, idx);
         $('#order-items-body').append(html);
         reindexOrderItemRows();
         refreshOrderItemsTotals();
@@ -187,7 +203,7 @@ $(function () {
         refreshOrderItemsTotals();
         showOrderItemsEmptyState();
     });
-    $(document).on('input change', '.js-order-item-qty, .js-order-item-price', refreshOrderItemsTotals);
+    $(document).on('input change', '.js-order-item-qty', refreshOrderItemsTotals);
     refreshOrderItemsTotals();
 });
 </script>

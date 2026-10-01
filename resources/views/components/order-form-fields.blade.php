@@ -4,7 +4,6 @@
     $addressId = old('address_id', $orderModel?->address_id);
     $statusId = old('order_status_id', old('order_status', $orderModel?->order_status_id));
     $couponId = old('coupon_id', old('coupon', $orderModel?->coupon_id));
-    $displayAmount = $orderModel?->amount ?? 0;
 @endphp
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap">
 <label class="item-title" for="customer">Customer:</label>
@@ -55,8 +54,8 @@
 @endforeach
 </select>
 </div>
-<div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
-<label class="item-title">Order amount:</label>
-<span class="ms-sm-2">$<span id="order-amount-display">{{ number_format((float) $displayAmount, 0, '.', ',') }}</span></span>
-<span class="text-muted small ms-2">(calculated from line items)</span>
+<div class="form-item second d-flex flex-column flex-sm-row align-items-sm-center flex-wrap mt-3">
+<label class="item-title">Subtotal (estimate):</label>
+<span class="ms-sm-2">$<span id="order-amount-display">0</span></span>
 </div>
+<p class="text-muted small mb-0 mt-1">Line prices and coupons are applied on the server when you save. The final order total may differ from this estimate.</p>
