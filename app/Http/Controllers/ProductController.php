@@ -5,14 +5,24 @@ namespace App\Http\Controllers;
 use App\Models\Attribute;
 use App\Models\Category;
 use App\Models\Lang;
+use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\ProductAttribute;
-use App\Models\ProductLocale;
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class ProductController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:view products', ['only' => ['index', 'show']]);
+        $this->middleware('permission:add products', ['only' => ['create', 'store']]);
+        $this->middleware('permission:edit products', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:delete products', ['only' => ['destroy']]);
+    }
+
     public function index()
     {
         $products = Product::with(['locales', 'categories', 'tags'])
@@ -29,9 +39,14 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        $product = Product::create($this->productAttributesFromRequest($request));
+        $validated = $this->validateProductRequest($request);
 
-        $this->syncProductRelations($product, $request);
+        $product = DB::transaction(function () use ($request, $validated) {
+            $product = Product::create($this->productDataFromValidated($request, $validated));
+            $this->applyProductRelations($product, $request, $validated);
+
+            return $product;
+        });
 
         return redirect()->route('products.edit', $product)->with('status', 'Product created.');
     }
@@ -55,9 +70,12 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $product)
     {
-        $product->update($this->productAttributesFromRequest($request));
+        $validated = $this->validateProductRequest($request);
 
-        $this->syncProductRelations($product, $request);
+        DB::transaction(function () use ($request, $product, $validated) {
+            $product->update($this->productDataFromValidated($request, $validated));
+            $this->applyProductRelations($product, $request, $validated);
+        });
 
         return redirect()->route('products.edit', $product)->with('status', 'Product updated.');
     }
@@ -88,9 +106,9 @@ class ProductController extends Controller
     /**
      * @return array<string, mixed>
      */
-    private function productAttributesFromRequest(Request $request): array
+    private function validateProductRequest(Request $request): array
     {
-        $validated = $request->validate([
+        return $request->validate([
             'sku' => ['nullable', 'string'],
             'product_sku' => ['nullable', 'string'],
             'product_img' => ['nullable', 'string', 'max:191'],
@@ -103,24 +121,6 @@ class ProductController extends Controller
             'status' => ['nullable', 'string', 'max:191'],
             'new' => ['sometimes', 'boolean'],
             'featured' => ['sometimes', 'boolean'],
-        ]);
-
-        return [
-            'sku' => $validated['sku'] ?? $validated['product_sku'] ?? '',
-            'product_img' => $validated['product_img'] ?? null,
-            'regular_price' => $validated['regular_price'] ?? null,
-            'sale_price' => $validated['sale_price'] ?? null,
-            'schedule_sale' => $validated['schedule_sale'] ?? $validated['last_sale_date'] ?? null,
-            'quantity' => $validated['quantity'] ?? $validated['product_quantity'] ?? 0,
-            'status' => $validated['status'] ?? null,
-            'new' => $request->boolean('new'),
-            'featured' => $request->boolean('featured'),
-        ];
-    }
-
-    private function syncProductRelations(Product $product, Request $request): void
-    {
-        $request->validate([
             'category_ids' => ['nullable', 'array'],
             'category_ids.*' => ['integer', 'exists:categories,id'],
             'tag_ids' => ['nullable', 'array'],
@@ -141,13 +141,45 @@ class ProductController extends Controller
             'meta_keywords' => ['nullable', 'string', 'max:191'],
             'meta_description' => ['nullable', 'string', 'max:191'],
             'langs' => ['nullable', 'string', 'max:10'],
+            'product_attributes' => ['nullable', 'array'],
+            'product_attributes.*.id' => ['nullable', 'integer', 'exists:products_attributes,id'],
+            'product_attributes.*.attribute_1_id' => ['required_with:product_attributes', 'integer', 'exists:attributes,id'],
+            'product_attributes.*.attribute_2_id' => ['required_with:product_attributes', 'integer', 'exists:attributes,id'],
         ]);
+    }
 
-        $categoryIds = $request->input('category_ids', []);
-        $product->categories()->sync($categoryIds);
+    /**
+     * @param  array<string, mixed>  $validated
+     * @return array<string, mixed>
+     */
+    private function productDataFromValidated(Request $request, array $validated): array
+    {
+        return [
+            'sku' => $validated['sku'] ?? $validated['product_sku'] ?? '',
+            'product_img' => $validated['product_img'] ?? null,
+            'regular_price' => $validated['regular_price'] ?? null,
+            'sale_price' => $validated['sale_price'] ?? null,
+            'schedule_sale' => $validated['schedule_sale'] ?? $validated['last_sale_date'] ?? null,
+            'quantity' => $validated['quantity'] ?? $validated['product_quantity'] ?? 0,
+            'status' => $validated['status'] ?? null,
+            'new' => $request->boolean('new'),
+            'featured' => $request->boolean('featured'),
+        ];
+    }
 
-        $tagIds = $request->input('tag_ids', $request->input('product_tags', []));
-        $product->tags()->sync($tagIds);
+    /**
+     * @param  array<string, mixed>  $validated
+     */
+    private function applyProductRelations(Product $product, Request $request, array $validated): void
+    {
+        if ($request->has('category_ids')) {
+            $product->categories()->sync($request->input('category_ids', []));
+        }
+
+        if ($request->has('tag_ids') || $request->has('product_tags')) {
+            $tagIds = $request->input('tag_ids', $request->input('product_tags', []));
+            $product->tags()->sync($tagIds);
+        }
 
         $locales = $request->input('locales', []);
         $activeLocale = $request->input('langs');
@@ -177,36 +209,31 @@ class ProductController extends Controller
                 'meta_description' => $localeData['meta_description'] ?? null,
             ], fn ($value) => $value !== null && $value !== '');
 
-            if ($payload === []) {
+            if ($payload === [] || empty($payload['name'])) {
                 continue;
             }
 
-            if (empty($payload['name'])) {
-                continue;
-            }
+            $locale = substr((string) $localeCode, 0, 10);
 
-            ProductLocale::updateOrCreate(
+            DB::table('product_locales')->updateOrInsert(
                 [
                     'product_id' => $product->id,
-                    'locale' => substr((string) $localeCode, 0, 10),
+                    'locale' => $locale,
                 ],
                 $payload
             );
         }
 
-        $this->syncProductAttributes($product, $request);
+        if ($request->has('product_attributes')) {
+            $this->syncProductAttributes($product, $request->input('product_attributes', []));
+        }
     }
 
-    private function syncProductAttributes(Product $product, Request $request): void
+    /**
+     * @param  array<int, array<string, mixed>>  $rows
+     */
+    private function syncProductAttributes(Product $product, array $rows): void
     {
-        $request->validate([
-            'product_attributes' => ['nullable', 'array'],
-            'product_attributes.*.id' => ['nullable', 'integer', 'exists:products_attributes,id'],
-            'product_attributes.*.attribute_1_id' => ['required', 'integer', 'exists:attributes,id'],
-            'product_attributes.*.attribute_2_id' => ['required', 'integer', 'exists:attributes,id'],
-        ]);
-
-        $rows = $request->input('product_attributes', []);
         $keepIds = [];
 
         foreach ($rows as $row) {
@@ -236,6 +263,20 @@ class ProductController extends Controller
                 'attribute_2_id' => $row['attribute_2_id'],
             ]);
             $keepIds[] = $created->id;
+        }
+
+        $deleteQuery = $product->productAttributes();
+
+        if ($keepIds !== []) {
+            $deleteQuery->whereNotIn('id', $keepIds);
+        }
+
+        $idsToDelete = $deleteQuery->pluck('id');
+
+        if ($idsToDelete->isNotEmpty() && OrderItem::query()->whereIn('product_attribute_id', $idsToDelete)->exists()) {
+            throw ValidationException::withMessages([
+                'product_attributes' => ['One or more variants are used on existing orders and cannot be removed.'],
+            ]);
         }
 
         if ($keepIds === []) {
