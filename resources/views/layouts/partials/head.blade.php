@@ -13,6 +13,7 @@
 
 <link href="{{ asset('assets/css/bs.min.css') }}" rel="stylesheet">
 <link href="{{ asset('assets/css/style.min.css') }}" rel="stylesheet">
+<link href="{{ asset('assets/css/app-overrides.css') }}" rel="stylesheet">
 <link href="{{ asset('assets/css/sweetalert2.min.css') }}" rel="stylesheet">
 
 <link href="https://fonts.gstatic.com" rel="preconnect">

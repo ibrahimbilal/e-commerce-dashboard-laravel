@@ -26,7 +26,7 @@
 <ul class="menu-list-group">
 <li class="list-item"><a href="{{ route('customers.index') }}"><i class="fi-rr-users"> </i><span class="title">customers</span></a></li>
 <li class="list-item @if(request()->routeIs('addresses.*')) active @endif"><a href="{{ route('addresses.index') }}"><i class="fi-rr-marker"> </i><span class="title">addresses</span></a></li>
-<li class="list-item has-submenu @if(request()->routeIs('orders.*', 'order-statuses.*')) active @endif"><a href="{{ route('orders.index') }}"><i class="fi-rr-box"> </i><span class="title">order</span><span class="title badge">35</span><span class="icon"><i class="fi-rr-angle-small-down"> </i></span></a>
+<li class="list-item has-submenu @if(request()->routeIs('orders.*', 'order-statuses.*')) active @endif"><a href="{{ route('orders.index') }}"><i class="fi-rr-box"> </i><span class="title">order</span><span class="icon"><i class="fi-rr-angle-small-down"> </i></span></a>
 <ul class="submenu">
 <li class="list-item @if(request()->routeIs('order-statuses.*')) active @endif"><a href="{{ route('order-statuses.index') }}"><i class="fi-rr-circle"> </i><span class="title">order statuses</span></a></li>
 </ul>
@@ -55,7 +55,6 @@
 <li class="list-item"><a href="{{ route('settings.store') }}"><i class="fi-rr-circle"> </i><span class="title">store</span></a></li>
 <li class="list-item"><a href="{{ route('settings.currencies') }}"><i class="fi-rr-circle"> </i><span class="title">currencies</span></a></li>
 <li class="list-item"><a href="{{ route('settings.emails') }}"><i class="fi-rr-circle"> </i><span class="title">emails</span></a></li>
-<li class="list-item"><a href="./payment-settings.html"><i class="fi-rr-circle"> </i><span class="title">payment</span></a></li>
 </ul>
 </li>
 <li class="list-item has-submenu"><a href="javascript:void(0)"><i class="fi-rr-browser"> </i><span class="title">Errors</span><span class="icon"><i class="fi-rr-angle-small-down"> </i></span></a>

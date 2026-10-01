@@ -11,6 +11,7 @@
     </aside>
     <main>
         @include('layouts.partials.header')
+        <x-flash-messages />
         @yield('content')
     </main>
     @include('layouts.partials.footer')
