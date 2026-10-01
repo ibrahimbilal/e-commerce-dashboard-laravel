@@ -91,20 +91,20 @@
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="current-password">current password:</label>
 <div class="with-icon">
-<input class="form-control" id="current-password" name="current_password" type="password"   value="{{ old('current_password', $user->current_password ?? '') }}" /><span class="show-pass"><i class="fi-rr-eye"> </i></span>
+<input class="form-control" id="current-password" name="current_password" type="password"   /><span class="show-pass"><i class="fi-rr-eye"> </i></span>
 </div>
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="new-password">new password:</label>
 <div class="with-icon">
-<input class="form-control" id="password" name="password" type="password"   value="{{ old('password', $user->password ?? '') }}" /><span class="show-pass"><i class="fi-rr-eye"> </i></span>
+<input class="form-control" id="password" name="password" type="password"   /><span class="show-pass"><i class="fi-rr-eye"> </i></span>
 </div>
 <button class="btn regular-btn ms-sm-3 mt-2 mt-sm-0 text-nowrap generate-password" type="button">generate</button>
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="confirm-password">confirm password:</label>
 <div class="with-icon">
-<input class="form-control" id="confirm-password" name="confirm_password" type="password"   value="{{ old('confirm_password', $user->confirm_password ?? '') }}" /><span class="show-pass"><i class="fi-rr-eye"> </i></span>
+<input class="form-control" id="confirm-password" name="confirm_password" type="password"   /><span class="show-pass"><i class="fi-rr-eye"> </i></span>
 </div>
 </div>
 </div>
