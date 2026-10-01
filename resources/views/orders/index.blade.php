@@ -65,7 +65,7 @@
 <tr>
 <td></td>
 <td class="text-uppercase">#{{ $order->id }}</td>
-<td class="status text-capitalize">{{ $order->orderStatus->title ?? '—' }}</td>
+<x-order-status :status="$order->orderStatus" />
 <td class="text-capitalize">{{ $customerName }}</td>
 <td class="text-uppercase text-center">${{ number_format($order->amount ?? 0) }}</td>
 <td class="text-capitalize">{{ $destination }}</td>

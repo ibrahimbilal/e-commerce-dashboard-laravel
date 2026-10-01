@@ -159,7 +159,7 @@ ${{ number_format((float) $price) }}
 @endphp
 <tr>
 <td class="text-uppercase">#{{ $order->id }}</td>
-<td class="text-capitalize">{{ $order->orderStatus->title ?? '—' }}</td>
+<x-order-status :status="$order->orderStatus" />
 <td class="text-capitalize">{{ $customerName }}</td>
 <td class="text-end">${{ number_format($order->amount ?? 0) }}</td>
 <td>{{ $order->created_at?->format('H:i d/m/Y') ?? '—' }}</td>
