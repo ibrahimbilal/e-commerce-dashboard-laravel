@@ -43,7 +43,7 @@
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="password">password:</label>
 <div class="with-icon">
-<input class="form-control" id="password" name="password" type="password" value="{{ old('password', $customer->password ?? '') }}" /><span class="show-pass"><i class="fi-rr-eye"> </i></span>
+<input class="form-control" id="password" name="password" type="password"/><span class="show-pass"><i class="fi-rr-eye"> </i></span>
 </div>
 <button class="btn regular-btn ms-sm-3 mt-2 mt-sm-0 text-nowrap generate-password" type="button">Suggest Password</button>
 </div>
@@ -54,16 +54,16 @@
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="birth-date">Birth Of Date:</label>
 <div class="position-relative w-100">
-<input class="form-control" data-toggle="datepicker" id="birth-date" name="birth_date" type="text" value="{{ old('birth_date', $customer->birth_date ?? '') }}" />
+<input class="form-control" data-toggle="datepicker" id="birth-date" name="birth_date" type="text" value="{{ old('birth_date', optional($customer->birth_date)->format('Y-m-d') ?? '') }}" />
 </div>
 </div>
 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title">gender:</label>
 <label class="radio-label" for="male">
-<input checked="" class="input-radio" id="male" name="customer_type" type="radio" value="Male"/>Male
+<input class="input-radio" id="male" name="gender" type="radio" value="Male" @checked(old('gender', $customer->gender ?? '') === 'Male')/>Male
               </label>
 <label class="radio-label" for="female">
-<input class="input-radio" id="female" name="customer_type" type="radio" value="Female"/>Female
+<input class="input-radio" id="female" name="gender" type="radio" value="Female" @checked(old('gender', $customer->gender ?? '') === 'Female')/>Female
               </label>
 </div>
 <div class="form-item second d-flex mt-3 flex-wrap flex-sm-nowrap">
@@ -92,11 +92,11 @@
 <div class="repeater-inputs px-3 active">
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap">
 <label class="item-title" for="title">title:</label>
-<input class="form-control" id="title" name="title" type="text" value="{{ old('title', $customer->title ?? '') }}" />
+<input class="form-control" id="title" type="text" disabled="disabled" placeholder="Address UI only (not saved with customer)"/>
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="country">Country:</label>
-<select class="form-select" id="country" name="country">
+<select class="form-select" id="country" disabled="disabled">
 <option value="">-- Select Country --</option>
 <option value="AF">Afghanistan</option>
 <option value="AL">Albania</option>
@@ -366,27 +366,29 @@
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="state">State:</label>
-<input class="form-control" id="state" name="state" type="text" value="{{ old('state', $customer->state ?? '') }}" />
+<input class="form-control" id="state" type="text" disabled="disabled"/>
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="city">City:</label>
-<input class="form-control" id="city" name="city" type="text" value="{{ old('city', $customer->city ?? '') }}" />
+<input class="form-control" id="city" type="text" disabled="disabled"/>
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="address-1">Address 1:</label>
-<input autocomplete="on" class="form-control" id="address-1" name="address_1" placeholder="Street name and house number" type="text" value="{{ old('address_1', $customer->address_1 ?? '') }}" />
+<input autocomplete="on" class="form-control" id="address-1" placeholder="Street name and house number" type="text" disabled="disabled"/>
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="address-2">Address 2:</label>
-<input autocomplete="on" class="form-control" id="address-2" name="address_2" placeholder="Apartment, suite, unit, etc. (optional)" type="text" value="{{ old('address_2', $customer->address_2 ?? '') }}" />
+<input autocomplete="on" class="form-control" id="address-2" placeholder="Apartment, suite, unit, etc. (optional)" type="text" disabled="disabled"/>
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="postal">Postal Code:</label>
-<input class="form-control" id="postal" name="postal" type="text" value="{{ old('postal', $customer->postal ?? '') }}" />
+<input class="form-control" id="postal" type="text" disabled="disabled"/>
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="ad-mobile">Mobile:</label>
-<input class="form-control" id="ad-mobile" name="mobile" type="tel" value="{{ old('mobile', $customer->mobile ?? '') }}" />
+<input class="form-control" id="ad-mobile" type="tel" disabled="disabled"/>
+<input type="hidden" name="profile_picture" value="{{ old('profile_picture', $customer->profile_picture ?? '') }}"/>
+<input type="hidden" name="ip_address" value="{{ old('ip_address', $customer->ip_address ?? '') }}"/>
 </div>
 </div>
 </div>
@@ -420,12 +422,20 @@
 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
 <label class="item-title meta-title">Last Logged In:</label><span class="ms-2">26/03/2021 14:58</span>
 </div>
+<div class="form-item second d-flex align-items-center mt-3">
+<label class="item-title" for="customer-deleted">Account inactive (deleted)?</label>
+<label class="switch text-start ms-sm-3">
+<input type="hidden" name="deleted" value="0"/>
+<input class="switch" id="customer-deleted" name="deleted" type="checkbox" value="1" @checked(old('deleted', $customer->deleted ?? false))/><span class="slider"></span>
+</label>
+</div>
 <div class="btns-holder d-flex justify-content-between mt-4">
 <form method="POST" action="{{ route('customers.destroy', $customer) }}" class="w-100 d-inline destroy-resource-form">
 @csrf
 @method('DELETE')
 <button type="button" class="btn trans-btn w-100 text-start js-destroy-submit" data-confirm-label="customer" data-post-type="customer"><span class="icon me-1"><i class="fi-rr-trash"> </i></span>delete account</button>
-<button class="btn solid-btn" type="submit">create </button>
+</form>
+<button class="btn solid-btn" type="submit" form="add-newitem-form">update </button>
 </div>
 </div>
 </div>
@@ -438,4 +448,3 @@
 <script src="{{ asset('assets/js/pickadate/picker.js') }}" type="text/javascript"></script>
 <script src="{{ asset('assets/js/pickadate/picker.date.js') }}" type="text/javascript"></script>
 @endpush
-

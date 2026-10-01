@@ -27,7 +27,7 @@
 <div class="main-box box-spaces">
 <div class="form-item primary">
 <h2 class="box-title item-title">attribute title</h2>
-<input class="form-control" id="item-title" name="attribute_name" type="text" value="{{ old('attribute_name', $attribute->attribute_name ?? '') }}" />
+<input class="form-control" id="item-title" name="attribute_key" type="text" value="{{ old('attribute_key', $attribute->attribute_key ?? '') }}" />
 </div>
 </div>
 </div>
@@ -50,18 +50,18 @@
 <div class="repeater-inputs px-3 active">
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap">
 <label class="item-title" for="term-title">term title:</label>
-<input class="form-control" id="term-title" name="term_title" type="text" value="{{ old('term_title', $attribute->term_title ?? '') }}" />
+<input class="form-control" id="term-title" type="text" disabled="disabled" placeholder="Terms UI only (not saved with attribute)"/>
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="term-type">term type:</label>
-<select class="form-select" id="term-type" name="term_type">
+<select class="form-select" id="term-type">
 <option>Text</option>
 <option>Color</option>
 </select>
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="term-value">term value:</label>
-<input class="form-control" id="term-value" name="term_value" type="text" value="{{ old('term_value', $attribute->term_value ?? '') }}" />
+<input class="form-control" id="term-value" name="attribute_value" type="text" value="{{ old('attribute_value', $attribute->attribute_value ?? '') }}" />
 </div>
 </div>
 </div>
@@ -75,7 +75,7 @@
 <div class="main-box box-spaces mb-0">
 <div class="form-item second">
 <label class="item-title meta-title" for="item-slug">attribute slug:<span class="icon info ms-2" flow="up" tooltip="slug is the bit of text that appears after your domain name in the URL of a page"><i class="fi-rr-info"> </i></span></label>
-<input class="form-control mt-2" id="item-slug" name="attribute_slug" type="text" value="{{ old('attribute_slug', $attribute->attribute_slug ?? '') }}" />
+<input class="form-control mt-2" id="item-slug" type="text" value="{{ old('attribute_slug', $attribute->attribute_slug ?? '') }}" />
 </div>
 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
 <label class="item-title meta-title">created at: </label><span class="ms-2">26/03/2021 14:58</span>

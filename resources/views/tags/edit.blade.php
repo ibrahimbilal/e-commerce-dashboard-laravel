@@ -29,7 +29,7 @@
 <div class="main-box box-spaces">
 <div class="form-item primary">
 <h2 class="box-title item-title">tag title</h2>
-<input class="form-control" id="item-title" name="tag_name" type="text" value="{{ old('tag_name', $tag->tag_name ?? '') }}" />
+<input class="form-control" id="item-title" name="title" type="text" value="{{ old('title', $tag->title ?? '') }}" />
 </div>
 <div class="divider"></div>
 <div class="form-item primary">
@@ -46,10 +46,10 @@
 <div class="main-box box-spaces">
 <div class="form-item second justify-content-between mb-2 d-flex align-items-sm-center">
 <label class="item-title meta-title" for="newitem-lang">tag Lang:</label>
-<select class="form-select dropdown" id="newitem-lang" name="langs">
-<option data-flag="./assets/images/flags/us.png" value="en">English</option>
-<option data-flag="./assets/images/flags/sa.png" value="ar">Arabic</option>
-<option data-flag="./assets/images/flags/fr.png" value="fr">French</option>
+<select class="form-select dropdown" id="newitem-lang" name="locale">
+<option data-flag="./assets/images/flags/us.png" value="en" @selected(old('locale', $tag->locale ?? 'en') === 'en')>English</option>
+<option data-flag="./assets/images/flags/sa.png" value="ar" @selected(old('locale', $tag->locale ?? '') === 'ar')>Arabic</option>
+<option data-flag="./assets/images/flags/fr.png" value="fr" @selected(old('locale', $tag->locale ?? '') === 'fr')>French</option>
 </select>
 </div>
 <div class="form-item second">
@@ -98,7 +98,8 @@
 <div class="form-item second d-flex align-items-center mt-3">
 <label class="item-title" for="product-new">Active This tag?<span class="icon info ms-2" flow="up" tooltip="check this if you want active this tag."><i class="fi-rr-info"> </i></span></label>
 <label class="switch text-start">
-<input class="switch" id="product-new" name="new" type="checkbox"/><span class="slider"></span>
+<input type="hidden" name="deleted" value="{{ old('deleted', $tag->deleted ?? false) ? 1 : 0 }}" id="tag-deleted-field"/>
+<input class="switch" id="product-new" type="checkbox" @checked(!old('deleted', $tag->deleted ?? false)) onchange="document.getElementById('tag-deleted-field').value = this.checked ? 0 : 1"/><span class="slider"></span>
 </label>
 </div>
 </div>

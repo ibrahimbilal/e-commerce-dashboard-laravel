@@ -23,20 +23,18 @@
 </div>
 </div>
 </div>
-@csrf
 <form action="{{ route('categories.store') }}" class="row d-block clearfix" data-post-type="Category" id="add-newitem-form" method="POST">
+@csrf
 <div class="col-sm-12 col-lg-9 float-start post-box">
 <div class="main-box box-spaces">
 <div class="form-item primary">
 <h2 class="box-title item-title">category title</h2>
-<input class="form-control" id="item-title" name="category_name" type="text"/>
+<input class="form-control" id="item-title" name="title" type="text" value="{{ old('title') }}"/>
 </div>
 <div class="divider"></div>
 <div class="form-item primary">
 <h2 class="box-title item-title">category description</h2>
-<div id="category-desc">
-<div class="editor-container"></div>
-</div>
+<textarea class="form-control" id="category-desc" name="description" rows="4">{{ old('description') }}</textarea>
 </div>
 </div>
 </div>
@@ -46,15 +44,16 @@
 <div class="main-box box-spaces">
 <div class="form-item second justify-content-between mb-2 d-flex align-items-sm-center">
 <label class="item-title meta-title" for="newitem-lang">category Lang:</label>
-<select class="form-select dropdown" id="newitem-lang" name="langs">
-<option data-flag="./assets/images/flags/us.png" value="en">English</option>
-<option data-flag="./assets/images/flags/sa.png" value="ar">Arabic</option>
-<option data-flag="./assets/images/flags/fr.png" value="fr">French</option>
+<select class="form-select dropdown" id="newitem-lang" name="locale">
+<option data-flag="./assets/images/flags/us.png" value="en" @selected(old('locale', 'en') === 'en')>English</option>
+<option data-flag="./assets/images/flags/sa.png" value="ar" @selected(old('locale') === 'ar')>Arabic</option>
+<option data-flag="./assets/images/flags/fr.png" value="fr" @selected(old('locale') === 'fr')>French</option>
 </select>
 </div>
 <div class="form-item second">
 <label class="item-title meta-title" for="item-slug">category slug:<span class="icon info ms-2" flow="up" tooltip="slug is the bit of text that appears after your domain name in the URL of a page"><i class="fi-rr-info"> </i></span></label>
-<input class="form-control mt-2" id="item-slug" name="category_slug" type="text"/>
+<input class="form-control mt-2" id="item-slug" name="category_slug" type="text" value="{{ old('category_slug') }}"/>
+<input type="hidden" name="cat_img" value="{{ old('cat_img') }}"/>
 </div>
 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
 <label class="item-title meta-title">created at: </label><span class="ms-2">26/03/2021 14:58</span>
@@ -84,7 +83,8 @@
 <div class="form-item second d-flex align-items-center mt-3">
 <label class="item-title" for="product-new">Active This Category?<span class="icon info ms-2" flow="up" tooltip="check this if you want active this category."><i class="fi-rr-info"> </i></span></label>
 <label class="switch text-start">
-<input class="switch" id="product-new" name="new" type="checkbox"/><span class="slider"></span>
+<input type="hidden" name="active" value="0"/>
+<input class="switch" id="product-new" name="active" type="checkbox" value="1" @checked(old('active', true))/><span class="slider"></span>
 </label>
 </div>
 <div class="form-item second d-flex mt-3 flex-wrap flex-sm-nowrap">
@@ -101,16 +101,16 @@
 <div class="tab-box" id="seo">
 <div class="form-item second d-flex flex-wrap flex-sm-nowrap">
 <label class="item-title" for="meta-title">meta title:<span class="icon info ms-2" flow="up" tooltip="the title which be shown in search engines."><i class="fi-rr-info"> </i></span></label>
-<input class="form-control" id="meta-title" name="meta_title" type="text"/>
+<input class="form-control" id="meta-title" name="meta_title" type="text" value="{{ old('meta_title') }}"/>
 </div>
 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="meta-desc">meta description:<span class="icon info ms-2" flow="up" tooltip="the description which will be shown under the title in search engines."><i class="fi-rr-info"> </i></span></label>
-<textarea class="form-control" id="meta-desc" name="meta_description" rows="3" style="resize:none"></textarea>
+<textarea class="form-control" id="meta-desc" name="meta_description" rows="3" style="resize:none">{{ old('meta_description') }}</textarea>
 </div>
 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="meta-keyword">meta keywords:<span class="icon info ms-2" flow="up" tooltip="The keyword or key phrase is the search term that you want a page or post to rank for most. When people search for that phrase, they should find you.
 separate keywords with comma (,)."><i class="fi-rr-info"> </i></span></label>
-<textarea class="form-control" id="meta-keyword" name="meta_keywords" rows="3" style="resize:none"></textarea>
+<textarea class="form-control" id="meta-keyword" name="meta_keywords" rows="3" style="resize:none">{{ old('meta_keywords') }}</textarea>
 </div>
 </div>
 </div>

@@ -21,13 +21,13 @@
 </div>
 </div>
 </div>
-@csrf
 <form action="{{ route('discounts.store') }}" class="row clearfix" data-post-type="discount" id="add-newitem-form" method="POST">
+@csrf
 <div class="col-sm-12">
 <div class="main-box box-spaces">
 <div class="form-item primary">
 <h2 class="box-title item-title">discount title</h2>
-<input class="form-control" id="discount-name" name="discount_name" type="text"/>
+<input class="form-control" id="discount-name" name="title" type="text" value="{{ old('title') }}"/>
 </div>
 </div>
 </div>
@@ -38,38 +38,39 @@
 </div>
 <div class="form-item second d-flex flex-wrap flex-sm-nowrap">
 <label class="item-title" for="the-discount">the discount:<span class="icon info ms-2" flow="up" tooltip="write the number of the discount only."><i class="fi-rr-info"> </i></span></label>
-<input class="form-control" id="the-discount" name="the_discount" type="text"/>
+<input class="form-control" id="the-discount" name="discount" type="text" value="{{ old('discount') }}"/>
 </div>
 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="discount-type">discount type:<span class="icon info ms-2" flow="up" tooltip="write the number of the discount only."><i class="fi-rr-info"> </i></span></label>
-<select class="form-select" id="discount-type" name="discount_type">
-<option>percentage</option>
-<option>Static</option>
+<select class="form-select" id="discount-type" name="type">
+<option value="percent" @selected(old('type') === 'percent')>percentage</option>
+<option value="fixed" @selected(old('type') === 'fixed')>Static</option>
 </select>
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="discount-start-date">Discount Start Date:<span class="icon info ms-2" flow="up" tooltip="the date which sale will be end."><i class="fi-rr-info"> </i></span></label>
 <div class="position-relative w-100">
-<input class="form-control" data-toggle="datepicker" id="discount-start-date" name="discount_start_date" type="text"/>
+<input class="form-control" data-toggle="datepicker" id="discount-start-date" name="start_date" type="text" value="{{ old('start_date') }}"/>
 </div>
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="discount-end-date">Discount End Date:<span class="icon info ms-2" flow="up" tooltip="the date which sale will be end."><i class="fi-rr-info"> </i></span></label>
 <div class="position-relative w-100">
-<input class="form-control" data-toggle="datepicker" id="discount-end-date" name="discount_end_date" type="text"/>
+<input class="form-control" data-toggle="datepicker" id="discount-end-date" name="end_date" type="text" value="{{ old('end_date') }}"/>
 </div>
 </div>
 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
-<label class="item-title" for="discount-type">Apply Discount To:<span class="icon info ms-2" flow="up" tooltip="write the number of the discount only."><i class="fi-rr-info"> </i></span></label>
-<select class="form-select" id="discount-type" name="discount_type">
-<option>all products</option>
-<option>specific category</option>
+<label class="item-title" for="apply-to">Apply Discount To:<span class="icon info ms-2" flow="up" tooltip="write the number of the discount only."><i class="fi-rr-info"> </i></span></label>
+<select class="form-select" id="apply-to" name="apply_to">
+<option value="all" @selected(old('apply_to') === 'all')>all products</option>
+<option value="category" @selected(old('apply_to') === 'category')>specific category</option>
 </select>
 </div>
 <div class="form-item second d-flex align-items-center mt-3">
 <label class="item-title" for="product-new">Active This discount?<span class="icon info ms-2" flow="up" tooltip="check this if you want active this discount."><i class="fi-rr-info"> </i></span></label>
 <label class="switch text-start">
-<input class="switch" id="product-new" name="new" type="checkbox"/><span class="slider"></span>
+<input type="hidden" name="active" value="0"/>
+<input class="switch" id="product-new" name="active" type="checkbox" value="1" @checked(old('active', true))/><span class="slider"></span>
 </label>
 </div>
 </div>

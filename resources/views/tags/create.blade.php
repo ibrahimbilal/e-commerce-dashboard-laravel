@@ -22,13 +22,13 @@
 </div>
 </div>
 </div>
-@csrf
 <form action="{{ route('tags.store') }}" class="row clearfix" data-post-type="tag" id="add-newitem-form" method="POST">
+@csrf
 <div class="col-sm-12 col-lg-9 post-box">
 <div class="main-box box-spaces">
 <div class="form-item primary">
 <h2 class="box-title item-title">tag title</h2>
-<input class="form-control" id="item-title" name="tag_name" type="text"/>
+<input class="form-control" id="item-title" name="title" type="text" value="{{ old('title') }}"/>
 </div>
 <div class="divider"></div>
 <div class="form-item primary">
@@ -45,15 +45,15 @@
 <div class="main-box box-spaces">
 <div class="form-item second justify-content-between mb-2 d-flex align-items-sm-center">
 <label class="item-title meta-title" for="newitem-lang">tag Lang:</label>
-<select class="form-select dropdown" id="newitem-lang" name="langs">
-<option data-flag="./assets/images/flags/us.png" value="en">English</option>
-<option data-flag="./assets/images/flags/sa.png" value="ar">Arabic</option>
-<option data-flag="./assets/images/flags/fr.png" value="fr">French</option>
+<select class="form-select dropdown" id="newitem-lang" name="locale">
+<option data-flag="./assets/images/flags/us.png" value="en" @selected(old('locale', 'en') === 'en')>English</option>
+<option data-flag="./assets/images/flags/sa.png" value="ar" @selected(old('locale') === 'ar')>Arabic</option>
+<option data-flag="./assets/images/flags/fr.png" value="fr" @selected(old('locale') === 'fr')>French</option>
 </select>
 </div>
 <div class="form-item second">
 <label class="item-title meta-title" for="item-slug">tag slug:<span class="icon info ms-2" flow="up" tooltip="slug is the bit of text that appears after your domain name in the URL of a page"><i class="fi-rr-info"> </i></span></label>
-<input class="form-control mt-2" id="item-slug" name="tag_slug" type="text"/>
+<input class="form-control mt-2" id="item-slug" name="tag_slug" type="text" value="{{ old('tag_slug') }}"/>
 </div>
 <div class="form-item second mt-2">
 <label class="item-title meta-title" for="parent-id">parent tag:</label>
@@ -93,23 +93,24 @@
 <div class="form-item second d-flex align-items-center mt-3">
 <label class="item-title" for="product-new">Active This tag?<span class="icon info ms-2" flow="up" tooltip="check this if you want active this tag."><i class="fi-rr-info"> </i></span></label>
 <label class="switch text-start">
-<input class="switch" id="product-new" name="new" type="checkbox"/><span class="slider"></span>
+<input type="hidden" name="deleted" value="{{ old('deleted', 0) ? 1 : 0 }}" id="tag-deleted-field"/>
+<input class="switch" id="product-new" type="checkbox" @checked(!old('deleted', false)) onchange="document.getElementById('tag-deleted-field').value = this.checked ? 0 : 1"/><span class="slider"></span>
 </label>
 </div>
 </div>
 <div class="tab-box" id="seo">
 <div class="form-item second d-flex flex-wrap flex-sm-nowrap">
 <label class="item-title" for="meta-title">meta title:<span class="icon info ms-2" flow="up" tooltip="the title which be shown in search engines."><i class="fi-rr-info"> </i></span></label>
-<input class="form-control" id="meta-title" name="meta_title" type="text"/>
+<input class="form-control" id="meta-title" name="meta_title" type="text" value="{{ old('meta_title') }}"/>
 </div>
 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="meta-desc">meta description:<span class="icon info ms-2" flow="up" tooltip="the description which will be shown under the title in search engines."><i class="fi-rr-info"> </i></span></label>
-<textarea class="form-control" id="meta-desc" name="meta_description" rows="3" style="resize:none"></textarea>
+<textarea class="form-control" id="meta-desc" name="meta_description" rows="3" style="resize:none">{{ old('meta_description') }}</textarea>
 </div>
 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="meta-keyword">meta keywords:<span class="icon info ms-2" flow="up" tooltip="The keyword or key phrase is the search term that you want a page or post to rank for most. When people search for that phrase, they should find you.
 separate keywords with comma (,)."><i class="fi-rr-info"> </i></span></label>
-<textarea class="form-control" id="meta-keyword" name="meta_keywords" rows="3" style="resize:none"></textarea>
+<textarea class="form-control" id="meta-keyword" name="meta_keywords" rows="3" style="resize:none">{{ old('meta_keywords') }}</textarea>
 </div>
 </div>
 </div>

@@ -29,15 +29,15 @@
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap">
 <label class="item-title" for="first-name">first name:</label>
-<input class="form-control" id="first-name" name="first_name" type="text"/>
+<input class="form-control" id="first-name" name="first_name" type="text" value="{{ old('first_name') }}"/>
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="last-name">last name:</label>
-<input class="form-control" id="last-name" name="last_name" type="text"/>
+<input class="form-control" id="last-name" name="last_name" type="text" value="{{ old('last_name') }}"/>
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="email">email address:</label>
-<input class="form-control" id="email" name="email" type="email"/>
+<input class="form-control" id="email" name="email" type="email" value="{{ old('email') }}"/>
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="password">password:</label>
@@ -48,21 +48,21 @@
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="mobile">mobile:</label>
-<input class="form-control" id="mobile" name="mobile" type="tel"/>
+<input class="form-control" id="mobile" name="mobile" type="tel" value="{{ old('mobile') }}"/>
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="birth-date">Birth Of Date:</label>
 <div class="position-relative w-100">
-<input class="form-control" data-toggle="datepicker" id="birth-date" name="birth_date" type="text"/>
+<input class="form-control" data-toggle="datepicker" id="birth-date" name="birth_date" type="text" value="{{ old('birth_date') }}"/>
 </div>
 </div>
 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title">gender:</label>
 <label class="radio-label" for="male">
-<input checked="" class="input-radio" id="male" name="customer_type" type="radio" value="Male"/>Male
+<input class="input-radio" id="male" name="gender" type="radio" value="Male" @checked(old('gender', 'Male') === 'Male')/>Male
               </label>
 <label class="radio-label" for="female">
-<input class="input-radio" id="female" name="customer_type" type="radio" value="Female"/>Female
+<input class="input-radio" id="female" name="gender" type="radio" value="Female"/>Female
               </label>
 </div>
 <div class="form-item second d-flex mt-3 flex-wrap flex-sm-nowrap">
@@ -91,11 +91,11 @@
 <div class="repeater-inputs px-3 active">
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap">
 <label class="item-title" for="title">title:</label>
-<input class="form-control" id="title" name="title" type="text"/>
+<input class="form-control" id="title" type="text" disabled="disabled" placeholder="Address UI only (not saved with customer)"/>
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="country">Country:</label>
-<select class="form-select" id="country" name="country">
+<select class="form-select" id="country" disabled="disabled">
 <option value="">-- Select Country --</option>
 <option value="AF">Afghanistan</option>
 <option value="AL">Albania</option>
@@ -365,27 +365,29 @@
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="state">State:</label>
-<input class="form-control" id="state" name="state" type="text"/>
+<input class="form-control" id="state" type="text" disabled="disabled"/>
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="city">City:</label>
-<input class="form-control" id="city" name="city" type="text"/>
+<input class="form-control" id="city" type="text" disabled="disabled"/>
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="address-1">Address 1:</label>
-<input autocomplete="on" class="form-control" id="address-1" name="address_1" placeholder="Street name and house number" type="text"/>
+<input autocomplete="on" class="form-control" id="address-1" placeholder="Street name and house number" type="text" disabled="disabled"/>
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="address-2">Address 2:</label>
-<input autocomplete="on" class="form-control" id="address-2" name="address_2" placeholder="Apartment, suite, unit, etc. (optional)" type="text"/>
+<input autocomplete="on" class="form-control" id="address-2" placeholder="Apartment, suite, unit, etc. (optional)" type="text" disabled="disabled"/>
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="postal">Postal Code:</label>
-<input class="form-control" id="postal" name="postal" type="text"/>
+<input class="form-control" id="postal" type="text" disabled="disabled"/>
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="ad-mobile">Mobile:</label>
-<input class="form-control" id="ad-mobile" name="mobile" type="tel"/>
+<input class="form-control" id="ad-mobile" type="tel" disabled="disabled"/>
+<input type="hidden" name="profile_picture" value="{{ old('profile_picture') }}"/>
+<input type="hidden" name="ip_address" value="{{ old('ip_address') }}"/>
 </div>
 </div>
 </div>
@@ -434,4 +436,3 @@
 <script src="{{ asset('assets/js/pickadate/picker.js') }}" type="text/javascript"></script>
 <script src="{{ asset('assets/js/pickadate/picker.date.js') }}" type="text/javascript"></script>
 @endpush
-
