@@ -80,9 +80,9 @@
 </div>
 </div>
 </div>
-</div>
 <div class="col-12 mt-3">
 <x-pagination :paginator="$invoices" />
+</div>
 </div>
 @endsection
 

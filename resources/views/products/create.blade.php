@@ -173,7 +173,7 @@
 </div>
 </div>
 <div class="tab-box" id="attribute">
-@include('components.product-attribute-selects')
+@include('components.product-variant-rows')
 </div>
 <div class="tab-box" id="seo">
 <div class="form-item second d-flex flex-wrap flex-sm-nowrap">

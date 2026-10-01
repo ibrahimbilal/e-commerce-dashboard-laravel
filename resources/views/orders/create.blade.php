@@ -47,54 +47,7 @@
 <div class="form-item primary mb-3">
 <h2 class="box-title item-title">Order Items</h2>
 </div>
-<div class="repeater-holder">
-<div class="repeater mb-3">
-<div class="repeater-title p-3 mb-3 d-flex justify-content-between align-items-center">
-<h3 class="h5 mb-0">Item Title</h3>
-<div class="icons d-flex align-items-center"><span class="icon active"><i class="fi-rr-angle-small-down"> </i></span><span class="remove" flow="up" tooltip="Remove"><i class="fi-rr-trash"> </i></span></div>
-</div>
-<div class="repeater-inputs px-3 active">
-<div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap">
-<label class="item-title" for="product">Product:</label>
-<select class="form-select" id="product">
-<option>Select Product</option>
-<option>Product 1</option>
-<option>Product 2</option>
-<option>Product 3</option>
-<option>Product 4</option>
-</select>
-</div>
-<div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
-<label class="item-title" for="product-color">Product Color:</label>
-<select class="form-select" id="product-color">
-<option>Select Product Color</option>
-<option>Red</option>
-<option>Green</option>
-<option>Blue</option>
-<option>Black</option>
-<option>White</option>
-</select>
-</div>
-<div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
-<label class="item-title" for="product-size">Product Size:</label>
-<select class="form-select" id="product-size">
-<option>Select Product Size</option>
-<option>XS</option>
-<option>S</option>
-<option>M</option>
-<option>L</option>
-<option>XL</option>
-<option>XXL</option>
-</select>
-</div>
-<div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
-<label class="item-title" for="quantity">Quantity:</label>
-<input class="form-control" id="quantity" type="text"/>
-</div>
-</div>
-</div>
-</div>
-<div class="add-repeater-item"><a class="btn">Add New Item</a></div>
+@include('components.order-items-table')
 </div>
 </div>
 <div class="col-sm-6 col-lg-3 float-end meta-box order-sm-2">
@@ -114,6 +67,7 @@
 </div>
 </div>
 </div>
+@include('components.order-customer-address-script')
 </form>
 @endsection
 

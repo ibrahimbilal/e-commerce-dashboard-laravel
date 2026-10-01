@@ -9,8 +9,30 @@
 
 @php
     $order = $invoice->order;
+    $order?->loadMissing([
+        'items.productAttribute.attributeOne',
+        'items.productAttribute.attributeTwo',
+        'items.productAttribute.product.locales',
+        'customer',
+        'address',
+    ]);
     $customer = $order?->customer;
     $custName = $customer ? trim(($customer->first_name ?? '').' '.($customer->last_name ?? '')) : '—';
+    $address = $order?->address;
+    $items = $order?->items ?? collect();
+    $subtotal = $items->sum(fn ($item) => (int) ($item->price ?? 0) * (int) ($item->quantity ?? 0));
+    $invoiceTotal = $order?->amount ?? $subtotal;
+    $variantLineLabel = function ($item) {
+        $pa = $item->productAttribute;
+        if (! $pa) {
+            return 'Line item #'.$item->id;
+        }
+        $productName = $pa->product?->locales?->first()?->name ?? ('Product #'.($pa->product_id ?? '?'));
+        $one = $pa->attributeOne?->attribute_value ?? '?';
+        $two = $pa->attributeTwo?->attribute_value ?? '?';
+
+        return $productName.' ('.$one.' / '.$two.')';
+    };
 @endphp
 <div class="page-title text-capitalize">invoice #{{ $invoice->invoice_no }}</div>
 
@@ -97,36 +119,36 @@
 <td>
 <p class="title title-2 mb-0">Address:</p>
 </td>
-<td>1881  Rosewood Lane</td>
-<td>1881  Rosewood Lane</td>
+<td>{{ $address->address_1 ?? '—' }}</td>
+<td>{{ $address->address_1 ?? '—' }}</td>
 </tr>
 <tr>
 <td>
 <p class="title title-2 mb-0">City:</p>
 </td>
-<td>New York City</td>
-<td>New York City</td>
+<td>{{ $address->city ?? '—' }}</td>
+<td>{{ $address->city ?? '—' }}</td>
 </tr>
 <tr>
 <td>
 <p class="title title-2 mb-0">Country:</p>
 </td>
-<td>United State</td>
-<td>United State</td>
+<td>{{ $address->country ?? '—' }}</td>
+<td>{{ $address->country ?? '—' }}</td>
 </tr>
 <tr>
 <td>
 <p class="title title-2 mb-0">Postal:</p>
 </td>
-<td>10011</td>
-<td>10011</td>
+<td>{{ $address->postcode ?? '—' }}</td>
+<td>{{ $address->postcode ?? '—' }}</td>
 </tr>
 <tr>
 <td>
 <p class="title title-2 mb-0">Mobile:</p>
 </td>
-<td>516-913-8323</td>
-<td>516-913-8323</td>
+<td>{{ $address->mobile ?? ($customer->mobile ?? '—') }}</td>
+<td>{{ $address->mobile ?? ($customer->mobile ?? '—') }}</td>
 </tr>
 </tbody>
 </table>
@@ -136,11 +158,11 @@
 <div class="col-sm-4 col-lg-3">
 <div class="invoice-detail text-sm-end">
 <p class="title title-2">Invoice No</p>
-<p class="title-2">23234</p>
+<p class="title-2">{{ $invoice->invoice_no }}</p>
 <p class="title title-2">Date</p>
-<p class="title-2">26/03/2021</p>
+<p class="title-2">{{ $invoice->created_at?->format('d/m/Y') ?? '—' }}</p>
 <p class="title title-2">Amount</p>
-<p class="title-2">11990$</p>
+<p class="title-2">${{ number_format($invoiceTotal) }}</p>
 </div>
 </div>
 </div>
@@ -156,24 +178,19 @@
 <th class="text-end">Total Cost</th>
 </thead>
 <tbody>
+@forelse ($items as $item)
+@php
+    $lineTotal = (int) ($item->price ?? 0) * (int) ($item->quantity ?? 0);
+@endphp
 <tr>
-<td>Apple Watch Series 4 GPS</td>
-<td class="text-center">3</td>
-<td class="text-center">100$</td>
-<td class="text-end">300$</td>
+<td>{{ $variantLineLabel($item) }}</td>
+<td class="text-center">{{ $item->quantity ?? '—' }}</td>
+<td class="text-center">${{ number_format($item->price ?? 0) }}</td>
+<td class="text-end">${{ number_format($lineTotal) }}</td>
 </tr>
-<tr>
-<td>Apple Watch Series 4 GPS</td>
-<td class="text-center">3</td>
-<td class="text-center">100$</td>
-<td class="text-end">300$</td>
-</tr>
-<tr>
-<td>Apple Watch Series 4 GPS</td>
-<td class="text-center">3</td>
-<td class="text-center">100$</td>
-<td class="text-end">300$</td>
-</tr>
+@empty
+<tr><td colspan="4" class="text-center text-muted">No line items on this invoice's order.</td></tr>
+@endforelse
 </tbody>
 </table>
 </div>
@@ -186,16 +203,16 @@
 <div class="col-sm-4 col-lg-3 order-sm-2 mb-3 mb-md-0">
 <div class="total-holder">
 <div class="item form-item second d-flex justify-content-between">
-<div class="item-title meta-title">subtotal:</div><span class="ms-2">900$</span>
+<div class="item-title meta-title">subtotal:</div><span class="ms-2">${{ number_format($subtotal) }}</span>
 </div>
 <div class="item form-item second d-flex justify-content-between">
-<div class="item-title meta-title">shipping:</div><span class="ms-2">10$</span>
+<div class="item-title meta-title">shipping:</div><span class="ms-2 text-muted">—</span>
 </div>
 <div class="item form-item second d-flex justify-content-between">
-<div class="item-title meta-title">Tax (10%):</div><span class="ms-2">90$</span>
+<div class="item-title meta-title">Tax:</div><span class="ms-2 text-muted">—</span>
 </div>
 <div class="item form-item second d-flex justify-content-between total">
-<div class="item-title meta-title">Total:</div><span class="ms-2">1000$</span>
+<div class="item-title meta-title">Total:</div><span class="ms-2">${{ number_format($invoiceTotal) }}</span>
 </div>
 </div>
 </div>
@@ -212,7 +229,7 @@
 <div class="col-sm-6 col-lg-3 float-end meta-box ms-auto">
 <div class="main-box box-spaces">
 <div class="btns-holder">
-<button class="btn solid-btn w-100 mb-2" data-invoice="34245" id="download">Download (.Pdf)</button>
+<button class="btn solid-btn w-100 mb-2" data-invoice="{{ $invoice->invoice_no }}" id="download">Download (.Pdf)</button>
 <button class="btn regular-btn w-100 mb-2" id="send-mail">send as email</button>
 <button class="btn regular-btn w-100 mb-2" id="print">print</button>
 <button class="btn trans-btn w-100" id="trash"><span class="icon me-1"><i class="fi-rr-trash"> </i>move to trash</span></button>
