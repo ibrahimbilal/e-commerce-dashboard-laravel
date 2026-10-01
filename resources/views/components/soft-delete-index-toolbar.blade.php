@@ -2,6 +2,7 @@
     'counts' => [],
     'filters' => [],
     'route' => null,
+    'showSearch' => true,
 ])
 
 @php
@@ -16,4 +17,5 @@
     :filters="$filters"
     :tabs="$softDeleteFilterTabs"
     :route="$route"
+    :showSearch="$showSearch"
 />

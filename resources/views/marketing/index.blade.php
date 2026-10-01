@@ -2,6 +2,10 @@
 
 @section('title', 'Marketing')
 
+@push('styles')
+<link href="{{ asset('assets/css/datatables.min.css') }}" rel="stylesheet"/>
+@endpush
+
 @section('content')
 @php
     $marketingFilterTabs = [
@@ -58,6 +62,7 @@
 <table class="table table-striped" id="subscribers">
 <thead>
 <tr>
+<th></th>
 <th class="text-uppercase">name</th>
 <th class="text-uppercase">email</th>
 <th class="text-uppercase">country</th>
@@ -70,6 +75,7 @@
 <tbody>
 @forelse ($subscribers ?? [] as $subscriber)
 <tr>
+<td></td>
 <td class="text-capitalize">{{ trim(($subscriber->first_name ?? '').' '.($subscriber->last_name ?? '')) ?: '—' }}</td>
 <td class="text-uppercase">{{ $subscriber->email ?? '—' }}</td>
 <td class="text-capitalize">{{ $subscriber->country ?? '—' }}</td>
@@ -92,15 +98,12 @@
 @endif
 </tr>
 @empty
-<tr><td colspan="{{ $showActions ? 5 : 4 }}" class="text-center text-muted py-4">No subscribers yet.</td></tr>
+<tr><td colspan="{{ $showActions ? 6 : 5 }}" class="text-center text-muted py-4">No subscribers yet.</td></tr>
 @endforelse
 </tbody>
 </table>
 </div>
 </div>
-@if (isset($subscribers) && method_exists($subscribers, 'hasPages'))
-<x-pagination :paginator="$subscribers" />
-@endif
 </div>
 </div>
 </div>
@@ -132,3 +135,82 @@
 @endforeach
 @endcan
 @endsection
+
+@push('scripts')
+<script async="" src="{{ asset('assets/js/async.js') }}" type="text/javascript"></script>
+<script src="{{ asset('assets/js/datatables.min.js') }}" type="text/javascript"></script>
+<script>
+if ($.fn.DataTable && $('#subscribers').length) {
+      let product_table = $('#subscribers').DataTable({
+      	dom: 'Bfrtip',
+      	columnDefs: [
+      		{
+      			orderable: false,
+      			className: 'select-checkbox',
+      			targets: 0
+      		},
+      		{
+      			bSortable: false,
+      			aTargets: [0@if($showActions), 5@endif]
+      		},
+      		{
+      			bSearchable: false,
+      			aTargets: [0@if($showActions), 5@endif]
+      		}
+      	],
+      	select: {
+      		style: 'os',
+      		selector: 'td:first-child'
+      	},
+      	order: [
+      		[{{ $showActions ? 4 : 3 }}, 'desc']
+      	],
+      	language: {
+      		info: "Show _START_ To _END_ Of _TOTAL_ subscribers",
+      		buttons: {
+      			pageLength: 'Show %d',
+      			colvis: 'Columns'
+      		}
+      	},
+      	stateSave: true,
+      	paging: true,
+      	searching: true,
+      	lengthMenu: [[ 10, 15, 25, 50, 75, 100 ], ['10 subscribers', '15 subscribers', '25 subscribers', '50 subscribers', '75 subscribers', '100 subscribers']],
+      	buttons: ($(window).width() > 578) ? ['pageLength', 'print', {
+      		extend: 'collection',
+      		text: 'Export',
+      		className: 'btn btn-group',
+      		buttons: [
+      			{ extend: 'excelHtml5', className: 'dropdown-item' },
+      			{ extend: 'csvHtml5', className: 'dropdown-item' },
+      			{ extend: 'pdfHtml5', className: 'dropdown-item' }
+      		]
+      	}, 'colvis'] : ['pageLength', {
+      		extend: 'collection',
+      		text: 'Export',
+      		className: 'btn btn-group',
+      		buttons: [
+      			{ extend: 'excelHtml5', className: 'dropdown-item' },
+      			{ extend: 'csvHtml5', className: 'dropdown-item' },
+      			{ extend: 'pdfHtml5', className: 'dropdown-item' }
+      		]
+      	}, 'colvis']
+      });
+      product_table.on("click", "th.select-checkbox", function() {
+      	if ($("th.select-checkbox").hasClass("selected")) {
+      		product_table.rows().deselect();
+      		$("th.select-checkbox").removeClass("selected");
+      	} else {
+      		product_table.rows().select();
+      		$("th.select-checkbox").addClass("selected");
+      	}
+      }).on("select deselect", function() {
+      	if (product_table.rows({ selected: true }).count() !== product_table.rows().count()) {
+      		$("th.select-checkbox").removeClass("selected");
+      	} else {
+      		$("th.select-checkbox").addClass("selected");
+      	}
+      });
+}
+</script>
+@endpush

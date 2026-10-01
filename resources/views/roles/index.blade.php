@@ -22,7 +22,7 @@
 </div>
 </div>
 <div class="row">
-<x-index-list-toolbar :counts="$counts ?? []" :filters="$filters ?? []" :tabs="[['label' => 'All', 'key' => 'all', 'params' => []]]" route="roles.index"/>
+<x-index-list-toolbar :showSearch="false" :counts="$counts ?? []" :filters="$filters ?? []" :tabs="[['label' => 'All', 'key' => 'all', 'params' => []]]" route="roles.index"/>
 <div class="col-12">
 <div class="main-box box-spaces mb-0">
 <div class="table-holder mt-0">
@@ -64,3 +64,31 @@
 </div>
 @endsection
 
+@push('styles')
+<link href="{{ asset('assets/css/datatables.min.css') }}" rel="stylesheet"/>
+@endpush
+
+@push('scripts')
+<script async="" src="{{ asset('assets/js/async.js') }}" type="text/javascript"></script>
+<script src="{{ asset('assets/js/datatables.min.js') }}" type="text/javascript"></script>
+<script>
+if ($.fn.DataTable && $('#roles').length) {
+      let product_table = $('#roles').DataTable({
+      	dom: 'Bfrtip',
+      	columnDefs: [
+      		{ bSortable: false, aTargets: [3] },
+      		{ bSearchable: false, aTargets: [3] }
+      	],
+      	order: [[0, 'asc']],
+      	language: {
+      		info: "Show _START_ To _END_ Of _TOTAL_ Roles",
+      		buttons: { pageLength: 'Show %d', colvis: 'Columns' }
+      	},
+      	stateSave: true,
+      	paging: false,
+      	searching: true,
+      });
+    
+}
+</script>
+@endpush

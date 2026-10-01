@@ -2,6 +2,9 @@
 
 @section('title', 'E-Commerce Project')
 
+@push('styles')
+<link href="{{ asset('assets/css/datatables.min.css') }}" rel="stylesheet"/>
+@endpush
 
 @section('content')
 <div class="page-header">
@@ -28,7 +31,7 @@
     ];
 @endphp
 <div class="row">
-<x-index-list-toolbar :counts="$counts ?? []" :filters="$filters ?? []" :tabs="$couponFilterTabs" route="coupons.index"/>
+<x-index-list-toolbar :showSearch="false" :counts="$counts ?? []" :filters="$filters ?? []" :tabs="$couponFilterTabs" route="coupons.index"/>
 <div class="col-12">
 <div class="main-box box-spaces mb-0">
 <div class="table-holder mt-0">
@@ -77,4 +80,39 @@
 @push('scripts')
 <script async="" src="{{ asset('assets/js/async.js') }}" type="text/javascript"></script>
 <script src="{{ asset('assets/js/datatables.min.js') }}" type="text/javascript"></script>
+<script>
+if ($.fn.DataTable && $('#coupons').length) {
+      $('#coupons').DataTable({
+      	dom: 'Bfrtip',
+      	columnDefs: [
+      		{ bSortable: false, aTargets: [5, 6] },
+      		{ bSearchable: false, aTargets: [5, 6] }
+      	],
+      	order: [[0, 'asc']],
+      	language: {
+      		info: "Show _START_ To _END_ Of _TOTAL_ coupons",
+      		buttons: { pageLength: 'Show %d', colvis: 'Columns' }
+      	},
+      	stateSave: true,
+      	paging: true,
+      	searching: true,
+      	lengthMenu: [[10, 15, 25, 50, 75, 100], ['10 coupons', '15 coupons', '25 coupons', '50 coupons', '75 coupons', '100 coupons']],
+      	buttons: ($(window).width() > 578) ? ['pageLength', 'print', {
+      		extend: 'collection', text: 'Export', className: 'btn btn-group',
+      		buttons: [
+      			{ extend: 'excelHtml5', className: 'dropdown-item' },
+      			{ extend: 'csvHtml5', className: 'dropdown-item' },
+      			{ extend: 'pdfHtml5', className: 'dropdown-item' }
+      		]
+      	}, 'colvis'] : ['pageLength', {
+      		extend: 'collection', text: 'Export', className: 'btn btn-group',
+      		buttons: [
+      			{ extend: 'excelHtml5', className: 'dropdown-item' },
+      			{ extend: 'csvHtml5', className: 'dropdown-item' },
+      			{ extend: 'pdfHtml5', className: 'dropdown-item' }
+      		]
+      	}, 'colvis']
+      });
+}
+</script>
 @endpush
