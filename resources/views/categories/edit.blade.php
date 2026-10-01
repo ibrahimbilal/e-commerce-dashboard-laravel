@@ -46,7 +46,7 @@
 <div class="form-item second justify-content-between mb-2 d-flex align-items-sm-center">
 <label class="item-title meta-title" for="newitem-lang">category Lang:</label>
 <select class="form-select dropdown" id="newitem-lang" name="locale">
-<option data-flag="./assets/images/flags/us.png" value="en" @selected(old('locale', $category->locale ?? 'en') === 'en')>English</option>
+<option data-flag="{{ asset('assets/images/flags/us.png') }}" value="en" @selected(old('locale', $category->locale ?? 'en') === 'en')>English</option>
 <option data-flag="./assets/images/flags/sa.png" value="ar" @selected(old('locale', $category->locale ?? '') === 'ar')>Arabic</option>
 <option data-flag="./assets/images/flags/fr.png" value="fr" @selected(old('locale', $category->locale ?? '') === 'fr')>French</option>
 </select>
@@ -56,12 +56,7 @@
 <input class="form-control mt-2" id="item-slug" name="category_slug" type="text" value="{{ old('category_slug', $category->category_slug ?? '') }}" />
 <input type="hidden" name="cat_img" value="{{ old('cat_img', $category->cat_img ?? '') }}"/>
 </div>
-<div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-<label class="item-title meta-title">created at: </label><span class="ms-2">26/03/2021 14:58</span>
-</div>
-<div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-<label class="item-title meta-title">updated at:</label><span class="ms-2">26/03/2021 14:58</span>
-</div>
+<x-resource-timestamps :model="$category" />
 <div class="btns-holder d-flex justify-content-between mt-4">
 <button class="btn regular-btn draft" data-post-type="Category">save as draft</button>
 <button class="btn solid-btn" type="submit">publish </button>
@@ -159,11 +154,9 @@ separate keywords with comma (,)."><i class="fi-rr-info"> </i></span></label>
       	placeholder: 'Write The Description Here...',
       	theme: 'snow'   // Specify theme in configuration
       };
-      var quill = new Quill('.editor-container', setting);
-      
-      // ===========================================================
-      // fire category checkbox function 
-      radioBoxFunctions();
+      if (document.querySelector('.editor-container') && typeof Quill !== 'undefined') {
+        new Quill('.editor-container', setting);
+      }
     </script>
 @endpush
 

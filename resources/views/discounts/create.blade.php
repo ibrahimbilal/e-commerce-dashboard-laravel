@@ -79,12 +79,7 @@
 <div class="row d-block clearfix">
 <div class="col-sm-6 col-lg-12 float-end float-lg-none">
 <div class="main-box box-spaces">
-<div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-<label class="item-title meta-title">created at: </label><span class="ms-2">26/03/2021 14:58</span>
-</div>
-<div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-<label class="item-title meta-title">updated at:</label><span class="ms-2">26/03/2021 14:58</span>
-</div>
+<x-resource-timestamps />
 <div class="btns-holder d-flex justify-content-between mt-4">
 <button class="btn trans-btn w-100 text-start delete" data-post-type="discount"><span class="icon me-1"><i class="fi-rr-trash"> </i></span>move to trash</button>
 <button class="btn solid-btn" type="submit">publish </button>

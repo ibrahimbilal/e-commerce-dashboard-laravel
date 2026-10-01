@@ -8,7 +8,12 @@
 <div class="col-12 d-flex align-items-sm-center justify-content-sm-between flex-column flex-sm-row">
 
 <div class="text-capitalize mb-2 mb-sm-0 d-flex justify-content-between align-items-center">
-<h1 class="page-title">view user</h1><a class="add-btn btn text-capitalize" href="{{ route('users.edit', $user) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit <span class="page">user<span></span></span></a>
+<h1 class="page-title">view user</h1>
+@if (Route::has('users.edit'))
+@can('edit users')
+<a class="add-btn btn text-capitalize" href="{{ route('users.edit', $user) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit <span class="page">user<span></span></span></a>
+@endcan
+@endif
 </div>
 
 <div class="page-breadcrumbs d-flex align-items-sm-center justify-content-start justify-content-sm-end">
@@ -37,37 +42,11 @@
 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
 <div class="title"><b>Email Address:</b></div><span class="ms-2">{{ $user->email }}</span>
 </div>
-<div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-<div class="title"><b>Registered At:</b></div><span class="ms-2">{{ $user->created_at?->format('d/m/Y H:i') ?? '—' }}</span>
-</div>
-<div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-<div class="title"><b>Updated At:</b></div><span class="ms-2">26/03/2021 14:58</span>
-</div>
-<div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-<div class="title"><b>Last Logged In:</b></div><span class="ms-2">26/03/2021 14:58</span>
-</div>
-<div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-<div class="title"><b>Device:</b></div><span class="ms-2">Samsung Galaxy S20</span>
-</div>
+<x-account-activity-meta :subject="$user" />
 </div>
 <div class="col-sm-6">
 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-<div class="title"><b>Birth Of Date:</b></div><span class="ms-2">26/03/2021</span>
-</div>
-<div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
 <div class="title"><b>Mobile:</b></div><span class="ms-2">{{ $user->mobile ?? '—' }}</span>
-</div>
-<div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-<div class="title"><b>Gender:</b></div><span class="ms-2">Female</span>
-</div>
-<div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-<div class="title"><b>iP Address:</b></div><span class="ms-2">216.58.217.164</span>
-</div>
-<div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-<div class="title"><b>iP Country:</b></div><span class="ms-2">United State</span>
-</div>
-<div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-<div class="title"><b>iP City:</b></div><span class="ms-2">New York</span>
 </div>
 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
 <div class="title"><b>Roles:</b></div>
@@ -606,75 +585,3 @@
 </div>
 </div>
 @endsection
-
-@push('scripts')
-<script async="" src="{{ asset('assets/js/async.js') }}" type="text/javascript"></script>
-<script>
-      // Data Tables
-      let product_table = $('#activities').DataTable({
-      	dom: 'Bfrtip',
-      	columnDefs: [
-      		{ 
-      			bSortable: false, 
-      			aTargets: [ 4] 
-      		},
-      		{ 
-      			bSearchable: false, 
-      			aTargets: [ 0, 1, 2, 3] 
-      		}
-      	],
-      	order: [
-      		[3, 'desc']
-      	],
-      	language: {
-      		info: "Show _START_ To _END_ Of _TOTAL_ Activity",
-      		buttons: {
-      			pageLength: 'Show %d',
-      			colvis: 'Columns'
-      		}
-      	},
-      	stateSave: true,
-      	paging: true,
-      	searching: true,
-      	lengthMenu: [[ 10, 15, 25, 50, 75, 100 ], ['10 Activities', '15 Activities', '25 Activities', '50 Activities', '75 Activities', '100 Activities']],
-      	buttons: ($(window).width() > 578) ? ['pageLength', 'print', {
-      		extend: 'collection',
-      		text: 'Export',
-      		className: 'btn btn-group',
-      		buttons: [
-      			{
-      				extend: 'excelHtml5',
-      				className: 'dropdown-item'
-      			},
-      			{
-      				extend: 'csvHtml5',
-      				className: 'dropdown-item'
-      			},
-      			{
-      				extend: 'pdfHtml5',
-      				className: 'dropdown-item'
-      			}
-      		]
-      	}, 'colvis'] : ['pageLength', {
-      		extend: 'collection',
-      		text: 'Export',
-      		className: 'btn btn-group',
-      		buttons: [
-      			{
-      				extend: 'excelHtml5',
-      				className: 'dropdown-item'
-      			},
-      			{
-      				extend: 'csvHtml5',
-      				className: 'dropdown-item'
-      			},
-      			{
-      				extend: 'pdfHtml5',
-      				className: 'dropdown-item'
-      			}
-      		]
-      	}, 'colvis']
-      });
-    </script>
-@endpush
-

@@ -77,12 +77,7 @@
 <label class="item-title meta-title" for="item-slug">attribute slug:<span class="icon info ms-2" flow="up" tooltip="slug is the bit of text that appears after your domain name in the URL of a page"><i class="fi-rr-info"> </i></span></label>
 <input class="form-control mt-2" id="item-slug" type="text" value="{{ old('attribute_slug', $attribute->attribute_slug ?? '') }}" />
 </div>
-<div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-<label class="item-title meta-title">created at: </label><span class="ms-2">26/03/2021 14:58</span>
-</div>
-<div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-<label class="item-title meta-title">updated at:</label><span class="ms-2">26/03/2021 14:58</span>
-</div>
+<x-resource-timestamps :model="$attribute" />
 <div class="btns-holder d-flex justify-content-between mt-4">
 <button class="btn regular-btn draft" data-post-type="tag">save as draft</button>
 <button class="btn solid-btn" type="submit">publish </button>
