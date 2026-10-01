@@ -5,6 +5,7 @@ use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\AttributeController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CouponController;
+use App\Http\Controllers\CustomerAddressController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DiscountController;
@@ -50,6 +51,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/marketing', [MarketingController::class, 'index'])->name('marketing.index');
     Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery.index');
     Route::get('/languages', [LanguageController::class, 'index'])->name('languages.index');
+
+    Route::get('customers/{customer}/addresses', [CustomerAddressController::class, 'index'])
+        ->name('customers.addresses');
 
     Route::resources([
         'products' => ProductController::class,

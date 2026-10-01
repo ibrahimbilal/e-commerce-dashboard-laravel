@@ -31,6 +31,8 @@ class OrderController extends Controller
 
         $order = Order::create($data);
 
+        $this->syncOrderItems($order, $request);
+
         return redirect()->route('orders.edit', $order)->with('status', 'Order created.');
     }
 
@@ -54,6 +56,8 @@ class OrderController extends Controller
     public function update(Request $request, Order $order)
     {
         $order->update($this->validatedOrder($request));
+
+        $this->syncOrderItems($order, $request);
 
         return redirect()->route('orders.edit', $order)->with('status', 'Order updated.');
     }
@@ -109,5 +113,29 @@ class OrderController extends Controller
             'coupon_id' => $validated['coupon_id'] ?? $validated['coupon'] ?? null,
             'updated_by' => $validated['updated_by'] ?? optional($request->user())->id,
         ];
+    }
+
+    private function syncOrderItems(Order $order, Request $request): void
+    {
+        if (! $request->has('items')) {
+            return;
+        }
+
+        $validated = $request->validate([
+            'items' => ['nullable', 'array'],
+            'items.*.product_attribute_id' => ['required', 'integer', 'exists:products_attributes,id'],
+            'items.*.quantity' => ['required', 'integer', 'min:1'],
+            'items.*.price' => ['required', 'integer'],
+        ]);
+
+        $order->items()->delete();
+
+        foreach ($validated['items'] ?? [] as $item) {
+            $order->items()->create([
+                'product_attribute_id' => $item['product_attribute_id'],
+                'quantity' => $item['quantity'],
+                'price' => $item['price'],
+            ]);
+        }
     }
 }

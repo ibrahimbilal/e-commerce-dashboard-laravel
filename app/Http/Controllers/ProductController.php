@@ -6,6 +6,7 @@ use App\Models\Attribute;
 use App\Models\Category;
 use App\Models\Lang;
 use App\Models\Product;
+use App\Models\ProductAttribute;
 use App\Models\ProductLocale;
 use App\Models\Tag;
 use Illuminate\Http\Request;
@@ -192,5 +193,57 @@ class ProductController extends Controller
                 $payload
             );
         }
+
+        $this->syncProductAttributes($product, $request);
+    }
+
+    private function syncProductAttributes(Product $product, Request $request): void
+    {
+        $request->validate([
+            'product_attributes' => ['nullable', 'array'],
+            'product_attributes.*.id' => ['nullable', 'integer', 'exists:products_attributes,id'],
+            'product_attributes.*.attribute_1_id' => ['required', 'integer', 'exists:attributes,id'],
+            'product_attributes.*.attribute_2_id' => ['required', 'integer', 'exists:attributes,id'],
+        ]);
+
+        $rows = $request->input('product_attributes', []);
+        $keepIds = [];
+
+        foreach ($rows as $row) {
+            if (! is_array($row)) {
+                continue;
+            }
+
+            if (! empty($row['id'])) {
+                $existing = ProductAttribute::query()
+                    ->where('product_id', $product->id)
+                    ->whereKey($row['id'])
+                    ->first();
+
+                if ($existing) {
+                    $existing->update([
+                        'attribute_1_id' => $row['attribute_1_id'],
+                        'attribute_2_id' => $row['attribute_2_id'],
+                    ]);
+                    $keepIds[] = $existing->id;
+
+                    continue;
+                }
+            }
+
+            $created = $product->productAttributes()->create([
+                'attribute_1_id' => $row['attribute_1_id'],
+                'attribute_2_id' => $row['attribute_2_id'],
+            ]);
+            $keepIds[] = $created->id;
+        }
+
+        if ($keepIds === []) {
+            $product->productAttributes()->delete();
+
+            return;
+        }
+
+        $product->productAttributes()->whereNotIn('id', $keepIds)->delete();
     }
 }
