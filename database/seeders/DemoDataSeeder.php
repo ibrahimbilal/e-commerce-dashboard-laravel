@@ -21,6 +21,7 @@ use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class DemoDataSeeder extends Seeder
@@ -166,6 +167,8 @@ class DemoDataSeeder extends Seeder
                 'attribute_2_id' => $size->id,
             ]);
 
+            $this->assignDemoProductImage($product);
+
             $this->variants[] = $variant;
             $products->push($product);
         }
@@ -178,6 +181,7 @@ class DemoDataSeeder extends Seeder
                 'product_slug' => 'featured-'.$product->id,
             ]);
             $product->update(['featured' => true, 'sale_price' => (int) ($product->regular_price * 0.8)]);
+            $this->assignDemoProductImage($product);
         }
 
         Product::query()->latest('id')->limit(4)->get()->each->delete();
@@ -381,6 +385,23 @@ class DemoDataSeeder extends Seeder
         });
 
         Invoice::query()->latest('id')->limit(2)->get()->each->delete();
+    }
+
+    private function assignDemoProductImage(Product $product): void
+    {
+        Storage::disk('public')->makeDirectory('demo/products');
+
+        $relative = 'demo/products/product-'.$product->id.'.png';
+
+        if (! Storage::disk('public')->exists($relative)) {
+            $png = base64_decode(
+                'iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFUlEQVR42mNk+M9Qz0AEYBxVSF+FABJADveWkH6oAAAAAElFTkSuQmCC',
+                true
+            );
+            Storage::disk('public')->put($relative, $png !== false ? $png : '');
+        }
+
+        $product->forceFill(['product_img' => 'storage/'.$relative])->save();
     }
 
     private function seedGalleries(): void

@@ -30,6 +30,39 @@ class DashboardTest extends TestCase
             return true;
         });
         $response->assertViewHas('recentOrders');
-        $response->assertViewHas('topProducts');
+        $response->assertViewHas('topProducts', function ($topProducts) {
+            foreach ($topProducts as $row) {
+                foreach (['product_id', 'name', 'quantity_sold', 'image_url', 'price', 'regular_price'] as $key) {
+                    if (! array_key_exists($key, $row)) {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        });
+        $response->assertViewHas('recentProducts', function ($recentProducts) {
+            if ($recentProducts->isEmpty()) {
+                return false;
+            }
+
+            foreach ($recentProducts as $row) {
+                foreach (['id', 'name', 'image_url', 'price', 'regular_price'] as $key) {
+                    if (! array_key_exists($key, $row)) {
+                        return false;
+                    }
+                }
+
+                if ($row['image_url'] !== null && ! is_string($row['image_url'])) {
+                    return false;
+                }
+            }
+
+            return true;
+        });
+
+        $firstRecent = $response->viewData('recentProducts')->first();
+        $this->assertNotNull($firstRecent['image_url']);
+        $this->assertStringContainsString('/storage/demo/products/', $firstRecent['image_url']);
     }
 }
