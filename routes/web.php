@@ -50,6 +50,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/analytics/overview', [AnalyticsController::class, 'overview'])->name('analytics.overview');
     Route::get('/marketing', [MarketingController::class, 'index'])->name('marketing.index');
     Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery.index');
+    Route::delete('/gallery/{gallery}', [GalleryController::class, 'destroy'])->name('gallery.destroy');
     Route::get('/languages', [LanguageController::class, 'index'])->name('languages.index');
 
     Route::get('customers/{customer}/addresses', [CustomerAddressController::class, 'index'])
