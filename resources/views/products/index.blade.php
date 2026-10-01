@@ -22,21 +22,24 @@
 </div>
 </div>
 </div>
+@php
+    $productFilterTabs = [
+        ['label' => 'All', 'key' => 'all', 'params' => []],
+        ['label' => 'Published', 'key' => 'published', 'params' => ['status' => 'published']],
+        ['label' => 'Draft', 'key' => 'draft', 'params' => ['status' => 'draft']],
+        ['label' => 'Trashed', 'key' => 'trashed', 'params' => ['trashed' => '1']],
+        ['label' => 'Featured', 'key' => 'featured', 'params' => ['featured' => '1']],
+        ['label' => 'New', 'key' => 'new', 'params' => ['new' => '1']],
+        ['label' => 'Sale', 'key' => 'sale', 'params' => ['sale' => '1']],
+    ];
+@endphp
 <div class="row">
-<div class="col-12 d-flex align-items-sm-center justify-content-between flex-column flex-sm-row mb-2">
-<div class="dash-filters"><a class="item text-capitalize" href="#">Published (50)</a><a class="item text-capitalize" href="#">Draft (12)</a><a class="item text-capitalize" href="#">Trashed (99)</a><a class="item text-capitalize" href="#">Featured (45)</a><a class="item text-capitalize" href="#">New (675)</a><a class="item text-capitalize" href="#">Sale (124)</a>
-</div>
-<div class="bulk-action align-self-end">
-<form class="bulk-form">
-<select class="bulk-select text-capitalize">
-<option value="">bulk action</option>
-<option value="edit">edit</option>
-<option value="delete">delete</option>
-</select>
-<button class="btn bulk-submit text-capitalize" type="submit">apply</button>
-</form>
-</div>
-</div>
+<x-index-list-toolbar
+    :counts="$counts ?? []"
+    :filters="$filters ?? []"
+    :tabs="$productFilterTabs"
+    route="products.index"
+/>
 <div class="col-12">
 <div class="main-box box-spaces mb-0">
 <div class="table-holder mt-0">
@@ -66,7 +69,7 @@
 <tr>
 <td></td>
 <td class="prod-img">
-<div class="img-holder"><img src="{{ $product->product_img ? asset($product->product_img) : asset('assets/images/products/image-1.png') }}" width="70" alt=""/></div>
+<div class="img-holder"><img src="{{ $product->product_img ? asset($product->product_img) : asset('assets/images/product-placeholder.svg') }}" width="70" alt=""/></div>
 </td>
 <td class="prod-title">{{ $productName }}</td>
 <td class="text-uppercase">{{ $product->sku }}</td>

@@ -22,21 +22,16 @@
 </div>
 </div>
 </div>
+@php
+    $tagFilterTabs = [
+        ['label' => 'All', 'key' => 'all', 'params' => []],
+        ['label' => 'Trashed', 'key' => 'trashed', 'params' => ['trashed' => '1']],
+        ['label' => 'Active', 'key' => 'active', 'params' => ['active' => '1']],
+        ['label' => 'Inactive', 'key' => 'inactive', 'params' => ['inactive' => '1']],
+    ];
+@endphp
 <div class="row">
-<div class="col-12 d-flex align-items-sm-center justify-content-between flex-column flex-sm-row mb-2">
-<div class="dash-filters"><a class="item text-capitalize" href="#">Published (50)</a><a class="item text-capitalize" href="#">Trashed (99)</a><a class="item text-capitalize" href="#">Active (45)</a><a class="item text-capitalize" href="#">Inactive (675)</a>
-</div>
-<div class="bulk-action align-self-end">
-<form class="bulk-form">
-<select class="bulk-select text-capitalize">
-<option value="">bulk action</option>
-<option value="edit">edit</option>
-<option value="delete">delete</option>
-</select>
-<button class="btn bulk-submit text-capitalize" type="submit">apply</button>
-</form>
-</div>
-</div>
+<x-index-list-toolbar :counts="$counts ?? []" :filters="$filters ?? []" :tabs="$tagFilterTabs" route="tags.index"/>
 <div class="col-12">
 <div class="main-box box-spaces mb-0">
 <div class="table-holder mt-0">

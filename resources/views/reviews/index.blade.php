@@ -24,21 +24,29 @@
 </div>
 </div>
 </div>
+@php
+    $reviewFilterTabs = [
+        ['label' => 'All', 'key' => 'all', 'params' => []],
+        ['label' => 'Trashed', 'key' => 'trashed', 'params' => ['trashed' => '1']],
+    ];
+    foreach ($counts ?? [] as $key => $number) {
+        if (in_array($key, ['all', 'trashed'], true)) {
+            continue;
+        }
+        $params = is_numeric($key)
+            ? ['rate' => (string) $key]
+            : (str_starts_with((string) $key, 'star_')
+                ? ['rate' => substr((string) $key, 5)]
+                : [(string) $key => '1']);
+        $reviewFilterTabs[] = [
+            'label' => is_numeric($key) ? $key.' Star' : ucwords(str_replace('_', ' ', (string) $key)),
+            'key' => $key,
+            'params' => $params,
+        ];
+    }
+@endphp
 <div class="row">
-<div class="col-12 d-flex align-items-sm-center flex-column flex-sm-row mb-2">
-<div class="dash-filters"><a class="item text-capitalize" href="#">All (110)</a><a class="item text-capitalize" href="#">1 Star (20)</a><a class="item text-capitalize" href="#">2 Star (20)</a><a class="item text-capitalize" href="#">3 Star (20)</a><a class="item text-capitalize" href="#">4 Star (20)</a><a class="item text-capitalize" href="#">5 Star (20)</a><a class="item text-capitalize" href="#">Trashed (10)</a>
-</div>
-<div class="bulk-action align-self-end">
-<form class="bulk-form">
-<select class="bulk-select text-capitalize">
-<option value="">bulk action</option>
-<option value="edit">edit</option>
-<option value="delete">delete</option>
-</select>
-<button class="btn bulk-submit text-capitalize" type="submit">apply</button>
-</form>
-</div>
-</div>
+<x-index-list-toolbar :counts="$counts ?? []" :filters="$filters ?? []" :tabs="$reviewFilterTabs" route="reviews.index"/>
 <div class="col-12">
 <div class="main-box box-spaces">
 <div class="table-holder mt-0">

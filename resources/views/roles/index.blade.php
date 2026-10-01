@@ -23,6 +23,7 @@
 </div>
 </div>
 <div class="row">
+<x-index-list-toolbar :counts="$counts ?? []" :filters="$filters ?? []" :tabs="[['label' => 'All', 'key' => 'all', 'params' => []]]" route="roles.index"/>
 <div class="col-12">
 <div class="main-box box-spaces mb-0">
 <div class="table-holder mt-0">

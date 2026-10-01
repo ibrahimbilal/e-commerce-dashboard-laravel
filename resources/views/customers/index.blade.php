@@ -22,21 +22,9 @@
 </div>
 </div>
 </div>
+@include('partials.filter-tabs-soft-delete')
 <div class="row">
-<div class="col-12 d-flex align-items-sm-center justify-content-between flex-column flex-sm-row mb-2">
-<div class="dash-filters"><a class="item text-capitalize" href="#">Registered (50)</a><a class="item text-capitalize" href="#">Trashed (99)</a>
-</div>
-<div class="bulk-action align-self-end">
-<form class="bulk-form">
-<select class="bulk-select text-capitalize">
-<option value="">bulk action</option>
-<option value="edit">edit</option>
-<option value="delete">delete</option>
-</select>
-<button class="btn bulk-submit text-capitalize" type="submit">apply</button>
-</form>
-</div>
-</div>
+<x-index-list-toolbar :counts="$counts ?? []" :filters="$filters ?? []" :tabs="$softDeleteFilterTabs" route="customers.index"/>
 <div class="col-12">
 <div class="main-box box-spaces mb-0">
 <div class="table-holder mt-0">
@@ -58,7 +46,7 @@
 <tr>
 <td></td>
 <td class="customer-img">
-<div class="img-holder"><img src="{{ $customer->profile_picture ? asset($customer->profile_picture) : asset('assets/images/customers/image-1.png') }}" width="70" alt=""/></div>
+<div class="img-holder"><img src="{{ $customer->profile_picture ? asset($customer->profile_picture) : asset('assets/images/avatar-placeholder.svg') }}" width="70" alt=""/></div>
 </td>
 <td class="prod-title">{{ trim(($customer->first_name ?? '') . ' ' . ($customer->last_name ?? '')) ?: '—' }}</td>
 <td>{{ $customer->email }}</td>
