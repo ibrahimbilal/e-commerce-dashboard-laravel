@@ -1,107 +1,111 @@
 'use strict';
 
-// Apex Chart
-var options = {
-    series: [{
-        name: "Visitors",
-        data: [0, 50, 20, 40, 27, 50, 35, 60]
-    }],
-    chart: {
-        height: 360,
-        type: 'area',
-        toolbar: {
-            export: {
-                csv: {
-                    filename: 'Store Visitors',
-                    columnDelimiter: ',',
-                    headerCategory: 'Date',
-                },
-                svg: {
-                    filename: 'Store Visitors',
-                },
-                png: {
-                    filename: 'Store Visitors',
-                }
+// Dashboard main chart (#chart) — data from window.__dashboardChartSeries when present.
+(function () {
+    var chartElement = document.querySelector('#chart');
+    if (chartElement == null) {
+        return;
+    }
+
+    var payload = window.__dashboardChartSeries;
+    if (!payload || !Array.isArray(payload.labels)) {
+        return;
+    }
+
+    var salesData = Array.isArray(payload.sales) ? payload.sales : [];
+    var ordersData = Array.isArray(payload.orders) ? payload.orders : [];
+
+    var options = {
+        series: [
+            {
+                name: 'Sales',
+                data: salesData,
             },
-        }
-    },
-    colors: ['#2DCD7A'],
-    fill: {
-        type: "gradient",
-        gradient: {
-            shadeIntensity: 1,
-            opacityFrom: 0.7,
-            opacityTo: 0.5,
-            stops: [0, 90, 100]
-        },
-    },
-    dataLabels: {
-        enabled: false,
-    },
-    stroke: {
-        curve: 'smooth'
-    },
-    xaxis: {
-        type: 'datetime',
-        categories: [
-            "01 Jan 2021",
-            "02 Jan 2021",
-            "03 Jan 2021",
-            "04 Jan 2021",
-            "05 Jan 2021",
-            "06 Jan 2021",
-            "07 Jan 2021",
-            "08 Jan 2021"
+            {
+                name: 'Orders',
+                data: ordersData,
+            },
         ],
-        labels: {
-            style: {
-                colors: 'var(--text-color)',
-                fontSize: '10px',
-                fontFamily: 'Montserrat,sans-serif',
-                fontWeight: 400,
-                cssClass: 'apexcharts-xaxis-label',
+        chart: {
+            height: 360,
+            type: 'area',
+            toolbar: {
+                export: {
+                    csv: {
+                        filename: 'Store Sales',
+                        columnDelimiter: ',',
+                        headerCategory: 'Month',
+                    },
+                    svg: {
+                        filename: 'Store Sales',
+                    },
+                    png: {
+                        filename: 'Store Sales',
+                    },
+                },
             },
         },
-    },
-    yaxis: {
-        labels: {
-            style: {
-                colors: 'var(--text-color)',
-                fontSize: '10px',
-                fontFamily: 'Montserrat,sans-serif',
-                fontWeight: 400,
-                cssClass: 'apexcharts-xaxis-label',
+        colors: ['#2DCD7A', '#2C2CCC'],
+        fill: {
+            type: 'gradient',
+            gradient: {
+                shadeIntensity: 1,
+                opacityFrom: 0.7,
+                opacityTo: 0.5,
+                stops: [0, 90, 100],
             },
         },
-    },
-    tooltip: {
-        theme: 'dark',
-        style: {
-            fontSize: '12px',
-            fontFamily: 'Montserrat,sans-serif',
+        dataLabels: {
+            enabled: false,
         },
-        x: {
-            format: 'dd MMM, yyyy',
+        stroke: {
+            curve: 'smooth',
         },
+        xaxis: {
+            categories: payload.labels,
+            labels: {
+                style: {
+                    colors: 'var(--text-color)',
+                    fontSize: '10px',
+                    fontFamily: 'Montserrat,sans-serif',
+                    fontWeight: 400,
+                    cssClass: 'apexcharts-xaxis-label',
+                },
+            },
+        },
+        yaxis: {
+            labels: {
+                style: {
+                    colors: 'var(--text-color)',
+                    fontSize: '10px',
+                    fontFamily: 'Montserrat,sans-serif',
+                    fontWeight: 400,
+                    cssClass: 'apexcharts-xaxis-label',
+                },
+            },
+        },
+        tooltip: {
+            theme: 'dark',
+            style: {
+                fontSize: '12px',
+                fontFamily: 'Montserrat,sans-serif',
+            },
+        },
+        title: {
+            text: 'Sales & Orders',
+            align: 'left',
+            style: {
+                fontSize: '20px',
+                fontWeight: '400',
+                fontFamily: 'Montserrat,sans-serif',
+                color: 'var(--text-color)',
+            },
+        },
+    };
 
-    },
-    title: {
-        text: 'Store Visitors',
-        align: 'left',
-        style: {
-            fontSize: '20px',
-            fontWeight: '400',
-            fontFamily: "Montserrat,sans-serif",
-            color: 'var(--text-color)'
-        },
-    },
-};
-
-var chartElement = document.querySelector("#chart");
-if (typeof(chartElement) != 'undefined' && chartElement != null) {
     var chart = new ApexCharts(chartElement, options);
     chart.render();
-}
+})();
 
 // ==================================================================
 // ==================================================================
@@ -222,7 +226,7 @@ var totalSalesOptions = {
 };
 
 var chartElement = document.querySelector("#total-sales-chart");
-if (typeof(chartElement) != 'undefined' && chartElement != null) {
+if (typeof(chartElement) != 'undefined' && chartElement != null && !window.__analyticsOverview) {
     var chart = new ApexCharts(chartElement, totalSalesOptions);
     chart.render();
 }
@@ -333,7 +337,7 @@ var orderOverviewOptions = {
 };
 
 var chartElement = document.querySelector("#orders-overview-chart");
-if (typeof(chartElement) != 'undefined' && chartElement != null) {
+if (typeof(chartElement) != 'undefined' && chartElement != null && !window.__analyticsOverview) {
     var chart = new ApexCharts(chartElement, orderOverviewOptions);
     chart.render();
 }
@@ -439,7 +443,7 @@ var itemsSoldOptions = {
 };
 
 var chartElement = document.querySelector("#items-sold-chart");
-if (typeof(chartElement) != 'undefined' && chartElement != null) {
+if (typeof(chartElement) != 'undefined' && chartElement != null && !window.__analyticsOverview) {
     var chart = new ApexCharts(chartElement, itemsSoldOptions);
     chart.render();
 }
@@ -550,7 +554,170 @@ var totalTaxOptions = {
 };
 
 var chartElement = document.querySelector("#total-tax-chart");
-if (typeof(chartElement) != 'undefined' && chartElement != null) {
+if (typeof(chartElement) != 'undefined' && chartElement != null && !window.__analyticsOverview) {
     var chart = new ApexCharts(chartElement, totalTaxOptions);
     chart.render();
 }
+
+(function () {
+    var payload = window.__analyticsOverview;
+    if (!payload || !Array.isArray(payload.labels)) {
+        return;
+    }
+
+    var axisLabelStyle = {
+        colors: 'var(--text-color)',
+        fontSize: '10px',
+        fontFamily: 'Montserrat,sans-serif',
+        fontWeight: 400,
+        cssClass: 'apexcharts-xaxis-label',
+    };
+
+    var titleStyle = {
+        fontSize: '20px',
+        fontWeight: '400',
+        fontFamily: 'Montserrat,sans-serif',
+        color: 'var(--text-color)',
+    };
+
+    function renderAreaChart(selector, title, seriesName, data, color) {
+        var el = document.querySelector(selector);
+        if (el == null) {
+            return;
+        }
+        var chart = new ApexCharts(el, {
+            series: [{ name: seriesName, data: Array.isArray(data) ? data : [] }],
+            chart: {
+                height: 400,
+                type: 'area',
+                toolbar: {
+                    export: {
+                        csv: { filename: title, columnDelimiter: ',', headerCategory: 'Date' },
+                        svg: { filename: title },
+                        png: { filename: title },
+                    },
+                },
+            },
+            colors: [color || '#2DCD7A'],
+            fill: {
+                type: 'gradient',
+                gradient: { shadeIntensity: 1, opacityFrom: 0.7, opacityTo: 0.5, stops: [0, 90, 100] },
+            },
+            dataLabels: { enabled: false },
+            stroke: { curve: 'smooth' },
+            xaxis: {
+                categories: payload.labels,
+                labels: { style: axisLabelStyle },
+            },
+            yaxis: { labels: { style: axisLabelStyle } },
+            tooltip: {
+                theme: 'dark',
+                style: { fontSize: '12px', fontFamily: 'Montserrat,sans-serif' },
+            },
+            title: { text: title, align: 'left', style: titleStyle },
+        });
+        chart.render();
+    }
+
+    function renderLineChart(selector, title, seriesName, data, color) {
+        var el = document.querySelector(selector);
+        if (el == null) {
+            return;
+        }
+        var chart = new ApexCharts(el, {
+            series: [{ name: seriesName, data: Array.isArray(data) ? data : [] }],
+            chart: {
+                height: 400,
+                type: 'line',
+                toolbar: {
+                    export: {
+                        csv: { filename: title, columnDelimiter: ',', headerCategory: 'Date' },
+                        svg: { filename: title },
+                        png: { filename: title },
+                    },
+                },
+            },
+            colors: [color || '#2C2CCC'],
+            dataLabels: { enabled: false },
+            stroke: { curve: 'smooth' },
+            xaxis: {
+                categories: payload.labels,
+                labels: { style: axisLabelStyle },
+            },
+            yaxis: { labels: { style: axisLabelStyle } },
+            tooltip: {
+                theme: 'dark',
+                style: { fontSize: '12px', fontFamily: 'Montserrat,sans-serif' },
+            },
+            title: { text: title, align: 'left', style: titleStyle },
+        });
+        chart.render();
+    }
+
+    function renderBarChart(selector, title, seriesName, data, color) {
+        var el = document.querySelector(selector);
+        if (el == null) {
+            return;
+        }
+        var chart = new ApexCharts(el, {
+            series: [{ name: seriesName, data: Array.isArray(data) ? data : [] }],
+            chart: {
+                height: 400,
+                type: 'bar',
+                toolbar: {
+                    export: {
+                        csv: { filename: title, columnDelimiter: ',', headerCategory: 'Date' },
+                        svg: { filename: title },
+                        png: { filename: title },
+                    },
+                },
+            },
+            colors: [color || '#FF9F43'],
+            dataLabels: { enabled: false },
+            stroke: { show: true, width: 2, colors: ['transparent'] },
+            xaxis: {
+                categories: payload.labels,
+                labels: { style: axisLabelStyle },
+            },
+            yaxis: { labels: { style: axisLabelStyle } },
+            tooltip: {
+                theme: 'dark',
+                style: { fontSize: '12px', fontFamily: 'Montserrat,sans-serif' },
+            },
+            title: { text: title, align: 'left', style: titleStyle },
+        });
+        chart.render();
+    }
+
+    renderAreaChart('#total-sales-chart', 'Total Sales', 'Sales', payload.sales, '#2DCD7A');
+    renderLineChart('#orders-overview-chart', 'Orders Overview', 'Orders', payload.orders, '#2C2CCC');
+    renderBarChart('#items-sold-chart', 'Items Sold', 'Items sold', payload.items_sold, '#FF9F43');
+
+    var taxEl = document.querySelector('#total-tax-chart');
+    if (taxEl != null) {
+        var taxChart = new ApexCharts(taxEl, {
+            series: [{ name: 'Tax', data: [] }],
+            chart: {
+                height: 400,
+                type: 'line',
+                toolbar: { show: false },
+            },
+            noData: {
+                text: 'Not tracked',
+                align: 'center',
+                verticalAlign: 'middle',
+                style: {
+                    color: 'var(--text-color)',
+                    fontSize: '16px',
+                    fontFamily: 'Montserrat,sans-serif',
+                },
+            },
+            xaxis: {
+                categories: payload.labels,
+                labels: { style: axisLabelStyle },
+            },
+            title: { text: 'Total Tax', align: 'left', style: titleStyle },
+        });
+        taxChart.render();
+    }
+})();

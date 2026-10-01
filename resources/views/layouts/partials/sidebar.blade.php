@@ -26,12 +26,28 @@
 <ul class="menu-list-group">
 <li class="list-item"><a href="{{ route('customers.index') }}"><i class="fi-rr-users"> </i><span class="title">customers</span></a></li>
 <li class="list-item @if(request()->routeIs('addresses.*')) active @endif"><a href="{{ route('addresses.index') }}"><i class="fi-rr-marker"> </i><span class="title">addresses</span></a></li>
-<li class="list-item has-submenu @if(request()->routeIs('orders.*', 'order-statuses.*')) active @endif"><a href="{{ route('orders.index') }}"><i class="fi-rr-box"> </i><span class="title">order</span><span class="icon"><i class="fi-rr-angle-small-down"> </i></span></a>
+<li class="list-item has-submenu @if(request()->routeIs('orders.*', 'order-statuses.*')) active @endif"><a href="{{ route('orders.index') }}"><i class="fi-rr-box"> </i><span class="title">order</span>@if (($pendingOrdersCount ?? 0) > 0)<span class="badge">{{ $pendingOrdersCount }}</span>@endif<span class="icon"><i class="fi-rr-angle-small-down"> </i></span></a>
 <ul class="submenu">
 <li class="list-item @if(request()->routeIs('order-statuses.*')) active @endif"><a href="{{ route('order-statuses.index') }}"><i class="fi-rr-circle"> </i><span class="title">order statuses</span></a></li>
 </ul>
 </li>
 <li class="list-item"><a href="{{ route('invoices.index') }}"><i class="fi-rr-document"> </i><span class="title">invoices</span></a></li>
+</ul>
+<ul class="menu-list-group">
+@can('view analytics')
+@if (Route::has('analytics.overview'))
+<li class="list-item has-submenu @if(request()->routeIs('analytics.*')) active @endif"><a href="{{ route('analytics.overview') }}"><i class="fi-rr-stats"> </i><span class="title">analytics</span><span class="icon"><i class="fi-rr-angle-small-down"> </i></span></a>
+<ul class="submenu">
+<li class="list-item @if(request()->routeIs('analytics.overview')) active @endif"><a href="{{ route('analytics.overview') }}"><i class="fi-rr-circle"> </i><span class="title">overview</span></a></li>
+</ul>
+</li>
+@endif
+@endcan
+@can('view marketing')
+@if (Route::has('marketing.index'))
+<li class="list-item @if(request()->routeIs('marketing.*')) active @endif"><a href="{{ route('marketing.index') }}"><i class="fi-rr-megaphone"> </i><span class="title">marketing</span></a></li>
+@endif
+@endcan
 </ul>
 <ul class="menu-list-group">
 <li class="list-item"><a href="{{ route('users.index') }}"><i class="fi-rr-user"> </i><span class="title">users</span></a></li>

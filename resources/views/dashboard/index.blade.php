@@ -4,12 +4,14 @@
 
 @push('styles')
 <link href="{{ asset('assets/css/swiper-bundle.min.css') }}" rel="stylesheet"/>
+<link href="{{ asset('assets/css/apexcharts.css') }}" rel="stylesheet"/>
 @endpush
 
 @section('content')
 @php
     $stats = $stats ?? [];
-    $recentOrders = collect($recentOrders ?? []);
+    $salesChartSeries = $salesChartSeries ?? ['labels' => [], 'sales' => [], 'orders' => []];
+    $orderStatusStats = collect($orderStatusStats ?? []);
     $topProducts = collect($topProducts ?? []);
     $productPlaceholder = asset('assets/images/product-placeholder.svg');
     $formatDashboardStat = static function ($value): string {
@@ -26,10 +28,51 @@
 
         return number_format($number / 1000, 1, '.', '').'K';
     };
-    $customersStat = data_get($stats, 'customers', 0);
-    $ordersStat = data_get($stats, 'orders', 0);
-    $salesStat = data_get($stats, 'revenue', 0);
-    $subscribersStat = data_get($stats, 'subscribers', 0);
+    $formatChangePercent = static function ($change): ?string {
+        if ($change === null || ! is_numeric($change)) {
+            return null;
+        }
+
+        return number_format(abs((float) $change), 1, '.', '').'%';
+    };
+    $kpiCards = [
+        [
+            'value' => data_get($stats, 'customers', 0),
+            'label' => 'Customers',
+            'icon' => 'fi-rr-users',
+            'color' => 'mauve',
+            'change' => data_get($stats, 'customers_change'),
+        ],
+        [
+            'value' => data_get($stats, 'orders', 0),
+            'label' => 'Orders',
+            'icon' => 'fi-rr-box',
+            'color' => 'green',
+            'change' => data_get($stats, 'orders_change'),
+        ],
+        [
+            'value' => data_get($stats, 'sales', data_get($stats, 'revenue', 0)),
+            'label' => 'Sales',
+            'icon' => 'fi-rr-dollar',
+            'color' => 'red',
+            'change' => data_get($stats, 'sales_change'),
+        ],
+        [
+            'value' => data_get($stats, 'subscribers', 0),
+            'label' => 'Subscribers',
+            'icon' => 'fi-rr-paper-plane',
+            'color' => 'orange',
+            'change' => data_get($stats, 'subscribers_change'),
+        ],
+    ];
+    $statusClass = static function (?string $slug): string {
+        return match ($slug) {
+            'pending' => 'warning',
+            'canceled', 'cancelled' => 'danger',
+            'completed', 'delivered', 'moving' => 'success',
+            default => '',
+        };
+    };
 @endphp
 <div class="page-header">
 <div class="row">
@@ -50,96 +93,36 @@
 
 <div class="swiper-container">
 <div class="swiper-wrapper">
-<div class="swiper-slide main-box box-spaces d-flex justify-content-between align-items-center">
-<div class="icon-holder"><span class="mauve"><i class="fi-rr-users"> </i></span></div>
-<div class="detail-holder">
-<p class="text-start m-0">{{ $formatDashboardStat($customersStat) }}</p>
-<p class="text-start m-0">Customers</p>
-</div>
-</div>
-<div class="swiper-slide main-box box-spaces d-flex justify-content-between align-items-center">
-<div class="icon-holder"><span class="green"><i class="fi-rr-box"> </i></span></div>
-<div class="detail-holder">
-<p class="text-start m-0">{{ $formatDashboardStat($ordersStat) }}</p>
-<p class="text-start m-0">Orders</p>
-</div>
-</div>
-<div class="swiper-slide main-box box-spaces d-flex justify-content-between align-items-center">
-<div class="icon-holder"><span class="red"><i class="fi-rr-dollar"> </i></span></div>
-<div class="detail-holder">
-<p class="text-start m-0">{{ $formatDashboardStat($salesStat) }}</p>
-<p class="text-start m-0">Sales</p>
-</div>
-</div>
-<div class="swiper-slide main-box box-spaces d-flex justify-content-between align-items-center">
-<div class="icon-holder"><span class="orange"><i class="fi-rr-dollar"></i></span></div>
-<div class="detail-holder">
-<p class="text-start m-0">{{ number_format($stats['revenue'] ?? 0) }}</p>
-<p class="text-start m-0">Revenue</p>
-</div>
-</div>
-<div class="swiper-slide main-box box-spaces d-flex justify-content-between align-items-center">
-<div class="icon-holder"><span class="mauve"><i class="fi-rr-shopping-bag"></i></span></div>
-<div class="detail-holder">
-<p class="text-start m-0">{{ number_format($stats['products'] ?? 0) }}</p>
-<p class="text-start m-0 mb-0">Products</p>
-</div>
-</div>
-<div class="swiper-slide main-box box-spaces d-flex justify-content-between align-items-center">
-<div class="icon-holder"><span class="green"><i class="fi-rr-paper-plane"> </i></span></div>
-<div class="detail-holder">
-<p class="text-start m-0">{{ $formatDashboardStat($subscribersStat) }}</p>
-<p class="text-start m-0">Subscribers</p>
-</div>
-</div>
-</div>
-</div>
-</div>
-
-<div class="row g-3 mt-1">
-<div class="col-12 col-xxl-8">
-<div class="main-box box-spaces mb-0">
-<h2 class="box-title text-capitalize">Recent orders</h2>
-<div class="table-responsive">
-<table class="table table-striped mb-0">
-<thead>
-<tr>
-<th class="text-uppercase">Order</th>
-<th class="text-uppercase">Status</th>
-<th class="text-uppercase">Customer</th>
-<th class="text-uppercase text-end">Amount</th>
-<th class="text-uppercase">Date</th>
-</tr>
-</thead>
-<tbody>
-@forelse ($recentOrders as $order)
+@foreach ($kpiCards as $card)
 @php
-    $customerName = trim(($order->customer->first_name ?? '').' '.($order->customer->last_name ?? '')) ?: '—';
+    $changeValue = $card['change'] ?? null;
+    $changeLabel = $formatChangePercent($changeValue);
+    $changePositive = $changeValue !== null && is_numeric($changeValue) && (float) $changeValue >= 0;
 @endphp
-<tr>
-<td class="text-uppercase">
-@if (Route::has('orders.show'))
-<a href="{{ route('orders.show', $order) }}">#{{ $order->id }}</a>
-@else
-#{{ $order->id }}
+<div class="swiper-slide main-box box-spaces d-flex justify-content-between align-items-center">
+<div class="icon-holder"><span class="{{ $card['color'] }}"><i class="{{ $card['icon'] }}"> </i></span></div>
+<div class="detail-holder">
+<p class="text-start m-0">{{ $formatDashboardStat($card['value']) }}</p>
+<p class="text-start m-0">{{ $card['label'] }}</p>
+</div>
+@if ($changeLabel !== null)
+<div class="percent {{ $changePositive ? 'good' : 'bad' }}">{{ ($changePositive ? '' : '-').$changeLabel }}<i class="fi-sr-arrow-small-{{ $changePositive ? 'up' : 'down' }}"> </i>
+</div>
 @endif
-</td>
-<td class="text-capitalize">{{ $order->orderStatus->title ?? '—' }}</td>
-<td class="text-capitalize">{{ $customerName }}</td>
-<td class="text-end">${{ number_format($order->amount ?? 0) }}</td>
-<td>{{ $order->created_at?->format('H:i d/m/Y') ?? '—' }}</td>
-</tr>
-@empty
-<tr><td colspan="5" class="text-center text-muted py-4">No recent orders.</td></tr>
-@endforelse
-</tbody>
-</table>
+</div>
+@endforeach
 </div>
 </div>
 </div>
-<div class="col-12 col-xxl-4">
-<div class="main-box box-spaces mb-0">
-<h2 class="box-title text-capitalize">Top selling products</h2>
+<div class="row">
+<div class="col-12 col-xxl-8">
+<div class="main-box box-spaces">
+<div id="chart"></div>
+</div>
+</div>
+<div class="col-12 col-sm-6 col-xxl-4">
+<div class="main-box box-spaces">
+<h2 class="box-title text-capitalize">Top Selling Products</h2>
 <div class="list-holder">
 @forelse ($topProducts as $productRow)
 @php
@@ -174,10 +157,60 @@ ${{ number_format((float) $price) }}
 </div>
 </div>
 </div>
+<div class="col-12 col-sm-6 col-xxl-4">
+<div class="main-box box-spaces">
+<div class="box-header d-flex align-items-center justify-content-between flex-row-reverse">
+<h2 class="box-title text-capitalize mb-0">Visitors Referrals</h2>
+</div>
+<div class="list-holder">
+<p class="text-muted text-center py-4 mb-0">No visitor tracking yet.</p>
+</div>
+</div>
+</div>
+<div class="col-12 col-xxl-8">
+<div class="main-box box-spaces mb-0">
+<h2 class="box-title text-capitalize">Orders Statuses </h2>
+<div class="table-holder">
+<div class="table-responsive">
+<table class="table table-striped mb-0">
+<thead>
+<tr>
+<th class="text-uppercase">status</th>
+<th class="text-uppercase text-end">orders</th>
+<th class="text-uppercase text-end">share</th>
+</tr>
+</thead>
+<tbody>
+@forelse ($orderStatusStats as $statusRow)
+@php
+    $slug = data_get($statusRow, 'slug');
+    $title = data_get($statusRow, 'title', '—');
+    $count = data_get($statusRow, 'count', 0);
+    $percent = data_get($statusRow, 'percent');
+@endphp
+<tr>
+<td class="status text-capitalize {{ $statusClass(is_string($slug) ? $slug : null) }}">{{ $title }}</td>
+<td class="text-end">{{ is_numeric($count) ? number_format((int) $count) : '0' }}</td>
+<td class="text-end">@if (is_numeric($percent)){{ number_format((float) $percent, 1) }}%@else—@endif</td>
+</tr>
+@empty
+<tr><td colspan="3" class="text-center text-muted py-4">No order statuses yet.</td></tr>
+@endforelse
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
 </div>
 @endsection
 
 @push('scripts')
 <script async="" src="{{ asset('assets/js/async.js') }}" type="text/javascript"></script>
+<script src="{{ asset('assets/js/apexcharts.min.js') }}" type="text/javascript"></script>
+<script>
+window.__dashboardChartSeries = @json($salesChartSeries);
+</script>
+<script src="{{ asset('assets/js/charts.js') }}" type="text/javascript"></script>
 <script src="{{ asset('assets/js/swiper-bundle.min.js') }}" type="text/javascript"></script>
 @endpush
