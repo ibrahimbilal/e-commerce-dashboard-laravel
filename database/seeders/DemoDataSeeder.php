@@ -21,9 +21,10 @@ use App\Models\Subscriber;
 use App\Models\Tag;
 use App\Models\User;
 use App\Support\DemoImageGenerator;
+use App\Support\StoredMedia;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class DemoDataSeeder extends Seeder
@@ -54,6 +55,7 @@ class DemoDataSeeder extends Seeder
         $this->seedInvoices();
         $this->seedGalleries();
         $this->seedSubscribers($customers);
+        $this->reconcileDemoProductImages();
     }
 
     private function seedStaffUsers(): void
@@ -397,8 +399,29 @@ class DemoDataSeeder extends Seeder
         $path = DemoImageGenerator::writeProductImage($product->id, $label, $product->id);
 
         if ($path) {
-            $product->forceFill(['product_img' => $path])->save();
+            $product->forceFill(['product_img' => StoredMedia::normalizeStoredPath($path)])->save();
         }
+    }
+
+    private function reconcileDemoProductImages(): void
+    {
+        Product::query()->each(function (Product $product) {
+            $relative = 'demo/products/product-'.$product->id.'.png';
+
+            if (! Storage::disk('public')->exists($relative)) {
+                DemoImageGenerator::writeProductImage(
+                    $product->id,
+                    'Demo Product '.$product->id,
+                    $product->id
+                );
+            }
+
+            if (Storage::disk('public')->exists($relative)) {
+                $product->forceFill([
+                    'product_img' => StoredMedia::databasePath($relative),
+                ])->save();
+            }
+        });
     }
 
     /**

@@ -6,14 +6,11 @@ class ProductImage
 {
     public static function url(?string $path): ?string
     {
-        if ($path === null || $path === '') {
-            return null;
-        }
+        return StoredMedia::publicUrl($path);
+    }
 
-        if (str_starts_with($path, 'storage/')) {
-            return asset($path);
-        }
-
-        return asset('storage/'.ltrim($path, '/'));
+    public static function normalizeStoredPath(?string $path): ?string
+    {
+        return StoredMedia::normalizeStoredPath($path);
     }
 }

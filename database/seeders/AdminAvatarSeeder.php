@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Support\DemoImageGenerator;
+use App\Support\StoredMedia;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
 
@@ -20,21 +21,23 @@ class AdminAvatarSeeder extends Seeder
             return;
         }
 
-        $path = DemoImageGenerator::writeAdminAvatar();
+        $relative = 'avatars/admin.png';
 
-        if (! $path) {
-            Storage::disk('public')->makeDirectory('avatars');
-            $fallback = 'avatars/admin.png';
-            if (! Storage::disk('public')->exists($fallback)) {
-                $png = base64_decode(
-                    'iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFUlEQVR42mNk+M9Qz0AEYBxVSF+FABJADveWkH6oAAAAAElFTkSuQmCC',
-                    true
-                );
-                Storage::disk('public')->put($fallback, $png !== false ? $png : '');
-            }
-            $path = 'storage/'.$fallback;
+        if (! Storage::disk('public')->exists($relative)) {
+            DemoImageGenerator::writeAdminAvatar();
         }
 
-        $admin->forceFill(['profile_picture' => $path])->save();
+        if (! Storage::disk('public')->exists($relative)) {
+            Storage::disk('public')->makeDirectory('avatars');
+            $png = base64_decode(
+                'iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFUlEQVR42mNk+M9Qz0AEYBxVSF+FABJADveWkH6oAAAAAElFTkSuQmCC',
+                true
+            );
+            Storage::disk('public')->put($relative, $png !== false ? $png : '');
+        }
+
+        $admin->forceFill([
+            'profile_picture' => StoredMedia::databasePath($relative),
+        ])->save();
     }
 }

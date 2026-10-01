@@ -41,10 +41,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function getAvatarUrlAttribute(): ?string
     {
-        if (! $this->profile_picture) {
-            return null;
-        }
-
-        return asset($this->profile_picture);
+        return \App\Support\StoredMedia::publicUrl($this->profile_picture);
     }
 }
