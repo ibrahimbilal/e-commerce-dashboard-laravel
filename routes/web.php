@@ -58,19 +58,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resources([
         'products' => ProductController::class,
         'categories' => CategoryController::class,
-        'tags' => TagController::class,
         'orders' => OrderController::class,
         'customers' => CustomerController::class,
-        'coupons' => CouponController::class,
-        'discounts' => DiscountController::class,
         'reviews' => ReviewController::class,
         'users' => UserController::class,
         'roles' => RoleController::class,
         'invoices' => InvoiceController::class,
-        'attributes' => AttributeController::class,
         'addresses' => AddressController::class,
-        'order-statuses' => OrderStatusController::class,
     ]);
+
+    Route::resource('attributes', AttributeController::class)->except(['show']);
+    Route::resource('tags', TagController::class)->except(['show']);
+    Route::resource('discounts', DiscountController::class)->except(['show']);
+    Route::resource('coupons', CouponController::class)->except(['show']);
+    Route::resource('order-statuses', OrderStatusController::class)->except(['show']);
 });
 
 require_once 'admin.php';

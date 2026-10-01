@@ -62,7 +62,7 @@ class RoleController extends Controller
 			return response()->json([
 				'success' => true,
 				'text' => __('alerts.roles.response.create'),
-				'redirect' => route('roles.index')
+				'redirect' => route('admin.roles.index')
 			]);
 
 		} catch ( \Exception $ex ) {
@@ -94,7 +94,7 @@ class RoleController extends Controller
 		$role = Role::find($id);
 		if ( !$role ) {
 			return redirect()
-					->route('roles.index')
+					->route('admin.roles.index')
 					->with([
 						'errors' => __('alerts.roles.response.errors.not_exist')
 					]);
@@ -126,7 +126,7 @@ class RoleController extends Controller
             $role = Role::find($id);
             if ( !$role ) {
 				return redirect()
-						->route('roles.index')
+						->route('admin.roles.index')
 						->with([
 							'errors' => __('alerts.roles.response.errors.not_exist')
 						]);
@@ -143,7 +143,7 @@ class RoleController extends Controller
 
         }catch( \Exception $ex ) {
 			return redirect()
-					->route('roles.index')
+					->route('admin.roles.index')
 					->with(['errors' => [__('alerts.response.errors.unknown')]]);
         }
     }
@@ -161,7 +161,7 @@ class RoleController extends Controller
             $role = Role::find($id);
 			if ( !$role ) {
 				return redirect()
-						->route('roles.index')
+						->route('admin.roles.index')
 						->with([
 							'errors' => [__('alerts.roles.response.errors.not_exist')]
 						]);
@@ -172,12 +172,12 @@ class RoleController extends Controller
 				'success' => true,
 				'title' => __('alerts.roles.response.delete.title'),
 				'text' => __('alerts.roles.response.delete.text'),
-				'redirect' => route('roles.index')
+				'redirect' => route('admin.roles.index')
 			]);
 
         }catch( \Exception $ex ) {
 			return redirect()
-					->route('roles.index')
+					->route('admin.roles.index')
 					->with(['errors' => [__('alerts.response.errors.unknown')]]);
         }
     }

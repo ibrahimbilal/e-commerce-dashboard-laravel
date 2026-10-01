@@ -4,9 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class CategoryController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:view categories', ['only' => ['index', 'show']]);
+        $this->middleware('permission:add categories', ['only' => ['create', 'store']]);
+        $this->middleware('permission:edit categories', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:delete categories', ['only' => ['destroy']]);
+    }
+
     public function index()
     {
         $categories = Category::with(['parent', 'children'])
@@ -40,9 +49,11 @@ class CategoryController extends Controller
             'deleted' => ['sometimes', 'boolean'],
         ]);
 
-        $category = Category::create($data);
+        $this->assertValidCategoryParent(null, $data['parent_id'] ?? null);
 
-        return redirect()->route('categories.show', $category)->with('status', 'Category created.');
+        Category::create($data);
+
+        return redirect()->route('categories.index')->with('status', 'Category created.');
     }
 
     public function show(Category $category)
@@ -75,9 +86,11 @@ class CategoryController extends Controller
             'deleted' => ['sometimes', 'boolean'],
         ]);
 
+        $this->assertValidCategoryParent($category->id, $data['parent_id'] ?? null);
+
         $category->update($data);
 
-        return redirect()->route('categories.show', $category)->with('status', 'Category updated.');
+        return redirect()->route('categories.index')->with('status', 'Category updated.');
     }
 
     public function destroy(Category $category)
@@ -85,5 +98,44 @@ class CategoryController extends Controller
         $category->delete();
 
         return redirect()->route('categories.index')->with('status', 'Category deleted.');
+    }
+
+    private function assertValidCategoryParent(?int $categoryId, ?int $parentId): void
+    {
+        if (! $parentId) {
+            return;
+        }
+
+        if ($categoryId !== null && $parentId === $categoryId) {
+            throw ValidationException::withMessages([
+                'parent_id' => ['A category cannot be its own parent.'],
+            ]);
+        }
+
+        if ($categoryId !== null && in_array($parentId, $this->categoryDescendantIds($categoryId), true)) {
+            throw ValidationException::withMessages([
+                'parent_id' => ['A category cannot be placed under one of its descendants.'],
+            ]);
+        }
+    }
+
+    /**
+     * @return array<int, int>
+     */
+    private function categoryDescendantIds(int $categoryId): array
+    {
+        $ids = [];
+        $queue = Category::query()->where('parent_id', $categoryId)->pluck('id')->all();
+
+        while ($queue !== []) {
+            $childId = array_shift($queue);
+            $ids[] = $childId;
+            $queue = array_merge(
+                $queue,
+                Category::query()->where('parent_id', $childId)->pluck('id')->all()
+            );
+        }
+
+        return $ids;
     }
 }

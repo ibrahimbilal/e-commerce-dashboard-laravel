@@ -7,9 +7,17 @@ use Illuminate\Http\Request;
 
 class TagController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:view tags', ['only' => ['index', 'show']]);
+        $this->middleware('permission:add tags', ['only' => ['create', 'store']]);
+        $this->middleware('permission:edit tags', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:delete tags', ['only' => ['destroy']]);
+    }
+
     public function index()
     {
-        $tags = Tag::with(['parent', 'products'])->latest('id')->paginate(20);
+        $tags = Tag::with(['parent'])->withCount('products')->latest('id')->paginate(20);
 
         return view('tags.index', compact('tags'));
     }
@@ -34,9 +42,9 @@ class TagController extends Controller
             'deleted' => ['sometimes', 'boolean'],
         ]);
 
-        $tag = Tag::create($data);
+        Tag::create($data);
 
-        return redirect()->route('tags.show', $tag)->with('status', 'Tag created.');
+        return redirect()->route('tags.index')->with('status', 'Tag created.');
     }
 
     public function show(Tag $tag)
@@ -68,7 +76,7 @@ class TagController extends Controller
 
         $tag->update($data);
 
-        return redirect()->route('tags.show', $tag)->with('status', 'Tag updated.');
+        return redirect()->route('tags.index')->with('status', 'Tag updated.');
     }
 
     public function destroy(Tag $tag)

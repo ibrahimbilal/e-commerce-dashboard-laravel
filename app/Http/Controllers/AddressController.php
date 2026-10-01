@@ -8,6 +8,14 @@ use Illuminate\Http\Request;
 
 class AddressController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:view addresses', ['only' => ['index', 'show']]);
+        $this->middleware('permission:add addresses', ['only' => ['create', 'store']]);
+        $this->middleware('permission:edit addresses', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:delete addresses', ['only' => ['destroy']]);
+    }
+
     public function index()
     {
         $addresses = Address::with('customer')->latest('id')->paginate(20);

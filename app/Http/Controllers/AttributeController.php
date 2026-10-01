@@ -7,6 +7,14 @@ use Illuminate\Http\Request;
 
 class AttributeController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:view attributes', ['only' => ['index', 'show']]);
+        $this->middleware('permission:add attributes', ['only' => ['create', 'store']]);
+        $this->middleware('permission:edit attributes', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:delete attributes', ['only' => ['destroy']]);
+    }
+
     public function index()
     {
         $attributes = Attribute::orderBy('attribute_key')->paginate(20);
@@ -28,7 +36,7 @@ class AttributeController extends Controller
 
         $attribute = Attribute::create($data);
 
-        return redirect()->route('attributes.show', $attribute)->with('status', 'Attribute created.');
+        return redirect()->route('attributes.index')->with('status', 'Attribute created.');
     }
 
     public function show(Attribute $attribute)
@@ -52,7 +60,7 @@ class AttributeController extends Controller
 
         $attribute->update($data);
 
-        return redirect()->route('attributes.show', $attribute)->with('status', 'Attribute updated.');
+        return redirect()->route('attributes.index')->with('status', 'Attribute updated.');
     }
 
     public function destroy(Attribute $attribute)

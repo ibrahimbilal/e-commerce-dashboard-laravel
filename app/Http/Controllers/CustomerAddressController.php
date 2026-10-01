@@ -8,6 +8,11 @@ use Illuminate\Http\JsonResponse;
 
 class CustomerAddressController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:view customers');
+    }
+
     public function index(Customer $customer): JsonResponse
     {
         $addresses = $customer->addresses()->orderBy('id')->get();

@@ -7,6 +7,14 @@ use Illuminate\Http\Request;
 
 class OrderStatusController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:view orders', ['only' => ['index', 'show']]);
+        $this->middleware('permission:add orders', ['only' => ['create', 'store']]);
+        $this->middleware('permission:edit orders', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:delete orders', ['only' => ['destroy']]);
+    }
+
     public function index()
     {
         $orderStatuses = OrderStatus::withCount('orders')->orderBy('title')->paginate(20);
@@ -27,7 +35,7 @@ class OrderStatusController extends Controller
 
         $orderStatus = OrderStatus::create($data);
 
-        return redirect()->route('order-statuses.show', $orderStatus)->with('status', 'Order status created.');
+        return redirect()->route('order-statuses.index')->with('status', 'Order status created.');
     }
 
     public function show(OrderStatus $orderStatus)
@@ -50,7 +58,7 @@ class OrderStatusController extends Controller
 
         $orderStatus->update($data);
 
-        return redirect()->route('order-statuses.show', $orderStatus)->with('status', 'Order status updated.');
+        return redirect()->route('order-statuses.index')->with('status', 'Order status updated.');
     }
 
     public function destroy(OrderStatus $orderStatus)

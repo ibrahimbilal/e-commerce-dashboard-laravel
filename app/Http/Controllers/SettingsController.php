@@ -7,6 +7,16 @@ use Illuminate\Http\Request;
 
 class SettingsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:view general_settings', ['only' => ['index', 'update']]);
+        $this->middleware('permission:edit general_settings', ['only' => ['update']]);
+        $this->middleware('permission:view theme_settings', ['only' => ['theme']]);
+        $this->middleware('permission:view store_settings', ['only' => ['store']]);
+        $this->middleware('permission:view currencies_settings', ['only' => ['currencies']]);
+        $this->middleware('permission:view emails_settings', ['only' => ['emails']]);
+    }
+
     public function index()
     {
         $options = Option::orderBy('option_key')->get();

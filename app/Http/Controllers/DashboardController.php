@@ -8,6 +8,11 @@ use App\Models\Product;
 
 class DashboardController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:view dashboard');
+    }
+
     public function __invoke()
     {
         $stats = [

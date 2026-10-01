@@ -8,6 +8,14 @@ use Illuminate\Support\Facades\Hash;
 
 class CustomerController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:view customers', ['only' => ['index', 'show']]);
+        $this->middleware('permission:add customers', ['only' => ['create', 'store']]);
+        $this->middleware('permission:edit customers', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:delete customers', ['only' => ['destroy']]);
+    }
+
     public function index()
     {
         $customers = Customer::withCount(['orders', 'reviews'])

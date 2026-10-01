@@ -4,11 +4,20 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:view roles', ['only' => ['index', 'show']]);
+        $this->middleware('permission:add roles', ['only' => ['create', 'store']]);
+        $this->middleware('permission:edit roles', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:permanently_delete roles', ['only' => ['destroy']]);
+    }
+
     public function index()
     {
         $roles = Role::query()
@@ -70,6 +79,12 @@ class RoleController extends Controller
             'permissions.*' => ['string', Rule::exists('permissions', 'name')->where('guard_name', 'web')],
         ]);
 
+        if ($role->name === 'admin' && $validated['name'] !== 'admin') {
+            throw ValidationException::withMessages([
+                'name' => ['The admin role name cannot be changed.'],
+            ]);
+        }
+
         $role->update([
             'name' => $validated['name'],
         ]);
@@ -81,6 +96,10 @@ class RoleController extends Controller
 
     public function destroy(Role $role)
     {
+        if ($role->name === 'admin') {
+            abort(403, 'The admin role cannot be deleted.');
+        }
+
         $role->delete();
 
         return redirect()->route('roles.index')->with('status', 'Role deleted.');

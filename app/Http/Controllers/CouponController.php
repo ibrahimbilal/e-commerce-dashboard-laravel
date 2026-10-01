@@ -7,6 +7,14 @@ use Illuminate\Http\Request;
 
 class CouponController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:view discounts', ['only' => ['index', 'show']]);
+        $this->middleware('permission:add discounts', ['only' => ['create', 'store']]);
+        $this->middleware('permission:edit discounts', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:delete discounts', ['only' => ['destroy']]);
+    }
+
     public function index()
     {
         $coupons = Coupon::withCount('orders')->latest('id')->paginate(20);
@@ -34,7 +42,7 @@ class CouponController extends Controller
 
         $coupon = Coupon::create($data);
 
-        return redirect()->route('coupons.show', $coupon)->with('status', 'Coupon created.');
+        return redirect()->route('coupons.index')->with('status', 'Coupon created.');
     }
 
     public function show(Coupon $coupon)
@@ -64,7 +72,7 @@ class CouponController extends Controller
 
         $coupon->update($data);
 
-        return redirect()->route('coupons.show', $coupon)->with('status', 'Coupon updated.');
+        return redirect()->route('coupons.index')->with('status', 'Coupon updated.');
     }
 
     public function destroy(Coupon $coupon)

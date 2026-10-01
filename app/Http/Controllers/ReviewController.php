@@ -9,6 +9,14 @@ use Illuminate\Http\Request;
 
 class ReviewController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:view reviews', ['only' => ['index', 'show']]);
+        $this->middleware('permission:add reviews', ['only' => ['create', 'store']]);
+        $this->middleware('permission:edit reviews', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:delete reviews', ['only' => ['destroy']]);
+    }
+
     public function index()
     {
         $reviews = Review::with(['customer', 'product.locales'])

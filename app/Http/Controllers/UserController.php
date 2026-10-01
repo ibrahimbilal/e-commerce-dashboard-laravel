@@ -10,6 +10,14 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:view users', ['only' => ['index', 'show']]);
+        $this->middleware('permission:add users', ['only' => ['create', 'store']]);
+        $this->middleware('permission:edit users', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:delete users', ['only' => ['destroy']]);
+    }
+
     public function index()
     {
         $users = User::with('roles')->latest('id')->paginate(20);

@@ -7,6 +7,14 @@ use Illuminate\Http\Request;
 
 class DiscountController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:view discounts', ['only' => ['index', 'show']]);
+        $this->middleware('permission:add discounts', ['only' => ['create', 'store']]);
+        $this->middleware('permission:edit discounts', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:delete discounts', ['only' => ['destroy']]);
+    }
+
     public function index()
     {
         $discounts = Discount::latest('id')->paginate(20);
@@ -33,7 +41,7 @@ class DiscountController extends Controller
 
         $discount = Discount::create($data);
 
-        return redirect()->route('discounts.show', $discount)->with('status', 'Discount created.');
+        return redirect()->route('discounts.index')->with('status', 'Discount created.');
     }
 
     public function show(Discount $discount)
@@ -60,7 +68,7 @@ class DiscountController extends Controller
 
         $discount->update($data);
 
-        return redirect()->route('discounts.show', $discount)->with('status', 'Discount updated.');
+        return redirect()->route('discounts.index')->with('status', 'Discount updated.');
     }
 
     public function destroy(Discount $discount)

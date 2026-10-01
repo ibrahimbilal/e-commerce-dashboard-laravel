@@ -109,7 +109,7 @@ class UserController extends Controller
 			return response()->json([
 				'success' => true,
 				'text' => __('alerts.users.response.create'),
-				'redirect' => route('users.index')
+				'redirect' => route('admin.users.index')
 			]);
 		} catch (\Exception $ex) {
 			return response()->json(['errors' => [__('alerts.errors.unknown')]]);
@@ -158,7 +158,7 @@ class UserController extends Controller
 
 		if (!$user) {
 			return redirect()
-					->route('users.index')
+					->route('admin.users.index')
 					->with([
 						'errors' => __('alerts.users.response.errors.not_exist')
 					]);
@@ -485,7 +485,7 @@ class UserController extends Controller
 				'success' => true,
 				'title' => __('alerts.users.response.delete.title'),
 				'text' => __('alerts.users.response.delete.text'),
-				'redirect' => route('users.index')
+				'redirect' => route('admin.users.index')
 			]);
 		} catch (\Exception $ex) {
 			return response()->json(['errors' => [__('alerts.errors.unknown')]]);
@@ -541,7 +541,7 @@ class UserController extends Controller
 				'success' => true,
 				'title' => __('alerts.users.response.force_delete.title'),
 				'text' => __('alerts.users.response.force_delete.text'),
-				'redirect' => route('users.index')
+				'redirect' => route('admin.users.index')
 			]);
 		} catch (\Exception $ex) {
 			return response()->json(['errors' => [__('alerts.errors.unknown')]]);

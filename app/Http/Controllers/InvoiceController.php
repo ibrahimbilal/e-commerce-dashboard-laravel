@@ -8,6 +8,14 @@ use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:view invoices', ['only' => ['index', 'show']]);
+        $this->middleware('permission:add invoices', ['only' => ['create', 'store']]);
+        $this->middleware('permission:edit invoices', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:delete invoices', ['only' => ['destroy']]);
+    }
+
     public function index()
     {
         $invoices = Invoice::with('order.customer')->latest('id')->paginate(20);
