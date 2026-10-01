@@ -42,7 +42,10 @@ class OrderController extends Controller
 
         $order = DB::transaction(function () use ($payload) {
             $items = $payload['items'] ?? [];
-            $payload['order']['amount'] = $this->computeOrderSubtotal($items);
+            $payload['order']['amount'] = $this->computeOrderAmount(
+                $items,
+                $payload['order']['coupon_id'] ?? null
+            );
             $order = Order::create($payload['order']);
             $this->persistOrderItems($order, $items);
 
@@ -79,7 +82,10 @@ class OrderController extends Controller
             }
 
             $itemsForAmount = $payload['items'] ?? $this->orderItemsToLineFormat($order->items()->get());
-            $payload['order']['amount'] = $this->computeOrderSubtotal($itemsForAmount);
+            $payload['order']['amount'] = $this->computeOrderAmount(
+                $itemsForAmount,
+                $payload['order']['coupon_id'] ?? null
+            );
 
             $order->update($payload['order']);
         });
@@ -138,6 +144,7 @@ class OrderController extends Controller
         $couponId = $validated['coupon_id'] ?? $validated['coupon'] ?? null;
 
         $this->assertAddressBelongsToCustomer((int) $validated['address_id'], $customerId);
+        $this->assertCouponUsable($couponId, $customerId, $order);
 
         $items = $request->has('items')
             ? $this->resolveOrderLineItems($validated['items'] ?? [])
@@ -231,6 +238,44 @@ class OrderController extends Controller
     }
 
     /**
+     * Subtotal from line items, then coupon from coupons.type / coupons.discount:
+     * type "fixed" → subtract round(discount); otherwise percent → subtract round(subtotal × discount / 100).
+     * Final amount = max(0, subtotal − deduction).
+     *
+     * @param  array<int, array{product_attribute_id: int, quantity: int, price: int}>  $items
+     */
+    private function computeOrderAmount(array $items, ?int $couponId): int
+    {
+        $subtotal = $this->computeOrderSubtotal($items);
+
+        return $this->applyCouponDiscount($subtotal, $couponId);
+    }
+
+    private function applyCouponDiscount(int $subtotal, ?int $couponId): int
+    {
+        if (! $couponId) {
+            return $subtotal;
+        }
+
+        $coupon = Coupon::query()->find($couponId);
+
+        if (! $coupon) {
+            return $subtotal;
+        }
+
+        $deduction = 0;
+        $type = strtolower((string) ($coupon->type ?? 'percent'));
+
+        if ($type === 'fixed') {
+            $deduction = (int) round((float) $coupon->discount);
+        } else {
+            $deduction = (int) round($subtotal * ((float) $coupon->discount / 100));
+        }
+
+        return max(0, $subtotal - $deduction);
+    }
+
+    /**
      * @param  array<int, array<string, mixed>>  $items
      */
     private function persistOrderItems(Order $order, array $items): void
@@ -242,6 +287,56 @@ class OrderController extends Controller
                 'product_attribute_id' => $item['product_attribute_id'],
                 'quantity' => $item['quantity'],
                 'price' => $item['price'],
+            ]);
+        }
+    }
+
+    private function assertCouponUsable(?int $couponId, int $customerId, ?Order $order = null): void
+    {
+        if (! $couponId) {
+            return;
+        }
+
+        $coupon = Coupon::query()->find($couponId);
+
+        if (! $coupon || ! $coupon->active) {
+            throw ValidationException::withMessages([
+                'coupon_id' => ['The selected coupon is not active.'],
+            ]);
+        }
+
+        if ($coupon->expired_at && $coupon->expired_at->isPast()) {
+            throw ValidationException::withMessages([
+                'coupon_id' => ['The selected coupon has expired.'],
+            ]);
+        }
+
+        $ordersQuery = Order::query()->where('coupon_id', $couponId);
+        if ($order) {
+            $ordersQuery->whereKeyNot($order->id);
+        }
+
+        $totalUsage = $ordersQuery->count();
+
+        if ($coupon->usage_limit > 0 && $totalUsage >= $coupon->usage_limit) {
+            throw ValidationException::withMessages([
+                'coupon_id' => ['This coupon has reached its usage limit.'],
+            ]);
+        }
+
+        $customerUsageQuery = Order::query()
+            ->where('coupon_id', $couponId)
+            ->where('customer_id', $customerId);
+
+        if ($order) {
+            $customerUsageQuery->whereKeyNot($order->id);
+        }
+
+        $customerUsage = $customerUsageQuery->count();
+
+        if ($coupon->usage_per_customer > 0 && $customerUsage >= $coupon->usage_per_customer) {
+            throw ValidationException::withMessages([
+                'coupon_id' => ['This customer has reached the usage limit for this coupon.'],
             ]);
         }
     }
