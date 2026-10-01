@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\AddressController;
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\AttributeController;
 use App\Http\Controllers\CategoryController;
@@ -68,7 +67,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         'users' => UserController::class,
         'roles' => RoleController::class,
         'invoices' => InvoiceController::class,
-        'addresses' => AddressController::class,
     ]);
 
     Route::resource('products', ProductController::class)->except(['show']);

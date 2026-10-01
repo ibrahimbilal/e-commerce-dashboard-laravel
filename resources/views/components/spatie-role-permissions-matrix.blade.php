@@ -24,7 +24,7 @@
 
     $preferredSectionOrder = [
         'dashboard', 'products', 'attributes', 'reviews', 'categories', 'tags', 'discounts',
-        'customers', 'orders', 'invoices', 'addresses', 'analytics', 'marketing', 'users', 'roles',
+        'customers', 'orders', 'invoices', 'analytics', 'marketing', 'users', 'roles',
         'gallery', 'languages', 'general_settings', 'theme_settings', 'store_settings',
         'currencies_settings', 'emails_settings', 'payment_settings',
     ];

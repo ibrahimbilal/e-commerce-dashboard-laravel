@@ -1539,7 +1539,7 @@ table.dataTable.table-dark tr.selected th.select-checkbox:after {
 
 @media (min-width: 992px) {
   .meta-box {
-    min-width: 365px;
+    max-width: 365px;
   }
 }
 

@@ -81,7 +81,6 @@ class StorefrontResourceCrudTest extends TestCase
             'coupons' => ['coupons', 'couponCrudPayloads'],
             'discounts' => ['discounts', 'discountCrudPayloads'],
             'reviews' => ['reviews', 'reviewCrudPayloads'],
-            'addresses' => ['addresses', 'addressCrudPayloads'],
             'orders' => ['orders', 'orderCrudPayloads'],
             'invoices' => ['invoices', 'invoiceCrudPayloads'],
             'users' => ['users', 'userCrudPayloads'],
@@ -241,31 +240,6 @@ class StorefrontResourceCrudTest extends TestCase
                 'rate' => 4,
             ],
             Review::class,
-        ];
-    }
-
-    /**
-     * @return array{0: array<string, mixed>, 1: array<string, mixed>, 2: class-string}
-     */
-    private function addressCrudPayloads(): array
-    {
-        $customer = Customer::query()->create([
-            'email' => 'address-crud@example.com',
-            'password' => bcrypt('password'),
-        ]);
-
-        return [
-            [
-                'customer_id' => $customer->id,
-                'address_title' => 'Home',
-                'city' => 'Springfield',
-            ],
-            [
-                'customer_id' => $customer->id,
-                'address_title' => 'Office',
-                'city' => 'Shelbyville',
-            ],
-            Address::class,
         ];
     }
 

@@ -24,7 +24,6 @@ class PermissionsSeeder extends Seeder
             'customers',
             'orders',
             'invoices',
-            'addresses',
             'analytics',
             'marketing',
             'users',
