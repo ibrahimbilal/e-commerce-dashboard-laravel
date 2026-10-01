@@ -2,6 +2,9 @@
 
 @section('title', 'E-Commerce Project')
 
+@push('styles')
+<link href="{{ asset('assets/css/datatables.min.css') }}" rel="stylesheet"/>
+@endpush
 
 @section('content')
 <div class="page-header">
@@ -20,7 +23,7 @@
 </div>
 </div>
 <div class="row">
-<x-soft-delete-index-toolbar :counts="$counts ?? []" :filters="$filters ?? []" route="order-statuses.index"/>
+<x-soft-delete-index-toolbar :showSearch="false" :counts="$counts ?? []" :filters="$filters ?? []" route="order-statuses.index"/>
 <div class="col-12">
 <div class="main-box box-spaces mb-0">
 <div class="table-holder mt-0">
@@ -57,4 +60,39 @@
 @push('scripts')
 <script async="" src="{{ asset('assets/js/async.js') }}" type="text/javascript"></script>
 <script src="{{ asset('assets/js/datatables.min.js') }}" type="text/javascript"></script>
+<script>
+if ($.fn.DataTable && $('#order-statuses').length) {
+      $('#order-statuses').DataTable({
+      	dom: 'Bfrtip',
+      	columnDefs: [
+      		{ bSortable: false, aTargets: [2] },
+      		{ bSearchable: false, aTargets: [2] }
+      	],
+      	order: [[0, 'asc']],
+      	language: {
+      		info: "Show _START_ To _END_ Of _TOTAL_ order statuses",
+      		buttons: { pageLength: 'Show %d', colvis: 'Columns' }
+      	},
+      	stateSave: true,
+      	paging: true,
+      	searching: true,
+      	lengthMenu: [[10, 15, 25, 50, 75, 100], ['10 statuses', '15 statuses', '25 statuses', '50 statuses', '75 statuses', '100 statuses']],
+      	buttons: ($(window).width() > 578) ? ['pageLength', 'print', {
+      		extend: 'collection', text: 'Export', className: 'btn btn-group',
+      		buttons: [
+      			{ extend: 'excelHtml5', className: 'dropdown-item' },
+      			{ extend: 'csvHtml5', className: 'dropdown-item' },
+      			{ extend: 'pdfHtml5', className: 'dropdown-item' }
+      		]
+      	}, 'colvis'] : ['pageLength', {
+      		extend: 'collection', text: 'Export', className: 'btn btn-group',
+      		buttons: [
+      			{ extend: 'excelHtml5', className: 'dropdown-item' },
+      			{ extend: 'csvHtml5', className: 'dropdown-item' },
+      			{ extend: 'pdfHtml5', className: 'dropdown-item' }
+      		]
+      	}, 'colvis']
+      });
+}
+</script>
 @endpush

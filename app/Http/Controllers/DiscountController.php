@@ -47,7 +47,7 @@ class DiscountController extends Controller
             $query->where('title', 'like', '%'.$search.'%');
         }
 
-        $discounts = $query->latest('id')->paginate(20)->withQueryString();
+        $discounts = $query->latest('id')->get();
 
         return view('discounts.index', compact('discounts', 'counts', 'filters'));
     }

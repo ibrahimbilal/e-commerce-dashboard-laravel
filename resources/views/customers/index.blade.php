@@ -22,7 +22,7 @@
 </div>
 </div>
 <div class="row">
-<x-soft-delete-index-toolbar :counts="$counts ?? []" :filters="$filters ?? []" route="customers.index"/>
+<x-soft-delete-index-toolbar :showSearch="false" :counts="$counts ?? []" :filters="$filters ?? []" route="customers.index"/>
 <div class="col-12">
 <div class="main-box box-spaces mb-0">
 <div class="table-holder mt-0">
@@ -66,4 +66,108 @@
 </div>
 @endsection
 
+@push('styles')
+<link href="{{ asset('assets/css/datatables.min.css') }}" rel="stylesheet"/>
+@endpush
 
+@push('scripts')
+<script async="" src="{{ asset('assets/js/async.js') }}" type="text/javascript"></script>
+<script src="{{ asset('assets/js/datatables.min.js') }}" type="text/javascript"></script>
+<script>
+if ($.fn.DataTable && $('#customers').length) {
+      // Data Tables
+      let customer_table = $('#customers').DataTable({
+      	dom: 'Bfrtip',
+      	columnDefs: [
+      		{
+      			orderable: false,
+      			className: 'select-checkbox',
+      			targets: 0
+      		},
+      		{ 
+      			bSortable: false, 
+      			aTargets: [0, 1, 3, 4, 6] 
+      		},
+      		{ 
+      			bSearchable: false, 
+      			aTargets: [0, 1, 6] 
+      		}
+      	],
+      	select: {
+      		style: 'os',
+      		selector: 'td:first-child'
+      	},
+      	order: [
+      		[5, 'desc']
+      	],
+      	language: {
+      		info: "Show _START_ To _END_ Of _TOTAL_ customers",
+      		buttons: {
+      			pageLength: 'Show %d',
+      			colvis: 'Columns'
+      		}
+      	},
+      	stateSave: true,
+      	paging: true,
+      	searching: true,
+      	lengthMenu: [[ 10, 25, 50, 75, 100 ], ['10 customers', '25 customers', '50 customers', '75 customers', '100 customers']],
+      	buttons: ($(window).width() > 578) ? ['pageLength', 'print', {
+      		extend: 'collection',
+      		text: 'Export',
+      		className: 'btn btn-group',
+      		buttons: [
+      			{
+      				extend: 'excelHtml5',
+      				className: 'dropdown-item'
+      			},
+      			{
+      				extend: 'csvHtml5',
+      				className: 'dropdown-item'
+      			},
+      			{
+      				extend: 'pdfHtml5',
+      				className: 'dropdown-item'
+      			}
+      		]
+      	}, 'colvis'] : ['pageLength', {
+      		extend: 'collection',
+      		text: 'Export',
+      		className: 'btn btn-group',
+      		buttons: [
+      			{
+      				extend: 'excelHtml5',
+      				className: 'dropdown-item'
+      			},
+      			{
+      				extend: 'csvHtml5',
+      				className: 'dropdown-item'
+      			},
+      			{
+      				extend: 'pdfHtml5',
+      				className: 'dropdown-item'
+      			}
+      		]
+      	}, 'colvis']
+      });
+      customer_table.on("click", "th.select-checkbox", function() {
+      	if ($("th.select-checkbox").hasClass("selected")) {
+      		customer_table.rows().deselect();
+      		$("th.select-checkbox").removeClass("selected");
+      	} else {
+      		customer_table.rows().select();
+      		$("th.select-checkbox").addClass("selected");
+      	}
+      }).on("select deselect", function() {
+      	("Some selection or deselection going on")
+      	if (customer_table.rows({
+      			selected: true
+      		}).count() !== customer_table.rows().count()) {
+      		$("th.select-checkbox").removeClass("selected");
+      	} else {
+      		$("th.select-checkbox").addClass("selected");
+      	}
+      });
+    
+}
+</script>
+@endpush

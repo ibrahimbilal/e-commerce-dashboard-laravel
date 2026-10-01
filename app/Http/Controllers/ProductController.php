@@ -74,7 +74,7 @@ class ProductController extends Controller
             });
         }
 
-        $products = $query->latest('id')->paginate(20)->withQueryString();
+        $products = $query->latest('id')->get();
 
         return view('products.index', compact('products', 'counts', 'filters'));
     }
