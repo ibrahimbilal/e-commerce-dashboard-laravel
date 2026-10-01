@@ -13,6 +13,7 @@
 
 <link href="{{ asset('assets/css/bs.min.css') }}" rel="stylesheet">
 <link href="{{ asset('assets/css/style.min.css') }}" rel="stylesheet">
+<link href="{{ asset('assets/css/sweetalert2.min.css') }}" rel="stylesheet">
 
 <link href="https://fonts.gstatic.com" rel="preconnect">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">

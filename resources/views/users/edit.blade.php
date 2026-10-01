@@ -19,9 +19,9 @@
 </div>
 </div>
 </div>
+<form action="{{ route('users.update', $user) }}" class="row d-block clearfix" data-post-type="user" id="add-newitem-form" method="POST">
 @csrf
 @method('PUT')
-<form action="{{ route('users.update', 1) }}" class="row d-block clearfix" data-post-type="user" id="add-newitem-form" method="POST">
 <div class="col-sm-12 col-lg-9 float-start post-box">
 <div class="main-box box-spaces">
 <div class="form-item primary mb-3">
@@ -29,24 +29,24 @@
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap">
 <label class="item-title" for="first-name">first name:</label>
-<input class="form-control" id="first-name" name="first_name" type="text"/>
+<input class="form-control" id="first-name" name="first_name" type="text"   value="{{ old('first_name', $user->first_name ?? '') }}" />
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="last-name">last name:</label>
-<input class="form-control" id="last-name" name="last_name" type="text"/>
+<input class="form-control" id="last-name" name="last_name" type="text"   value="{{ old('last_name', $user->last_name ?? '') }}" />
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="email">email address:</label>
-<input class="form-control" id="email" name="email" type="email"/>
+<input class="form-control" id="email" name="email" type="email"   value="{{ old('email', $user->email ?? '') }}" />
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="mobile">mobile:</label>
-<input class="form-control" id="mobile" name="mobile" type="tel"/>
+<input class="form-control" id="mobile" name="mobile" type="tel"   value="{{ old('mobile', $user->mobile ?? '') }}" />
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="birth-date">Birth Of Date:</label>
 <div class="position-relative w-100">
-<input class="form-control" data-toggle="datepicker" id="birth-date" name="birth_date" type="text"/>
+<input class="form-control" data-toggle="datepicker" id="birth-date" name="birth_date" type="text"   value="{{ old('birth_date', $user->birth_date ?? '') }}" />
 </div>
 </div>
 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
@@ -91,20 +91,20 @@
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="current-password">current password:</label>
 <div class="with-icon">
-<input class="form-control" id="current-password" name="current_password" type="password"/><span class="show-pass"><i class="fi-rr-eye"> </i></span>
+<input class="form-control" id="current-password" name="current_password" type="password"   value="{{ old('current_password', $user->current_password ?? '') }}" /><span class="show-pass"><i class="fi-rr-eye"> </i></span>
 </div>
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="new-password">new password:</label>
 <div class="with-icon">
-<input class="form-control" id="password" name="password" type="password"/><span class="show-pass"><i class="fi-rr-eye"> </i></span>
+<input class="form-control" id="password" name="password" type="password"   value="{{ old('password', $user->password ?? '') }}" /><span class="show-pass"><i class="fi-rr-eye"> </i></span>
 </div>
 <button class="btn regular-btn ms-sm-3 mt-2 mt-sm-0 text-nowrap generate-password" type="button">generate</button>
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="confirm-password">confirm password:</label>
 <div class="with-icon">
-<input class="form-control" id="confirm-password" name="confirm_password" type="password"/><span class="show-pass"><i class="fi-rr-eye"> </i></span>
+<input class="form-control" id="confirm-password" name="confirm_password" type="password"   value="{{ old('confirm_password', $user->confirm_password ?? '') }}" /><span class="show-pass"><i class="fi-rr-eye"> </i></span>
 </div>
 </div>
 </div>
@@ -134,8 +134,14 @@
 <label class="item-title meta-title">iP City:</label><span class="ms-2">New York</span>
 </div>
 <div class="btns-holder d-flex justify-content-between mt-4">
-<button class="btn trans-btn w-100 text-start delete" data-post-type="user"><span class="icon me-1"><i class="fi-rr-trash"> </i></span>move to trash</button>
 <button class="btn solid-btn" type="submit">update </button>
+</div>
+<div class="btns-holder d-flex justify-content-between mt-2">
+<form method="POST" action="{{ route('users.destroy', $user) }}" class="w-100 d-inline destroy-resource-form">
+@csrf
+@method('DELETE')
+<button type="button" class="btn trans-btn w-100 text-start js-destroy-submit" data-confirm-label="user"><span class="icon me-1"><i class="fi-rr-trash"> </i></span>move to trash</button>
+</form>
 </div>
 </div>
 </div>

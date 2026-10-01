@@ -66,7 +66,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -81,7 +83,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -96,7 +100,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -111,7 +117,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -126,7 +134,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -141,7 +151,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -156,7 +168,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -171,7 +185,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -186,7 +202,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -201,7 +219,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -216,7 +236,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -231,7 +253,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -246,7 +270,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -261,7 +287,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -276,7 +304,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -291,7 +321,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -306,7 +338,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -321,7 +355,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -336,7 +372,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -351,7 +389,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -366,7 +406,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -381,7 +423,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -396,7 +440,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -411,7 +457,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -426,7 +474,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -441,7 +491,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -456,7 +508,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -471,7 +525,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -486,7 +542,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -501,7 +559,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -516,7 +576,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -531,7 +593,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -546,7 +610,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -561,7 +627,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -576,7 +644,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -591,7 +661,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -606,7 +678,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -621,7 +695,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -636,7 +712,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -651,7 +729,9 @@
 </label>
 </td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('categories.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('categories.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="categorie"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 </tbody>

@@ -58,7 +58,9 @@
 <td>sizes</td>
 <td>XS, S, M, L, XL, XXL</td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('attributes.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('attributes.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="attribute"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -67,7 +69,9 @@
 <td>weight</td>
 <td>G, KG, TN</td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('attributes.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('attributes.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="attribute"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 <tr>
@@ -76,7 +80,9 @@
 <td>colors</td>
 <td>Red, Black, Blue, White, Pink</td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><a class="btn btn-danger btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</a></div>
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('attributes.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('attributes.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+@method('DELETE')
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="attribute"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
 </tbody>
