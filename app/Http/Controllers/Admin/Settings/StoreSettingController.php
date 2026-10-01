@@ -13,8 +13,8 @@ class StoreSettingController extends Controller
 	 */
 	function __construct()
 	{
-		$this->middleware('permission:view theme_settings', ['only' => ['index']]);
-		$this->middleware('permission:edit theme_settings', ['only' => ['store']]);
+		$this->middleware('permission:view store_settings', ['only' => ['index']]);
+		$this->middleware('permission:edit store_settings', ['only' => ['store']]);
 	}
 
 	/**

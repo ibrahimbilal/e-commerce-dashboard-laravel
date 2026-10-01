@@ -16,6 +16,14 @@ class GalleryController extends Controller
 {
 	use UploadFilesTraits;
 
+	public function __construct()
+	{
+		$this->middleware('permission:view gallery', ['only' => ['index', 'show', 'get_image_meta']]);
+		$this->middleware('permission:add gallery', ['only' => ['create', 'store']]);
+		$this->middleware('permission:edit gallery', ['only' => ['edit', 'update']]);
+		$this->middleware('permission:delete gallery', ['only' => ['destroy']]);
+	}
+
     /**
      * Display a listing of the resource.
      *
