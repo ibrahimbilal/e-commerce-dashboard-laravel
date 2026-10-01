@@ -5,13 +5,13 @@
 @push('styles')
 <link href="{{ asset('assets/css/swiper-bundle.min.css') }}" rel="stylesheet"/>
 <link href="{{ asset('assets/css/apexcharts.css') }}" rel="stylesheet"/>
+<link href="{{ asset('assets/css/datatables.min.css') }}" rel="stylesheet"/>
 @endpush
 
 @section('content')
 @php
     $stats = $stats ?? [];
     $salesChartSeries = $salesChartSeries ?? ['labels' => [], 'sales' => [], 'orders' => []];
-    $orderStatusStats = collect($orderStatusStats ?? []);
     $topProducts = collect($topProducts ?? []);
     $recentOrders = collect($recentOrders ?? []);
     $productPlaceholder = asset('assets/images/product-placeholder.svg');
@@ -29,13 +29,6 @@
 
         return number_format($number / 1000, 1, '.', '').'K';
     };
-    $formatChangePercent = static function ($change): ?string {
-        if ($change === null || ! is_numeric($change)) {
-            return null;
-        }
-
-        return number_format(abs((float) $change), 1, '.', '').'%';
-    };
     $kpiCards = [
         ['value' => data_get($stats, 'customers', 0), 'label' => 'Customers', 'icon' => 'fi-rr-users', 'color' => 'mauve', 'format' => 'compact', 'change' => data_get($stats, 'customers_change'), 'icon_suffix' => ' '],
         ['value' => data_get($stats, 'orders', 0), 'label' => 'Orders', 'icon' => 'fi-rr-box', 'color' => 'green', 'format' => 'compact', 'change' => data_get($stats, 'orders_change'), 'icon_suffix' => ' '],
@@ -44,14 +37,6 @@
         ['value' => data_get($stats, 'products', 0), 'label' => 'Products', 'icon' => 'fi-rr-shopping-bag', 'color' => 'mauve', 'format' => 'number', 'change' => null, 'label_class' => 'mb-0', 'icon_suffix' => ''],
         ['value' => data_get($stats, 'subscribers', 0), 'label' => 'Subscribers', 'icon' => 'fi-rr-paper-plane', 'color' => 'green', 'format' => 'compact', 'change' => data_get($stats, 'subscribers_change'), 'icon_suffix' => ' '],
     ];
-    $statusClass = static function (?string $slug): string {
-        return match ($slug) {
-            'pending' => 'warning',
-            'canceled', 'cancelled' => 'danger',
-            'completed', 'delivered', 'moving' => 'success',
-            default => '',
-        };
-    };
 @endphp
 <div class="page-header">
 <div class="row">
@@ -148,43 +133,9 @@ ${{ number_format((float) $price) }}
 <div class="col-12 col-xxl-8">
 <div class="main-box box-spaces mb-0">
 <h2 class="box-title text-capitalize">Orders Statuses </h2>
-<div class="table-holder">
+<div class="table-holder mt-0">
 <div class="table-responsive">
-<table class="table table-striped mb-0">
-<thead>
-<tr>
-<th class="text-uppercase">status</th>
-<th class="text-uppercase text-end">orders</th>
-<th class="text-uppercase text-end">share</th>
-</tr>
-</thead>
-<tbody>
-@foreach ($orderStatusStats as $statusRow)
-@php
-    $slug = data_get($statusRow, 'slug');
-    $title = data_get($statusRow, 'title', '—');
-    $count = data_get($statusRow, 'count', 0);
-    $percent = data_get($statusRow, 'percent');
-@endphp
-<tr>
-<td class="status text-capitalize {{ $statusClass(is_string($slug) ? $slug : null) }}">{{ $title }}</td>
-<td class="text-end">{{ is_numeric($count) ? number_format((int) $count) : '0' }}</td>
-<td class="text-end">@if (is_numeric($percent)){{ number_format((float) $percent, 1) }}%@else—@endif</td>
-</tr>
-@endforeach
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="row g-3 mt-1">
-<div class="col-12 col-xxl-8">
-<div class="main-box box-spaces mb-0">
-<h2 class="box-title text-capitalize">Recent orders</h2>
-<div class="table-responsive">
-<table class="table table-striped mb-0">
+<table class="table table-striped mb-0" id="dashboard-recent-orders">
 <thead>
 <tr>
 <th class="text-uppercase">Order</th>
@@ -192,6 +143,7 @@ ${{ number_format((float) $price) }}
 <th class="text-uppercase">Customer</th>
 <th class="text-uppercase text-end">Amount</th>
 <th class="text-uppercase">Date</th>
+<th class="text-uppercase">action</th>
 </tr>
 </thead>
 <tbody>
@@ -200,21 +152,21 @@ ${{ number_format((float) $price) }}
     $customerName = trim(($order->customer->first_name ?? '').' '.($order->customer->last_name ?? '')) ?: '—';
 @endphp
 <tr>
-<td class="text-uppercase">
-@if (Route::has('orders.show'))
-<a href="{{ route('orders.show', $order) }}">#{{ $order->id }}</a>
-@else
-#{{ $order->id }}
-@endif
-</td>
+<td class="text-uppercase">#{{ $order->id }}</td>
 <td class="text-capitalize">{{ $order->orderStatus->title ?? '—' }}</td>
 <td class="text-capitalize">{{ $customerName }}</td>
 <td class="text-end">${{ number_format($order->amount ?? 0) }}</td>
 <td>{{ $order->created_at?->format('H:i d/m/Y') ?? '—' }}</td>
+<td>
+@if (Route::has('orders.show') && auth()->user()?->can('view orders'))
+<a class="btn btn-primary btn-rounded py-1" href="{{ route('orders.show', $order) }}"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a>
+@endif
+</td>
 </tr>
 @endforeach
 </tbody>
 </table>
+</div>
 </div>
 </div>
 </div>
@@ -229,4 +181,35 @@ window.__dashboardChartSeries = @json($salesChartSeries);
 </script>
 <script src="{{ asset('assets/js/charts.js') }}" type="text/javascript"></script>
 <script src="{{ asset('assets/js/swiper-bundle.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('assets/js/datatables.min.js') }}" type="text/javascript"></script>
+<script>
+if ($.fn.DataTable && $('#dashboard-recent-orders').length && ! $.fn.dataTable.isDataTable('#dashboard-recent-orders')) {
+      $('#dashboard-recent-orders').DataTable({
+      	dom: 'Bfrtip',
+      	columnDefs: [
+      		{
+      			bSortable: false,
+      			bSearchable: false,
+      			aTargets: [5]
+      		}
+      	],
+      	order: [
+      		[4, 'desc']
+      	],
+      	language: {
+      		emptyTable: 'No recent orders.',
+      		info: 'Show _START_ To _END_ Of _TOTAL_ orders',
+      		buttons: {
+      			pageLength: 'Show %d',
+      			colvis: 'Columns'
+      		}
+      	},
+      	stateSave: true,
+      	paging: true,
+      	searching: true,
+      	lengthMenu: [[5, 10, 15, 25], ['5 orders', '10 orders', '15 orders', '25 orders']],
+      	buttons: ($(window).width() > 578) ? ['pageLength', 'colvis'] : ['pageLength']
+      });
+}
+</script>
 @endpush
