@@ -21,6 +21,7 @@
 </ul>
 <ul class="menu-list-group">
 <li class="list-item"><a href="{{ route('customers.index') }}"><i class="fi-rr-users"> </i><span class="title">customers</span></a></li>
+<li class="list-item @if(request()->routeIs('addresses.*')) active @endif"><a href="{{ route('addresses.index') }}"><i class="fi-rr-marker"> </i><span class="title">addresses</span></a></li>
 <li class="list-item"><a href="{{ route('orders.index') }}"><i class="fi-rr-box"> </i><span class="title">order</span><span class="title badge">35</span></a></li>
 <li class="list-item"><a href="{{ route('invoices.index') }}"><i class="fi-rr-document"> </i><span class="title">invoices</span></a></li>
 </ul>
