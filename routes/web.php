@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\AddressController;
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\AttributeController;
 use App\Http\Controllers\CategoryController;
@@ -96,7 +95,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         'users' => UserController::class,
         'order-statuses' => OrderStatusController::class,
         'gallery' => GalleryController::class,
-        'addresses' => AddressController::class,
     ];
 
     foreach ($trashedStorefrontResources as $prefix => $controller) {

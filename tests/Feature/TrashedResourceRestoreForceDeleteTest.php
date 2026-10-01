@@ -257,15 +257,6 @@ class TrashedResourceRestoreForceDeleteTest extends TestCase
                     'user_id' => $admin->id,
                 ]),
             ],
-            'addresses' => [
-                'addresses',
-                'customers.index',
-                function (User $admin) {
-                    $customer = Customer::query()->create(['email' => 'addr-'.uniqid().'@example.com', 'password' => bcrypt('x')]);
-
-                    return Address::query()->create(['customer_id' => $customer->id, 'address_title' => 'Trash']);
-                },
-            ],
         ];
     }
 }
