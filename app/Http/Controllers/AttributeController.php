@@ -35,7 +35,7 @@ class AttributeController extends Controller
             });
         }
 
-        $attributeList = $query->paginate(20)->withQueryString();
+        $attributeList = $query->get();
 
         return view('attributes.index', compact('attributeList', 'counts', 'filters'));
     }

@@ -69,7 +69,7 @@ class OrderController extends Controller
             });
         }
 
-        $orders = $query->latest('id')->paginate(20)->withQueryString();
+        $orders = $query->latest('id')->get();
 
         return view('orders.index', compact('orders', 'counts', 'filters'));
     }

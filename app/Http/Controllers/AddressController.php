@@ -41,7 +41,7 @@ class AddressController extends Controller
             });
         }
 
-        $addresses = $query->latest('id')->paginate(20)->withQueryString();
+        $addresses = $query->latest('id')->get();
 
         return view('addresses.index', compact('addresses', 'counts', 'filters'));
     }

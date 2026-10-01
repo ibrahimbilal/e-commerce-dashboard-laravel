@@ -45,7 +45,7 @@ class InvoiceController extends Controller
             });
         }
 
-        $invoices = $query->latest('id')->paginate(20)->withQueryString();
+        $invoices = $query->latest('id')->get();
 
         return view('invoices.index', compact('invoices', 'counts', 'filters'));
     }

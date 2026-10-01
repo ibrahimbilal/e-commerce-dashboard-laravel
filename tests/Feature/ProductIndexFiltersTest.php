@@ -41,7 +41,7 @@ class ProductIndexFiltersTest extends TestCase
         $response->assertDontSee('Draft One');
     }
 
-    public function test_search_and_pagination_keeps_query_string(): void
+    public function test_search_filter_returns_matching_products(): void
     {
         $match = Product::query()->create(['sku' => 'FIND-ME', 'quantity' => 1, 'status' => 'published']);
         ProductLocale::query()->create(['product_id' => $match->id, 'locale' => 'en', 'name' => 'Findable Widget']);

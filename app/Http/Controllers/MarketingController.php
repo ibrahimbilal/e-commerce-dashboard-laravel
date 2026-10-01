@@ -46,7 +46,7 @@ class MarketingController extends Controller
             });
         }
 
-        $subscribers = $query->paginate(20)->withQueryString();
+        $subscribers = $query->get();
 
         return view('marketing.index', compact('subscribers', 'counts', 'filters'));
     }

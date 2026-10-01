@@ -47,7 +47,7 @@ class CategoryController extends Controller
             });
         }
 
-        $categories = $query->latest('id')->paginate(20)->withQueryString();
+        $categories = $query->latest('id')->get();
 
         return view('categories.index', compact('categories', 'counts', 'filters'));
     }

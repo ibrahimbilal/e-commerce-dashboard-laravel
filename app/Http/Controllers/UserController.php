@@ -51,7 +51,7 @@ class UserController extends Controller
             });
         }
 
-        $users = $query->latest('id')->paginate(20)->withQueryString();
+        $users = $query->latest('id')->get();
 
         return view('users.index', compact('users', 'counts', 'filters'));
     }

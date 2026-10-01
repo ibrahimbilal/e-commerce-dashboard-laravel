@@ -56,7 +56,7 @@ class ReviewController extends Controller
             });
         }
 
-        $reviews = $query->latest('id')->paginate(20)->withQueryString();
+        $reviews = $query->latest('id')->get();
 
         return view('reviews.index', compact('reviews', 'counts', 'filters'));
     }

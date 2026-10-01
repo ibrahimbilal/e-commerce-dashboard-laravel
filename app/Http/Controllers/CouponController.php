@@ -50,7 +50,7 @@ class CouponController extends Controller
             });
         }
 
-        $coupons = $query->latest('id')->paginate(20)->withQueryString();
+        $coupons = $query->latest('id')->get();
 
         return view('coupons.index', compact('coupons', 'counts', 'filters'));
     }

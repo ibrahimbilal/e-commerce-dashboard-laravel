@@ -39,7 +39,7 @@ class TagController extends Controller
             });
         }
 
-        $tags = $query->latest('id')->paginate(20)->withQueryString();
+        $tags = $query->latest('id')->get();
 
         return view('tags.index', compact('tags', 'counts', 'filters'));
     }

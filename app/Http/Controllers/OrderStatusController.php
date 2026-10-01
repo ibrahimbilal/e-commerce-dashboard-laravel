@@ -37,7 +37,7 @@ class OrderStatusController extends Controller
             $query->where('title', 'like', '%'.$search.'%');
         }
 
-        $orderStatuses = $query->orderBy('title')->paginate(20)->withQueryString();
+        $orderStatuses = $query->orderBy('title')->get();
 
         return view('order-statuses.index', compact('orderStatuses', 'counts', 'filters'));
     }

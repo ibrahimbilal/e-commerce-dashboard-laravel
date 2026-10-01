@@ -37,7 +37,7 @@ class RoleController extends Controller
             $query->where('name', 'like', '%'.$search.'%');
         }
 
-        $roles = $query->orderBy('name')->paginate(20)->withQueryString();
+        $roles = $query->orderBy('name')->get();
 
         return view('roles.index', compact('roles', 'counts', 'filters'));
     }
