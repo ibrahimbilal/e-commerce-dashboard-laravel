@@ -23,7 +23,7 @@
 <div class="main-box box-spaces">
 <div class="row">
 <div class="col-sm-12 col-lg-3 d-flex justify-content-center user-holder">
-<div class="profile-image text-center"><img src="{{ asset('assets/images/customers/image-1.png') }}"/></div>
+<div class="profile-image text-center"><img src="{{ $customer->profile_picture ? asset($customer->profile_picture) : asset('assets/images/avatar-placeholder.svg') }}" alt=""/></div>
 </div>
 <div class="col-sm-12 col-lg-9">
 <div class="profile-details row mt-3 mt-lg-0">

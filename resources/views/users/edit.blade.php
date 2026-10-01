@@ -51,7 +51,7 @@
 </div>
 <div class="item-content"><a class="btn regular-btn gallery-btn" href="javascript:void(0)" style="width: 150px">Change Image</a>
 <div class="selected-img">
-<div class="img-holder mt-3"><img class="preview" src="{{ asset('assets/images/customers/image-1.png') }}" width="70"/><span class="overlay"><i class="fi-rr-trash"> </i><span>remove</span></span></div>
+<div class="img-holder mt-3"><img class="preview" src="{{ $user->profile_picture ? asset($user->profile_picture) : asset('assets/images/avatar-placeholder.svg') }}" width="70" alt=""/><span class="overlay"><i class="fi-rr-trash"> </i><span>remove</span></span></div>
 </div>
 </div>
 </div>

@@ -53,14 +53,21 @@
 </div>
 <div class="col-sm-6 col-lg-3 float-end meta-box order-sm-2">
 <div class="main-box box-spaces mb-0">
+@php
+    $updatedByLabel = '—';
+    if ($order->relationLoaded('updatedByUser') && $order->updatedByUser) {
+        $updatedByLabel = trim(($order->updatedByUser->first_name ?? '').' '.($order->updatedByUser->last_name ?? ''))
+            ?: $order->updatedByUser->email;
+    }
+@endphp
 <div class="form-item second justify-content-between d-flex align-items-sm-center">
-<label class="item-title meta-title">Created At:</label><span class="text-end ms-2">26/03/2021 14:58</span>
+<label class="item-title meta-title">Created At:</label><span class="text-end ms-2">{{ $order->created_at?->format('d/m/Y H:i') ?? '—' }}</span>
 </div>
 <div class="form-item second justify-content-between mt-3 d-flex align-items-sm-center">
-<label class="item-title meta-title">updated at:</label><span class="text-end ms-2">26/03/2021 14:58</span>
+<label class="item-title meta-title">updated at:</label><span class="text-end ms-2">{{ $order->updated_at?->format('d/m/Y H:i') ?? '—' }}</span>
 </div>
 <div class="form-item second justify-content-between mt-3 d-flex align-items-sm-center">
-<label class="item-title meta-title">updated By:</label><span class="text-end ms-2">Jayson Hinrichsen</span>
+<label class="item-title meta-title">updated By:</label><span class="text-end ms-2">{{ $updatedByLabel }}</span>
 </div>
 <div class="btns-holder d-flex justify-content-between mt-4">
 <button type="button" class="btn trans-btn w-100 text-start js-destroy-submit" form="order-destroy-form" data-confirm-label="order" data-post-type="order"><span class="icon me-1"><i class="fi-rr-trash"> </i></span>move to trash</button>

@@ -172,7 +172,7 @@
 @endphp
 <tr>
 <td class="prod-img">
-<div class="img-holder"><img src="{{ $prod?->product_img ? asset($prod->product_img) : asset('assets/images/products/image-1.png') }}" width="40" alt=""/></div>
+<div class="img-holder"><img src="{{ $prod?->product_img ? asset($prod->product_img) : asset('assets/images/product-placeholder.svg') }}" width="40" alt=""/></div>
 </td>
 <td class="text-capitalize">{{ $prodName }}</td>
 <td class="text-capitalize">{{ $item->price ?? '—' }}</td>

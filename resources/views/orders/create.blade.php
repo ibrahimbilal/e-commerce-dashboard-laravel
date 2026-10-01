@@ -52,17 +52,20 @@
 </div>
 <div class="col-sm-6 col-lg-3 float-end meta-box order-sm-2">
 <div class="main-box box-spaces mb-0">
+@php
+    $authUser = auth()->user();
+    $authLabel = $authUser ? (trim(($authUser->first_name ?? '').' '.($authUser->last_name ?? '')) ?: $authUser->email) : '—';
+@endphp
 <div class="form-item second justify-content-between d-flex align-items-sm-center">
-<label class="item-title meta-title">Created At:</label><span class="text-end ms-2">26/03/2021 14:58</span>
+<label class="item-title meta-title">Created At:</label><span class="text-end ms-2">—</span>
 </div>
 <div class="form-item second justify-content-between mt-3 d-flex align-items-sm-center">
-<label class="item-title meta-title">updated at:</label><span class="text-end ms-2">26/03/2021 14:58</span>
+<label class="item-title meta-title">updated at:</label><span class="text-end ms-2">—</span>
 </div>
 <div class="form-item second justify-content-between mt-3 d-flex align-items-sm-center">
-<label class="item-title meta-title">updated By:</label><span class="text-end ms-2">Jayson Hinrichsen</span>
+<label class="item-title meta-title">updated By:</label><span class="text-end ms-2">{{ $authLabel }}</span>
 </div>
-<div class="btns-holder d-flex justify-content-between mt-4">
-<button class="btn trans-btn w-100 text-start delete" data-post-type="order"><span class="icon me-1"><i class="fi-rr-trash"> </i></span>move to trash</button>
+<div class="btns-holder d-flex justify-content-end mt-4">
 <button class="btn solid-btn" type="submit">publish </button>
 </div>
 </div>

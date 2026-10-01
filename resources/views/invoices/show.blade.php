@@ -219,7 +219,7 @@
 <div class="col-sm-8 col-lg-9 order-sm-1">
 <div class="note">
 <p class="title title-1 mb-1">Notes:</p>
-<p>Lorem ipsum dolor sit amet, consetetur sadipscing <br/> elitr, sed diam nonumy eirmod tempor invidunt ut <br/> labore et dolore magna aliquyam erat, sed diam </p>
+<p class="text-muted mb-0">{{ $invoice->order ? 'Invoice for order #'.$invoice->order_id : 'Invoice details' }}</p>
 </div>
 </div>
 </div>
