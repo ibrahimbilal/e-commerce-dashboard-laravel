@@ -36,34 +36,12 @@
         return number_format(abs((float) $change), 1, '.', '').'%';
     };
     $kpiCards = [
-        [
-            'value' => data_get($stats, 'customers', 0),
-            'label' => 'Customers',
-            'icon' => 'fi-rr-users',
-            'color' => 'mauve',
-            'change' => data_get($stats, 'customers_change'),
-        ],
-        [
-            'value' => data_get($stats, 'orders', 0),
-            'label' => 'Orders',
-            'icon' => 'fi-rr-box',
-            'color' => 'green',
-            'change' => data_get($stats, 'orders_change'),
-        ],
-        [
-            'value' => data_get($stats, 'sales', data_get($stats, 'revenue', 0)),
-            'label' => 'Sales',
-            'icon' => 'fi-rr-dollar',
-            'color' => 'red',
-            'change' => data_get($stats, 'sales_change'),
-        ],
-        [
-            'value' => data_get($stats, 'subscribers', 0),
-            'label' => 'Subscribers',
-            'icon' => 'fi-rr-paper-plane',
-            'color' => 'orange',
-            'change' => data_get($stats, 'subscribers_change'),
-        ],
+        ['value' => data_get($stats, 'customers', 0), 'label' => 'Customers', 'icon' => 'fi-rr-users', 'color' => 'mauve', 'format' => 'compact', 'change' => data_get($stats, 'customers_change'), 'icon_suffix' => ' '],
+        ['value' => data_get($stats, 'orders', 0), 'label' => 'Orders', 'icon' => 'fi-rr-box', 'color' => 'green', 'format' => 'compact', 'change' => data_get($stats, 'orders_change'), 'icon_suffix' => ' '],
+        ['value' => data_get($stats, 'sales', data_get($stats, 'revenue', 0)), 'label' => 'Sales', 'icon' => 'fi-rr-dollar', 'color' => 'red', 'format' => 'compact', 'change' => data_get($stats, 'sales_change'), 'icon_suffix' => ' '],
+        ['value' => data_get($stats, 'revenue', 0), 'label' => 'Revenue', 'icon' => 'fi-rr-dollar', 'color' => 'orange', 'format' => 'number', 'change' => null, 'icon_suffix' => ''],
+        ['value' => data_get($stats, 'products', 0), 'label' => 'Products', 'icon' => 'fi-rr-shopping-bag', 'color' => 'mauve', 'format' => 'number', 'change' => null, 'label_class' => 'mb-0', 'icon_suffix' => ''],
+        ['value' => data_get($stats, 'subscribers', 0), 'label' => 'Subscribers', 'icon' => 'fi-rr-paper-plane', 'color' => 'green', 'format' => 'compact', 'change' => data_get($stats, 'subscribers_change'), 'icon_suffix' => ' '],
     ];
     $statusClass = static function (?string $slug): string {
         return match ($slug) {
@@ -96,14 +74,19 @@
 @foreach ($kpiCards as $card)
 @php
     $changeValue = $card['change'] ?? null;
-    $changeLabel = $formatChangePercent($changeValue);
+    $changeLabel = array_key_exists('change', $card) && $changeValue !== null ? $formatChangePercent($changeValue) : null;
     $changePositive = $changeValue !== null && is_numeric($changeValue) && (float) $changeValue >= 0;
+    $displayValue = ($card['format'] ?? 'compact') === 'number'
+        ? number_format(is_numeric($card['value']) ? (float) $card['value'] : 0)
+        : $formatDashboardStat($card['value']);
+    $labelClass = trim('text-start m-0 '.($card['label_class'] ?? ''));
+    $iconSuffix = $card['icon_suffix'] ?? ' ';
 @endphp
 <div class="swiper-slide main-box box-spaces d-flex justify-content-between align-items-center">
-<div class="icon-holder"><span class="{{ $card['color'] }}"><i class="{{ $card['icon'] }}"> </i></span></div>
+<div class="icon-holder"><span class="{{ $card['color'] }}"><i class="{{ $card['icon'] }}">{{ $iconSuffix }}</i></span></div>
 <div class="detail-holder">
-<p class="text-start m-0">{{ $formatDashboardStat($card['value']) }}</p>
-<p class="text-start m-0">{{ $card['label'] }}</p>
+<p class="text-start m-0">{{ $displayValue }}</p>
+<p class="{{ $labelClass }}">{{ $card['label'] }}</p>
 </div>
 @if ($changeLabel !== null)
 <div class="percent {{ $changePositive ? 'good' : 'bad' }}">{{ ($changePositive ? '' : '-').$changeLabel }}<i class="fi-sr-arrow-small-{{ $changePositive ? 'up' : 'down' }}"> </i>
