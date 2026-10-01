@@ -16,7 +16,7 @@
     // breadcrumbs params
     $params = [
         'page_title' => __('admin.menu.users.profile'),
-        'breadcrumbs_items' => [['title' => __('admin.menu.users.title'), 'route_name' => 'users.index'], ['title' => __('admin.menu.users.profile')]],
+        'breadcrumbs_items' => [['title' => __('admin.menu.users.title'), 'route_name' => 'admin.users.index'], ['title' => __('admin.menu.users.profile')]],
     ];
     @endphp
     @include('admin.inc.page_title', $params)

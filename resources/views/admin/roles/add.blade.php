@@ -13,7 +13,7 @@
     // breadcrumbs params
     $params = [
         'page_title' => __('admin.menu.roles.add'),
-        'breadcrumbs_items' => [['title' => __('admin.menu.roles.title'), 'route_name' => 'roles.index'], ['title' => __('admin.menu.roles.add')]],
+        'breadcrumbs_items' => [['title' => __('admin.menu.roles.title'), 'route_name' => 'admin.roles.index'], ['title' => __('admin.menu.roles.add')]],
     ];
     @endphp
     @include('admin.inc.page_title', $params)
@@ -130,7 +130,7 @@
             var data = $(this).serialize();
             $.ajax({
                 type: 'POST',
-                url: "{{ route('roles.store') }}",
+                url: "{{ route('admin.roles.store') }}",
                 headers: {
                     "X-CSRF-TOKEN": "{{ csrf_token() }}",
                 },
