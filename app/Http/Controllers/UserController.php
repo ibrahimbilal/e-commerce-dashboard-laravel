@@ -19,9 +19,7 @@ class UserController extends Controller
 
     public function create()
     {
-        $roles = $this->presentRoles(
-            Role::query()->where('guard_name', 'web')->orderBy('name')->get()
-        );
+        $roles = Role::query()->where('guard_name', 'web')->orderBy('name')->get();
 
         return view('users.create', compact('roles'));
     }
@@ -37,7 +35,6 @@ class UserController extends Controller
             'profile_picture' => ['nullable', 'string', 'max:191'],
             'roles' => ['nullable', 'array'],
             'roles.*' => ['string', Rule::exists('roles', 'name')->where('guard_name', 'web')],
-            'role' => ['nullable', 'integer', Rule::exists('roles', 'id')],
         ]);
 
         $user = User::create([
@@ -49,7 +46,7 @@ class UserController extends Controller
             'profile_picture' => $data['profile_picture'] ?? null,
         ]);
 
-        $user->syncRoles($this->resolveRoleNames($request));
+        $user->syncRoles($data['roles'] ?? []);
 
         return redirect()->route('users.show', $user)->with('status', 'User created.');
     }
@@ -64,9 +61,7 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $user->load('roles');
-        $roles = $this->presentRoles(
-            Role::query()->where('guard_name', 'web')->orderBy('name')->get()
-        );
+        $roles = Role::query()->where('guard_name', 'web')->orderBy('name')->get();
 
         return view('users.edit', compact('user', 'roles'));
     }
@@ -82,7 +77,6 @@ class UserController extends Controller
             'profile_picture' => ['nullable', 'string', 'max:191'],
             'roles' => ['nullable', 'array'],
             'roles.*' => ['string', Rule::exists('roles', 'name')->where('guard_name', 'web')],
-            'role' => ['nullable', 'integer', Rule::exists('roles', 'id')],
         ]);
 
         $payload = [
@@ -98,7 +92,7 @@ class UserController extends Controller
         }
 
         $user->update($payload);
-        $user->syncRoles($this->resolveRoleNames($request));
+        $user->syncRoles($data['roles'] ?? []);
 
         return redirect()->route('users.show', $user)->with('status', 'User updated.');
     }
@@ -108,31 +102,5 @@ class UserController extends Controller
         $user->delete();
 
         return redirect()->route('users.index')->with('status', 'User deleted.');
-    }
-
-    /**
-     * @param  \Illuminate\Support\Collection<int, Role>|\Illuminate\Database\Eloquent\Collection<int, Role>  $roles
-     */
-    private function presentRoles($roles)
-    {
-        return $roles->each(fn (Role $role) => $role->setAttribute('title', $role->name));
-    }
-
-    /**
-     * @return array<int, string>
-     */
-    private function resolveRoleNames(Request $request): array
-    {
-        if ($request->filled('roles')) {
-            return array_values($request->input('roles', []));
-        }
-
-        if ($request->filled('role')) {
-            $role = Role::query()->find($request->input('role'));
-
-            return $role ? [$role->name] : [];
-        }
-
-        return [];
     }
 }

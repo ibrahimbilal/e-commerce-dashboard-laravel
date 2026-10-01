@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Support\StorefrontPermissionMap;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -13,11 +13,10 @@ class RoleController extends Controller
     {
         $roles = Role::query()
             ->where('guard_name', 'web')
+            ->with('permissions')
             ->withCount('users')
             ->orderBy('name')
             ->paginate(20);
-
-        $roles->getCollection()->transform(fn (Role $role) => $this->presentRole($role));
 
         return view('roles.index', compact('roles'));
     }
@@ -32,20 +31,17 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => ['required_without:title', 'string', 'max:255'],
-            'title' => ['required_without:name', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
             'permissions' => ['nullable', 'array'],
-            'permissions.*' => ['string'],
+            'permissions.*' => ['string', Rule::exists('permissions', 'name')->where('guard_name', 'web')],
         ]);
 
         $role = Role::create([
-            'name' => $validated['name'] ?? $validated['title'],
+            'name' => $validated['name'],
             'guard_name' => 'web',
         ]);
 
-        $role->syncPermissions(
-            StorefrontPermissionMap::toPermissionNames($validated['permissions'] ?? [])
-        );
+        $role->syncPermissions($validated['permissions'] ?? []);
 
         return redirect()->route('roles.edit', $role)->with('status', 'Role created.');
     }
@@ -53,10 +49,9 @@ class RoleController extends Controller
     public function show(Role $role)
     {
         $role->load('permissions');
+        $permissions = Permission::query()->where('guard_name', 'web')->orderBy('name')->get();
 
-        return view('roles.show', [
-            'role' => $this->presentRole($role),
-        ]);
+        return view('roles.show', compact('role', 'permissions'));
     }
 
     public function edit(Role $role)
@@ -64,28 +59,22 @@ class RoleController extends Controller
         $role->load('permissions');
         $permissions = Permission::query()->where('guard_name', 'web')->orderBy('name')->get();
 
-        return view('roles.edit', [
-            'role' => $this->presentRole($role),
-            'permissions' => $permissions,
-        ]);
+        return view('roles.edit', compact('role', 'permissions'));
     }
 
     public function update(Request $request, Role $role)
     {
         $validated = $request->validate([
-            'name' => ['required_without:title', 'string', 'max:255'],
-            'title' => ['required_without:name', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
             'permissions' => ['nullable', 'array'],
-            'permissions.*' => ['string'],
+            'permissions.*' => ['string', Rule::exists('permissions', 'name')->where('guard_name', 'web')],
         ]);
 
         $role->update([
-            'name' => $validated['name'] ?? $validated['title'],
+            'name' => $validated['name'],
         ]);
 
-        $role->syncPermissions(
-            StorefrontPermissionMap::toPermissionNames($validated['permissions'] ?? [])
-        );
+        $role->syncPermissions($validated['permissions'] ?? []);
 
         return redirect()->route('roles.edit', $role)->with('status', 'Role updated.');
     }
@@ -95,18 +84,5 @@ class RoleController extends Controller
         $role->delete();
 
         return redirect()->route('roles.index')->with('status', 'Role deleted.');
-    }
-
-    private function presentRole(Role $role): Role
-    {
-        $role->setAttribute('title', $role->name);
-        $slugList = StorefrontPermissionMap::toSlugs(
-            $role->relationLoaded('permissions')
-                ? $role->permissions->pluck('name')->all()
-                : $role->permissions()->pluck('name')->all()
-        );
-        $role->setAttribute('permissions', implode(',', $slugList));
-
-        return $role;
     }
 }

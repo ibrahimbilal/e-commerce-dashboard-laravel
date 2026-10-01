@@ -34,23 +34,4 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-    /**
-     * Blade compatibility for legacy roleRelation->title (Spatie roles).
-     */
-    public function getRoleRelationAttribute(): ?object
-    {
-        $role = $this->relationLoaded('roles')
-            ? $this->roles->first()
-            : $this->roles()->first();
-
-        if (! $role) {
-            return null;
-        }
-
-        return (object) [
-            'id' => $role->id,
-            'title' => $role->name,
-        ];
-    }
 }
