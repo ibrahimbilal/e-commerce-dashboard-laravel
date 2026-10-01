@@ -14,7 +14,9 @@
 
 <div class="text-capitalize mb-2 mb-sm-0 d-flex justify-content-between align-items-center">
 <h1 class="page-title">Reviews</h1>
+@can('add reviews')
 <a class="add-btn btn text-capitalize" href="{{ route('reviews.create') }}"><span class="icon"><i class="fi-rr-plus"> </i></span>add review</a>
+@endcan
 </div>
 
 <div class="page-breadcrumbs d-flex align-items-sm-center justify-content-start justify-content-sm-end">
@@ -80,102 +82,4 @@
 </div>
 @endsection
 
-@push('scripts')
-<script async="" src="{{ asset('assets/js/async.js') }}" type="text/javascript"></script>
-<script src="{{ asset('assets/js/datatables.min.js') }}" type="text/javascript"></script>
-<script>
-      // Data Tables
-      let product_table = $('#reviews').DataTable({
-      	dom: 'Bfrtip',
-      	columnDefs: [
-      		{
-      			orderable: false,
-      			className: 'select-checkbox',
-      			targets: 0
-      		},
-      		{ 
-      			bSortable: false, 
-      			aTargets: [0, 2, 6] 
-      		},
-      		{ 
-      			bSearchable: false, 
-      			aTargets: [0, 2, 6] 
-      		}
-      	],
-      	select: {
-      		style: 'os',
-      		selector: 'td:first-child'
-      	},
-      	order: [
-      		[5, 'desc']
-      	],
-      	language: {
-      		info: "Show _START_ To _END_ Of _TOTAL_ reviews",
-      		buttons: {
-      			pageLength: 'Show %d',
-      			colvis: 'Columns'
-      		}
-      	},
-      	stateSave: true,
-      	paging: true,
-      	searching: true,
-      	lengthMenu: [[ 10, 15, 25, 50, 75, 100 ], ['10 reviews', '15 reviews', '25 reviews', '50 reviews', '75 reviews', '100 reviews']],
-      	buttons: ($(window).width() > 578) ? ['pageLength', 'print', {
-      		extend: 'collection',
-      		text: 'Export',
-      		className: 'btn btn-group',
-      		buttons: [
-      			{
-      				extend: 'excelHtml5',
-      				className: 'dropdown-item'
-      			},
-      			{
-      				extend: 'csvHtml5',
-      				className: 'dropdown-item'
-      			},
-      			{
-      				extend: 'pdfHtml5',
-      				className: 'dropdown-item'
-      			}
-      		]
-      	}, 'colvis'] : ['pageLength', {
-      		extend: 'collection',
-      		text: 'Export',
-      		className: 'btn btn-group',
-      		buttons: [
-      			{
-      				extend: 'excelHtml5',
-      				className: 'dropdown-item'
-      			},
-      			{
-      				extend: 'csvHtml5',
-      				className: 'dropdown-item'
-      			},
-      			{
-      				extend: 'pdfHtml5',
-      				className: 'dropdown-item'
-      			}
-      		]
-      	}, 'colvis']
-      });
-      product_table.on("click", "th.select-checkbox", function() {
-      	if ($("th.select-checkbox").hasClass("selected")) {
-      		product_table.rows().deselect();
-      		$("th.select-checkbox").removeClass("selected");
-      	} else {
-      		product_table.rows().select();
-      		$("th.select-checkbox").addClass("selected");
-      	}
-      }).on("select deselect", function() {
-      	("Some selection or deselection going on")
-      	if (product_table.rows({
-      			selected: true
-      		}).count() !== product_table.rows().count()) {
-      		$("th.select-checkbox").removeClass("selected");
-      	} else {
-      		$("th.select-checkbox").addClass("selected");
-      	}
-      });
-    </script>
-@endpush
 

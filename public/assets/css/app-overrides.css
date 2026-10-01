@@ -44,3 +44,19 @@
     color: #6c757d;
     text-align: center;
 }
+
+.slider-holder .swiper-slide.main-box {
+    min-width: 0;
+    max-width: 280px;
+}
+
+.slider-holder .swiper-slide .detail-holder {
+    min-width: 0;
+    overflow: hidden;
+}
+
+.slider-holder .swiper-slide .detail-holder p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

@@ -397,30 +397,7 @@
 </div>
 <div class="col-sm-6 col-lg-3 meta-box order-2">
 <div class="main-box box-spaces mb-0">
-<div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-<label class="item-title meta-title">Registered At:</label><span class="ms-2">26/03/2021 14:58</span>
-</div>
-<div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-<label class="item-title meta-title">updated at:</label><span class="ms-2">26/03/2021 14:58</span>
-</div>
-<div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-<label class="item-title meta-title">ip address:</label><span class="ms-2">216.58.217.164</span>
-</div>
-<div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-<label class="item-title meta-title">ip country:</label><span class="ms-2">United State</span>
-</div>
-<div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-<label class="item-title meta-title">iP City:</label><span class="ms-2">New York</span>
-</div>
-<div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-<label class="item-title meta-title">Device:</label><span class="ms-2">Samsung Galaxy S20</span>
-</div>
-<div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-<label class="item-title meta-title">Registered At:</label><span class="ms-2">26/03/2021 14:58</span>
-</div>
-<div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-<label class="item-title meta-title">Last Logged In:</label><span class="ms-2">26/03/2021 14:58</span>
-</div>
+<x-account-activity-meta />
 <div class="btns-holder d-flex justify-content-between mt-4">
 <button class="btn trans-btn w-100 text-start delete" data-post-type="customer"><span class="icon me-1"><i class="fi-rr-trash"> </i></span>delete account</button>
 <button class="btn solid-btn" type="submit">create </button>

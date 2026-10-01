@@ -83,7 +83,7 @@
 <td>
 <p class="title title-2 mb-0">Country:</p>
 </td>
-<td>United State</td>
+<td>{{ $address?->country ?? '—' }}</td>
 </tr>
 <tr>
 <td>

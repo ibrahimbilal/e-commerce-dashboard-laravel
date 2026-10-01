@@ -46,7 +46,7 @@
 <div class="form-item second justify-content-between mb-2 d-flex align-items-sm-center">
 <label class="item-title meta-title" for="newitem-lang">tag Lang:</label>
 <select class="form-select dropdown" id="newitem-lang" name="locale">
-<option data-flag="./assets/images/flags/us.png" value="en" @selected(old('locale', 'en') === 'en')>English</option>
+<option data-flag="{{ asset('assets/images/flags/us.png') }}" value="en" @selected(old('locale', 'en') === 'en')>English</option>
 <option data-flag="./assets/images/flags/sa.png" value="ar" @selected(old('locale') === 'ar')>Arabic</option>
 <option data-flag="./assets/images/flags/fr.png" value="fr" @selected(old('locale') === 'fr')>French</option>
 </select>
@@ -64,12 +64,7 @@
 @endforeach
 </select>
 </div>
-<div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-<label class="item-title meta-title">created at: </label><span class="ms-2">26/03/2021 14:58</span>
-</div>
-<div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-<label class="item-title meta-title">updated at:</label><span class="ms-2">26/03/2021 14:58</span>
-</div>
+<x-resource-timestamps />
 <div class="btns-holder d-flex justify-content-between mt-4">
 <button class="btn regular-btn draft" data-post-type="tag">save as draft</button>
 <button class="btn solid-btn" type="submit">publish </button>
@@ -155,11 +150,9 @@ separate keywords with comma (,)."><i class="fi-rr-info"> </i></span></label>
       	placeholder: 'Write The Description Here...',
       	theme: 'snow'   // Specify theme in configuration
       };
-      var quill = new Quill('.editor-container', setting);
-      
-      // ===========================================================
-      // fire tag checkbox function 
-      checkboxFunctions();
+      if (document.querySelector('.editor-container') && typeof Quill !== 'undefined') {
+        new Quill('.editor-container', setting);
+      }
     </script>
 @endpush
 

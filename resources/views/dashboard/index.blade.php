@@ -180,16 +180,4 @@ ${{ number_format((float) $price) }}
 @push('scripts')
 <script async="" src="{{ asset('assets/js/async.js') }}" type="text/javascript"></script>
 <script src="{{ asset('assets/js/swiper-bundle.min.js') }}" type="text/javascript"></script>
-<script>
-if (document.querySelectorAll('.swiper-container').length > 0 && typeof Swiper !== 'undefined') {
-	var swiper = new Swiper('.swiper-container', {
-		freeMode: true,
-		slidesPerView: 'auto',
-		pagination: false,
-		speed: 500,
-		grabCursor: true,
-		touchStartTime: 5000,
-	});
-}
-</script>
 @endpush

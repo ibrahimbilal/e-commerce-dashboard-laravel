@@ -8,7 +8,7 @@
 <label class="item-title meta-title" for="newitem-lang">Product Lang:</label>
 <select class="form-select dropdown" id="newitem-lang" name="langs">
 @foreach ($langs as $lang)
-<option data-flag="./assets/images/flags/us.png" value="{{ $lang->code }}" @selected($activeLang === $lang->code)>{{ $lang->name ?? $lang->code }}</option>
+<option data-flag="{{ asset('assets/images/flags/us.png') }}" value="{{ $lang->code }}" @selected($activeLang === $lang->code)>{{ $lang->name ?? $lang->code }}</option>
 @endforeach
 </select>
 </div>

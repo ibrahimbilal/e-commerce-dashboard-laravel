@@ -83,27 +83,7 @@
 </div>
 <div class="col-sm-6 col-lg-3 float-end meta-box">
 <div class="main-box box-spaces">
-<div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-<label class="item-title meta-title">Registered At:</label><span class="ms-2">26/03/2021 14:58</span>
-</div>
-<div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-<label class="item-title meta-title">updated at:</label><span class="ms-2">26/03/2021 14:58</span>
-</div>
-<div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-<label class="item-title meta-title">Last Logged In:</label><span class="ms-2">26/03/2021 14:58</span>
-</div>
-<div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-<label class="item-title meta-title">Device:</label><span class="ms-2">Samsung Galaxy S20</span>
-</div>
-<div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-<label class="item-title meta-title">iP Address:</label><span class="ms-2">216.58.217.164</span>
-</div>
-<div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-<label class="item-title meta-title">iP Country:</label><span class="ms-2">United State</span>
-</div>
-<div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-<label class="item-title meta-title">iP City:</label><span class="ms-2">New York</span>
-</div>
+<x-account-activity-meta :subject="$user" />
 <div class="btns-holder d-flex justify-content-between mt-4">
 <button class="btn solid-btn" type="submit">update </button>
 </div>
@@ -687,75 +667,7 @@
 
 @push('scripts')
 <script async="" src="{{ asset('assets/js/async.js') }}" type="text/javascript"></script>
-<script src="{{ asset('assets/js/datatables.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('assets/js/pickadate/picker.js') }}" type="text/javascript"></script>
 <script src="{{ asset('assets/js/pickadate/picker.date.js') }}" type="text/javascript"></script>
-<script>
-      // Data Tables
-      let product_table = $('#activities').DataTable({
-      	dom: 'Bfrtip',
-      	columnDefs: [
-      		{ 
-      			bSortable: false, 
-      			aTargets: [ 4] 
-      		},
-      		{ 
-      			bSearchable: false, 
-      			aTargets: [ 0, 1, 2, 3] 
-      		}
-      	],
-      	order: [
-      		[3, 'desc']
-      	],
-      	language: {
-      		info: "Show _START_ To _END_ Of _TOTAL_ Activity",
-      		buttons: {
-      			pageLength: 'Show %d',
-      			colvis: 'Columns'
-      		}
-      	},
-      	stateSave: true,
-      	paging: true,
-      	searching: true,
-      	lengthMenu: [[ 10, 15, 25, 50, 75, 100 ], ['10 Activities', '15 Activities', '25 Activities', '50 Activities', '75 Activities', '100 Activities']],
-      	buttons: ($(window).width() > 578) ? ['pageLength', 'print', {
-      		extend: 'collection',
-      		text: 'Export',
-      		className: 'btn btn-group',
-      		buttons: [
-      			{
-      				extend: 'excelHtml5',
-      				className: 'dropdown-item'
-      			},
-      			{
-      				extend: 'csvHtml5',
-      				className: 'dropdown-item'
-      			},
-      			{
-      				extend: 'pdfHtml5',
-      				className: 'dropdown-item'
-      			}
-      		]
-      	}, 'colvis'] : ['pageLength', {
-      		extend: 'collection',
-      		text: 'Export',
-      		className: 'btn btn-group',
-      		buttons: [
-      			{
-      				extend: 'excelHtml5',
-      				className: 'dropdown-item'
-      			},
-      			{
-      				extend: 'csvHtml5',
-      				className: 'dropdown-item'
-      			},
-      			{
-      				extend: 'pdfHtml5',
-      				className: 'dropdown-item'
-      			}
-      		]
-      	}, 'colvis']
-      });
-    </script>
 @endpush
 

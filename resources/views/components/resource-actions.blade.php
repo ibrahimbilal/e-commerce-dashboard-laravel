@@ -4,17 +4,24 @@
     'destroyLabel' => 'item',
     'show' => true,
     'edit' => true,
+    'permissionSection' => null,
 ])
 
 @php
     $showRoute = $resource.'.show';
     $editRoute = $resource.'.edit';
     $destroyRoute = $resource.'.destroy';
-    $canShow = $show && Route::has($showRoute);
-    $canEdit = $edit && Route::has($editRoute);
-    $canDestroy = Route::has($destroyRoute);
+    $section = $permissionSection ?? match ($resource) {
+        'order-statuses' => 'orders',
+        'coupons' => 'discounts',
+        default => $resource,
+    };
+    $canShow = $show && Route::has($showRoute) && auth()->user()?->can('view '.$section);
+    $canEdit = $edit && Route::has($editRoute) && auth()->user()?->can('edit '.$section);
+    $canDestroy = Route::has($destroyRoute) && auth()->user()?->can('delete '.$section);
 @endphp
 
+@if ($canShow || $canEdit || $canDestroy)
 <div class="btn-group">
     @if ($canShow)
         <a class="btn btn-primary btn-rounded me-2 py-1" href="{{ route($showRoute, $model) }}">
@@ -36,3 +43,4 @@
     </form>
     @endif
 </div>
+@endif

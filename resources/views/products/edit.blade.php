@@ -63,12 +63,7 @@
 <div class="col-sm-6 col-lg-12 float-end float-lg-none">
 <div class="main-box box-spaces">
 @include('components.product-form-sidebar-meta', ['activeLang' => $activeLang])
-<div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-<label class="item-title meta-title">created at: </label><span class="ms-2">26/03/2021 14:58</span>
-</div>
-<div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
-<label class="item-title meta-title">updated at:</label><span class="ms-2">26/03/2021 14:58</span>
-</div>
+<x-resource-timestamps :model="$product" />
 <div class="btns-holder d-flex justify-content-between mt-4">
 <button class="btn regular-btn draft" data-post-type="Product">save as draft</button>
 <button class="btn solid-btn" type="submit">publish </button>
@@ -236,17 +231,20 @@ separate keywords with comma (,)."><i class="fi-rr-info"> </i></span></label>
       	placeholder: 'Write The Description Here...',
       	theme: 'snow'   // Specify theme in configuration
       };
-      var quill = new Quill('.editor-container', setting);
-
-      var initialHtml = document.getElementById('description-input').value;
-      if (initialHtml) { quill.root.innerHTML = initialHtml; }
-      document.getElementById('add-newitem-form').addEventListener('submit', function () {
-        document.getElementById('description-input').value = quill.root.innerHTML;
-      });
-
-      // ===========================================================
-      // fire category checkbox function 
-      checkboxFunctions();
+      var editorEl = document.querySelector('.editor-container');
+      var descriptionInput = document.getElementById('description-input');
+      var formEl = document.getElementById('add-newitem-form');
+      if (editorEl && typeof Quill !== 'undefined') {
+        var quill = new Quill('.editor-container', setting);
+        if (descriptionInput && descriptionInput.value) {
+          quill.root.innerHTML = descriptionInput.value;
+        }
+        if (formEl && descriptionInput) {
+          formEl.addEventListener('submit', function () {
+            descriptionInput.value = quill.root.innerHTML;
+          });
+        }
+      }
     </script>
 @endpush
 
