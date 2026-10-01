@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
+use App\Models\Product;
 use App\Models\Review;
 use Illuminate\Http\Request;
 
@@ -18,7 +20,7 @@ class ReviewController extends Controller
 
     public function create()
     {
-        return view('reviews.create');
+        return view('reviews.create', $this->reviewFormLookups());
     }
 
     public function store(Request $request)
@@ -32,7 +34,7 @@ class ReviewController extends Controller
 
         $review = Review::create($data);
 
-        return redirect()->route('reviews.show', $review)->with('status', 'Review created.');
+        return redirect()->route('reviews.index')->with('status', 'Review created.');
     }
 
     public function show(Review $review)
@@ -44,7 +46,10 @@ class ReviewController extends Controller
 
     public function edit(Review $review)
     {
-        return view('reviews.edit', compact('review'));
+        return view('reviews.edit', array_merge(
+            compact('review'),
+            $this->reviewFormLookups()
+        ));
     }
 
     public function update(Request $request, Review $review)
@@ -58,7 +63,7 @@ class ReviewController extends Controller
 
         $review->update($data);
 
-        return redirect()->route('reviews.show', $review)->with('status', 'Review updated.');
+        return redirect()->route('reviews.index')->with('status', 'Review updated.');
     }
 
     public function destroy(Review $review)
@@ -66,5 +71,16 @@ class ReviewController extends Controller
         $review->delete();
 
         return redirect()->route('reviews.index')->with('status', 'Review deleted.');
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function reviewFormLookups(): array
+    {
+        return [
+            'customers' => Customer::orderBy('first_name')->orderBy('last_name')->get(),
+            'products' => Product::with('locales')->orderBy('id')->get(),
+        ];
     }
 }

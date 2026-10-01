@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Address;
+use App\Models\Coupon;
+use App\Models\Customer;
 use App\Models\Order;
+use App\Models\OrderStatus;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -18,23 +22,16 @@ class OrderController extends Controller
 
     public function create()
     {
-        return view('orders.create');
+        return view('orders.create', $this->orderFormLookups());
     }
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'customer_id' => ['required', 'integer', 'exists:customers,id'],
-            'address_id' => ['required', 'integer', 'exists:addresses,id'],
-            'amount' => ['required', 'integer'],
-            'order_status_id' => ['required', 'integer', 'exists:order_statuses,id'],
-            'coupon_id' => ['nullable', 'integer', 'exists:coupons,id'],
-            'updated_by' => ['nullable', 'integer', 'exists:users,id'],
-        ]);
+        $data = $this->validatedOrder($request);
 
         $order = Order::create($data);
 
-        return redirect()->route('orders.show', $order)->with('status', 'Order created.');
+        return redirect()->route('orders.edit', $order)->with('status', 'Order created.');
     }
 
     public function show(Order $order)
@@ -46,23 +43,19 @@ class OrderController extends Controller
 
     public function edit(Order $order)
     {
-        return view('orders.edit', compact('order'));
+        $order->load(['customer', 'address', 'orderStatus', 'coupon', 'items']);
+
+        return view('orders.edit', [
+            'order' => $order,
+            ...$this->orderFormLookups($order),
+        ]);
     }
 
     public function update(Request $request, Order $order)
     {
-        $data = $request->validate([
-            'customer_id' => ['required', 'integer', 'exists:customers,id'],
-            'address_id' => ['required', 'integer', 'exists:addresses,id'],
-            'amount' => ['required', 'integer'],
-            'order_status_id' => ['required', 'integer', 'exists:order_statuses,id'],
-            'coupon_id' => ['nullable', 'integer', 'exists:coupons,id'],
-            'updated_by' => ['nullable', 'integer', 'exists:users,id'],
-        ]);
+        $order->update($this->validatedOrder($request));
 
-        $order->update($data);
-
-        return redirect()->route('orders.show', $order)->with('status', 'Order updated.');
+        return redirect()->route('orders.edit', $order)->with('status', 'Order updated.');
     }
 
     public function destroy(Order $order)
@@ -70,5 +63,51 @@ class OrderController extends Controller
         $order->delete();
 
         return redirect()->route('orders.index')->with('status', 'Order deleted.');
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function orderFormLookups(?Order $order = null): array
+    {
+        $addressesQuery = Address::with('customer')->orderBy('id');
+
+        if ($order?->customer_id) {
+            $addressesQuery->where('customer_id', $order->customer_id);
+        }
+
+        return [
+            'customers' => Customer::orderBy('first_name')->orderBy('last_name')->get(),
+            'addresses' => $addressesQuery->get(),
+            'orderStatuses' => OrderStatus::orderBy('title')->get(),
+            'coupons' => Coupon::orderBy('title')->get(),
+        ];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function validatedOrder(Request $request): array
+    {
+        $validated = $request->validate([
+            'customer_id' => ['required_without:customer', 'integer', 'exists:customers,id'],
+            'customer' => ['required_without:customer_id', 'integer', 'exists:customers,id'],
+            'address_id' => ['required', 'integer', 'exists:addresses,id'],
+            'amount' => ['required', 'integer'],
+            'order_status_id' => ['required_without:order_status', 'integer', 'exists:order_statuses,id'],
+            'order_status' => ['required_without:order_status_id', 'integer', 'exists:order_statuses,id'],
+            'coupon_id' => ['nullable', 'integer', 'exists:coupons,id'],
+            'coupon' => ['nullable', 'integer', 'exists:coupons,id'],
+            'updated_by' => ['nullable', 'integer', 'exists:users,id'],
+        ]);
+
+        return [
+            'customer_id' => $validated['customer_id'] ?? $validated['customer'],
+            'address_id' => $validated['address_id'],
+            'amount' => $validated['amount'],
+            'order_status_id' => $validated['order_status_id'] ?? $validated['order_status'],
+            'coupon_id' => $validated['coupon_id'] ?? $validated['coupon'] ?? null,
+            'updated_by' => $validated['updated_by'] ?? optional($request->user())->id,
+        ];
     }
 }

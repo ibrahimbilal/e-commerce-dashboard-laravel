@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invoice;
+use App\Models\Order;
 use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
@@ -16,7 +17,7 @@ class InvoiceController extends Controller
 
     public function create()
     {
-        return view('invoices.create');
+        return view('invoices.create', $this->invoiceFormLookups());
     }
 
     public function store(Request $request)
@@ -40,7 +41,10 @@ class InvoiceController extends Controller
 
     public function edit(Invoice $invoice)
     {
-        return view('invoices.edit', compact('invoice'));
+        return view('invoices.edit', array_merge(
+            compact('invoice'),
+            $this->invoiceFormLookups()
+        ));
     }
 
     public function update(Request $request, Invoice $invoice)
@@ -60,5 +64,15 @@ class InvoiceController extends Controller
         $invoice->delete();
 
         return redirect()->route('invoices.index')->with('status', 'Invoice deleted.');
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function invoiceFormLookups(): array
+    {
+        return [
+            'orders' => Order::with('customer')->latest('id')->get(),
+        ];
     }
 }

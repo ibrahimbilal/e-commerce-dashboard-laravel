@@ -21,14 +21,11 @@ class RoleController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'title' => ['required', 'string', 'max:50'],
-            'permissions' => ['nullable', 'string', 'max:255'],
-        ]);
+        $data = $this->validatedRole($request);
 
         $role = Role::create($data);
 
-        return redirect()->route('roles.show', $role)->with('status', 'Role created.');
+        return redirect()->route('roles.edit', $role)->with('status', 'Role created.');
     }
 
     public function show(Role $role)
@@ -45,14 +42,9 @@ class RoleController extends Controller
 
     public function update(Request $request, Role $role)
     {
-        $data = $request->validate([
-            'title' => ['required', 'string', 'max:50'],
-            'permissions' => ['nullable', 'string', 'max:255'],
-        ]);
+        $role->update($this->validatedRole($request));
 
-        $role->update($data);
-
-        return redirect()->route('roles.show', $role)->with('status', 'Role updated.');
+        return redirect()->route('roles.edit', $role)->with('status', 'Role updated.');
     }
 
     public function destroy(Role $role)
@@ -60,5 +52,28 @@ class RoleController extends Controller
         $role->delete();
 
         return redirect()->route('roles.index')->with('status', 'Role deleted.');
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function validatedRole(Request $request): array
+    {
+        $validated = $request->validate([
+            'title' => ['required_without:role_name', 'string', 'max:50'],
+            'role_name' => ['required_without:title', 'string', 'max:50'],
+            'permissions' => ['nullable'],
+        ]);
+
+        $permissions = $validated['permissions'] ?? null;
+
+        if (is_array($permissions)) {
+            $permissions = implode(',', array_values(array_filter($permissions)));
+        }
+
+        return [
+            'title' => $validated['title'] ?? $validated['role_name'],
+            'permissions' => $permissions,
+        ];
     }
 }

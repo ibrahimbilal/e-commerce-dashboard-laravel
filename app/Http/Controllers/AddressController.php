@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Address;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 
 class AddressController extends Controller
@@ -16,7 +17,9 @@ class AddressController extends Controller
 
     public function create()
     {
-        return view('addresses.create');
+        return view('addresses.create', [
+            'customers' => Customer::orderBy('first_name')->orderBy('last_name')->get(),
+        ]);
     }
 
     public function store(Request $request)
@@ -47,7 +50,10 @@ class AddressController extends Controller
 
     public function edit(Address $address)
     {
-        return view('addresses.edit', compact('address'));
+        return view('addresses.edit', [
+            'address' => $address,
+            'customers' => Customer::orderBy('first_name')->orderBy('last_name')->get(),
+        ]);
     }
 
     public function update(Request $request, Address $address)
