@@ -52,7 +52,7 @@
 </tr>
 </thead>
 <tbody>
-@forelse ($attributes as $attribute)
+@forelse ($attributeList as $attribute)
 <tr>
 <td></td>
 <td class="prod-title">{{ $attribute->attribute_key }}</td>
@@ -70,7 +70,7 @@
 </div>
 </div>
 </div>
-<x-pagination :paginator="$attributes" />
+<x-pagination :paginator="$attributeList" />
 </div>
 </div>
 @endsection

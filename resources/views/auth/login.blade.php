@@ -42,7 +42,9 @@
 </form>
 </div>
 <div class="form-footer">
+@if (Route::has('register'))
 <p>Don't have an account yet? <a class="form-link" href="{{ route('register') }}">Sign Up</a></p>
+@endif
 </div>
 </div>
 </div>

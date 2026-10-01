@@ -11,6 +11,7 @@
 			<p> Welcome to store name. Enter your personal details and start journey with us.</p>
 		</div>
 		<div class="form-body">
+			@if (Route::has('register'))
 			<form method="POST" action="{{ route('register') }}">
 				@csrf
 				<div class="input-wrapper">
@@ -42,6 +43,9 @@
 				</div>
 				<button type="submit">Sign Up</button>
 			</form>
+			@else
+			<p>Registration is currently disabled.</p>
+			@endif
 		</div>
 		<div class="form-footer">
 			<p>Already have an account? <a class="form-link" href="{{ route('login') }}">Sign In</a></p>

@@ -1,7 +1,10 @@
 @push('scripts')
+@php
+    $customerAddressesUrlTemplate = str_replace('/0/', '/__CUSTOMER__/', route('customers.addresses', ['customer' => 0]));
+@endphp
 <script>
 $(function () {
-    var addressesUrlTemplate = @json(str_replace('/0/', '/__CUSTOMER__/', route('customers.addresses', ['customer' => 0])));
+    var addressesUrlTemplate = {{ Js::from($customerAddressesUrlTemplate) }};
     function formatAddressLabel(a) {
         return [a.address_title, a.address_1, a.city, a.country].filter(Boolean).join(', ') || ('Address #' + a.id);
     }
