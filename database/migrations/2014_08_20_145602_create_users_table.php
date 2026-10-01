@@ -6,40 +6,27 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
+    public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->string('mobile')->nullable();
-            $table->date('birth_date')->nullable();
-			$table->string('role_name')->default('not_verified');
-			$table->enum('gender', ['male', 'female']);
-            $table->string('status');
-            $table->string('language')->nullable();
-            $table->string('profile_picture', 1000)->nullable();
+            $table->increments('id');
+            $table->string('email', 50);
+            $table->string('password', 191);
             $table->rememberToken();
-            $table->timestamps();
-			$table->softDeletes();
+            $table->unsignedInteger('role')->default(1);
+            $table->string('first_name', 50)->nullable();
+            $table->string('last_name', 50)->nullable();
+            $table->string('mobile', 20)->nullable();
+            $table->string('profile_picture', 191)->nullable();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->nullable();
+            $table->softDeletes();
+
+            $table->foreign('role')->references('id')->on('roles');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     * $2y$10$7mv70CQw8zxyQtl2W5jmz.ZdZ2t22BDDL4DxszkBAM6JOgHcB9YI2
-	 * storage/users/hwbnTkhbSmF88qS6qG3c3BsGI6719L2lKa3hcHyZ.jpg
-     * @return void
-     */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('users');
     }

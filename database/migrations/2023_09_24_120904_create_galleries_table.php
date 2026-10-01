@@ -18,7 +18,7 @@ return new class extends Migration
 			$table->string('url');
 			$table->text('metas')->json()->nullable();
 			$table->text('sizes_url')->json()->nullable();
-			$table->foreignId('user_id')->index();
+			$table->unsignedInteger('user_id')->index();
             $table->timestamps();
 			$table->softDeletes();
 
