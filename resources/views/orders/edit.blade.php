@@ -54,11 +54,10 @@
 <div class="col-sm-6 col-lg-3 float-end meta-box order-sm-2">
 <div class="main-box box-spaces mb-0">
 @php
-    $updatedByLabel = '—';
-    if ($order->relationLoaded('updatedByUser') && $order->updatedByUser) {
-        $updatedByLabel = trim(($order->updatedByUser->first_name ?? '').' '.($order->updatedByUser->last_name ?? ''))
-            ?: $order->updatedByUser->email;
-    }
+    $updatedBy = $order->updatedByUser;
+    $updatedByLabel = $updatedBy
+        ? (trim(($updatedBy->first_name ?? '').' '.($updatedBy->last_name ?? '')) ?: $updatedBy->email)
+        : '—';
 @endphp
 <div class="form-item second justify-content-between d-flex align-items-sm-center">
 <label class="item-title meta-title">Created At:</label><span class="text-end ms-2">{{ $order->created_at?->format('d/m/Y H:i') ?? '—' }}</span>
