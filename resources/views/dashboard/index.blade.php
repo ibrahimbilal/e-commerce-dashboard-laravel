@@ -72,59 +72,25 @@
 </div>
 </div>
 <div class="swiper-slide main-box box-spaces d-flex justify-content-between align-items-center">
-<div class="icon-holder"><span class="orange"><i class="fi-rr-paper-plane"> </i></span></div>
+<div class="icon-holder"><span class="orange"><i class="fi-rr-dollar"></i></span></div>
 <div class="detail-holder">
-<p class="text-start m-0">{{ $formatDashboardStat($subscribersStat) }}</p>
-<p class="text-start m-0">Subscribers</p>
+<p class="text-start m-0">{{ number_format($stats['revenue'] ?? 0) }}</p>
+<p class="text-start m-0">Revenue</p>
 </div>
 </div>
-</div>
-</div>
-</div>
-
-<div class="row g-3">
-<div class="col-6 col-lg">
-<div class="main-box box-spaces d-flex justify-content-between align-items-center h-100">
-<div class="icon-holder"><span class="green"><i class="fi-rr-box"></i></span></div>
-<div class="detail-holder">
-<p class="text-start m-0">{{ number_format($stats['orders'] ?? 0) }}</p>
-<p class="text-start m-0 mb-0">Orders</p>
-</div>
-</div>
-</div>
-<div class="col-6 col-lg">
-<div class="main-box box-spaces d-flex justify-content-between align-items-center h-100">
-<div class="icon-holder"><span class="red"><i class="fi-rr-dollar"></i></span></div>
-<div class="detail-holder">
-<p class="text-start m-0">${{ number_format($stats['revenue'] ?? 0) }}</p>
-<p class="text-start m-0 mb-0">Revenue</p>
-</div>
-</div>
-</div>
-<div class="col-6 col-lg">
-<div class="main-box box-spaces d-flex justify-content-between align-items-center h-100">
-<div class="icon-holder"><span class="mauve"><i class="fi-rr-users"></i></span></div>
-<div class="detail-holder">
-<p class="text-start m-0">{{ number_format($stats['customers'] ?? 0) }}</p>
-<p class="text-start m-0 mb-0">Customers</p>
-</div>
-</div>
-</div>
-<div class="col-6 col-lg">
-<div class="main-box box-spaces d-flex justify-content-between align-items-center h-100">
-<div class="icon-holder"><span class="orange"><i class="fi-rr-shopping-bag"></i></span></div>
+<div class="swiper-slide main-box box-spaces d-flex justify-content-between align-items-center">
+<div class="icon-holder"><span class="mauve"><i class="fi-rr-shopping-bag"></i></span></div>
 <div class="detail-holder">
 <p class="text-start m-0">{{ number_format($stats['products'] ?? 0) }}</p>
 <p class="text-start m-0 mb-0">Products</p>
 </div>
 </div>
-</div>
-<div class="col-6 col-lg">
-<div class="main-box box-spaces d-flex justify-content-between align-items-center h-100">
-<div class="icon-holder"><span class="green"><i class="fi-rr-calendar"></i></span></div>
+<div class="swiper-slide main-box box-spaces d-flex justify-content-between align-items-center">
+<div class="icon-holder"><span class="green"><i class="fi-rr-paper-plane"> </i></span></div>
 <div class="detail-holder">
-<p class="text-start m-0">{{ number_format($stats['orders_today'] ?? 0) }}</p>
-<p class="text-start m-0 mb-0">Orders today</p>
+<p class="text-start m-0">{{ $formatDashboardStat($subscribersStat) }}</p>
+<p class="text-start m-0">Subscribers</p>
+</div>
 </div>
 </div>
 </div>
