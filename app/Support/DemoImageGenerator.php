@@ -2,10 +2,193 @@
 
 namespace App\Support;
 
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 class DemoImageGenerator
 {
+    /**
+     * @return string|null storage/demo/products/product-{id}.{ext}
+     */
+    public static function seedProductImage(int $productId): ?string
+    {
+        $sources = self::sortedThemeRelativePaths('products');
+
+        if ($sources !== []) {
+            $sourceRelative = $sources[($productId - 1) % count($sources)];
+            $extension = strtolower(pathinfo($sourceRelative, PATHINFO_EXTENSION) ?: 'jpg');
+            if ($extension === 'jpeg') {
+                $extension = 'jpg';
+            }
+
+            $destRelative = 'demo/products/product-'.$productId.'.'.$extension;
+
+            if (self::copyThemeAssetToPublicDisk($sourceRelative, $destRelative)) {
+                return StoredMedia::databasePath($destRelative);
+            }
+        }
+
+        return self::writeProductImage($productId, 'Demo Product '.$productId, $productId);
+    }
+
+    /**
+     * @return string|null Public-disk relative path e.g. demo/gallery-{index}.jpg
+     */
+    public static function seedGalleryImage(int $index): ?string
+    {
+        $sourceRelative = 'gallery/image-'.$index.'.jpg';
+        $destRelative = 'demo/gallery-'.$index.'.jpg';
+
+        if (self::copyThemeAssetToPublicDisk($sourceRelative, $destRelative)) {
+            return $destRelative;
+        }
+
+        $fallback = self::writeGalleryImage($index, 'Demo gallery '.$index);
+
+        if ($fallback === null) {
+            return null;
+        }
+
+        return StoredMedia::publicDiskRelativePath($fallback) ?? $destRelative;
+    }
+
+    /**
+     * @return string|null storage/avatars/admin.{ext}
+     */
+    public static function seedAdminAvatar(): ?string
+    {
+        $sources = self::sortedThemeRelativePaths('avatars');
+
+        if ($sources !== []) {
+            $sourceRelative = $sources[0];
+            $extension = strtolower(pathinfo($sourceRelative, PATHINFO_EXTENSION) ?: 'png');
+            if ($extension === 'jpeg') {
+                $extension = 'jpg';
+            }
+
+            $destRelative = 'avatars/admin.'.$extension;
+
+            if (self::copyThemeAssetToPublicDisk($sourceRelative, $destRelative)) {
+                return StoredMedia::databasePath($destRelative);
+            }
+        }
+
+        return self::writeAdminAvatar();
+    }
+
+    /**
+     * @return string|null storage/avatars/customer-{id}.{ext}
+     */
+    public static function seedCustomerPhoto(int $customerId): ?string
+    {
+        $sources = self::sortedThemeRelativePaths('customers');
+
+        if ($sources === []) {
+            return null;
+        }
+
+        $sourceRelative = $sources[($customerId - 1) % count($sources)];
+        $extension = strtolower(pathinfo($sourceRelative, PATHINFO_EXTENSION) ?: 'jpg');
+        if ($extension === 'jpeg') {
+            $extension = 'jpg';
+        }
+
+        $destRelative = 'avatars/customers/customer-'.$customerId.'.'.$extension;
+
+        if (self::copyThemeAssetToPublicDisk($sourceRelative, $destRelative)) {
+            return StoredMedia::databasePath($destRelative);
+        }
+
+        return null;
+    }
+
+    /**
+     * @return string|null storage/avatars/user-{id}.{ext}
+     */
+    public static function seedUserAvatar(int $userId): ?string
+    {
+        $sources = self::sortedThemeRelativePaths('avatars');
+
+        if ($sources === []) {
+            return null;
+        }
+
+        $sourceRelative = $sources[($userId - 1) % count($sources)];
+        $extension = strtolower(pathinfo($sourceRelative, PATHINFO_EXTENSION) ?: 'png');
+        if ($extension === 'jpeg') {
+            $extension = 'jpg';
+        }
+
+        $destRelative = 'avatars/user-'.$userId.'.'.$extension;
+
+        if (self::copyThemeAssetToPublicDisk($sourceRelative, $destRelative)) {
+            return StoredMedia::databasePath($destRelative);
+        }
+
+        return null;
+    }
+
+    public static function themeAssetAbsolutePath(string $relativePath): string
+    {
+        return public_path('assets/images/'.ltrim($relativePath, '/'));
+    }
+
+    /**
+     * @return list<string> paths relative to assets/images, sorted naturally
+     */
+    public static function sortedThemeRelativePaths(string $subdir): array
+    {
+        $directory = public_path('assets/images/'.trim($subdir, '/'));
+
+        if (! is_dir($directory)) {
+            return [];
+        }
+
+        $files = File::files($directory);
+        $relative = [];
+
+        foreach ($files as $file) {
+            if (! $file->isFile()) {
+                continue;
+            }
+
+            $extension = strtolower($file->getExtension());
+            if (! in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp'], true)) {
+                continue;
+            }
+
+            $relative[] = trim($subdir, '/').'/'.$file->getFilename();
+        }
+
+        sort($relative, SORT_NATURAL);
+
+        return array_values($relative);
+    }
+
+    public static function copyThemeAssetToPublicDisk(string $themeRelativePath, string $publicDiskRelativePath): bool
+    {
+        $source = self::themeAssetAbsolutePath($themeRelativePath);
+
+        if (! is_readable($source)) {
+            return false;
+        }
+
+        $contents = file_get_contents($source);
+
+        if ($contents === false || $contents === '') {
+            return false;
+        }
+
+        Storage::disk('public')->makeDirectory(dirname($publicDiskRelativePath));
+
+        return Storage::disk('public')->put($publicDiskRelativePath, $contents);
+    }
+
+    public static function isFallbackPlaceholder(string $contents): bool
+    {
+        return hash('sha256', $contents) === hash('sha256', self::fallbackPng(0));
+    }
+
     /**
      * @return string|null storage/demo/products/product-{id}.png
      */

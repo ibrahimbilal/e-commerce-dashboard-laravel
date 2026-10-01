@@ -46,6 +46,7 @@ class DemoDataSeeder extends Seeder
         $tags = $this->seedTags();
         $products = $this->seedProducts($categories, $tags);
         $customers = $this->seedCustomers();
+        $this->assignDemoCustomerPhotos($customers);
         $addresses = $this->seedAddresses($customers);
         $statuses = $this->seedOrderStatuses();
         $coupons = $this->seedCoupons();
@@ -81,7 +82,11 @@ class DemoDataSeeder extends Seeder
         User::factory(8)->create()->each(function (User $user) {
             $user->markEmailAsVerified();
             $user->assignRole(fake()->randomElement(['manager', 'viewer']));
+            $this->assignDemoUserAvatar($user);
         });
+
+        $this->assignDemoUserAvatar($manager);
+        $this->assignDemoUserAvatar($viewer);
     }
 
     private function seedAttributes(): void
@@ -396,7 +401,7 @@ class DemoDataSeeder extends Seeder
 
     private function assignDemoProductImage(Product $product, string $label): void
     {
-        $path = DemoImageGenerator::writeProductImage($product->id, $label, $product->id);
+        $path = DemoImageGenerator::seedProductImage($product->id);
 
         if ($path) {
             $product->forceFill(['product_img' => StoredMedia::normalizeStoredPath($path)])->save();
@@ -406,22 +411,41 @@ class DemoDataSeeder extends Seeder
     private function reconcileDemoProductImages(): void
     {
         Product::query()->each(function (Product $product) {
-            $relative = 'demo/products/product-'.$product->id.'.png';
+            $path = DemoImageGenerator::seedProductImage($product->id);
 
-            if (! Storage::disk('public')->exists($relative)) {
-                DemoImageGenerator::writeProductImage(
-                    $product->id,
-                    'Demo Product '.$product->id,
-                    $product->id
-                );
-            }
-
-            if (Storage::disk('public')->exists($relative)) {
+            if ($path) {
                 $product->forceFill([
-                    'product_img' => StoredMedia::databasePath($relative),
+                    'product_img' => StoredMedia::normalizeStoredPath($path),
                 ])->save();
             }
         });
+    }
+
+    /**
+     * @param  \Illuminate\Support\Collection<int, Customer>  $customers
+     */
+    private function assignDemoCustomerPhotos($customers): void
+    {
+        foreach ($customers as $customer) {
+            $path = DemoImageGenerator::seedCustomerPhoto($customer->id);
+
+            if ($path) {
+                $customer->forceFill(['profile_picture' => StoredMedia::normalizeStoredPath($path)])->save();
+            }
+        }
+    }
+
+    private function assignDemoUserAvatar(User $user): void
+    {
+        if ($user->email === 'admin@example.com') {
+            return;
+        }
+
+        $path = DemoImageGenerator::seedUserAvatar($user->id);
+
+        if ($path) {
+            $user->forceFill(['profile_picture' => StoredMedia::normalizeStoredPath($path)])->save();
+        }
     }
 
     /**
@@ -466,10 +490,10 @@ class DemoDataSeeder extends Seeder
         }
 
         for ($i = 1; $i <= 20; $i++) {
-            DemoImageGenerator::writeGalleryImage($i, 'Demo gallery '.$i);
+            $url = DemoImageGenerator::seedGalleryImage($i) ?? 'demo/gallery-'.$i.'.jpg';
 
             Gallery::query()->create([
-                'url' => 'demo/gallery-'.$i.'.png',
+                'url' => $url,
                 'metas' => ['alt' => 'Demo gallery '.$i],
                 'sizes_url' => null,
                 'user_id' => $userId,

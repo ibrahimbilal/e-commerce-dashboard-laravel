@@ -6,7 +6,6 @@ use App\Models\User;
 use App\Support\DemoImageGenerator;
 use App\Support\StoredMedia;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Storage;
 
 class AdminAvatarSeeder extends Seeder
 {
@@ -21,23 +20,12 @@ class AdminAvatarSeeder extends Seeder
             return;
         }
 
-        $relative = 'avatars/admin.png';
+        $path = DemoImageGenerator::seedAdminAvatar();
 
-        if (! Storage::disk('public')->exists($relative)) {
-            DemoImageGenerator::writeAdminAvatar();
+        if ($path) {
+            $admin->forceFill([
+                'profile_picture' => StoredMedia::normalizeStoredPath($path),
+            ])->save();
         }
-
-        if (! Storage::disk('public')->exists($relative)) {
-            Storage::disk('public')->makeDirectory('avatars');
-            $png = base64_decode(
-                'iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFUlEQVR42mNk+M9Qz0AEYBxVSF+FABJADveWkH6oAAAAAElFTkSuQmCC',
-                true
-            );
-            Storage::disk('public')->put($relative, $png !== false ? $png : '');
-        }
-
-        $admin->forceFill([
-            'profile_picture' => StoredMedia::databasePath($relative),
-        ])->save();
     }
 }
