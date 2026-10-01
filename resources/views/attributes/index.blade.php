@@ -59,7 +59,7 @@
 <td>{{ \Illuminate\Support\Str::slug($attribute->attribute_key) }}</td>
 <td>{{ $attribute->attribute_value }}</td>
 <td>
-<x-resource-actions :model="$attribute" resource="attributes" destroy-label="attribute" />
+<x-resource-actions :model="$attribute" resource="attributes" destroy-label="attribute" :show="false" />
 </td>
 </tr>
 @empty

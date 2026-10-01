@@ -67,7 +67,7 @@
 </label>
 </td>
 <td>
-<x-resource-actions :model="$discount" resource="discounts" destroy-label="discount" />
+<x-resource-actions :model="$discount" resource="discounts" destroy-label="discount" :show="false" />
 </td>
 </tr>
 @empty

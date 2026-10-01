@@ -45,16 +45,13 @@
 <div class="col-sm-12 col-lg-4">
 <div class="main-box box-spaces">
 <div class="btns-holder d-flex justify-content-between mt-4 gap-2">
-<form method="POST" action="{{ route('roles.destroy', $role) }}" class="w-100 d-inline destroy-resource-form">
-@csrf
-@method('DELETE')
-<button type="button" class="btn trans-btn w-100 text-start js-destroy-submit" data-confirm-label="role" data-post-type="role"><span class="icon me-1"><i class="fi-rr-trash"> </i></span>move to trash</button>
-</form>
-<button class="btn solid-btn" type="submit" form="add-newitem-form">publish </button>
+<button type="button" class="btn trans-btn w-100 text-start js-destroy-submit" form="role-destroy-form" data-confirm-label="role" data-post-type="role"><span class="icon me-1"><i class="fi-rr-trash"> </i></span>move to trash</button>
+<button class="btn solid-btn" type="submit">publish </button>
 </div>
 </div>
 </div>
 </form>
+<form method="POST" action="{{ route('roles.destroy', $role) }}" id="role-destroy-form" class="destroy-resource-form d-none">@csrf @method('DELETE')</form>
 @endsection
 
 @push('scripts')

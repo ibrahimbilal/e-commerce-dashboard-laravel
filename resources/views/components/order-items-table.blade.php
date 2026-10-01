@@ -8,9 +8,10 @@
             'price' => $item->price,
         ])->values()->all();
     }
-    if ($itemRows === null || $itemRows === []) {
-        $itemRows = [['product_attribute_id' => '', 'quantity' => 1, 'price' => '']];
+    if ($itemRows === null) {
+        $itemRows = [];
     }
+    $itemRows = is_array($itemRows) ? $itemRows : [];
 
     $variantOptions = isset($productVariants) ? collect($productVariants) : collect();
     if ($variantOptions->isEmpty() && $orderModel) {
@@ -53,6 +54,11 @@
 </tr>
 </thead>
 <tbody id="order-items-body">
+@if (count($itemRows) === 0)
+<tr class="order-item-empty" id="order-items-empty-row">
+<td colspan="5" class="text-center text-muted py-3">No line items yet. Add a row to build this order.</td>
+</tr>
+@else
 @foreach ($itemRows as $index => $row)
 @php
     $idx = is_numeric($index) ? (int) $index : $loop->index;
@@ -86,6 +92,7 @@
 </td>
 </tr>
 @endforeach
+@endif
 </tbody>
 </table>
 </div>
@@ -123,6 +130,13 @@
 @push('scripts')
 <script>
 $(function () {
+    function showOrderItemsEmptyState() {
+        if ($('#order-items-body .order-item-row').length === 0 && $('#order-items-empty-row').length === 0) {
+            $('#order-items-body').append(
+                '<tr class="order-item-empty" id="order-items-empty-row"><td colspan="5" class="text-center text-muted py-3">No line items yet. Add a row to build this order.</td></tr>'
+            );
+        }
+    }
     function lineTotal($row) {
         var q = parseFloat($row.find('.js-order-item-qty').val()) || 0;
         var p = parseFloat($row.find('.js-order-item-price').val()) || 0;
@@ -156,6 +170,7 @@ $(function () {
         });
     }
     $('#js-add-order-item').on('click', function () {
+        $('#order-items-empty-row').remove();
         var idx = nextOrderItemIndex();
         var html = $('#order-item-row-template').html().replace(/__INDEX__/g, idx);
         $('#order-items-body').append(html);
@@ -163,15 +178,10 @@ $(function () {
         refreshOrderItemsTotals();
     });
     $(document).on('click', '.js-remove-order-item', function () {
-        var $body = $('#order-items-body');
-        if ($body.find('.order-item-row').length <= 1) {
-            $(this).closest('tr').find('select, input').val('');
-            refreshOrderItemsTotals();
-            return;
-        }
         $(this).closest('tr').remove();
         reindexOrderItemRows();
         refreshOrderItemsTotals();
+        showOrderItemsEmptyState();
     });
     $(document).on('input change', '.js-order-item-qty, .js-order-item-price', refreshOrderItemsTotals);
     refreshOrderItemsTotals();

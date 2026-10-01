@@ -6,7 +6,8 @@
     $(function () {
         $(document).on('click', '.js-destroy-submit', function (e) {
             e.preventDefault();
-            var $form = $(this).closest('form');
+            var formId = $(this).attr('form');
+            var $form = formId ? $('#' + formId) : $(this).closest('form');
             var label = $(this).data('confirm-label') || 'item';
             Swal.fire({
                 title: 'Are you sure?',

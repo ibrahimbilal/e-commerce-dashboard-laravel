@@ -108,11 +108,7 @@
 <button class="btn solid-btn" type="submit">update </button>
 </div>
 <div class="btns-holder d-flex justify-content-between mt-2">
-<form method="POST" action="{{ route('users.destroy', $user) }}" class="w-100 d-inline destroy-resource-form">
-@csrf
-@method('DELETE')
-<button type="button" class="btn trans-btn w-100 text-start js-destroy-submit" data-confirm-label="user"><span class="icon me-1"><i class="fi-rr-trash"> </i></span>move to trash</button>
-</form>
+<button type="button" class="btn trans-btn w-100 text-start js-destroy-submit" form="user-destroy-form" data-confirm-label="user"><span class="icon me-1"><i class="fi-rr-trash"> </i></span>move to trash</button>
 </div>
 </div>
 </div>
@@ -686,6 +682,7 @@
 </div>
 </div>
 </form>
+<form method="POST" action="{{ route('users.destroy', $user) }}" id="user-destroy-form" class="destroy-resource-form d-none">@csrf @method('DELETE')</form>
 @endsection
 
 @push('scripts')

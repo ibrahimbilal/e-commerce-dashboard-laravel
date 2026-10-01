@@ -9,9 +9,7 @@
             ])->values()->all()
             : [];
     }
-    if ($variantRows === [] || $variantRows === null) {
-        $variantRows = [['id' => null, 'attribute_1_id' => null, 'attribute_2_id' => null]];
-    }
+    $variantRows = is_array($variantRows) ? $variantRows : [];
     $attributeOptions = $attributes ?? collect();
 @endphp
 <div class="product-variant-rows" id="product-variant-rows">
@@ -25,6 +23,11 @@
 </tr>
 </thead>
 <tbody id="product-variant-rows-body">
+@if (count($variantRows) === 0)
+<tr class="product-variant-empty" id="product-variant-empty-row">
+<td colspan="3" class="text-center text-muted py-3">No variant rows yet. Add a row to define product attributes.</td>
+</tr>
+@else
 @foreach ($variantRows as $index => $row)
 @php
     $rowId = is_array($row) ? ($row['id'] ?? null) : null;
@@ -57,6 +60,7 @@
 </td>
 </tr>
 @endforeach
+@endif
 </tbody>
 </table>
 </div>
@@ -88,6 +92,13 @@
 @push('scripts')
 <script>
 $(function () {
+    function showProductVariantEmptyState() {
+        if ($('#product-variant-rows-body .product-variant-row').length === 0 && $('#product-variant-empty-row').length === 0) {
+            $('#product-variant-rows-body').append(
+                '<tr class="product-variant-empty" id="product-variant-empty-row"><td colspan="3" class="text-center text-muted py-3">No variant rows yet. Add a row to define product attributes.</td></tr>'
+            );
+        }
+    }
     function nextProductVariantIndex() {
         var max = -1;
         $('#product-variant-rows-body .product-variant-row').each(function () {
@@ -107,20 +118,16 @@ $(function () {
         });
     }
     $('#js-add-product-variant').on('click', function () {
+        $('#product-variant-empty-row').remove();
         var idx = nextProductVariantIndex();
         var html = $('#product-variant-row-template').html().replace(/__INDEX__/g, idx);
         $('#product-variant-rows-body').append(html);
         reindexProductVariantRows();
     });
     $(document).on('click', '.js-remove-product-variant', function () {
-        var $body = $('#product-variant-rows-body');
-        if ($body.find('.product-variant-row').length <= 1) {
-            $(this).closest('tr').find('select').val('');
-            $(this).closest('tr').find('input[type="hidden"]').remove();
-            return;
-        }
         $(this).closest('tr').remove();
         reindexProductVariantRows();
+        showProductVariantEmptyState();
     });
 });
 </script>

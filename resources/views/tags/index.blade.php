@@ -67,7 +67,7 @@
 </label>
 </td>
 <td>
-<x-resource-actions :model="$tag" resource="tags" destroy-label="tag" />
+<x-resource-actions :model="$tag" resource="tags" destroy-label="tag" :show="false" />
 </td>
 </tr>
 @empty
