@@ -268,63 +268,6 @@ $(() => {
 		});
 	}
 
-    // Sweet Alert 2
-    $('form#add-newitem-form, form#settings-form, form#edit-image-gallery').on('submit', function (e) {
-        e.preventDefault();
-        var postType = $(this).data('post-type');
-        Swal.fire({
-            icon: 'success',
-            title: 'Your ' + postType + ' has been Published',
-            showConfirmButton: true,
-            confirmButtonColor: 'var(--main-color)',
-        });
-    });
-
-    // Save As Draft Alert
-    $('form#add-newitem-form .draft').on('click', function (e) {
-        e.preventDefault();
-        var postType = $(this).data('post-type');
-        Swal.fire({
-            icon: 'success',
-            title: 'Your ' + postType + ' has been Saved As Draft',
-            showConfirmButton: true,
-            confirmButtonColor: 'var(--main-color)',
-        });
-    });
-
-    // Delete Alert
-    $('form#add-newitem-form .delete').on('click', function (e) {
-        e.preventDefault();
-        var postType = $(this).data('post-type');
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: 'var(--main-color)',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'No, cancel!',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire(
-                    'Deleted!',
-                    'Your ' + postType + ' has been deleted.',
-                    'success'
-                )
-            } else if (result.dismiss === Swal.DismissReason.cancel) {
-                Swal.fire({
-                    title: 'Cancelled',
-                    text: 'Your ' + postType + ' is safe :)',
-                    icon: 'error',
-                    timer: 1500,
-                    timerProgressBar: true,
-                    showConfirmButton: false,
-                })
-            }
-        })
-    });
-
     // Close Gallery Overlay
     $('.gallery #close-overlay').on('click', function () {
         $('.gallery').fadeOut();
@@ -537,6 +480,10 @@ function checkboxFunctions() {
     });
 }
 
+if (document.querySelectorAll('.my-checkbox').length > 0) {
+	checkboxFunctions();
+}
+
 // Function For Parent Category Checklist
 function radioBoxFunctions() {
     const radioBoxes = document.querySelectorAll(".my-radiobox");
@@ -567,4 +514,8 @@ function radioBoxFunctions() {
                 } 
             });
     });
+}
+
+if (document.querySelectorAll('.my-radiobox').length > 0) {
+	radioBoxFunctions();
 }

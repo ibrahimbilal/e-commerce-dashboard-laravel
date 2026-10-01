@@ -1,6 +1,6 @@
 'use strict';
 
-jQuery(() => {
+$(() => {
 
     // Prevent Default Action If Link Equal //#
     $('a[href="#"]').on('click', function (e) {
@@ -247,12 +247,11 @@ jQuery(() => {
     // DatePicker.
 	if ( $('[data-toggle="datepicker"]').length > 0 ) {
 		$('[data-toggle="datepicker"]').pickadate({
-			format: 'dd mmmm, yyyy',
+			format: 'dd mmm, yyyy',
 			formatSubmit: 'yyyy-mm-dd',
-			hiddenName: true,
-			showMonthsShort: true,
+            showMonthsShort: true,
             selectMonths: true,
-            selectYears: 150,
+            selectYears: true,
 			onOpen: function () {
 				// Chenge Datepicker position
 				var pageHeight = $(document).height(); // 1361
@@ -304,20 +303,20 @@ jQuery(() => {
     });
 
 	// Gallery Items Select in Gallery Page
-	// $('.gallery-page .img-item').on('click', function (e) {
-    //     e.preventDefault();
-    //     if (!$(this).hasClass('selected')) {
-    //         $(this).addClass('selected').siblings().removeClass('selected');
-    //         $('.gallery-page .meta-box').removeClass('hide');
-    //         $('.gallery-page .post-box').removeClass('open');
-    //         var selectedImage = $('.gallery-page .img-item.selected').find('img').attr('src');
-    //         $('.img-view img').attr('src', selectedImage);
-    //     } else {
-    //         $(this).removeClass('selected');
-    //         $('.gallery-page .meta-box').addClass('hide');
-    //         $('.gallery-page .post-box').addClass('open');
-    //     }
-    // });
+	$('.gallery-page .img-item').on('click', function (e) {
+        e.preventDefault();
+        if (!$(this).hasClass('selected')) {
+            $(this).addClass('selected').siblings().removeClass('selected');
+            $('.gallery-page .meta-box').removeClass('hide');
+            $('.gallery-page .post-box').removeClass('open');
+            var selectedImage = $('.gallery-page .img-item.selected').find('img').attr('src');
+            $('.img-view img').attr('src', selectedImage);
+        } else {
+            $(this).removeClass('selected');
+            $('.gallery-page .meta-box').addClass('hide');
+            $('.gallery-page .post-box').addClass('open');
+        }
+    });
 
     // Toggle Addresses
     $(document).on('click', '.repeater-holder .repeater-title h5, .repeater-holder .repeater-title .icon', function () {
@@ -325,6 +324,11 @@ jQuery(() => {
         $(this).parents('.repeater').find('.repeater-inputs').slideToggle();
         $(this).parents('.repeater').siblings().find('.repeater-inputs').slideUp();
         $(this).parents('.repeater').siblings().find('.icon').removeClass('active');
+    });
+
+    // Add New Address 
+    $('.add-repeater-item .btn').on('click', function () {
+        $(".repeater-holder").append($(".repeater-holder .repeater:first").clone());
     });
 
 	// Remove Address
@@ -415,14 +419,14 @@ jQuery(() => {
     function preventLeavePage() {
         var isSubmitting = false,
             forms = $('form').not(".search-form, .bulk-form");
-
+    
         forms.on('submit', function () {
             isSubmitting = true
         })
-
+    
         forms.data('initial-state', forms.serialize());
-
-        forms.on('change', function () {
+    
+        $('form').not(".search-form, .bulk-form").on('change', function () {
             $(window).on('beforeunload', function () {
                 if (!isSubmitting && forms.serialize() != forms.data('initial-state')) {
                     return 'Changes you made may not be saved.';
@@ -476,6 +480,10 @@ function checkboxFunctions() {
     });
 }
 
+if (document.querySelectorAll('.my-checkbox').length > 0) {
+	checkboxFunctions();
+}
+
 // Function For Parent Category Checklist
 function radioBoxFunctions() {
     const radioBoxes = document.querySelectorAll(".my-radiobox");
@@ -503,7 +511,11 @@ function radioBoxFunctions() {
                         radioBoxInactive(item);
                     })
                     radioBoxActive(radioBox);
-                }
+                } 
             });
     });
+}
+
+if (document.querySelectorAll('.my-radiobox').length > 0) {
+	radioBoxFunctions();
 }
