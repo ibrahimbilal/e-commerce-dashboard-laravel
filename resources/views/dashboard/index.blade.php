@@ -39,23 +39,20 @@
     $productName = (string) data_get($productRow, 'name', '—');
     $quantitySold = data_get($productRow, 'quantity_sold');
     $imageUrl = data_get($productRow, 'image_url');
-    if (filled($imageUrl)) {
-        $imageSrc = str_starts_with($imageUrl, 'http://') || str_starts_with($imageUrl, 'https://')
-            ? $imageUrl
-            : asset(ltrim($imageUrl, '/'));
-    } else {
-        $imageSrc = $productPlaceholder;
-    }
+    $imageSrc = filled($imageUrl) ? $imageUrl : $productPlaceholder;
     $price = data_get($productRow, 'price');
     $regularPrice = data_get($productRow, 'regular_price');
     $showStrike = is_numeric($regularPrice) && is_numeric($price) && (float) $regularPrice > (float) $price;
-    $editUrl = ($productId && Route::has('products.edit')) ? route('products.edit', $productId) : null;
 @endphp
 <div class="swiper-slide main-box box-spaces d-flex justify-content-between align-items-center">
 <div class="img me-3 flex-shrink-0"><img alt="{{ $productName }}" src="{{ $imageSrc }}" width="70"/></div>
 <div class="detail-holder flex-grow-1 text-start">
-@if ($editUrl)
-<a class="text-decoration-none text-body" href="{{ $editUrl }}"><p class="text-start m-0 text-capitalize">{{ $productName }}</p></a>
+@if ($productId && Route::has('products.edit'))
+@can('edit products')
+<a class="text-decoration-none text-body" href="{{ route('products.edit', $productId) }}"><p class="text-start m-0 text-capitalize">{{ $productName }}</p></a>
+@else
+<p class="text-start m-0 text-capitalize">{{ $productName }}</p>
+@endcan
 @else
 <p class="text-start m-0 text-capitalize">{{ $productName }}</p>
 @endif
@@ -189,7 +186,11 @@
 @endphp
 <div class="list-item d-flex align-items-center justify-content-between">
 @if ($productId && Route::has('products.edit'))
+@can('edit products')
 <a class="title text-start w-100 text-capitalize text-decoration-none" href="{{ route('products.edit', $productId) }}">{{ $productName }}</a>
+@else
+<div class="title text-start w-100 text-capitalize">{{ $productName }}</div>
+@endcan
 @else
 <div class="title text-start w-100 text-capitalize">{{ $productName }}</div>
 @endif
