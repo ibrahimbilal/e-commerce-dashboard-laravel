@@ -75,7 +75,7 @@ return [
     |
     */
 
-    'prefix' => 'admin',
+    'prefix' => '',
 
     'domain' => null,
 
@@ -119,7 +119,7 @@ return [
     |
     */
 
-    'views' => false,
+    'views' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -128,8 +128,8 @@ return [
     */
 
 	'redirects' => [
-		'login' => 'admin',
-        'logout' => 'admin/login',
+		'login' => 'dashboard',
+        'logout' => 'login',
         'password-confirmation' => 'admin/profile',
         'register' => null,
         'email-verification' => 'admin',

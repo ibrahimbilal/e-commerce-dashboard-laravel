@@ -7,16 +7,16 @@ Route::prefix('/admin')->group(function () {
 	// Authentication
 	Route::get('/login', function () {
 		return view('admin.auth.login');
-	})->name('login');
+	})->name('admin.login');
 
 	// forget / reset / confirm password
 	Route::get('/forgot-password', function () {
 		return view('admin.auth.forgot-password');
-	})->name('password.request');
+	})->name('admin.password.request');
 
 	Route::get('/reset-password/{token}', function ($request) {
 		return view('admin.auth.reset-password', ['request' => $request]);
-	})->name('password.reset');
+	})->name('admin.password.reset');
 
 	Route::get('/user/confirm-password', function () {
 		return view('admin.auth.password-confirm');
@@ -30,7 +30,7 @@ Route::prefix('/admin')->group(function () {
 	// two factor authentication
 	Route::get('/two-factor-challeng', function () {
 		return view('admin.auth.two-factor-challeng');
-	})->name('two-factor.login');
+	})->name('admin.two-factor.login');
 
 	Route::middleware(['auth', 'verified'])->group(function () {
 
@@ -51,10 +51,10 @@ Route::prefix('/admin')->group(function () {
 		Route::post('/users/bulk-restore', [App\Http\Controllers\Admin\UserController::class, 'bulk_restore'])->name('users.bulk_restore');
 		Route::post('/users/bulk-force-delete', [App\Http\Controllers\Admin\UserController::class, 'bulk_force_delete'])->name('users.bulk_force_delete');
 
-		Route::resource('/users', App\Http\Controllers\Admin\UserController::class);
+		Route::resource('/users', App\Http\Controllers\Admin\UserController::class)->names('admin.users');
 
 		// Roles Pages
-		Route::resource('/roles', App\Http\Controllers\Admin\RoleController::class);
+		Route::resource('/roles', App\Http\Controllers\Admin\RoleController::class)->names('admin.roles');
 
 		// Gallery Pages
 		Route::resource('/gallery', App\Http\Controllers\Admin\GalleryController::class);
