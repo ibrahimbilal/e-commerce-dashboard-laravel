@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Coupon;
 use App\Models\Customer;
 use App\Models\Discount;
+use App\Models\Gallery;
 use App\Models\Invoice;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -48,6 +49,7 @@ class DemoDataSeeder extends Seeder
         $this->seedOrders($customers, $addresses, $statuses, $coupons, $products);
         $this->seedReviews($customers, $products);
         $this->seedInvoices();
+        $this->seedGalleries();
     }
 
     private function seedStaffUsers(): void
@@ -379,6 +381,29 @@ class DemoDataSeeder extends Seeder
         });
 
         Invoice::query()->latest('id')->limit(2)->get()->each->delete();
+    }
+
+    private function seedGalleries(): void
+    {
+        if (Gallery::query()->count() > 0) {
+            return;
+        }
+
+        $userId = User::query()->where('email', 'admin@example.com')->value('id')
+            ?? User::query()->value('id');
+
+        if (! $userId) {
+            return;
+        }
+
+        for ($i = 1; $i <= 20; $i++) {
+            Gallery::query()->create([
+                'url' => 'demo/gallery-'.$i.'.jpg',
+                'metas' => ['alt' => 'Demo gallery '.$i],
+                'sizes_url' => null,
+                'user_id' => $userId,
+            ]);
+        }
     }
 
     private function unitPriceForProduct(?Product $product): int
