@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\OrderStatus;
 use App\Support\IndexListing;
+use App\Support\ReferentialDeleteGuard;
 use Illuminate\Http\Request;
 
 class OrderStatusController extends Controller
@@ -80,8 +81,16 @@ class OrderStatusController extends Controller
         return redirect()->route('order-statuses.index')->with('status', 'Order status updated.');
     }
 
-    public function destroy(OrderStatus $orderStatus)
+    public function destroy(Request $request, OrderStatus $orderStatus)
     {
+        if ($blocked = ReferentialDeleteGuard::blockIfInUse(
+            $request,
+            $orderStatus,
+            'Cannot delete this order status because orders use it.'
+        )) {
+            return $blocked;
+        }
+
         $orderStatus->delete();
 
         return redirect()->route('order-statuses.index')->with('status', 'Order status deleted.');

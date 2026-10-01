@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\ProductAttribute;
 use App\Models\Tag;
 use App\Support\IndexListing;
+use App\Support\ReferentialDeleteGuard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -126,8 +127,16 @@ class ProductController extends Controller
         return redirect()->route('products.edit', $product)->with('status', 'Product updated.');
     }
 
-    public function destroy(Product $product)
+    public function destroy(Request $request, Product $product)
     {
+        if ($blocked = ReferentialDeleteGuard::blockIfInUse(
+            $request,
+            $product,
+            'Cannot delete this product because it appears on order line items.'
+        )) {
+            return $blocked;
+        }
+
         $product->delete();
 
         return redirect()->route('products.index')->with('status', 'Product deleted.');
