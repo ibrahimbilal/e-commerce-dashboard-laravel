@@ -14,17 +14,14 @@ return new class extends Migration
         }
 
         if (Schema::hasTable('roles') && ! Schema::hasColumn('roles', 'guard_name')) {
-            Schema::table('users', function (Blueprint $table) {
-                $table->dropForeign('users_role_foreign');
-            });
+            if (Schema::hasColumn('users', 'role')) {
+                Schema::table('users', function (Blueprint $table) {
+                    $table->dropForeign('users_role_foreign');
+                    $table->dropColumn('role');
+                });
+            }
 
-            Schema::rename('roles', 'legacy_roles');
-
-            Schema::table('users', function (Blueprint $table) {
-                $table->foreign('role', 'users_role_foreign')
-                    ->references('id')
-                    ->on('legacy_roles');
-            });
+            Schema::drop('roles');
         }
 
         DB::statement('RENAME TABLE
@@ -50,18 +47,5 @@ return new class extends Migration
             role_has_permissions TO spatie_role_has_permissions
         ');
 
-        if (Schema::hasTable('legacy_roles') && ! Schema::hasTable('roles')) {
-            Schema::table('users', function (Blueprint $table) {
-                $table->dropForeign('users_role_foreign');
-            });
-
-            Schema::rename('legacy_roles', 'roles');
-
-            Schema::table('users', function (Blueprint $table) {
-                $table->foreign('role', 'users_role_foreign')
-                    ->references('id')
-                    ->on('roles');
-            });
-        }
     }
 };
