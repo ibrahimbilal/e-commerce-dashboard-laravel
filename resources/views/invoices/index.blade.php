@@ -53,48 +53,36 @@
 </tr>
 </thead>
 <tbody>
+@forelse ($invoices as $invoice)
+@php
+    $cust = $invoice->order?->customer;
+    $custLabel = $cust ? trim(($cust->first_name ?? '').' '.($cust->last_name ?? '')) : '—';
+    $total = $invoice->order?->amount;
+@endphp
 <tr>
 <td></td>
-<td>#123</td>
-<td class="prod-title">Jayson Hinrichsen</td>
-<td class="text-center">123$</td>
-<td>14:58 26/03/2022</td>
+<td>#{{ $invoice->invoice_no }}</td>
+<td class="prod-title">{{ $custLabel ?: '—' }}</td>
+<td class="text-center">@if($total !== null)${{ number_format($total) }}@else—@endif</td>
+<td>{{ $invoice->created_at?->format('H:i d/m/Y') ?? '—' }}</td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1" href="{{ route('invoices.show', 1) }}"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('invoices.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('invoices.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1" href="{{ route('invoices.show', $invoice) }}"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('invoices.edit', $invoice) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('invoices.destroy', $invoice) }}" class="d-inline destroy-resource-form">@csrf
 @method('DELETE')
 <button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="invoice"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
 </td>
 </tr>
-<tr>
-<td></td>
-<td>#1234</td>
-<td class="prod-title">Jayson Hinrichsen</td>
-<td class="text-center">123$</td>
-<td>14:58 26/03/2022</td>
-<td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1" href="{{ route('invoices.show', 1) }}"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('invoices.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('invoices.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
-@method('DELETE')
-<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="invoice"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
-</td>
-</tr>
-<tr>
-<td></td>
-<td>#12345</td>
-<td class="prod-title">Jayson Hinrichsen</td>
-<td class="text-center">123$</td>
-<td>14:58 26/03/2022</td>
-<td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1" href="{{ route('invoices.show', 1) }}"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('invoices.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('invoices.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
-@method('DELETE')
-<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="invoice"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
-</td>
-</tr>
+@empty
+<tr><td colspan="6" class="text-center text-muted">No invoices found.</td></tr>
+@endforelse
 </tbody>
 </table>
 </div>
 </div>
 </div>
 </div>
+</div>
+<div class="col-12 mt-3">
+<x-pagination :paginator="$invoices" />
 </div>
 @endsection
 

@@ -27,17 +27,33 @@
 <form action="{{ route('products.update', $product) }}" class="row d-block clearfix" data-post-type="Product" id="add-newitem-form" method="POST">
 @csrf
 @method('PUT')
+
+@php
+    $selectedCategoryIds = array_map('intval', (array) old('category_ids', isset($product) ? $product->categories->pluck('id')->all() : []));
+    $selectedTagIds = array_map('intval', (array) old('tag_ids', old('product_tags', isset($product) ? $product->tags->pluck('id')->all() : [])));
+    $activeLang = old('langs', isset($product) ? ($product->locales->firstWhere('locale', old('langs'))?->locale ?? $product->locales->first()?->locale) : null);
+    if (! $activeLang) {
+        $activeLang = old('langs', $langs->first()->code ?? 'en');
+    }
+    $productLocale = isset($product) ? $product->locales->firstWhere('locale', $activeLang) : null;
+    $localeName = old('product_name', $productLocale?->name ?? '');
+    $localeDescription = old('description', $productLocale?->description ?? '');
+    $localeMetaTitle = old('meta_title', $productLocale?->meta_title ?? '');
+    $localeMetaDescription = old('meta_description', $productLocale?->meta_description ?? '');
+    $localeMetaKeywords = old('meta_keywords', $productLocale?->meta_keywords ?? '');
+@endphp
 <div class="col-sm-12 col-lg-9 float-start post-box">
 <div class="main-box box-spaces">
 <div class="form-item primary">
 <h2 class="box-title item-title">product name</h2>
-<input class="form-control" id="item-title" name="product_name" type="text" value="{{ old('product_name', $product->product_name ?? '') }}" />
+<input class="form-control" id="item-title" name="product_name" type="text" value="{{ $localeName }}"/>
 </div>
 <div class="divider"></div>
 <div class="form-item primary">
 <h2 class="box-title item-title">product description</h2>
 <div id="product-desc">
 <div class="editor-container"></div>
+<input type="hidden" name="description" id="description-input" value="{{ e($localeDescription) }}"/>
 </div>
 </div>
 </div>
@@ -46,18 +62,7 @@
 <div class="row d-block clearfix">
 <div class="col-sm-6 col-lg-12 float-end float-lg-none">
 <div class="main-box box-spaces">
-<div class="form-item second justify-content-between mb-2 d-flex align-items-sm-center">
-<label class="item-title meta-title" for="newitem-lang">Product Lang:</label>
-<select class="form-select dropdown" id="newitem-lang" name="langs">
-<option data-flag="./assets/images/flags/us.png" value="en">English</option>
-<option data-flag="./assets/images/flags/sa.png" value="ar">Arabic</option>
-<option data-flag="./assets/images/flags/fr.png" value="fr">French</option>
-</select>
-</div>
-<div class="form-item second">
-<label class="item-title meta-title" for="item-slug">product slug:<span class="icon info ms-2" flow="up" tooltip="slug is the bit of text that appears after your domain name in the URL of a page"><i class="fi-rr-info"> </i></span></label>
-<input class="form-control mt-2" id="item-slug" name="product_slug" type="text" value="{{ old('product_slug', $product->product_slug ?? '') }}" />
-</div>
+@include('components.product-form-sidebar-meta', ['activeLang' => $activeLang])
 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
 <label class="item-title meta-title">created at: </label><span class="ms-2">26/03/2021 14:58</span>
 </div>
@@ -80,142 +85,16 @@
 <div class="col-sm-6 col-lg-12 float-start float-lg-none">
 <div class="main-box box-spaces form-item" id="product-cat">
 <h2 class="box-title item-title">product category</h2>
-<div class="cat-list-holder">
-<ul class="my-list main-list">
-<li class="my-item">
-<label class="my-checkbox">
-<input class="my-checkbox__input" type="checkbox"/>
-<div class="my-checkbox__icon"><i class="fi-rr-square"> </i>
-</div><span class="my-checkbox__label">clothes</span>
-</label>
-<ul class="my-list child-cat">
-<li class="my-item">
-<label class="my-checkbox">
-<input class="my-checkbox__input" type="checkbox"/>
-<div class="my-checkbox__icon"><i class="fi-rr-square"> </i>
-</div><span class="my-checkbox__label">men</span>
-</label>
-<ul class="my-list child-cat">
-<li class="my-item">
-<label class="my-checkbox">
-<input class="my-checkbox__input" type="checkbox"/>
-<div class="my-checkbox__icon"><i class="fi-rr-square"> </i>
-</div><span class="my-checkbox__label">T-shirts</span>
-</label>
-</li>
-<li class="my-item">
-<label class="my-checkbox">
-<input class="my-checkbox__input" type="checkbox"/>
-<div class="my-checkbox__icon"><i class="fi-rr-square"> </i>
-</div><span class="my-checkbox__label">Jackets</span>
-</label>
-</li>
-<li class="my-item">
-<label class="my-checkbox">
-<input class="my-checkbox__input" type="checkbox"/>
-<div class="my-checkbox__icon"><i class="fi-rr-square"> </i>
-</div><span class="my-checkbox__label">Coast</span>
-</label>
-</li>
-<li class="my-item">
-<label class="my-checkbox">
-<input class="my-checkbox__input" type="checkbox"/>
-<div class="my-checkbox__icon"><i class="fi-rr-square"> </i>
-</div><span class="my-checkbox__label">Sport</span>
-</label>
-</li>
-</ul>
-</li>
-<li class="my-item">
-<label class="my-checkbox">
-<input class="my-checkbox__input" type="checkbox"/>
-<div class="my-checkbox__icon"><i class="fi-rr-square"> </i>
-</div><span class="my-checkbox__label">women</span>
-</label>
-<ul class="my-list child-cat">
-<li class="my-item">
-<label class="my-checkbox">
-<input class="my-checkbox__input" type="checkbox"/>
-<div class="my-checkbox__icon"><i class="fi-rr-square"> </i>
-</div><span class="my-checkbox__label">T-shirts</span>
-</label>
-</li>
-<li class="my-item">
-<label class="my-checkbox">
-<input class="my-checkbox__input" type="checkbox"/>
-<div class="my-checkbox__icon"><i class="fi-rr-square"> </i>
-</div><span class="my-checkbox__label">Jackets</span>
-</label>
-</li>
-<li class="my-item">
-<label class="my-checkbox">
-<input class="my-checkbox__input" type="checkbox"/>
-<div class="my-checkbox__icon"><i class="fi-rr-square"> </i>
-</div><span class="my-checkbox__label">Coast</span>
-</label>
-</li>
-<li class="my-item">
-<label class="my-checkbox">
-<input class="my-checkbox__input" type="checkbox"/>
-<div class="my-checkbox__icon"><i class="fi-rr-square"> </i>
-</div><span class="my-checkbox__label">Sport</span>
-</label>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="my-item">
-<label class="my-checkbox">
-<input class="my-checkbox__input" type="checkbox"/>
-<div class="my-checkbox__icon"><i class="fi-rr-square"> </i>
-</div><span class="my-checkbox__label">shoeses</span>
-</label>
-<ul class="my-list child-cat">
-<li class="my-item">
-<label class="my-checkbox">
-<input class="my-checkbox__input" type="checkbox"/>
-<div class="my-checkbox__icon"><i class="fi-rr-square"> </i>
-</div><span class="my-checkbox__label">men</span>
-</label>
-</li>
-<li class="my-item">
-<label class="my-checkbox">
-<input class="my-checkbox__input" type="checkbox"/>
-<div class="my-checkbox__icon"><i class="fi-rr-square"> </i>
-</div><span class="my-checkbox__label">women</span>
-</label>
-</li>
-<li class="my-item">
-<label class="my-checkbox">
-<input class="my-checkbox__input" type="checkbox"/>
-<div class="my-checkbox__icon"><i class="fi-rr-square"> </i>
-</div><span class="my-checkbox__label">childrens</span>
-</label>
-</li>
-</ul>
-</li>
-</ul>
-</div>
+@include('components.product-category-tree', ['categories' => $categories, 'selectedCategoryIds' => $selectedCategoryIds])
 </div>
 </div>
 <div class="col-sm-6 col-lg-12 float-end float-lg-none">
 <div class="main-box box-spaces form-item mb-lg-0" id="product-tags">
 <h2 class="box-title item-title">product tags:<span class="icon info ms-2" flow="up" tooltip="separate tags with comma (,)"><i class="fi-rr-info"> </i></span></h2>
-<select class="form-select multi-select" id="product-tags-select" multiple="multiple" name="product_tags">
-<option selected="" value="Something">Something</option>
-<option selected="" value="Clothes">Clothes</option>
-<option selected="" value="Yello">Yello</option>
-<option value="John">John</option>
-<option value="Doe">Doe</option>
-<option value="Banana">Banana</option>
-<option value="Orange">Orange</option>
-<option value="Apple">Apple</option>
-<option value="Mango">Mango</option>
-<option value="Cabbage">Cabbage</option>
-<option value="Turnip">Turnip</option>
-<option value="Radish">Radish</option>
-<option value="Carrot">Carrot</option>
+<select class="form-select multi-select" id="product-tags-select" multiple="multiple" name="tag_ids[]">
+@foreach ($tags as $tag)
+<option value="{{ $tag->id }}" @selected(in_array($tag->id, $selectedTagIds, true))>{{ $tag->title }}</option>
+@endforeach
 </select>
 <div class="selected-tags-container"></div>
 </div>
@@ -242,13 +121,15 @@
 <div class="form-item second d-flex align-items-center mt-3">
 <label class="item-title" for="product-new">product is new:<span class="icon info ms-2" flow="up" tooltip='check this if you want add "new" sticker to the product.'><i class="fi-rr-info"> </i></span></label>
 <label class="switch text-start">
-<input class="switch" id="product-new" name="new" type="checkbox"/><span class="slider"></span>
+<input type="hidden" name="new" value="0"/>
+<input class="switch" id="product-new" name="new" type="checkbox" value="1" @checked(old(\'new\', $product->new ?? false))/><span class="slider"></span>
 </label>
 </div>
 <div class="form-item second d-flex align-items-center mt-3">
 <label class="item-title" for="product-featured">product is featured:<span class="icon info ms-2" flow="up" tooltip='check this if you want add "featured" sticker to the product.'><i class="fi-rr-info"> </i></span></label>
 <label class="switch text-start">
-<input class="switch" id="product-featured" name="featured" type="checkbox"/><span class="slider"></span>
+<input type="hidden" name="featured" value="0"/>
+<input class="switch" id="product-featured" name="featured" type="checkbox" value="1" @checked(old(\'featured\', $product->featured ?? false))/><span class="slider"></span>
 </label>
 </div>
 <div class="form-item second d-flex mt-3 flex-wrap flex-sm-nowrap">
@@ -286,7 +167,7 @@
 <div class="form-item second d-flex align-items-center mt-3">
 <label class="item-title" for="schedule">Schedule Sale Price:<span class="icon info ms-2" flow="up" tooltip="check this if you want Schedule Sale of product."><i class="fi-rr-info"> </i></span></label>
 <label class="switch text-start">
-<input class="switch" id="schedule" name="new" type="checkbox"/><span class="slider"></span>
+<input class="switch" id="schedule" type="checkbox"/><span class="slider"></span>
 </label>
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
@@ -297,29 +178,7 @@
 </div>
 </div>
 <div class="tab-box" id="attribute">
-<div class="select2-wrapper">
-<div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap">
-<label class="item-title" for="product-sizes">sizes:<span class="icon info ms-2" flow="up" tooltip="the attribute you created."><i class="fi-rr-info"> </i></span></label>
-<select class="form-select multi-select" id="product-sizes" multiple="multiple" name="sizes" placeholder="Select Attribute From The List.">
-<option value="XS">XS</option>
-<option value="S">S</option>
-<option value="M">M</option>
-<option value="L">L</option>
-<option value="XL">XL</option>
-<option value="XXL">XXL</option>
-</select>
-</div>
-<div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
-<label class="item-title" for="product-colors">colors:<span class="icon info ms-2" flow="up" tooltip="the attribute you created."><i class="fi-rr-info"> </i></span></label>
-<select class="form-select multi-select" id="product-colors" multiple="multiple" name="colors" placeholder="Select Attribute From The List.">
-<option value="#000000">black</option>
-<option value="#45CC5B">green</option>
-<option value="#FE2B2B">red</option>
-<option value="#FFA620">orang</option>
-<option value="#3932FE">blue</option>
-</select>
-</div>
-</div>
+@include('components.product-attribute-selects')
 </div>
 <div class="tab-box" id="seo">
 <div class="form-item second d-flex flex-wrap flex-sm-nowrap">
@@ -381,7 +240,13 @@ separate keywords with comma (,)."><i class="fi-rr-info"> </i></span></label>
       	theme: 'snow'   // Specify theme in configuration
       };
       var quill = new Quill('.editor-container', setting);
-      
+
+      var initialHtml = document.getElementById('description-input').value;
+      if (initialHtml) { quill.root.innerHTML = initialHtml; }
+      document.getElementById('add-newitem-form').addEventListener('submit', function () {
+        document.getElementById('description-input').value = quill.root.innerHTML;
+      });
+
       // ===========================================================
       // fire category checkbox function 
       checkboxFunctions();

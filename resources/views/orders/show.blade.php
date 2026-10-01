@@ -3,12 +3,19 @@
 @section('title', 'E-Commerce Project')
 
 @section('content')
+@php
+    $customer = $order->customer;
+    $customerName = $customer ? trim(($customer->first_name ?? '').' '.($customer->last_name ?? '')) : '—';
+    $address = $order->address;
+    $statusTitle = $order->orderStatus?->title ?? '—';
+    $couponTitle = $order->coupon?->title;
+@endphp
 <div class="page-header">
 <div class="row">
 <div class="col-12 d-flex align-items-sm-center justify-content-sm-between flex-column flex-sm-row">
 
 <div class="text-capitalize mb-2 mb-sm-0 d-flex justify-content-between align-items-center">
-<h1 class="page-title">view order</h1><a class="add-btn btn text-capitalize" href="{{ route('orders.create') }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit <span class="page">order<span></span></span></a>
+<h1 class="page-title">view order</h1><a class="add-btn btn text-capitalize" href="{{ route('orders.edit', $order) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit <span class="page">order<span></span></span></a>
 </div>
 
 <div class="page-breadcrumbs d-flex align-items-sm-center justify-content-start justify-content-sm-end">
@@ -30,27 +37,27 @@
 <tbody>
 <tr>
 <td>Order ID:</td>
-<td>#27282</td>
+<td>#{{ $order->id }}</td>
 </tr>
 <tr>
 <td>Order Date:</td>
-<td>26/03/2021 14:58</td>
+<td>{{ $order->created_at?->format('d/m/Y H:i') ?? '—' }}</td>
 </tr>
 <tr>
 <td>Order Status:</td>
-<td class="status success">Processing</td>
+<td class="status success">{{ $statusTitle }}</td>
+</tr>
+<tr>
+<td>Amount:</td>
+<td>${{ number_format($order->amount ?? 0) }}</td>
+</tr>
+<tr>
+<td>Coupon:</td>
+<td>{{ $couponTitle ?? '—' }}</td>
 </tr>
 <tr>
 <td>Payment Method:</td>
-<td>Cash On Delivery</td>
-</tr>
-<tr>
-<td>Payment Status:</td>
-<td>Paid</td>
-</tr>
-<tr>
-<td>Payment Currency:</td>
-<td>USD</td>
+<td class="text-muted">— (not on Order model)</td>
 </tr>
 </tbody>
 </table>
@@ -64,15 +71,15 @@
 <tbody>
 <tr>
 <td>Customer Name:</td>
-<td>Mildred Stoddard</td>
+<td>{{ $customerName }}</td>
 </tr>
 <tr>
 <td>Email Address:</td>
-<td>m.stoddard@gmail.com</td>
+<td>{{ $customer->email ?? '—' }}</td>
 </tr>
 <tr>
 <td>Mobile:</td>
-<td>516-913-8323</td>
+<td>{{ $customer->mobile ?? '—' }}</td>
 </tr>
 </tbody>
 </table>
@@ -98,43 +105,43 @@
 <td>
 <p class="title title-2 mb-0">Full Name:</p>
 </td>
-<td>Jayson Hinrichsen</td>
-<td>Jayson Hinrichsen</td>
+<td>{{ $customerName }}</td>
+<td>{{ $customerName }}</td>
 </tr>
 <tr>
 <td>
 <p class="title title-2 mb-0">Address:</p>
 </td>
-<td>1881  Rosewood Lane</td>
-<td>1881  Rosewood Lane</td>
+<td>{{ $address->address_1 ?? '—' }}</td>
+<td>{{ $address->address_1 ?? '—' }}</td>
 </tr>
 <tr>
 <td>
 <p class="title title-2 mb-0">City:</p>
 </td>
-<td>New York City</td>
-<td>New York City</td>
+<td>{{ $address->city ?? '—' }}</td>
+<td>{{ $address->city ?? '—' }}</td>
 </tr>
 <tr>
 <td>
 <p class="title title-2 mb-0">Country:</p>
 </td>
-<td>United State</td>
-<td>United State</td>
+<td>{{ $address->country ?? '—' }}</td>
+<td>{{ $address->country ?? '—' }}</td>
 </tr>
 <tr>
 <td>
 <p class="title title-2 mb-0">Postal:</p>
 </td>
-<td>10011</td>
-<td>10011</td>
+<td>{{ $address->postcode ?? '—' }}</td>
+<td>{{ $address->postcode ?? '—' }}</td>
 </tr>
 <tr>
 <td>
 <p class="title title-2 mb-0">Mobile:</p>
 </td>
-<td>516-913-8323</td>
-<td>516-913-8323</td>
+<td>{{ $address->mobile ?? '—' }}</td>
+<td>{{ $address->mobile ?? '—' }}</td>
 </tr>
 </tbody>
 </table>
@@ -158,33 +165,23 @@
 </tr>
 </thead>
 <tbody>
+@forelse ($order->items as $item)
+@php
+    $prod = $item->productAttribute?->product;
+    $prodName = $prod?->locales?->first()?->name ?? ('Item #'.$item->id);
+@endphp
 <tr>
 <td class="prod-img">
-<div class="img-holder"><img src="{{ asset('assets/images/products/image-1.png') }}" width="40"/></div>
+<div class="img-holder"><img src="{{ $prod?->product_img ? asset($prod->product_img) : asset('assets/images/products/image-1.png') }}" width="40" alt=""/></div>
 </td>
-<td class="text-capitalize">Apple Watch Series 4 GPS</td>
-<td class="text-capitalize">399$</td>
-<td class="text-capitalize">10</td>
-<td class="text-capitalize">3990$</td>
+<td class="text-capitalize">{{ $prodName }}</td>
+<td class="text-capitalize">{{ $item->price ?? '—' }}</td>
+<td class="text-capitalize">{{ $item->quantity ?? '—' }}</td>
+<td class="text-capitalize">{{ isset($item->price, $item->quantity) ? ($item->price * $item->quantity) : '—' }}</td>
 </tr>
-<tr>
-<td class="prod-img">
-<div class="img-holder"><img src="{{ asset('assets/images/products/image-2.png') }}" width="40"/></div>
-</td>
-<td class="text-capitalize">Apple Watch Series 4 GPS</td>
-<td class="text-capitalize">300$</td>
-<td class="text-capitalize">5</td>
-<td class="text-capitalize">1500$</td>
-</tr>
-<tr>
-<td class="prod-img">
-<div class="img-holder"><img src="{{ asset('assets/images/products/image-3.png') }}" width="40"/></div>
-</td>
-<td class="text-capitalize">Apple Watch Series 4 GPS</td>
-<td class="text-capitalize">100$</td>
-<td class="text-capitalize">3</td>
-<td class="text-capitalize">300$</td>
-</tr>
+@empty
+<tr><td colspan="5" class="text-center text-muted">No line items on this order.</td></tr>
+@endforelse
 </tbody>
 </table>
 </div>
@@ -201,7 +198,7 @@
 <div class="item-title">Shipping Costs:</div><span class="ms-2">159.8$</span>
 </div>
 <div class="item form-item second d-flex justify-content-between">
-<div class="item-title">Order Total Costs:</div><span class="ms-2">1058.8$</span>
+<div class="item-title">Order Total Costs:</div><span class="ms-2">${{ number_format($order->amount ?? 0) }}</span>
 </div>
 </div>
 </div>

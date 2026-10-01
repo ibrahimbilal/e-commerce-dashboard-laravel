@@ -7,7 +7,12 @@
 <div class="row">
 <div class="col-12 d-flex align-items-sm-center justify-content-sm-between flex-column flex-sm-row">
 
-<div class="page-title text-capitalize">invoice #34245</div>
+@php
+    $order = $invoice->order;
+    $customer = $order?->customer;
+    $custName = $customer ? trim(($customer->first_name ?? '').' '.($customer->last_name ?? '')) : '—';
+@endphp
+<div class="page-title text-capitalize">invoice #{{ $invoice->invoice_no }}</div>
 
 <div class="page-breadcrumbs d-flex align-items-sm-center justify-content-start justify-content-sm-end">
 <div class="breadcrumbs d-flex justify-content-between align-items-center"><a class="item text-capitalize d-flex justify-content-between align-items-center" href="{{ route('dashboard') }}"><span class="icon"><i class="fi-rr-apps"> </i></span>dashboard</a><span class="angle"><span class="icon"><i class="fi-rr-angle-double-right"> </i></span></span><a class="item text-capitalize d-flex justify-content-between align-items-center" href="{{ route('invoices.index') }}">invoices</a><span class="angle"><span class="icon"><i class="fi-rr-angle-double-right"> </i></span></span><span class="item text-capitalize d-flex justify-content-between align-items-center">view</span>
@@ -85,8 +90,8 @@
 <td>
 <p class="title title-2 mb-0">Customer:</p>
 </td>
-<td>Jayson Hinrichsen</td>
-<td>Jayson Hinrichsen</td>
+<td>{{ $custName }}</td>
+<td>{{ $custName }}</td>
 </tr>
 <tr>
 <td>

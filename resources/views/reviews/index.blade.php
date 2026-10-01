@@ -14,6 +14,7 @@
 
 <div class="text-capitalize mb-2 mb-sm-0 d-flex justify-content-between align-items-center">
 <h1 class="page-title">Reviews</h1>
+<a class="add-btn btn text-capitalize" href="{{ route('reviews.create') }}"><span class="icon"><i class="fi-rr-plus"> </i></span>add review</a>
 </div>
 
 <div class="page-breadcrumbs d-flex align-items-sm-center justify-content-start justify-content-sm-end">
@@ -73,6 +74,7 @@
 <td>
 <div class="btn-group">
 <a class="btn btn-primary btn-rounded me-2 py-1" href="{{ route('reviews.show', $review) }}"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a>
+<a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('reviews.edit', $review) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a>
 <form method="POST" action="{{ route('reviews.destroy', $review) }}" class="d-inline destroy-resource-form">@csrf
 @method('DELETE')
 <button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="review"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form>
