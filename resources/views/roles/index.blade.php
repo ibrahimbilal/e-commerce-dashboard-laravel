@@ -37,24 +37,16 @@
 </tr>
 </thead>
 <tbody>
-@forelse ($roles as $role)
+@foreach ($roles as $role)
 <tr>
 <td class="prod-title">{{ $role->name }}</td>
 <td class="text-center">{{ $role->permissions->count() }}</td>
 <td class="text-center">{{ $role->users_count }}</td>
 <td>
-<div class="btn-group">
-<a class="btn btn-primary btn-rounded me-2 py-1" href="{{ route('roles.show', $role) }}"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a>
-<a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('roles.edit', $role) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a>
-<form method="POST" action="{{ route('roles.destroy', $role) }}" class="d-inline destroy-resource-form">@csrf
-@method('DELETE')
-<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="role"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form>
-</div>
+<x-resource-actions :model="$role" resource="roles" destroy-label="role" />
 </td>
 </tr>
-@empty
-<tr><td colspan="4" class="text-center text-muted py-4">No roles found.</td></tr>
-@endforelse
+@endforeach
 </tbody>
 </table>
 </div>
@@ -81,6 +73,7 @@ if ($.fn.DataTable && $('#roles').length) {
       	],
       	order: [[0, 'asc']],
       	language: {
+      		emptyTable: 'No roles found.',
       		info: "Show _START_ To _END_ Of _TOTAL_ Roles",
       		buttons: { pageLength: 'Show %d', colvis: 'Columns' }
       	},

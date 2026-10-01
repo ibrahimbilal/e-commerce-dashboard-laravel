@@ -37,7 +37,7 @@
 </tr>
 </thead>
 <tbody>
-@forelse ($orderStatuses as $orderStatus)
+@foreach ($orderStatuses as $orderStatus)
 <tr>
 <td class="prod-title">{{ $orderStatus->title }}</td>
 <td class="text-center">{{ $orderStatus->orders_count ?? 0 }}</td>
@@ -45,9 +45,7 @@
 <x-resource-actions :model="$orderStatus" resource="order-statuses" destroy-label="order status" :show="false" />
 </td>
 </tr>
-@empty
-<tr><td colspan="3" class="text-center text-muted py-4">No order statuses found.</td></tr>
-@endforelse
+@endforeach
 </tbody>
 </table>
 </div>
@@ -70,6 +68,7 @@ if ($.fn.DataTable && $('#order-statuses').length) {
       	],
       	order: [[0, 'asc']],
       	language: {
+      		emptyTable: 'No order statuses found.',
       		info: "Show _START_ To _END_ Of _TOTAL_ order statuses",
       		buttons: { pageLength: 'Show %d', colvis: 'Columns' }
       	},

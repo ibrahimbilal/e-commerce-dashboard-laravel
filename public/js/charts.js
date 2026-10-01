@@ -19,16 +19,18 @@
         series: [
             {
                 name: 'Sales',
+                type: 'area',
                 data: salesData,
             },
             {
                 name: 'Orders',
+                type: 'line',
                 data: ordersData,
             },
         ],
         chart: {
             height: 360,
-            type: 'area',
+            type: 'line',
             toolbar: {
                 export: {
                     csv: {
@@ -73,17 +75,47 @@
                 },
             },
         },
-        yaxis: {
-            labels: {
-                style: {
-                    colors: 'var(--text-color)',
-                    fontSize: '10px',
-                    fontFamily: 'Montserrat,sans-serif',
-                    fontWeight: 400,
-                    cssClass: 'apexcharts-xaxis-label',
+        yaxis: [
+            {
+                seriesName: 'Sales',
+                title: {
+                    text: 'Sales',
+                    style: {
+                        color: 'var(--text-color)',
+                        fontFamily: 'Montserrat,sans-serif',
+                    },
+                },
+                labels: {
+                    style: {
+                        colors: 'var(--text-color)',
+                        fontSize: '10px',
+                        fontFamily: 'Montserrat,sans-serif',
+                        fontWeight: 400,
+                        cssClass: 'apexcharts-xaxis-label',
+                    },
                 },
             },
-        },
+            {
+                seriesName: 'Orders',
+                opposite: true,
+                title: {
+                    text: 'Orders',
+                    style: {
+                        color: 'var(--text-color)',
+                        fontFamily: 'Montserrat,sans-serif',
+                    },
+                },
+                labels: {
+                    style: {
+                        colors: 'var(--text-color)',
+                        fontSize: '10px',
+                        fontFamily: 'Montserrat,sans-serif',
+                        fontWeight: 400,
+                        cssClass: 'apexcharts-xaxis-label',
+                    },
+                },
+            },
+        ],
         tooltip: {
             theme: 'dark',
             style: {

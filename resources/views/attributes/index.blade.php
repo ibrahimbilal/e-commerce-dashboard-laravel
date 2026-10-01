@@ -43,7 +43,7 @@
 </tr>
 </thead>
 <tbody>
-@forelse ($attributeList as $attribute)
+@foreach ($attributeList as $attribute)
 <tr>
 <td></td>
 <td class="prod-title">{{ $attribute->attribute_key }}</td>
@@ -53,9 +53,7 @@
 <x-resource-actions :model="$attribute" resource="attributes" destroy-label="attribute" :show="false" />
 </td>
 </tr>
-@empty
-<tr><td colspan="5" class="text-center text-muted py-4">No attributes found.</td></tr>
-@endforelse
+@endforeach
 </tbody>
 </table>
 </div>
@@ -85,11 +83,11 @@ if ($.fn.DataTable && $('#attributes').length) {
       		},
       		{ 
       			bSortable: false, 
-      			aTargets: [ 0, 1] 
+      			aTargets: [ 0, 4] 
       		},
       		{ 
       			bSearchable: false, 
-      			aTargets: [ 0, 1, 2] 
+      			aTargets: [ 0, 3, 4] 
       		}
       	],
       	select: {
@@ -97,10 +95,11 @@ if ($.fn.DataTable && $('#attributes').length) {
       		selector: 'td:first-child'
       	},
       	order: [
-      		[4, 'desc']
+      		[1, 'asc']
       	],
       	language: {
-      		info: "Show _START_ To _END_ Of _TOTAL_ Tags",
+      		emptyTable: 'No attributes found.',
+      		info: "Show _START_ To _END_ Of _TOTAL_ Attributes",
       		buttons: {
       			pageLength: 'Show %d',
       			colvis: 'Columns'
@@ -109,7 +108,7 @@ if ($.fn.DataTable && $('#attributes').length) {
       	stateSave: true,
       	paging: true,
       	searching: true,
-      	lengthMenu: [[ 10, 15, 25, 50, 75, 100 ], ['10 Tags', '15 Tags', '25 Tags', '50 Tags', '75 Tags', '100 Tags']],
+      	lengthMenu: [[ 10, 15, 25, 50, 75, 100 ], ['10 Attributes', '15 Attributes', '25 Attributes', '50 Attributes', '75 Attributes', '100 Attributes']],
       	buttons: ($(window).width() > 578) ? ['pageLength', 'print', {
       		extend: 'collection',
       		text: 'Export',

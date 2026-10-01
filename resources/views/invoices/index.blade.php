@@ -42,7 +42,7 @@
 </tr>
 </thead>
 <tbody>
-@forelse ($invoices as $invoice)
+@foreach ($invoices as $invoice)
 @php
     $cust = $invoice->order?->customer;
     $custLabel = $cust ? trim(($cust->first_name ?? '').' '.($cust->last_name ?? '')) : '—';
@@ -55,14 +55,10 @@
 <td class="text-center">@if($total !== null)${{ number_format($total) }}@else—@endif</td>
 <td>{{ $invoice->created_at?->format('H:i d/m/Y') ?? '—' }}</td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1" href="{{ route('invoices.show', $invoice) }}"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('invoices.edit', $invoice) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('invoices.destroy', $invoice) }}" class="d-inline destroy-resource-form">@csrf
-@method('DELETE')
-<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="invoice"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
+<x-resource-actions :model="$invoice" resource="invoices" destroy-label="invoice" />
 </td>
 </tr>
-@empty
-<tr><td colspan="6" class="text-center text-muted">No invoices found.</td></tr>
-@endforelse
+@endforeach
 </tbody>
 </table>
 </div>
@@ -107,6 +103,7 @@ if ($.fn.DataTable && $('#invoices').length) {
       		[4, 'desc']
       	],
       	language: {
+      		emptyTable: 'No invoices found.',
       		info: "Show _START_ To _END_ Of _TOTAL_ invoices",
       		buttons: {
       			pageLength: 'Show %d',

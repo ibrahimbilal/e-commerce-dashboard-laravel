@@ -25,6 +25,7 @@
     $discountFilterTabs = [
         ['label' => 'All', 'key' => 'all', 'params' => []],
         ['label' => 'Active', 'key' => 'active', 'params' => ['active' => '1']],
+        ['label' => 'Inactive', 'key' => 'inactive', 'params' => ['inactive' => '1']],
         ['label' => 'Expired', 'key' => 'expired', 'params' => ['expired' => '1']],
         ['label' => 'Trashed', 'key' => 'trashed', 'params' => ['trashed' => '1']],
     ];
@@ -48,7 +49,7 @@
 </tr>
 </thead>
 <tbody>
-@forelse ($discounts as $discount)
+@foreach ($discounts as $discount)
 <tr>
 <td></td>
 <td class="prod-title">{{ $discount->title }}</td>
@@ -64,9 +65,7 @@
 <x-resource-actions :model="$discount" resource="discounts" destroy-label="discount" :show="false" />
 </td>
 </tr>
-@empty
-<tr><td colspan="7" class="text-center text-muted py-4">No discounts found.</td></tr>
-@endforelse
+@endforeach
 </tbody>
 </table>
 </div>
@@ -111,6 +110,7 @@ if ($.fn.DataTable && $('#discounts').length) {
       		[4, 'desc']
       	],
       	language: {
+      		emptyTable: 'No discounts found.',
       		info: "Show _START_ To _END_ Of _TOTAL_ Discounts",
       		buttons: {
       			pageLength: 'Show %d',

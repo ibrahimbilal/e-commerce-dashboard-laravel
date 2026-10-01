@@ -6,10 +6,10 @@
     $roleName = $authUser?->getRoleNames()?->first();
     $profileUrl = null;
     if ($authUser) {
-        if ($authUser->can('edit users') && Route::has('users.edit')) {
-            $profileUrl = route('users.edit', $authUser);
-        } elseif (Route::has('profile.edit')) {
+        if (Route::has('profile.edit')) {
             $profileUrl = route('profile.edit');
+        } elseif ($authUser->can('edit users') && Route::has('users.edit')) {
+            $profileUrl = route('users.edit', $authUser);
         }
     }
 @endphp

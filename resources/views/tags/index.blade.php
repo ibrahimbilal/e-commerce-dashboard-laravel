@@ -40,7 +40,7 @@
 </tr>
 </thead>
 <tbody>
-@forelse ($tags as $tag)
+@foreach ($tags as $tag)
 <tr>
 <td></td>
 <td class="prod-title">{{ $tag->title }}</td>
@@ -56,9 +56,7 @@
 <x-resource-actions :model="$tag" resource="tags" destroy-label="tag" :show="false" />
 </td>
 </tr>
-@empty
-<tr><td colspan="7" class="text-center text-muted py-4">No tags found.</td></tr>
-@endforelse
+@endforeach
 </tbody>
 </table>
 </div>
@@ -103,6 +101,7 @@ if ($.fn.DataTable && $('#tags').length) {
       		[4, 'desc']
       	],
       	language: {
+      		emptyTable: 'No tags found.',
       		info: "Show _START_ To _END_ Of _TOTAL_ Tags",
       		buttons: {
       			pageLength: 'Show %d',

@@ -72,7 +72,7 @@
 </tr>
 </thead>
 <tbody>
-@forelse ($reviews as $review)
+@foreach ($reviews as $review)
 @php
     $customerName = trim(($review->customer->first_name ?? '') . ' ' . ($review->customer->last_name ?? '')) ?: '—';
     $productName = $review->product?->locales->first()?->name ?? '—';
@@ -88,18 +88,10 @@
 <td class="text-capitalize">{{ $productName }}</td>
 <td class="text-uppercase">{{ $review->created_at?->format('H:i d/m/Y') ?? '—' }}</td>
 <td>
-<div class="btn-group">
-<a class="btn btn-primary btn-rounded me-2 py-1" href="{{ route('reviews.show', $review) }}"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a>
-<a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('reviews.edit', $review) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a>
-<form method="POST" action="{{ route('reviews.destroy', $review) }}" class="d-inline destroy-resource-form">@csrf
-@method('DELETE')
-<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="review"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form>
-</div>
+<x-resource-actions :model="$review" resource="reviews" destroy-label="review" />
 </td>
 </tr>
-@empty
-<tr><td colspan="7" class="text-center text-muted py-4">No reviews found.</td></tr>
-@endforelse
+@endforeach
 </tbody>
 </table>
 </div>
@@ -145,6 +137,7 @@ if ($.fn.DataTable && $('#reviews').length) {
       		[5, 'desc']
       	],
       	language: {
+      		emptyTable: 'No reviews found.',
       		info: "Show _START_ To _END_ Of _TOTAL_ reviews",
       		buttons: {
       			pageLength: 'Show %d',

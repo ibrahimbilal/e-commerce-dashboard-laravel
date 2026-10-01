@@ -13,6 +13,7 @@
     $salesChartSeries = $salesChartSeries ?? ['labels' => [], 'sales' => [], 'orders' => []];
     $orderStatusStats = collect($orderStatusStats ?? []);
     $topProducts = collect($topProducts ?? []);
+    $recentOrders = collect($recentOrders ?? []);
     $productPlaceholder = asset('assets/images/product-placeholder.svg');
     $formatDashboardStat = static function ($value): string {
         if (! is_numeric($value)) {
@@ -100,7 +101,7 @@
 <div class="main-box box-spaces">
 <h2 class="box-title text-capitalize">Top Selling Products</h2>
 <div class="list-holder">
-@forelse ($topProducts as $productRow)
+@foreach ($topProducts as $productRow)
 @php
     $productId = data_get($productRow, 'product_id') ?? data_get($productRow, 'id');
     $productName = (string) data_get($productRow, 'name', '—');
@@ -127,16 +128,17 @@ ${{ number_format((float) $price) }}
 @endif
 </div>
 </div>
-@empty
+@endforeach
+@if ($topProducts->isEmpty())
 <p class="text-muted mb-0 py-3">No sales data yet.</p>
-@endforelse
+@endif
 </div>
 </div>
 </div>
 <div class="col-12 col-sm-6 col-xxl-4">
 <div class="main-box box-spaces">
-<div class="box-header d-flex align-items-center justify-content-between flex-row-reverse">
-<h2 class="box-title text-capitalize mb-0">Visitors Referrals</h2>
+<div class="box-header d-flex align-items-center justify-content-between">
+<h2 class="box-title text-capitalize mb-0 text-start">Visitors Referrals</h2>
 </div>
 <div class="list-holder">
 <p class="text-muted text-center py-4 mb-0">No visitor tracking yet.</p>
@@ -157,7 +159,7 @@ ${{ number_format((float) $price) }}
 </tr>
 </thead>
 <tbody>
-@forelse ($orderStatusStats as $statusRow)
+@foreach ($orderStatusStats as $statusRow)
 @php
     $slug = data_get($statusRow, 'slug');
     $title = data_get($statusRow, 'title', '—');
@@ -169,12 +171,50 @@ ${{ number_format((float) $price) }}
 <td class="text-end">{{ is_numeric($count) ? number_format((int) $count) : '0' }}</td>
 <td class="text-end">@if (is_numeric($percent)){{ number_format((float) $percent, 1) }}%@else—@endif</td>
 </tr>
-@empty
-<tr><td colspan="3" class="text-center text-muted py-4">No order statuses yet.</td></tr>
-@endforelse
+@endforeach
 </tbody>
 </table>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="row g-3 mt-1">
+<div class="col-12 col-xxl-8">
+<div class="main-box box-spaces mb-0">
+<h2 class="box-title text-capitalize">Recent orders</h2>
+<div class="table-responsive">
+<table class="table table-striped mb-0">
+<thead>
+<tr>
+<th class="text-uppercase">Order</th>
+<th class="text-uppercase">Status</th>
+<th class="text-uppercase">Customer</th>
+<th class="text-uppercase text-end">Amount</th>
+<th class="text-uppercase">Date</th>
+</tr>
+</thead>
+<tbody>
+@foreach ($recentOrders as $order)
+@php
+    $customerName = trim(($order->customer->first_name ?? '').' '.($order->customer->last_name ?? '')) ?: '—';
+@endphp
+<tr>
+<td class="text-uppercase">
+@if (Route::has('orders.show'))
+<a href="{{ route('orders.show', $order) }}">#{{ $order->id }}</a>
+@else
+#{{ $order->id }}
+@endif
+</td>
+<td class="text-capitalize">{{ $order->orderStatus->title ?? '—' }}</td>
+<td class="text-capitalize">{{ $customerName }}</td>
+<td class="text-end">${{ number_format($order->amount ?? 0) }}</td>
+<td>{{ $order->created_at?->format('H:i d/m/Y') ?? '—' }}</td>
+</tr>
+@endforeach
+</tbody>
+</table>
 </div>
 </div>
 </div>

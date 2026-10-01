@@ -73,7 +73,7 @@
 </tr>
 </thead>
 <tbody>
-@forelse ($subscribers ?? [] as $subscriber)
+@foreach ($subscribers ?? [] as $subscriber)
 <tr>
 <td></td>
 <td class="text-capitalize">{{ trim(($subscriber->first_name ?? '').' '.($subscriber->last_name ?? '')) ?: '—' }}</td>
@@ -97,9 +97,7 @@
 </td>
 @endif
 </tr>
-@empty
-<tr><td colspan="{{ $showActions ? 6 : 5 }}" class="text-center text-muted py-4">No subscribers yet.</td></tr>
-@endforelse
+@endforeach
 </tbody>
 </table>
 </div>
@@ -166,6 +164,7 @@ if ($.fn.DataTable && $('#subscribers').length) {
       		[{{ $showActions ? 4 : 3 }}, 'desc']
       	],
       	language: {
+      		emptyTable: 'No subscribers found.',
       		info: "Show _START_ To _END_ Of _TOTAL_ subscribers",
       		buttons: {
       			pageLength: 'Show %d',

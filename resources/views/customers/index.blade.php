@@ -40,7 +40,7 @@
 </tr>
 </thead>
 <tbody>
-@forelse ($customers as $customer)
+@foreach ($customers as $customer)
 <tr>
 <td></td>
 <td class="customer-img">
@@ -54,9 +54,7 @@
 <x-resource-actions :model="$customer" resource="customers" destroy-label="customer" />
 </td>
 </tr>
-@empty
-<tr><td colspan="7" class="text-center text-muted py-4">No customers found.</td></tr>
-@endforelse
+@endforeach
 </tbody>
 </table>
 </div>
@@ -101,6 +99,7 @@ if ($.fn.DataTable && $('#customers').length) {
       		[5, 'desc']
       	],
       	language: {
+      		emptyTable: 'No customers found.',
       		info: "Show _START_ To _END_ Of _TOTAL_ customers",
       		buttons: {
       			pageLength: 'Show %d',

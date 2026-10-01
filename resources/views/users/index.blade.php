@@ -56,7 +56,7 @@
 </tr>
 </thead>
 <tbody>
-@forelse ($users as $user)
+@foreach ($users as $user)
 <tr>
 <td></td>
 <td class="customer-img">
@@ -75,18 +75,10 @@
 </td>
 <td>{{ $user->created_at?->format('H:i d/m/Y') ?? '—' }}</td>
 <td>
-<div class="btn-group">
-<a class="btn btn-primary btn-rounded me-2 py-1" href="{{ route('users.show', $user) }}"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a>
-<a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('users.edit', $user) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a>
-<form method="POST" action="{{ route('users.destroy', $user) }}" class="d-inline destroy-resource-form">@csrf
-@method('DELETE')
-<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="user"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form>
-</div>
+<x-resource-actions :model="$user" resource="users" destroy-label="user" />
 </td>
 </tr>
-@empty
-<tr><td colspan="7" class="text-center text-muted py-4">No users found.</td></tr>
-@endforelse
+@endforeach
 </tbody>
 <tfoot>
 <tr>
@@ -142,6 +134,7 @@ if ($.fn.DataTable && $('#users').length) {
       		[5, 'desc']
       	],
       	language: {
+      		emptyTable: 'No users found.',
       		info: "Show _START_ To _END_ Of _TOTAL_ users",
       		buttons: {
       			pageLength: 'Show %d',

@@ -59,7 +59,7 @@
 </tr>
 </thead>
 <tbody>
-@forelse ($products as $product)
+@foreach ($products as $product)
 @php
     $locale = $product->locales->first();
     $productName = $locale?->name ?? '—';
@@ -89,9 +89,7 @@
 <x-resource-actions :model="$product" resource="products" destroy-label="product" :show="false" />
 </td>
 </tr>
-@empty
-<tr><td colspan="10" class="text-center text-muted py-4">No products found.</td></tr>
-@endforelse
+@endforeach
 </tbody>
 </table>
 </div>
@@ -136,6 +134,7 @@ if ($.fn.DataTable && $('#products').length) {
       		[8, 'desc']
       	],
       	language: {
+      		emptyTable: 'No products found.',
       		info: "Show _START_ To _END_ Of _TOTAL_ Products",
       		buttons: {
       			pageLength: 'Show %d',

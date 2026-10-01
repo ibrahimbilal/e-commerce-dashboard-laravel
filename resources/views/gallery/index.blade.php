@@ -53,13 +53,35 @@
 <div class="col-sm-12 col-lg-9 float-start post-box order-1 open">
 <div class="g-holder main-box box-spaces d-flex flex-column mb-0">
 <x-soft-delete-index-toolbar :counts="$counts ?? []" :filters="$filters ?? []" route="gallery.index" class="col-12 px-0"/>
+<div class="search-holder mt-2">
+<form class="search-form" method="GET" action="{{ route('gallery.index') }}">
+@if (request()->boolean('trashed'))
+<input type="hidden" name="trashed" value="1"/>
+@endif
+@if (request()->filled('selected'))
+<input type="hidden" name="selected" value="{{ request('selected') }}"/>
+@endif
+<div class="form-item second d-flex align-items-center">
+<label class="item-title meta-title me-2" for="gal-search">Search</label>
+<input class="form-control d-inline-block" id="gal-search" type="search" name="search" value="{{ request('search') }}"/>
+</div>
+</form>
+</div>
 <div class="images mt-3">
 <ul class="list-unstyled images-list">
 @forelse ($galleries as $gallery)
+@php
+    $galleryIsTrashed = is_object($gallery) && method_exists($gallery, 'trashed') && $gallery->trashed();
+@endphp
 <li class="img-item">
 <a class="d-flex justify-content-center align-items-center text-decoration-none @if($selectedGallery?->id === $gallery->id) border border-primary @endif" href="{{ route('gallery.index', array_merge($indexQuery, ['selected' => $gallery->id])) }}">
 <x-gallery-thumbnail :gallery="$gallery"/>
 </a>
+@if ($galleryIsTrashed)
+<div class="mt-2 text-center">
+<x-resource-actions :model="$gallery" resource="gallery" destroy-label="image" :show="false" :edit="false" />
+</div>
+@endif
 </li>
 @empty
 <li class="w-100"><p class="text-center text-muted py-4 mb-0">No gallery items yet.</p></li>
@@ -75,6 +97,7 @@
 @if ($selectedGallery)
 @php
     $selectedUrl = $galleryPublicUrl($selectedGallery);
+    $selectedIsTrashed = method_exists($selectedGallery, 'trashed') && $selectedGallery->trashed();
 @endphp
 <div class="main-box box-spaces">
 <div class="row">
@@ -82,6 +105,31 @@
 <div class="img-view text-center w-100"><x-gallery-thumbnail :gallery="$selectedGallery" class="img-fluid"/></div>
 </div>
 <div class="col-12">
+@if ($selectedIsTrashed)
+<table class="mt-2 w-100">
+<tbody>
+<tr>
+<td class="py-2"><div class="form-item second"><label class="item-title meta-title">Image Url:</label></div></td>
+<td class="py-2"><div class="form-item second"><span class="ps-2">{{ $selectedUrl ?: '—' }}</span></div></td>
+</tr>
+<tr>
+<td class="py-2"><div class="form-item second"><label class="item-title meta-title">created date:</label></div></td>
+<td class="py-2"><div class="form-item second"><span class="ps-2">{{ $selectedGallery->created_at?->format('H:i d/m/Y') ?? '—' }}</span></div></td>
+</tr>
+<tr>
+<td class="py-2"><div class="form-item second"><label class="item-title meta-title">Image Title:</label></div></td>
+<td class="py-2"><div class="form-item second"><span class="ps-2">{{ $selectedGallery->title ?: '—' }}</span></div></td>
+</tr>
+<tr>
+<td class="py-2"><div class="form-item second"><label class="item-title meta-title">Alt Text:</label></div></td>
+<td class="py-2"><div class="form-item second"><span class="ps-2">{{ $selectedGallery->alt ?: '—' }}</span></div></td>
+</tr>
+</tbody>
+</table>
+<div class="btns-holder d-flex justify-content-start mt-4 flex-wrap gap-2">
+<x-resource-actions :model="$selectedGallery" resource="gallery" destroy-label="image" :show="false" :edit="false" />
+</div>
+@elseif (Route::has('gallery.update'))
 @can('edit gallery')
 <form method="POST" action="{{ route('gallery.update', $selectedGallery) }}" id="edit-image-gallery">
 @csrf
@@ -167,6 +215,7 @@
 </tbody>
 </table>
 @endcan
+@if (Route::has('gallery.destroy'))
 @can('delete gallery')
 <form method="POST" action="{{ route('gallery.destroy', $selectedGallery) }}" id="gallery-delete-{{ $selectedGallery->id }}" class="destroy-resource-form d-none">
 @csrf
@@ -174,6 +223,8 @@
 <button type="button" class="js-destroy-submit" data-confirm-label="image"></button>
 </form>
 @endcan
+@endif
+@endif
 </div>
 </div>
 </div>

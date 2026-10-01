@@ -53,7 +53,7 @@
 </tr>
 </thead>
 <tbody>
-@forelse ($categories as $category)
+@foreach ($categories as $category)
 <tr>
 <td></td>
 <td class="prod-title">{{ $category->parent_id ? '— ' : '' }}{{ $category->title }}</td>
@@ -69,9 +69,7 @@
 <x-resource-actions :model="$category" resource="categories" destroy-label="category" :show="false" />
 </td>
 </tr>
-@empty
-<tr><td colspan="7" class="text-center text-muted py-4">No categories found.</td></tr>
-@endforelse
+@endforeach
 </tbody>
 </table>
 </div>
@@ -116,6 +114,7 @@ if ($.fn.DataTable && $('#categories').length) {
       		[4, 'desc']
       	],
       	language: {
+      		emptyTable: 'No categories found.',
       		info: "Show _START_ To _END_ Of _TOTAL_ Categories",
       		buttons: {
       			pageLength: 'Show %d',

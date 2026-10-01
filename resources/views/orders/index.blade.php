@@ -57,7 +57,7 @@
 </tr>
 </thead>
 <tbody>
-@forelse ($orders as $order)
+@foreach ($orders as $order)
 @php
     $customerName = trim(($order->customer->first_name ?? '') . ' ' . ($order->customer->last_name ?? '')) ?: '—';
     $destination = $order->address ? trim(($order->address->city ?? '') . ', ' . ($order->address->state ?? '')) : '—';
@@ -74,9 +74,7 @@
 <x-resource-actions :model="$order" resource="orders" destroy-label="order" />
 </td>
 </tr>
-@empty
-<tr><td colspan="8" class="text-center text-muted py-4">No orders found.</td></tr>
-@endforelse
+@endforeach
 </tbody>
 </table>
 </div>
@@ -121,6 +119,7 @@ if ($.fn.DataTable && $('#orders').length) {
       		[1, 'desc']
       	],
       	language: {
+      		emptyTable: 'No orders found.',
       		info: "Show _START_ To _END_ Of _TOTAL_ Orders",
       		buttons: {
       			pageLength: 'Show %d',

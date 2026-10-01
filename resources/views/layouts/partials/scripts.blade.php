@@ -9,14 +9,17 @@
             var formId = $(this).attr('form');
             var $form = formId ? $('#' + formId) : $(this).closest('form');
             var label = $(this).data('confirm-label') || 'item';
+            var isPermanent = $(this).data('permanent-delete') === 1 || $(this).data('permanent-delete') === '1';
             Swal.fire({
                 title: 'Are you sure?',
-                text: "You won't be able to revert this!",
+                text: isPermanent
+                    ? 'This will permanently delete this ' + label + '. This action cannot be undone.'
+                    : "You won't be able to revert this!",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: 'var(--main-color)',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!',
+                confirmButtonText: isPermanent ? 'Yes, delete permanently!' : 'Yes, delete it!',
                 cancelButtonText: 'No, cancel!',
             }).then(function (result) {
                 if (result.isConfirmed) {
