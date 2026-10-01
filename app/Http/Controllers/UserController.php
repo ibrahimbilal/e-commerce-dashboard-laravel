@@ -47,13 +47,14 @@ class UserController extends Controller
 
         $user = User::create([
             'email' => $data['email'],
-            'email_verified_at' => now(),
             'password' => Hash::make($data['password']),
             'first_name' => $data['first_name'] ?? null,
             'last_name' => $data['last_name'] ?? null,
             'mobile' => $data['mobile'] ?? null,
             'profile_picture' => $data['profile_picture'] ?? null,
         ]);
+
+        $user->markEmailAsVerified();
 
         $user->syncRoles($data['roles'] ?? []);
 

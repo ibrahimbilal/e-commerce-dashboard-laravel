@@ -84,7 +84,7 @@
 </td>
 <td>{{ $product->created_at?->format('H:i d/m/Y') ?? '—' }}</td>
 <td>
-<x-resource-actions :model="$product" resource="products" destroy-label="product" />
+<x-resource-actions :model="$product" resource="products" destroy-label="product" :show="false" />
 </td>
 </tr>
 @empty

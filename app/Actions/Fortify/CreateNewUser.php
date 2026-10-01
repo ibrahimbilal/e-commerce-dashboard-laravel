@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
-use Spatie\Permission\Models\Role;
 
 class CreateNewUser implements CreatesNewUsers
 {
@@ -31,9 +30,6 @@ class CreateNewUser implements CreatesNewUsers
             'password' => $this->passwordRules(),
             'mobile' => ['nullable', 'string', 'max:20'],
             'profile_picture' => ['nullable', 'string', 'max:191'],
-            'roles' => ['nullable', 'array'],
-            'roles.*' => ['string', Rule::exists('roles', 'name')->where('guard_name', 'web')],
-            'role_name' => ['nullable', 'string', Rule::exists('roles', 'name')->where('guard_name', 'web')],
         ])->validate();
 
         $user = User::create([
@@ -43,17 +39,9 @@ class CreateNewUser implements CreatesNewUsers
             'password' => Hash::make($input['password']),
             'mobile' => $input['mobile'] ?? null,
             'profile_picture' => $input['profile_picture'] ?? null,
-            'email_verified_at' => now(),
         ]);
 
-        $roleNames = $input['roles'] ?? [];
-        if (! empty($input['role_name'])) {
-            $roleNames[] = $input['role_name'];
-        }
-
-        if ($roleNames !== []) {
-            $user->syncRoles(array_values(array_unique($roleNames)));
-        }
+        $user->markEmailAsVerified();
 
         return $user;
     }
