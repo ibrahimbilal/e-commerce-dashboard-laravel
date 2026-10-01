@@ -150,6 +150,10 @@ $(function () {
             sum += lt;
         });
         $('#order-items-running-total').text(sum);
+        var $orderAmount = $('#order-amount-display');
+        if ($orderAmount.length) {
+            $orderAmount.text(sum.toLocaleString('en-US'));
+        }
     }
     function nextOrderItemIndex() {
         var max = -1;

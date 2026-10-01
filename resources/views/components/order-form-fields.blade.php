@@ -4,7 +4,7 @@
     $addressId = old('address_id', $orderModel?->address_id);
     $statusId = old('order_status_id', old('order_status', $orderModel?->order_status_id));
     $couponId = old('coupon_id', old('coupon', $orderModel?->coupon_id));
-    $amount = old('amount', $orderModel?->amount ?? '');
+    $displayAmount = $orderModel?->amount ?? 0;
 @endphp
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap">
 <label class="item-title" for="customer">Customer:</label>
@@ -56,6 +56,7 @@
 </select>
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
-<label class="item-title" for="amount">Order amount:</label>
-<input class="form-control" id="amount" name="amount" type="number" min="0" step="1" value="{{ $amount }}" required/>
+<label class="item-title">Order amount:</label>
+<span class="ms-sm-2">$<span id="order-amount-display">{{ number_format((float) $displayAmount, 0, '.', ',') }}</span></span>
+<span class="text-muted small ms-2">(calculated from line items)</span>
 </div>
