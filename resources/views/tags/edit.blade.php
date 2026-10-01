@@ -56,6 +56,15 @@
 <label class="item-title meta-title" for="item-slug">tag slug:<span class="icon info ms-2" flow="up" tooltip="slug is the bit of text that appears after your domain name in the URL of a page"><i class="fi-rr-info"> </i></span></label>
 <input class="form-control mt-2" id="item-slug" name="tag_slug" type="text" value="{{ old('tag_slug', $tag->tag_slug ?? '') }}" />
 </div>
+<div class="form-item second mt-2">
+<label class="item-title meta-title" for="parent-id">parent tag:</label>
+<select class="form-select" id="parent-id" name="parent_id">
+<option value="">None / top level</option>
+@foreach ($parents as $parent)
+<option value="{{ $parent->id }}" @selected((string) old('parent_id', optional($tag ?? null)->parent_id) === (string) $parent->id)>{{ $parent->title }}</option>
+@endforeach
+</select>
+</div>
 <div class="form-item second justify-content-between mt-2 d-flex align-items-sm-center">
 <label class="item-title meta-title">created at: </label><span class="ms-2">26/03/2021 14:58</span>
 </div>

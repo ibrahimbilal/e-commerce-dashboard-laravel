@@ -35,35 +35,27 @@
 </tr>
 </thead>
 <tbody>
+@forelse ($roles as $role)
 <tr>
-<td class="prod-title">Administrator</td>
+<td class="prod-title">{{ $role->title }}</td>
 <td>
-<div class="btn-group"><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('roles.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('roles.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+<div class="btn-group">
+<a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('roles.edit', $role) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a>
+<form method="POST" action="{{ route('roles.destroy', $role) }}" class="d-inline destroy-resource-form">@csrf
 @method('DELETE')
-<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="role"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="role"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form>
+</div>
 </td>
 </tr>
-<tr>
-<td class="prod-title">Store Manager</td>
-<td>
-<div class="btn-group"><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('roles.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('roles.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
-@method('DELETE')
-<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="role"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
-</td>
-</tr>
-<tr>
-<td class="prod-title">Accountment</td>
-<td>
-<div class="btn-group"><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('roles.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('roles.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
-@method('DELETE')
-<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="role"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
-</td>
-</tr>
+@empty
+<tr><td colspan="2" class="text-center text-muted py-4">No roles found.</td></tr>
+@endforelse
 </tbody>
 </table>
 </div>
 </div>
 </div>
+<x-pagination :paginator="$roles" />
 </div>
 </div>
 @endsection

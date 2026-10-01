@@ -43,37 +43,18 @@
 <label class="item-title" for="mobile">mobile:</label>
 <input class="form-control" id="mobile" name="mobile" type="tel"   value="{{ old('mobile', $user->mobile ?? '') }}" />
 </div>
-<div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
-<label class="item-title" for="birth-date">Birth Of Date:</label>
-<div class="position-relative w-100">
-<input class="form-control" data-toggle="datepicker" id="birth-date" name="birth_date" type="text"   value="{{ old('birth_date', $user->birth_date ?? '') }}" />
-</div>
-</div>
-<div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
-<label class="item-title">gender:</label>
-<label class="radio-label" for="male">
-<input checked="" class="input-radio" id="male" name="customer_type" type="radio" value="Male"/>Male
-              </label>
-<label class="radio-label" for="female">
-<input class="input-radio" id="female" name="customer_type" type="radio" value="Female"/>Female
-              </label>
-</div>
 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="user-role">role:</label>
-<select class="form-select" id="user-role" name="user_role">
-<option>administrator</option>
-<option>store manager</option>
-<option>accountant</option>
+<select class="form-select" id="user-role" name="role" required>
+@foreach ($roles as $role)
+<option value="{{ $role->id }}" @selected((string) old('role', $user->role ?? '') === (string) $role->id)>{{ $role->title }}</option>
+@endforeach
 </select>
 </div>
-<div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
-<label class="item-title" for="user-status">status:</label>
-<select class="form-select" id="user-status" name="user_status">
-<option>not verified</option>
-<option>verified</option>
-<option>blocked</option>
-</select>
-</div>
+@if ($user->roleRelation)
+<p class="small text-muted mt-1 mb-0">Current role: {{ $user->roleRelation->title }}</p>
+@endif
+<input type="hidden" name="profile_picture" value="{{ old('profile_picture', $user->profile_picture ?? '') }}"/>
 <div class="form-item second d-flex mt-3 flex-wrap flex-sm-nowrap">
 <div class="item-title">
 <label class="item-title mb-2" for="profile-picture">Profile Picture:</label>

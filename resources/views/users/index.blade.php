@@ -50,59 +50,32 @@
 <th class="text-uppercase">email</th>
 <th class="text-uppercase">role</th>
 <th class="text-uppercase">registered date</th>
-<th class="text-uppercase">status</th>
 <th class="text-uppercase">action</th>
 </tr>
 </thead>
 <tbody>
+@forelse ($users as $user)
 <tr>
 <td></td>
 <td class="customer-img">
-<div class="img-holder"><img src="{{ asset('assets/images/customers/image-1.png') }}" width="70"/></div>
+<div class="img-holder"><img src="{{ $user->profile_picture ? asset($user->profile_picture) : asset('assets/images/customers/image-1.png') }}" width="70" alt=""/></div>
 </td>
-<td class="user-title">jayson hinrichsen</td>
-<td>example@email.com</td>
-<td>Administrator</td>
-<td>14:58 26/03/2022</td>
-<td class="status-title">verified</td>
+<td class="user-title">{{ trim(($user->first_name ?? '') . ' ' . ($user->last_name ?? '')) ?: '—' }}</td>
+<td>{{ $user->email }}</td>
+<td>{{ $user->roleRelation->title ?? '—' }}</td>
+<td>{{ $user->created_at?->format('H:i d/m/Y') ?? '—' }}</td>
 <td>
-<div class="btn-group"><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('users.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('users.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
+<div class="btn-group">
+<a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('users.edit', $user) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a>
+<form method="POST" action="{{ route('users.destroy', $user) }}" class="d-inline destroy-resource-form">@csrf
 @method('DELETE')
-<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="user"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="user"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form>
+</div>
 </td>
 </tr>
-<tr>
-<td></td>
-<td class="customer-img">
-<div class="img-holder"><img src="{{ asset('assets/images/customers/image-2.png') }}" width="70"/></div>
-</td>
-<td class="user-title">jayson hinrichsen</td>
-<td>example@email.com</td>
-<td>Accountant</td>
-<td>14:58 26/03/2022</td>
-<td class="status-title">blocked</td>
-<td>
-<div class="btn-group"><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('users.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('users.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
-@method('DELETE')
-<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="user"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
-</td>
-</tr>
-<tr>
-<td></td>
-<td class="customer-img">
-<div class="img-holder"><img src="{{ asset('assets/images/customers/image-3.png') }}" width="70"/></div>
-</td>
-<td class="user-title">jayson hinrichsen</td>
-<td>example@email.com</td>
-<td>Store Manager</td>
-<td>14:58 26/03/2022</td>
-<td class="status-title">not verified</td>
-<td>
-<div class="btn-group"><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('users.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('users.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
-@method('DELETE')
-<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="user"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
-</td>
-</tr>
+@empty
+<tr><td colspan="7" class="text-center text-muted py-4">No users found.</td></tr>
+@endforelse
 </tbody>
 <tfoot>
 <tr>
@@ -119,6 +92,7 @@
 </div>
 </div>
 </div>
+<x-pagination :paginator="$users" />
 </div>
 </div>
 @endsection

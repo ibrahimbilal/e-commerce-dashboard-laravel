@@ -54,236 +54,29 @@
 </tr>
 </thead>
 <tbody>
+@forelse ($customers as $customer)
 <tr>
 <td></td>
 <td class="customer-img">
-<div class="img-holder"><img src="{{ asset('assets/images/customers/image-1.png') }}" width="70"/></div>
+<div class="img-holder"><img src="{{ $customer->profile_picture ? asset($customer->profile_picture) : asset('assets/images/customers/image-1.png') }}" width="70" alt=""/></div>
 </td>
-<td class="prod-title">Jayson Hinrichsen</td>
-<td>example1@email.com</td>
-<td>09212 34 343455</td>
-<td>14:58 26/03/2022</td>
+<td class="prod-title">{{ trim(($customer->first_name ?? '') . ' ' . ($customer->last_name ?? '')) ?: '—' }}</td>
+<td>{{ $customer->email }}</td>
+<td>{{ $customer->mobile ?? '—' }}</td>
+<td>{{ $customer->created_at?->format('H:i d/m/Y') ?? '—' }}</td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1" href="{{ route('customers.show', 1) }}"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('customers.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('customers.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
-@method('DELETE')
-<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="customer"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
+<x-resource-actions :model="$customer" resource="customers" destroy-label="customer" />
 </td>
 </tr>
-<tr>
-<td></td>
-<td class="customer-img">
-<div class="img-holder"><img src="{{ asset('assets/images/customers/image-2.png') }}" width="70"/></div>
-</td>
-<td class="prod-title">Arezou Firouzeh</td>
-<td>example2@email.com</td>
-<td>09212 34 343455</td>
-<td>14:58 26/03/2022</td>
-<td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1" href="{{ route('customers.show', 1) }}"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('customers.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('customers.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
-@method('DELETE')
-<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="customer"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
-</td>
-</tr>
-<tr>
-<td></td>
-<td class="customer-img">
-<div class="img-holder"><img src="{{ asset('assets/images/customers/image-3.png') }}" width="70"/></div>
-</td>
-<td class="prod-title">Hossein Roghayeh</td>
-<td>example3@email.com</td>
-<td>09212 34 343455</td>
-<td>14:58 26/03/2022</td>
-<td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1" href="{{ route('customers.show', 1) }}"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('customers.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('customers.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
-@method('DELETE')
-<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="customer"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
-</td>
-</tr>
-<tr>
-<td></td>
-<td class="customer-img">
-<div class="img-holder"><img src="{{ asset('assets/images/customers/image-4.png') }}" width="70"/></div>
-</td>
-<td class="prod-title">Soraya Siavash</td>
-<td>example4@email.com</td>
-<td>09212 34 343455</td>
-<td>14:58 26/03/2022</td>
-<td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1" href="{{ route('customers.show', 1) }}"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('customers.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('customers.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
-@method('DELETE')
-<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="customer"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
-</td>
-</tr>
-<tr>
-<td></td>
-<td class="customer-img">
-<div class="img-holder"><img src="{{ asset('assets/images/customers/image-5.png') }}" width="70"/></div>
-</td>
-<td class="prod-title">Gemma Chua-Tran</td>
-<td>example5@email.com</td>
-<td>09212 34 343455</td>
-<td>14:58 26/03/2022</td>
-<td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1" href="{{ route('customers.show', 1) }}"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('customers.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('customers.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
-@method('DELETE')
-<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="customer"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
-</td>
-</tr>
-<tr>
-<td></td>
-<td class="customer-img">
-<div class="img-holder"><img src="{{ asset('assets/images/customers/image-1.png') }}" width="70"/></div>
-</td>
-<td class="prod-title">Jayson Hinrichsen</td>
-<td>example1@email.com</td>
-<td>09212 34 343455</td>
-<td>14:58 26/03/2022</td>
-<td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1" href="{{ route('customers.show', 1) }}"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('customers.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('customers.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
-@method('DELETE')
-<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="customer"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
-</td>
-</tr>
-<tr>
-<td></td>
-<td class="customer-img">
-<div class="img-holder"><img src="{{ asset('assets/images/customers/image-2.png') }}" width="70"/></div>
-</td>
-<td class="prod-title">Arezou Firouzeh</td>
-<td>example2@email.com</td>
-<td>09212 34 343455</td>
-<td>14:58 26/03/2022</td>
-<td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1" href="{{ route('customers.show', 1) }}"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('customers.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('customers.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
-@method('DELETE')
-<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="customer"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
-</td>
-</tr>
-<tr>
-<td></td>
-<td class="customer-img">
-<div class="img-holder"><img src="{{ asset('assets/images/customers/image-3.png') }}" width="70"/></div>
-</td>
-<td class="prod-title">Hossein Roghayeh</td>
-<td>example3@email.com</td>
-<td>09212 34 343455</td>
-<td>14:58 26/03/2022</td>
-<td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1" href="{{ route('customers.show', 1) }}"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('customers.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('customers.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
-@method('DELETE')
-<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="customer"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
-</td>
-</tr>
-<tr>
-<td></td>
-<td class="customer-img">
-<div class="img-holder"><img src="{{ asset('assets/images/customers/image-4.png') }}" width="70"/></div>
-</td>
-<td class="prod-title">Soraya Siavash</td>
-<td>example4@email.com</td>
-<td>09212 34 343455</td>
-<td>14:58 26/03/2022</td>
-<td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1" href="{{ route('customers.show', 1) }}"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('customers.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('customers.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
-@method('DELETE')
-<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="customer"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
-</td>
-</tr>
-<tr>
-<td></td>
-<td class="customer-img">
-<div class="img-holder"><img src="{{ asset('assets/images/customers/image-5.png') }}" width="70"/></div>
-</td>
-<td class="prod-title">Gemma Chua-Tran</td>
-<td>example5@email.com</td>
-<td>09212 34 343455</td>
-<td>14:58 26/03/2022</td>
-<td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1" href="{{ route('customers.show', 1) }}"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('customers.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('customers.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
-@method('DELETE')
-<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="customer"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
-</td>
-</tr>
-<tr>
-<td></td>
-<td class="customer-img">
-<div class="img-holder"><img src="{{ asset('assets/images/customers/image-1.png') }}" width="70"/></div>
-</td>
-<td class="prod-title">Jayson Hinrichsen</td>
-<td>example1@email.com</td>
-<td>09212 34 343455</td>
-<td>14:58 26/03/2022</td>
-<td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1" href="{{ route('customers.show', 1) }}"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('customers.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('customers.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
-@method('DELETE')
-<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="customer"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
-</td>
-</tr>
-<tr>
-<td></td>
-<td class="customer-img">
-<div class="img-holder"><img src="{{ asset('assets/images/customers/image-2.png') }}" width="70"/></div>
-</td>
-<td class="prod-title">Arezou Firouzeh</td>
-<td>example2@email.com</td>
-<td>09212 34 343455</td>
-<td>14:58 26/03/2022</td>
-<td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1" href="{{ route('customers.show', 1) }}"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('customers.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('customers.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
-@method('DELETE')
-<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="customer"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
-</td>
-</tr>
-<tr>
-<td></td>
-<td class="customer-img">
-<div class="img-holder"><img src="{{ asset('assets/images/customers/image-3.png') }}" width="70"/></div>
-</td>
-<td class="prod-title">Hossein Roghayeh</td>
-<td>example3@email.com</td>
-<td>09212 34 343455</td>
-<td>14:58 26/03/2022</td>
-<td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1" href="{{ route('customers.show', 1) }}"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('customers.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('customers.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
-@method('DELETE')
-<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="customer"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
-</td>
-</tr>
-<tr>
-<td></td>
-<td class="customer-img">
-<div class="img-holder"><img src="{{ asset('assets/images/customers/image-4.png') }}" width="70"/></div>
-</td>
-<td class="prod-title">Soraya Siavash</td>
-<td>example4@email.com</td>
-<td>09212 34 343455</td>
-<td>14:58 26/03/2022</td>
-<td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1" href="{{ route('customers.show', 1) }}"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('customers.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('customers.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
-@method('DELETE')
-<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="customer"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
-</td>
-</tr>
-<tr>
-<td></td>
-<td class="customer-img">
-<div class="img-holder"><img src="{{ asset('assets/images/customers/image-5.png') }}" width="70"/></div>
-</td>
-<td class="prod-title">Gemma Chua-Tran</td>
-<td>example5@email.com</td>
-<td>09212 34 343455</td>
-<td>14:58 26/03/2022</td>
-<td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1" href="{{ route('customers.show', 1) }}"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('customers.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('customers.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
-@method('DELETE')
-<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="customer"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
-</td>
-</tr>
+@empty
+<tr><td colspan="7" class="text-center text-muted py-4">No customers found.</td></tr>
+@endforelse
 </tbody>
 </table>
 </div>
 </div>
 </div>
+<x-pagination :paginator="$customers" />
 </div>
 </div>
 @endsection

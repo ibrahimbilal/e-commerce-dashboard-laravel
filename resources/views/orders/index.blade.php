@@ -55,95 +55,32 @@
 </tr>
 </thead>
 <tbody>
+@forelse ($orders as $order)
+@php
+    $customerName = trim(($order->customer->first_name ?? '') . ' ' . ($order->customer->last_name ?? '')) ?: '—';
+    $destination = $order->address ? trim(($order->address->city ?? '') . ', ' . ($order->address->state ?? '')) : '—';
+@endphp
 <tr>
 <td></td>
-<td class="text-uppercase">#23234</td>
-<td class="status text-capitalize success">Completed</td>
-<td class="text-capitalize">Jayson Hinrichsen</td>
-<td class="text-uppercase text-center">$398</td>
-<td class="text-capitalize">anniston, alabama</td>
-<td class="text-uppercase">14:58 26/03/2021</td>
+<td class="text-uppercase">#{{ $order->id }}</td>
+<td class="status text-capitalize">{{ $order->orderStatus->title ?? '—' }}</td>
+<td class="text-capitalize">{{ $customerName }}</td>
+<td class="text-uppercase text-center">${{ number_format($order->amount ?? 0) }}</td>
+<td class="text-capitalize">{{ $destination }}</td>
+<td class="text-uppercase">{{ $order->updated_at?->format('H:i d/m/Y') ?? '—' }}</td>
 <td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1" href="{{ route('orders.show', 1) }}"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('orders.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('orders.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
-@method('DELETE')
-<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="order"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
+<x-resource-actions :model="$order" resource="orders" destroy-label="order" />
 </td>
 </tr>
-<tr>
-<td></td>
-<td class="text-uppercase">#23236</td>
-<td class="status text-capitalize warning">On Hold</td>
-<td class="text-capitalize">Jayson Hinrichsen</td>
-<td class="text-uppercase text-center">$400</td>
-<td class="text-capitalize">anniston, alabama</td>
-<td class="text-uppercase">14:58 26/03/2021</td>
-<td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1" href="{{ route('orders.show', 1) }}"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('orders.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('orders.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
-@method('DELETE')
-<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="order"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
-</td>
-</tr>
-<tr>
-<td></td>
-<td class="text-uppercase">#23235</td>
-<td class="status text-capitalize danger">Canceled</td>
-<td class="text-capitalize">Jayson Hinrichsen</td>
-<td class="text-uppercase text-center">$100</td>
-<td class="text-capitalize">anniston, alabama</td>
-<td class="text-uppercase">14:58 26/03/2021</td>
-<td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1" href="{{ route('orders.show', 1) }}"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('orders.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('orders.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
-@method('DELETE')
-<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="order"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
-</td>
-</tr>
-<tr>
-<td></td>
-<td class="text-uppercase">#23232</td>
-<td class="status text-capitalize dark">Refunded</td>
-<td class="text-capitalize">Jayson Hinrichsen</td>
-<td class="text-uppercase text-center">$200</td>
-<td class="text-capitalize">anniston, alabama</td>
-<td class="text-uppercase">14:58 26/03/2021</td>
-<td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1" href="{{ route('orders.show', 1) }}"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('orders.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('orders.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
-@method('DELETE')
-<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="order"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
-</td>
-</tr>
-<tr>
-<td></td>
-<td class="text-uppercase">#23233</td>
-<td class="status text-capitalize primary">Processing</td>
-<td class="text-capitalize">Jayson Hinrichsen</td>
-<td class="text-uppercase text-center">$250</td>
-<td class="text-capitalize">anniston, alabama</td>
-<td class="text-uppercase">14:58 26/03/2021</td>
-<td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1" href="{{ route('orders.show', 1) }}"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('orders.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('orders.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
-@method('DELETE')
-<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="order"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
-</td>
-</tr>
-<tr>
-<td></td>
-<td class="text-uppercase">#23237</td>
-<td class="status text-capitalize success">Completed</td>
-<td class="text-capitalize">Jayson Hinrichsen</td>
-<td class="text-uppercase text-center">$225</td>
-<td class="text-capitalize">anniston, alabama</td>
-<td class="text-uppercase">14:58 26/03/2021</td>
-<td>
-<div class="btn-group"><a class="btn btn-primary btn-rounded me-2 py-1" href="{{ route('orders.show', 1) }}"><span class="icon"><i class="fi-rr-eye"> </i></span>view</a><a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('orders.edit', 1) }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a><form method="POST" action="{{ route('orders.destroy', 1) }}" class="d-inline destroy-resource-form">@csrf
-@method('DELETE')
-<button type="button" class="btn btn-danger btn-rounded me-2 py-1 js-destroy-submit" data-confirm-label="order"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button></form></div>
-</td>
-</tr>
+@empty
+<tr><td colspan="8" class="text-center text-muted py-4">No orders found.</td></tr>
+@endforelse
 </tbody>
 </table>
 </div>
 </div>
 </div>
+<x-pagination :paginator="$orders" />
 </div>
 </div>
 @endsection
