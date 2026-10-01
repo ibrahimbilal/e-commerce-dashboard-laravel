@@ -73,9 +73,6 @@
 <div class="swiper-wrapper">
 @foreach ($kpiCards as $card)
 @php
-    $changeValue = $card['change'] ?? null;
-    $changeLabel = array_key_exists('change', $card) && $changeValue !== null ? $formatChangePercent($changeValue) : null;
-    $changePositive = $changeValue !== null && is_numeric($changeValue) && (float) $changeValue >= 0;
     $displayValue = ($card['format'] ?? 'compact') === 'number'
         ? number_format(is_numeric($card['value']) ? (float) $card['value'] : 0)
         : $formatDashboardStat($card['value']);
@@ -88,10 +85,6 @@
 <p class="text-start m-0">{{ $displayValue }}</p>
 <p class="{{ $labelClass }}">{{ $card['label'] }}</p>
 </div>
-@if ($changeLabel !== null)
-<div class="percent {{ $changePositive ? 'good' : 'bad' }}">{{ ($changePositive ? '' : '-').$changeLabel }}<i class="fi-sr-arrow-small-{{ $changePositive ? 'up' : 'down' }}"> </i>
-</div>
-@endif
 </div>
 @endforeach
 </div>

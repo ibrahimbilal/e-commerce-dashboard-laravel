@@ -45,11 +45,6 @@
     text-align: center;
 }
 
-.slider-holder .swiper-slide.main-box {
-    min-width: 0;
-    max-width: 280px;
-}
-
 .slider-holder .swiper-slide .detail-holder {
     min-width: 0;
     overflow: hidden;
