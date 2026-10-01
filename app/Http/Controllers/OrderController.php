@@ -8,7 +8,9 @@ use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\ProductAttribute;
+use App\Support\IndexListing;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -22,13 +24,53 @@ class OrderController extends Controller
         $this->middleware('permission:delete orders', ['only' => ['destroy']]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $orders = Order::with(['customer', 'address', 'orderStatus', 'coupon', 'items.productAttribute.product'])
-            ->latest('id')
-            ->paginate(20);
+        $filterKeys = ['search', 'status', 'trashed'];
+        $filters = IndexListing::activeFilters($request, $filterKeys);
 
-        return view('orders.index', compact('orders'));
+        $counts = [
+            'all' => Order::query()->count(),
+            'trashed' => Order::query()->onlyTrashed()->count(),
+        ];
+
+        foreach (OrderStatus::query()->orderBy('title')->get() as $status) {
+            $counts[Str::slug($status->title)] = Order::query()
+                ->where('order_status_id', $status->id)
+                ->count();
+        }
+
+        $query = Order::with(['customer', 'address', 'orderStatus', 'coupon', 'items.productAttribute.product']);
+
+        if ($request->query('trashed') === '1') {
+            $query->onlyTrashed();
+        }
+
+        if ($statusSlug = $request->query('status')) {
+            $statusId = OrderStatus::query()
+                ->get()
+                ->first(fn (OrderStatus $status) => Str::slug($status->title) === $statusSlug)
+                ?->id;
+
+            if ($statusId) {
+                $query->where('order_status_id', $statusId);
+            }
+        }
+
+        if ($search = $request->query('search')) {
+            $query->where(function ($builder) use ($search) {
+                $builder->where('id', 'like', '%'.$search.'%')
+                    ->orWhereHas('customer', function ($customerQuery) use ($search) {
+                        $customerQuery->where('email', 'like', '%'.$search.'%')
+                            ->orWhere('first_name', 'like', '%'.$search.'%')
+                            ->orWhere('last_name', 'like', '%'.$search.'%');
+                    });
+            });
+        }
+
+        $orders = $query->latest('id')->paginate(20)->withQueryString();
+
+        return view('orders.index', compact('orders', 'counts', 'filters'));
     }
 
     public function create()

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\OrderStatus;
+use App\Support\IndexListing;
 use Illuminate\Http\Request;
 
 class OrderStatusController extends Controller
@@ -15,11 +16,29 @@ class OrderStatusController extends Controller
         $this->middleware('permission:delete orders', ['only' => ['destroy']]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $orderStatuses = OrderStatus::withCount('orders')->orderBy('title')->paginate(20);
+        $filterKeys = ['search', 'trashed'];
+        $filters = IndexListing::activeFilters($request, $filterKeys);
 
-        return view('order-statuses.index', compact('orderStatuses'));
+        $counts = [
+            'all' => OrderStatus::query()->count(),
+            'trashed' => OrderStatus::query()->onlyTrashed()->count(),
+        ];
+
+        $query = OrderStatus::withCount('orders');
+
+        if ($request->query('trashed') === '1') {
+            $query->onlyTrashed();
+        }
+
+        if ($search = $request->query('search')) {
+            $query->where('title', 'like', '%'.$search.'%');
+        }
+
+        $orderStatuses = $query->orderBy('title')->paginate(20)->withQueryString();
+
+        return view('order-statuses.index', compact('orderStatuses', 'counts', 'filters'));
     }
 
     public function create()

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tag;
+use App\Support\IndexListing;
 use Illuminate\Http\Request;
 
 class TagController extends Controller
@@ -15,11 +16,32 @@ class TagController extends Controller
         $this->middleware('permission:delete tags', ['only' => ['destroy']]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $tags = Tag::with(['parent'])->withCount('products')->latest('id')->paginate(20);
+        $filterKeys = ['search', 'trashed'];
+        $filters = IndexListing::activeFilters($request, $filterKeys);
 
-        return view('tags.index', compact('tags'));
+        $counts = [
+            'all' => Tag::query()->count(),
+            'trashed' => Tag::query()->onlyTrashed()->count(),
+        ];
+
+        $query = Tag::with(['parent'])->withCount('products');
+
+        if ($request->query('trashed') === '1') {
+            $query->onlyTrashed();
+        }
+
+        if ($search = $request->query('search')) {
+            $query->where(function ($builder) use ($search) {
+                $builder->where('title', 'like', '%'.$search.'%')
+                    ->orWhere('tag_slug', 'like', '%'.$search.'%');
+            });
+        }
+
+        $tags = $query->latest('id')->paginate(20)->withQueryString();
+
+        return view('tags.index', compact('tags', 'counts', 'filters'));
     }
 
     public function create()

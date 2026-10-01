@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Address;
 use App\Models\Customer;
+use App\Support\IndexListing;
 use Illuminate\Http\Request;
 
 class AddressController extends Controller
@@ -16,11 +17,33 @@ class AddressController extends Controller
         $this->middleware('permission:delete addresses', ['only' => ['destroy']]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $addresses = Address::with('customer')->latest('id')->paginate(20);
+        $filterKeys = ['search', 'trashed'];
+        $filters = IndexListing::activeFilters($request, $filterKeys);
 
-        return view('addresses.index', compact('addresses'));
+        $counts = [
+            'all' => Address::query()->count(),
+            'trashed' => Address::query()->onlyTrashed()->count(),
+        ];
+
+        $query = Address::with('customer');
+
+        if ($request->query('trashed') === '1') {
+            $query->onlyTrashed();
+        }
+
+        if ($search = $request->query('search')) {
+            $query->where(function ($builder) use ($search) {
+                $builder->where('address_title', 'like', '%'.$search.'%')
+                    ->orWhere('city', 'like', '%'.$search.'%')
+                    ->orWhereHas('customer', fn ($customer) => $customer->where('email', 'like', '%'.$search.'%'));
+            });
+        }
+
+        $addresses = $query->latest('id')->paginate(20)->withQueryString();
+
+        return view('addresses.index', compact('addresses', 'counts', 'filters'));
     }
 
     public function create()

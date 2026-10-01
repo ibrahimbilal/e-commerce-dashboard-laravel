@@ -9,6 +9,7 @@ use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\ProductAttribute;
 use App\Models\Tag;
+use App\Support\IndexListing;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -23,13 +24,58 @@ class ProductController extends Controller
         $this->middleware('permission:delete products', ['only' => ['destroy']]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::with(['locales', 'categories', 'tags'])
-            ->latest('id')
-            ->paginate(20);
+        $filterKeys = ['search', 'status', 'trashed', 'featured', 'new', 'sale'];
+        $filters = IndexListing::activeFilters($request, $filterKeys);
 
-        return view('products.index', compact('products'));
+        $counts = [
+            'all' => Product::query()->count(),
+            'published' => Product::query()->where('status', 'published')->count(),
+            'draft' => Product::query()->where('status', 'draft')->count(),
+            'trashed' => Product::query()->onlyTrashed()->count(),
+            'featured' => Product::query()->where('featured', true)->count(),
+            'new' => Product::query()->where('new', true)->count(),
+            'sale' => Product::query()
+                ->whereNotNull('sale_price')
+                ->whereColumn('sale_price', '<', 'regular_price')
+                ->count(),
+        ];
+
+        $query = Product::with(['locales', 'categories', 'tags']);
+
+        if ($request->query('trashed') === '1') {
+            $query->onlyTrashed();
+        }
+
+        if ($status = $request->query('status')) {
+            $query->where('status', $status);
+        }
+
+        if ($request->query('featured') === '1') {
+            $query->where('featured', true);
+        }
+
+        if ($request->query('new') === '1') {
+            $query->where('new', true);
+        }
+
+        if ($request->query('sale') === '1') {
+            $query->whereNotNull('sale_price')->whereColumn('sale_price', '<', 'regular_price');
+        }
+
+        if ($search = $request->query('search')) {
+            $query->where(function ($builder) use ($search) {
+                $builder->where('sku', 'like', '%'.$search.'%')
+                    ->orWhereHas('locales', fn ($localeQuery) => $localeQuery
+                        ->where('name', 'like', '%'.$search.'%')
+                        ->orWhere('product_slug', 'like', '%'.$search.'%'));
+            });
+        }
+
+        $products = $query->latest('id')->paginate(20)->withQueryString();
+
+        return view('products.index', compact('products', 'counts', 'filters'));
     }
 
     public function create()

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Support\IndexListing;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
@@ -18,11 +19,41 @@ class UserController extends Controller
         $this->middleware('permission:delete users', ['only' => ['destroy']]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::with('roles')->latest('id')->paginate(20);
+        $filterKeys = ['search', 'trashed', 'role'];
+        $filters = IndexListing::activeFilters($request, $filterKeys);
 
-        return view('users.index', compact('users'));
+        $counts = [
+            'all' => User::query()->count(),
+            'trashed' => User::query()->onlyTrashed()->count(),
+        ];
+
+        foreach (Role::query()->where('guard_name', 'web')->orderBy('name')->pluck('name') as $roleName) {
+            $counts[$roleName] = User::query()->role($roleName)->count();
+        }
+
+        $query = User::with('roles');
+
+        if ($request->query('trashed') === '1') {
+            $query->onlyTrashed();
+        }
+
+        if ($role = $request->query('role')) {
+            $query->role($role);
+        }
+
+        if ($search = $request->query('search')) {
+            $query->where(function ($builder) use ($search) {
+                $builder->where('email', 'like', '%'.$search.'%')
+                    ->orWhere('first_name', 'like', '%'.$search.'%')
+                    ->orWhere('last_name', 'like', '%'.$search.'%');
+            });
+        }
+
+        $users = $query->latest('id')->paginate(20)->withQueryString();
+
+        return view('users.index', compact('users', 'counts', 'filters'));
     }
 
     public function create()

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Discount;
+use App\Support\IndexListing;
 use Illuminate\Http\Request;
 
 class DiscountController extends Controller
@@ -15,11 +16,55 @@ class DiscountController extends Controller
         $this->middleware('permission:delete discounts', ['only' => ['destroy']]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $discounts = Discount::latest('id')->paginate(20);
+        $filterKeys = ['search', 'trashed', 'active', 'expired'];
+        $filters = IndexListing::activeFilters($request, $filterKeys);
 
-        return view('discounts.index', compact('discounts'));
+        $counts = [
+            'all' => Discount::query()->count(),
+            'active' => Discount::query()->where('active', true)
+                ->where(function ($query) {
+                    $query->whereNull('end_date')->orWhere('end_date', '>=', now());
+                })->count(),
+            'expired' => Discount::query()->where(function ($query) {
+                $query->where('active', false)
+                    ->orWhere(function ($inner) {
+                        $inner->whereNotNull('end_date')->where('end_date', '<', now());
+                    });
+            })->count(),
+            'trashed' => Discount::query()->onlyTrashed()->count(),
+        ];
+
+        $query = Discount::query();
+
+        if ($request->query('trashed') === '1') {
+            $query->onlyTrashed();
+        }
+
+        if ($request->query('active') === '1') {
+            $query->where('active', true)
+                ->where(function ($builder) {
+                    $builder->whereNull('end_date')->orWhere('end_date', '>=', now());
+                });
+        }
+
+        if ($request->query('expired') === '1') {
+            $query->where(function ($builder) {
+                $builder->where('active', false)
+                    ->orWhere(function ($inner) {
+                        $inner->whereNotNull('end_date')->where('end_date', '<', now());
+                    });
+            });
+        }
+
+        if ($search = $request->query('search')) {
+            $query->where('title', 'like', '%'.$search.'%');
+        }
+
+        $discounts = $query->latest('id')->paginate(20)->withQueryString();
+
+        return view('discounts.index', compact('discounts', 'counts', 'filters'));
     }
 
     public function create()

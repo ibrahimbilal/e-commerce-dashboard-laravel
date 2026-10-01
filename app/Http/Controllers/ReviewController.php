@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\Product;
 use App\Models\Review;
+use App\Support\IndexListing;
 use Illuminate\Http\Request;
 
 class ReviewController extends Controller
@@ -17,13 +18,29 @@ class ReviewController extends Controller
         $this->middleware('permission:delete reviews', ['only' => ['destroy']]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $reviews = Review::with(['customer', 'product.locales'])
-            ->latest('id')
-            ->paginate(20);
+        $filterKeys = ['search', 'trashed'];
+        $filters = IndexListing::activeFilters($request, $filterKeys);
 
-        return view('reviews.index', compact('reviews'));
+        $counts = [
+            'all' => Review::query()->count(),
+            'trashed' => Review::query()->onlyTrashed()->count(),
+        ];
+
+        $query = Review::with(['customer', 'product.locales']);
+
+        if ($request->query('trashed') === '1') {
+            $query->onlyTrashed();
+        }
+
+        if ($search = $request->query('search')) {
+            $query->where('comment', 'like', '%'.$search.'%');
+        }
+
+        $reviews = $query->latest('id')->paginate(20)->withQueryString();
+
+        return view('reviews.index', compact('reviews', 'counts', 'filters'));
     }
 
     public function create()

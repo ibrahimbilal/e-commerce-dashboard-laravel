@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Support\IndexListing;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
@@ -16,14 +17,38 @@ class CategoryController extends Controller
         $this->middleware('permission:delete categories', ['only' => ['destroy']]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::with(['parent', 'children'])
-            ->withCount('products')
-            ->latest('id')
-            ->paginate(20);
+        $filterKeys = ['search', 'trashed', 'active'];
+        $filters = IndexListing::activeFilters($request, $filterKeys);
 
-        return view('categories.index', compact('categories'));
+        $counts = [
+            'all' => Category::query()->count(),
+            'active' => Category::query()->where('active', true)->count(),
+            'inactive' => Category::query()->where('active', false)->count(),
+            'trashed' => Category::query()->onlyTrashed()->count(),
+        ];
+
+        $query = Category::with(['parent', 'children'])->withCount('products');
+
+        if ($request->query('trashed') === '1') {
+            $query->onlyTrashed();
+        }
+
+        if ($request->has('active')) {
+            $query->where('active', $request->query('active') === '1');
+        }
+
+        if ($search = $request->query('search')) {
+            $query->where(function ($builder) use ($search) {
+                $builder->where('title', 'like', '%'.$search.'%')
+                    ->orWhere('category_slug', 'like', '%'.$search.'%');
+            });
+        }
+
+        $categories = $query->latest('id')->paginate(20)->withQueryString();
+
+        return view('categories.index', compact('categories', 'counts', 'filters'));
     }
 
     public function create()

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Support\IndexListing;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -16,13 +17,33 @@ class CustomerController extends Controller
         $this->middleware('permission:delete customers', ['only' => ['destroy']]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $customers = Customer::withCount(['orders', 'reviews'])
-            ->latest('id')
-            ->paginate(20);
+        $filterKeys = ['search', 'trashed'];
+        $filters = IndexListing::activeFilters($request, $filterKeys);
 
-        return view('customers.index', compact('customers'));
+        $counts = [
+            'all' => Customer::query()->count(),
+            'trashed' => Customer::query()->onlyTrashed()->count(),
+        ];
+
+        $query = Customer::withCount(['orders', 'reviews']);
+
+        if ($request->query('trashed') === '1') {
+            $query->onlyTrashed();
+        }
+
+        if ($search = $request->query('search')) {
+            $query->where(function ($builder) use ($search) {
+                $builder->where('email', 'like', '%'.$search.'%')
+                    ->orWhere('first_name', 'like', '%'.$search.'%')
+                    ->orWhere('last_name', 'like', '%'.$search.'%');
+            });
+        }
+
+        $customers = $query->latest('id')->paginate(20)->withQueryString();
+
+        return view('customers.index', compact('customers', 'counts', 'filters'));
     }
 
     public function create()

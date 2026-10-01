@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Invoice;
 use App\Models\Order;
+use App\Support\IndexListing;
 use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
@@ -16,11 +17,29 @@ class InvoiceController extends Controller
         $this->middleware('permission:delete invoices', ['only' => ['destroy']]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $invoices = Invoice::with('order.customer')->latest('id')->paginate(20);
+        $filterKeys = ['search', 'trashed'];
+        $filters = IndexListing::activeFilters($request, $filterKeys);
 
-        return view('invoices.index', compact('invoices'));
+        $counts = [
+            'all' => Invoice::query()->count(),
+            'trashed' => Invoice::query()->onlyTrashed()->count(),
+        ];
+
+        $query = Invoice::with('order.customer');
+
+        if ($request->query('trashed') === '1') {
+            $query->onlyTrashed();
+        }
+
+        if ($search = $request->query('search')) {
+            $query->where('invoice_no', 'like', '%'.$search.'%');
+        }
+
+        $invoices = $query->latest('id')->paginate(20)->withQueryString();
+
+        return view('invoices.index', compact('invoices', 'counts', 'filters'));
     }
 
     public function create()

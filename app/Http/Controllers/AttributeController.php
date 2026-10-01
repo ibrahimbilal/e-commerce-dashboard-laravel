@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Attribute;
+use App\Support\IndexListing;
 use Illuminate\Http\Request;
 
 class AttributeController extends Controller
@@ -15,11 +16,27 @@ class AttributeController extends Controller
         $this->middleware('permission:delete attributes', ['only' => ['destroy']]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $attributeList = Attribute::orderBy('attribute_key')->paginate(20);
+        $filterKeys = ['search'];
+        $filters = IndexListing::activeFilters($request, $filterKeys);
 
-        return view('attributes.index', compact('attributeList'));
+        $counts = [
+            'all' => Attribute::query()->count(),
+        ];
+
+        $query = Attribute::query()->orderBy('attribute_key');
+
+        if ($search = $request->query('search')) {
+            $query->where(function ($builder) use ($search) {
+                $builder->where('attribute_key', 'like', '%'.$search.'%')
+                    ->orWhere('attribute_value', 'like', '%'.$search.'%');
+            });
+        }
+
+        $attributeList = $query->paginate(20)->withQueryString();
+
+        return view('attributes.index', compact('attributeList', 'counts', 'filters'));
     }
 
     public function create()

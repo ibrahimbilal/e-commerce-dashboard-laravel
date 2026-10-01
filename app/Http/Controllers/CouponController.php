@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Coupon;
+use App\Support\IndexListing;
 use Illuminate\Http\Request;
 
 class CouponController extends Controller
@@ -15,11 +16,58 @@ class CouponController extends Controller
         $this->middleware('permission:delete discounts', ['only' => ['destroy']]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $coupons = Coupon::withCount('orders')->latest('id')->paginate(20);
+        $filterKeys = ['search', 'trashed', 'active', 'expired'];
+        $filters = IndexListing::activeFilters($request, $filterKeys);
 
-        return view('coupons.index', compact('coupons'));
+        $counts = [
+            'all' => Coupon::query()->count(),
+            'active' => Coupon::query()->where('active', true)
+                ->where(function ($query) {
+                    $query->whereNull('expired_at')->orWhere('expired_at', '>=', now());
+                })->count(),
+            'expired' => Coupon::query()->where(function ($query) {
+                $query->where('active', false)
+                    ->orWhere(function ($inner) {
+                        $inner->whereNotNull('expired_at')->where('expired_at', '<', now());
+                    });
+            })->count(),
+            'trashed' => Coupon::query()->onlyTrashed()->count(),
+        ];
+
+        $query = Coupon::withCount('orders');
+
+        if ($request->query('trashed') === '1') {
+            $query->onlyTrashed();
+        }
+
+        if ($request->query('active') === '1') {
+            $query->where('active', true)
+                ->where(function ($builder) {
+                    $builder->whereNull('expired_at')->orWhere('expired_at', '>=', now());
+                });
+        }
+
+        if ($request->query('expired') === '1') {
+            $query->where(function ($builder) {
+                $builder->where('active', false)
+                    ->orWhere(function ($inner) {
+                        $inner->whereNotNull('expired_at')->where('expired_at', '<', now());
+                    });
+            });
+        }
+
+        if ($search = $request->query('search')) {
+            $query->where(function ($builder) use ($search) {
+                $builder->where('title', 'like', '%'.$search.'%')
+                    ->orWhere('code', 'like', '%'.$search.'%');
+            });
+        }
+
+        $coupons = $query->latest('id')->paginate(20)->withQueryString();
+
+        return view('coupons.index', compact('coupons', 'counts', 'filters'));
     }
 
     public function create()

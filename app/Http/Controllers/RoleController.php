@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\IndexListing;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -18,16 +19,27 @@ class RoleController extends Controller
         $this->middleware('permission:permanently_delete roles', ['only' => ['destroy']]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $roles = Role::query()
+        $filterKeys = ['search'];
+        $filters = IndexListing::activeFilters($request, $filterKeys);
+
+        $counts = [
+            'all' => Role::query()->where('guard_name', 'web')->count(),
+        ];
+
+        $query = Role::query()
             ->where('guard_name', 'web')
             ->with('permissions')
-            ->withCount('users')
-            ->orderBy('name')
-            ->paginate(20);
+            ->withCount('users');
 
-        return view('roles.index', compact('roles'));
+        if ($search = $request->query('search')) {
+            $query->where('name', 'like', '%'.$search.'%');
+        }
+
+        $roles = $query->orderBy('name')->paginate(20)->withQueryString();
+
+        return view('roles.index', compact('roles', 'counts', 'filters'));
     }
 
     public function create()
