@@ -74,5 +74,3 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('coupons', CouponController::class)->except(['show']);
     Route::resource('order-statuses', OrderStatusController::class)->except(['show']);
 });
-
-require_once 'admin.php';
