@@ -57,8 +57,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('customers.addresses');
 
     Route::resources([
-        'products' => ProductController::class,
-        'categories' => CategoryController::class,
         'orders' => OrderController::class,
         'customers' => CustomerController::class,
         'reviews' => ReviewController::class,
@@ -68,6 +66,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         'addresses' => AddressController::class,
     ]);
 
+    Route::resource('products', ProductController::class)->except(['show']);
+    Route::resource('categories', CategoryController::class)->except(['show']);
     Route::resource('attributes', AttributeController::class)->except(['show']);
     Route::resource('tags', TagController::class)->except(['show']);
     Route::resource('discounts', DiscountController::class)->except(['show']);

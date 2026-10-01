@@ -17,9 +17,9 @@ class AttributeController extends Controller
 
     public function index()
     {
-        $attributes = Attribute::orderBy('attribute_key')->paginate(20);
+        $attributeList = Attribute::orderBy('attribute_key')->paginate(20);
 
-        return view('attributes.index', compact('attributes'));
+        return view('attributes.index', compact('attributeList'));
     }
 
     public function create()
