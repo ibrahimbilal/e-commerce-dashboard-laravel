@@ -10,6 +10,7 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::with(['parent', 'children'])
+            ->withCount('products')
             ->latest('id')
             ->paginate(20);
 

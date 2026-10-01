@@ -13,7 +13,7 @@ class OrderController extends Controller
 {
     public function index()
     {
-        $orders = Order::with(['customer', 'orderStatus', 'coupon', 'items.productAttribute.product'])
+        $orders = Order::with(['customer', 'address', 'orderStatus', 'coupon', 'items.productAttribute.product'])
             ->latest('id')
             ->paginate(20);
 
