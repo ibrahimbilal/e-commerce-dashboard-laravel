@@ -34,6 +34,20 @@ class DemoImageGenerator
         return StoredMedia::databasePath($relative);
     }
 
+    /**
+     * @return string|null storage/demo/gallery-{index}.png
+     */
+    public static function writeGalleryImage(int $index, string $label): ?string
+    {
+        $relative = 'demo/gallery-'.$index.'.png';
+
+        if (! self::writeImage($relative, 800, 600, $label, $index * 13)) {
+            return null;
+        }
+
+        return StoredMedia::databasePath($relative);
+    }
+
     private static function writeImage(string $relativePath, int $width, int $height, string $label, int $seed): bool
     {
         Storage::disk('public')->makeDirectory(dirname($relativePath));

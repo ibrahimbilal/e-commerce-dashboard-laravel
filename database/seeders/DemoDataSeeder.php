@@ -466,8 +466,10 @@ class DemoDataSeeder extends Seeder
         }
 
         for ($i = 1; $i <= 20; $i++) {
+            DemoImageGenerator::writeGalleryImage($i, 'Demo gallery '.$i);
+
             Gallery::query()->create([
-                'url' => 'demo/gallery-'.$i.'.jpg',
+                'url' => 'demo/gallery-'.$i.'.png',
                 'metas' => ['alt' => 'Demo gallery '.$i],
                 'sizes_url' => null,
                 'user_id' => $userId,

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Gallery;
 use App\Models\Product;
 use App\Models\User;
 use App\Support\StoredMedia;
@@ -42,6 +43,21 @@ class SeededMediaFilesTest extends TestCase
             $this->assertTrue(
                 Storage::disk('public')->exists($relative),
                 'Missing public disk file for product #'.$product->id.': '.$relative
+            );
+        }
+
+        $galleries = Gallery::query()->get();
+        $this->assertGreaterThan(0, $galleries->count());
+
+        foreach ($galleries as $gallery) {
+            $this->assertTrue(StoredMedia::hasValidImageExtension($gallery->url));
+
+            $relative = StoredMedia::publicDiskRelativePath($gallery->url)
+                ?? ltrim($gallery->url, '/');
+
+            $this->assertTrue(
+                Storage::disk('public')->exists($relative),
+                'Missing public disk file for gallery #'.$gallery->id.': '.$relative
             );
         }
     }
