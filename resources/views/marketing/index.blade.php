@@ -151,11 +151,11 @@ if ($.fn.DataTable && $('#subscribers').length) {
       		},
       		{
       			bSortable: false,
-      			aTargets: [0@if($showActions), 5@endif]
+      			aTargets: [0{{ $showActions ? ', 5' : '' }}]
       		},
       		{
       			bSearchable: false,
-      			aTargets: [0@if($showActions), 5@endif]
+      			aTargets: [0{{ $showActions ? ', 5' : '' }}]
       		}
       	],
       	select: {

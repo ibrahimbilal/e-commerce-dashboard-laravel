@@ -20,8 +20,8 @@
 </div>
 </div>
 </div>
-@csrf
 <form action="{{ route('customers.store') }}" class="row clearfix" data-post-type="customer" id="add-newitem-form" method="POST">
+@csrf
 <div class="col-sm-12 post-box order-sm-1">
 <div class="main-box box-spaces">
 <div class="form-item primary mb-3">
