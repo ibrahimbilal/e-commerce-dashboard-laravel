@@ -147,7 +147,7 @@ class OrderController extends Controller
         $this->assertCouponUsable($couponId, $customerId, $order);
 
         $items = $request->has('items')
-            ? $this->resolveOrderLineItems($validated['items'] ?? [])
+            ? $this->resolveOrderLineItems($validated['items'] ?? [], $order)
             : null;
 
         return [
@@ -176,8 +176,21 @@ class OrderController extends Controller
      * @param  array<int, array<string, mixed>>  $rawItems
      * @return array<int, array{product_attribute_id: int, quantity: int, price: int}>
      */
-    private function resolveOrderLineItems(array $rawItems): array
+    private function resolveOrderLineItems(array $rawItems, ?Order $order = null): array
     {
+        $existingLinesByVariant = [];
+
+        if ($order) {
+            $order->loadMissing('items');
+
+            foreach ($order->items as $existingItem) {
+                $existingLinesByVariant[(int) $existingItem->product_attribute_id] = [
+                    'quantity' => (int) $existingItem->quantity,
+                    'price' => (int) $existingItem->price,
+                ];
+            }
+        }
+
         $resolved = [];
 
         foreach ($rawItems as $row) {
@@ -191,13 +204,22 @@ class OrderController extends Controller
                 ]);
             }
 
-            $product = $variant->product;
-            $unitPrice = (int) ($product->sale_price ?? $product->regular_price ?? 0);
+            $variantId = (int) $variant->id;
+            $quantity = (int) $row['quantity'];
+            $existing = $existingLinesByVariant[$variantId] ?? null;
+
+            if ($existing !== null && $existing['quantity'] === $quantity) {
+                $unitPrice = $existing['price'];
+            } else {
+                $product = $variant->product;
+                $unitPrice = (int) ($product->sale_price ?? $product->regular_price ?? 0);
+                $unitPrice = max(0, $unitPrice);
+            }
 
             $resolved[] = [
-                'product_attribute_id' => (int) $variant->id,
-                'quantity' => (int) $row['quantity'],
-                'price' => max(0, $unitPrice),
+                'product_attribute_id' => $variantId,
+                'quantity' => $quantity,
+                'price' => $unitPrice,
             ];
         }
 
