@@ -16,8 +16,8 @@ class ProductsIndexAuthorizationTest extends TestCase
     {
         $this->seed([PermissionsSeeder::class, UserSeeder::class]);
 
-        $user = User::query()->whereDoesntHave('roles')->first();
-        $user->forceFill(['email_verified_at' => now()])->save();
+        $user = User::factory()->create();
+        $user->markEmailAsVerified();
 
         $this->actingAs($user)
             ->get(route('products.index'))
