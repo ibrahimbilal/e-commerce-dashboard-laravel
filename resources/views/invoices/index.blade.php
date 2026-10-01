@@ -22,9 +22,8 @@
 </div>
 </div>
 </div>
-@include('partials.filter-tabs-soft-delete')
 <div class="row">
-<x-index-list-toolbar :counts="$counts ?? []" :filters="$filters ?? []" :tabs="$softDeleteFilterTabs" route="invoices.index"/>
+<x-soft-delete-index-toolbar :counts="$counts ?? []" :filters="$filters ?? []" route="invoices.index"/>
 <div class="col-12">
 <div class="main-box box-spaces mb-0">
 <div class="table-holder mt-0">
