@@ -106,7 +106,14 @@ class OrderController extends Controller
 
     public function edit(Order $order)
     {
-        $order->load(['customer', 'address', 'orderStatus', 'coupon', 'items']);
+        $order->load([
+            'customer',
+            'address',
+            'orderStatus',
+            'coupon',
+            'updatedByUser',
+            'items.productAttribute',
+        ]);
 
         return view('orders.edit', [
             'order' => $order,
