@@ -149,8 +149,8 @@ if (!function_exists('get_dashboard_menu')) {
 				'allow_to' => ['view users', 'view roles'],
 				'group_items' => [
 					[
-						"route_name" => 'users.index',
-						"active_if" => ['users.index', 'users.create', 'users.edit', 'users.profile'],
+						"route_name" => 'admin.users.index',
+						"active_if" => ['admin.users.index', 'admin.users.create', 'admin.users.edit', 'users.profile'],
 						"icon" => 'user',
 						"title" => __('admin.menu.users.title'),
 						"has_submeu" => false,
@@ -158,8 +158,8 @@ if (!function_exists('get_dashboard_menu')) {
 						'permission' => ['view users'],
 					],
 					[
-						"route_name" => 'roles.index',
-						"active_if" => ['roles.index', 'roles.create', 'roles.edit'],
+						"route_name" => 'admin.roles.index',
+						"active_if" => ['admin.roles.index', 'admin.roles.create', 'admin.roles.edit'],
 						"icon" => 'key',
 						"title" => __('admin.menu.roles.title'),
 						"has_submeu" => false,
@@ -181,8 +181,8 @@ if (!function_exists('get_dashboard_menu')) {
 				],
 				'group_items' => [
 					[
-						"route_name" => 'gallery.index',
-						"active_if" => ['gallery.index'],
+						"route_name" => 'admin.gallery.index',
+						"active_if" => ['admin.gallery.index'],
 						"icon" => 'picture',
 						"title" => __('admin.menu.gallery.title'),
 						"has_submeu" => false,
