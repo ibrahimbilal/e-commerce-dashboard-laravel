@@ -15,14 +15,12 @@ class UserSeeder extends Seeder
     {
         $admin = User::factory()->create([
             'email' => 'admin@example.com',
-            'email_verified_at' => now(),
             'password' => Hash::make('password'),
             'first_name' => 'Admin',
             'last_name' => 'User',
         ]);
 
+        $admin->markEmailAsVerified();
         $admin->assignRole('admin');
-
-        User::factory(9)->create();
     }
 }
