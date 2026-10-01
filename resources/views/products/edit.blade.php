@@ -174,7 +174,7 @@
 </div>
 </div>
 <div class="tab-box" id="attribute">
-@include('components.product-variant-rows', ['product' => $product])
+<x-product-variant-rows :attribute-list="$attributeList" :product="$product" />
 </div>
 <div class="tab-box" id="seo">
 <div class="form-item second d-flex flex-wrap flex-sm-nowrap">

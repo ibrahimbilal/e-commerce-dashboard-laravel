@@ -1,7 +1,12 @@
+@props([
+    'attributeList' => collect(),
+    'product' => null,
+])
+
 @php
     $variantRows = old('product_attributes');
     if ($variantRows === null) {
-        $variantRows = isset($product)
+        $variantRows = $product
             ? $product->productAttributes->map(fn ($row) => [
                 'id' => $row->id,
                 'attribute_1_id' => $row->attribute_1_id,
@@ -10,7 +15,9 @@
             : [];
     }
     $variantRows = is_array($variantRows) ? $variantRows : [];
-    $attributeOptions = $attributes ?? collect();
+    $attributeOptions = $attributeList instanceof \Illuminate\Support\Collection
+        ? $attributeList
+        : collect($attributeList);
 @endphp
 <div class="product-variant-rows" id="product-variant-rows">
 <div class="table-responsive">

@@ -1,5 +1,7 @@
+@props(['attributeList' => collect()])
+
 @php
-    $grouped = $attributes->groupBy('attribute_key');
+    $grouped = collect($attributeList)->groupBy('attribute_key');
 @endphp
 <div class="select2-wrapper">
 @forelse ($grouped as $key => $items)
