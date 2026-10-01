@@ -6,6 +6,12 @@
 <link href="{{ asset('assets/css/swiper-bundle.min.css') }}" rel="stylesheet"/>
 <link href="{{ asset('assets/css/apexcharts.css') }}" rel="stylesheet"/>
 <link href="{{ asset('assets/css/datatables.min.css') }}" rel="stylesheet"/>
+<style>
+.dashboard-top-selling .list-item .img {
+	max-width: 60px;
+	flex: 0 0 60px;
+}
+</style>
 @endpush
 
 @section('content')
@@ -85,8 +91,8 @@
 <div class="col-12 col-sm-6 col-xxl-4">
 <div class="main-box box-spaces">
 <h2 class="box-title text-capitalize">Top Selling Products</h2>
-<div class="list-holder">
-@foreach ($topProducts as $productRow)
+<div class="list-holder dashboard-top-selling">
+@foreach ($topProducts->take(4) as $productRow)
 @php
     $productId = data_get($productRow, 'product_id') ?? data_get($productRow, 'id');
     $productName = (string) data_get($productRow, 'name', '—');
