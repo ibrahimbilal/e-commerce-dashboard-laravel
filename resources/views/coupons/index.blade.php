@@ -14,14 +14,22 @@
 <h1 class="page-title">coupons</h1><a class="add-btn btn text-capitalize" href="{{ route('coupons.create') }}"><span class="icon"><i class="fi-rr-add"> </i></span>add new</a>
 </div>
 <div class="page-breadcrumbs d-flex align-items-sm-center justify-content-start justify-content-sm-end">
-<div class="breadcrumbs d-flex justify-content-between align-items-center"><a class="item text-capitalize d-flex justify-content-between align-items-center" href="{{ route('dashboard') }}"><span class="icon"><i class="fi-rr-apps"> </i></span>dashboard</a><span class="angle"><span class="icon"><i class="fi-rr-angle-double-right"> </i></span></span><a class="item text-capitalize d-flex justify-content-between align-items-center" href="{{ route('marketing.index') }}">marketing</a><span class="angle"><span class="icon"><i class="fi-rr-angle-double-right"> </i></span></span><span class="item text-capitalize d-flex justify-content-between align-items-center">coupons</span>
+<div class="breadcrumbs d-flex justify-content-between align-items-center"><a class="item text-capitalize d-flex justify-content-between align-items-center" href="{{ route('dashboard') }}"><span class="icon"><i class="fi-rr-apps"> </i></span>dashboard</a><span class="angle"><span class="icon"><i class="fi-rr-angle-double-right"> </i></span></span><a class="item text-capitalize d-flex justify-content-between align-items-center" href="{{ route('discounts.index') }}">discounts</a><span class="angle"><span class="icon"><i class="fi-rr-angle-double-right"> </i></span></span><span class="item text-capitalize d-flex justify-content-between align-items-center">coupons</span>
 </div>
 </div>
 </div>
 </div>
 </div>
+@php
+    $couponFilterTabs = [
+        ['label' => 'All', 'key' => 'all', 'params' => []],
+        ['label' => 'Active', 'key' => 'active', 'params' => ['active' => '1']],
+        ['label' => 'Expired', 'key' => 'expired', 'params' => ['expired' => '1']],
+        ['label' => 'Trashed', 'key' => 'trashed', 'params' => ['trashed' => '1']],
+    ];
+@endphp
 <div class="row">
-<x-soft-delete-index-toolbar :counts="$counts ?? []" :filters="$filters ?? []" route="coupons.index"/>
+<x-index-list-toolbar :counts="$counts ?? []" :filters="$filters ?? []" :tabs="$couponFilterTabs" route="coupons.index"/>
 <div class="col-12">
 <div class="main-box box-spaces mb-0">
 <div class="table-holder mt-0">

@@ -23,7 +23,12 @@
 </div>
 </div>
 <div class="row">
-<x-soft-delete-index-toolbar :counts="$counts ?? []" :filters="$filters ?? []" route="attributes.index"/>
+<x-index-list-toolbar
+    :counts="$counts ?? []"
+    :filters="$filters ?? []"
+    :tabs="[['label' => 'All', 'key' => 'all', 'params' => []]]"
+    route="attributes.index"
+/>
 <div class="col-12">
 <div class="main-box box-spaces mb-0">
 <div class="table-holder mt-0">

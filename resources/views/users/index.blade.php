@@ -25,9 +25,10 @@
 @php
     $userFilterTabs = [
         ['label' => 'All', 'key' => 'all', 'params' => []],
+        ['label' => 'Trashed', 'key' => 'trashed', 'params' => ['trashed' => '1']],
     ];
     foreach ($counts ?? [] as $roleKey => $number) {
-        if ($roleKey === 'all') {
+        if (in_array($roleKey, ['all', 'trashed'], true)) {
             continue;
         }
         $userFilterTabs[] = [

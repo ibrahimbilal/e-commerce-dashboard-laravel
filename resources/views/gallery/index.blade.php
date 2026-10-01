@@ -3,6 +3,22 @@
 @section('title', 'Gallery')
 
 @section('content')
+@php
+    $galleries = $galleries ?? collect();
+    $galleryFilterTabs = [['label' => 'All', 'key' => 'all', 'params' => []]];
+    foreach ($counts ?? [] as $tabKey => $tabCount) {
+        if (in_array($tabKey, ['all'], true)) {
+            continue;
+        }
+        $paramKey = $tabKey === 'trashed' ? 'trashed' : $tabKey;
+        $paramValue = $tabKey === 'trashed' ? '1' : '1';
+        $galleryFilterTabs[] = [
+            'label' => ucwords(str_replace(['_', '-'], ' ', (string) $tabKey)),
+            'key' => $tabKey,
+            'params' => [$paramKey => $paramValue],
+        ];
+    }
+@endphp
 <div class="page-header">
 <div class="row">
 <div class="col-12 d-flex align-items-sm-center justify-content-sm-between flex-column flex-sm-row">
@@ -18,18 +34,14 @@
 </div>
 
 <div class="row">
+<x-index-list-toolbar :counts="$counts ?? []" :filters="$filters ?? []" :tabs="$galleryFilterTabs" route="gallery.index"/>
 <div class="col-12">
 <div class="main-box box-spaces">
-<p class="text-muted mb-3">Upload and manage media from this page once the gallery API is wired. Individual deletes can use <code>gallery.destroy</code>.</p>
 <div class="row g-3">
-@forelse ($galleries ?? [] as $gallery)
+@forelse ($galleries as $gallery)
 <div class="col-6 col-md-4 col-lg-3">
 <div class="main-box box-spaces h-100 d-flex flex-column">
-@if (! empty($gallery->url))
-<img src="{{ asset('storage/'.$gallery->url) }}" alt="" class="img-fluid mb-2"/>
-@else
-<img src="{{ asset('assets/images/product-placeholder.svg') }}" alt="" class="img-fluid mb-2"/>
-@endif
+<x-gallery-thumbnail :gallery="$gallery" class="img-fluid mb-2"/>
 <div class="mt-auto">
 @if (Route::has('gallery.destroy'))
 <form method="POST" action="{{ route('gallery.destroy', $gallery) }}" class="destroy-resource-form">
@@ -42,10 +54,10 @@
 </div>
 </div>
 @empty
-<div class="col-12"><p class="text-center text-muted py-4 mb-0">No gallery items yet. Backend should pass <code>$galleries</code> (paginated) and an upload endpoint.</p></div>
+<div class="col-12"><p class="text-center text-muted py-4 mb-0">No gallery items yet.</p></div>
 @endforelse
 </div>
-@if (isset($galleries) && method_exists($galleries, 'hasPages'))
+@if (is_object($galleries) && method_exists($galleries, 'hasPages') && $galleries->hasPages())
 <x-pagination :paginator="$galleries" />
 @endif
 </div>

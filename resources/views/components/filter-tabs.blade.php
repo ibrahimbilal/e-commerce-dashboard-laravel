@@ -58,8 +58,7 @@
                 $countKey = $tab['key'] ?? null;
                 $showTab = $countKey === null
                     || $countKey === 'all'
-                    || array_key_exists($countKey, $counts)
-                    || $counts === [];
+                    || array_key_exists($countKey, $counts);
 
                 if (! $showTab) {
                     continue;

@@ -34,14 +34,6 @@
 <li class="list-item"><a href="{{ route('invoices.index') }}"><i class="fi-rr-document"> </i><span class="title">invoices</span></a></li>
 </ul>
 <ul class="menu-list-group">
-<li class="list-item has-submenu"><a href="{{ route('analytics.overview') }}"><i class="fi-rr-stats"> </i><span class="title">analytics</span><span class="icon"><i class="fi-rr-angle-small-down"> </i></span></a>
-<ul class="submenu">
-<li class="list-item"><a href="{{ route('analytics.overview') }}"><i class="fi-rr-circle"> </i><span class="title">overview</span></a></li>
-</ul>
-</li>
-<li class="list-item"><a href="{{ route('marketing.index') }}"><i class="fi-rr-megaphone"> </i><span class="title">marketing</span></a></li>
-</ul>
-<ul class="menu-list-group">
 <li class="list-item"><a href="{{ route('users.index') }}"><i class="fi-rr-user"> </i><span class="title">users</span></a></li>
 <li class="list-item"><a href="{{ route('roles.index') }}"><i class="fi-rr-key"> </i><span class="title">roles</span></a></li>
 </ul>

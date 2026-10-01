@@ -22,16 +22,8 @@
 </div>
 </div>
 </div>
-@php
-    $tagFilterTabs = [
-        ['label' => 'All', 'key' => 'all', 'params' => []],
-        ['label' => 'Trashed', 'key' => 'trashed', 'params' => ['trashed' => '1']],
-        ['label' => 'Active', 'key' => 'active', 'params' => ['active' => '1']],
-        ['label' => 'Inactive', 'key' => 'inactive', 'params' => ['inactive' => '1']],
-    ];
-@endphp
 <div class="row">
-<x-index-list-toolbar :counts="$counts ?? []" :filters="$filters ?? []" :tabs="$tagFilterTabs" route="tags.index"/>
+<x-soft-delete-index-toolbar :counts="$counts ?? []" :filters="$filters ?? []" route="tags.index"/>
 <div class="col-12">
 <div class="main-box box-spaces mb-0">
 <div class="table-holder mt-0">

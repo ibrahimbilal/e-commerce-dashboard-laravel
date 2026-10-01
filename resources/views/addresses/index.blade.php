@@ -12,7 +12,7 @@
 </div>
 </div>
 <div class="row">
-<x-index-list-toolbar :counts="$counts ?? []" :filters="$filters ?? []" :tabs="[['label' => 'All', 'key' => 'all', 'params' => []]]" route="addresses.index"/>
+<x-soft-delete-index-toolbar :counts="$counts ?? []" :filters="$filters ?? []" route="addresses.index"/>
 <div class="col-12">
 <div class="main-box box-spaces">
 <div class="table-responsive">

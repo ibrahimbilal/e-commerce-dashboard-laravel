@@ -24,29 +24,8 @@
 </div>
 </div>
 </div>
-@php
-    $reviewFilterTabs = [
-        ['label' => 'All', 'key' => 'all', 'params' => []],
-        ['label' => 'Trashed', 'key' => 'trashed', 'params' => ['trashed' => '1']],
-    ];
-    foreach ($counts ?? [] as $key => $number) {
-        if (in_array($key, ['all', 'trashed'], true)) {
-            continue;
-        }
-        $params = is_numeric($key)
-            ? ['rate' => (string) $key]
-            : (str_starts_with((string) $key, 'star_')
-                ? ['rate' => substr((string) $key, 5)]
-                : [(string) $key => '1']);
-        $reviewFilterTabs[] = [
-            'label' => is_numeric($key) ? $key.' Star' : ucwords(str_replace('_', ' ', (string) $key)),
-            'key' => $key,
-            'params' => $params,
-        ];
-    }
-@endphp
 <div class="row">
-<x-index-list-toolbar :counts="$counts ?? []" :filters="$filters ?? []" :tabs="$reviewFilterTabs" route="reviews.index"/>
+<x-soft-delete-index-toolbar :counts="$counts ?? []" :filters="$filters ?? []" route="reviews.index"/>
 <div class="col-12">
 <div class="main-box box-spaces">
 <div class="table-holder mt-0">

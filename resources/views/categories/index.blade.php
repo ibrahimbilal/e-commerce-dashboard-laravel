@@ -25,9 +25,9 @@
 @php
     $categoryFilterTabs = [
         ['label' => 'All', 'key' => 'all', 'params' => []],
-        ['label' => 'Trashed', 'key' => 'trashed', 'params' => ['trashed' => '1']],
         ['label' => 'Active', 'key' => 'active', 'params' => ['active' => '1']],
-        ['label' => 'Inactive', 'key' => 'inactive', 'params' => ['inactive' => '1']],
+        ['label' => 'Inactive', 'key' => 'inactive', 'params' => ['active' => '0']],
+        ['label' => 'Trashed', 'key' => 'trashed', 'params' => ['trashed' => '1']],
     ];
 @endphp
 <div class="row">
