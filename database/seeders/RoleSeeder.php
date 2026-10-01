@@ -23,8 +23,10 @@ class RoleSeeder extends Seeder
             ->where(function ($query) {
                 $query->where('name', 'like', 'view %')
                     ->orWhere('name', 'like', 'add %')
-                    ->orWhere('name', 'like', 'edit %');
+                    ->orWhere('name', 'like', 'edit %')
+                    ->orWhere('name', 'like', 'restore %');
             })
+            ->where('name', 'not like', 'permanently_delete %')
             ->whereNotIn('name', [
                 'view roles',
                 'add roles',

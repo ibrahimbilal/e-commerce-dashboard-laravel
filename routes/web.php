@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AddressController;
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\AttributeController;
 use App\Http\Controllers\CategoryController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\MarketingController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderStatusController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingsController;
@@ -36,6 +38,10 @@ foreach (['400', '401', '403', '404', '500', '503'] as $errorCode) {
 }
 
 Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
@@ -76,4 +82,29 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('discounts', DiscountController::class)->except(['show']);
     Route::resource('coupons', CouponController::class)->except(['show']);
     Route::resource('order-statuses', OrderStatusController::class)->except(['show']);
+
+    $trashedStorefrontResources = [
+        'products' => ProductController::class,
+        'categories' => CategoryController::class,
+        'tags' => TagController::class,
+        'orders' => OrderController::class,
+        'customers' => CustomerController::class,
+        'coupons' => CouponController::class,
+        'discounts' => DiscountController::class,
+        'reviews' => ReviewController::class,
+        'invoices' => InvoiceController::class,
+        'users' => UserController::class,
+        'order-statuses' => OrderStatusController::class,
+        'gallery' => GalleryController::class,
+        'addresses' => AddressController::class,
+    ];
+
+    foreach ($trashedStorefrontResources as $prefix => $controller) {
+        Route::patch($prefix.'/{id}/restore', [$controller, 'restore'])
+            ->name($prefix.'.restore')
+            ->whereNumber('id');
+        Route::delete($prefix.'/{id}/force', [$controller, 'forceDelete'])
+            ->name($prefix.'.force-delete')
+            ->whereNumber('id');
+    }
 });

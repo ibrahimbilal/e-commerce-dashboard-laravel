@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Concerns\ManagesTrashedRecords;
 use App\Models\Invoice;
 use App\Models\Order;
 use App\Support\IndexListing;
@@ -9,12 +10,15 @@ use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
 {
+    use ManagesTrashedRecords;
+
     public function __construct()
     {
         $this->middleware('permission:view invoices', ['only' => ['index', 'show']]);
         $this->middleware('permission:add invoices', ['only' => ['create', 'store']]);
         $this->middleware('permission:edit invoices', ['only' => ['edit', 'update']]);
         $this->middleware('permission:delete invoices', ['only' => ['destroy']]);
+        $this->registerTrashedMiddleware('invoices');
     }
 
     public function index(Request $request)
@@ -103,6 +107,22 @@ class InvoiceController extends Controller
         $invoice->delete();
 
         return redirect()->route('invoices.index')->with('status', 'Invoice deleted.');
+    }
+
+    public function restore(Request $request, int $id)
+    {
+        $invoice = $this->findOnlyTrashed(Invoice::class, $id);
+        $invoice->restore();
+
+        return $this->trashedActionResponse($request, 'invoices.index', 'Invoice restored.');
+    }
+
+    public function forceDelete(Request $request, int $id)
+    {
+        $invoice = $this->findOnlyTrashed(Invoice::class, $id);
+        $invoice->forceDelete();
+
+        return $this->trashedActionResponse($request, 'invoices.index', 'Invoice permanently deleted.');
     }
 
     /**

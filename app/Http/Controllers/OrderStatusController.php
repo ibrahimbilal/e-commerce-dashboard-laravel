@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Concerns\ManagesTrashedRecords;
 use App\Models\OrderStatus;
 use App\Support\IndexListing;
 use App\Support\ReferentialDeleteGuard;
@@ -9,12 +10,15 @@ use Illuminate\Http\Request;
 
 class OrderStatusController extends Controller
 {
+    use ManagesTrashedRecords;
+
     public function __construct()
     {
         $this->middleware('permission:view orders', ['only' => ['index', 'show']]);
         $this->middleware('permission:add orders', ['only' => ['create', 'store']]);
         $this->middleware('permission:edit orders', ['only' => ['edit', 'update']]);
         $this->middleware('permission:delete orders', ['only' => ['destroy']]);
+        $this->registerTrashedMiddleware('orders');
     }
 
     public function index(Request $request)
@@ -94,5 +98,30 @@ class OrderStatusController extends Controller
         $orderStatus->delete();
 
         return redirect()->route('order-statuses.index')->with('status', 'Order status deleted.');
+    }
+
+    public function restore(Request $request, int $id)
+    {
+        $orderStatus = $this->findOnlyTrashed(OrderStatus::class, $id);
+        $orderStatus->restore();
+
+        return $this->trashedActionResponse($request, 'order-statuses.index', 'Order status restored.');
+    }
+
+    public function forceDelete(Request $request, int $id)
+    {
+        $orderStatus = $this->findOnlyTrashed(OrderStatus::class, $id);
+
+        if ($blocked = ReferentialDeleteGuard::blockIfInUse(
+            $request,
+            $orderStatus,
+            'Cannot permanently delete this order status because orders use it.'
+        )) {
+            return $blocked;
+        }
+
+        $orderStatus->forceDelete();
+
+        return $this->trashedActionResponse($request, 'order-statuses.index', 'Order status permanently deleted.');
     }
 }

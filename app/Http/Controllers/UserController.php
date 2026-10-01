@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Concerns\ManagesTrashedRecords;
 use App\Models\User;
 use App\Support\IndexListing;
+use App\Support\StoredMediaCleanup;
+use App\Support\UserForceDeleteGuard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
@@ -11,12 +14,15 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
+    use ManagesTrashedRecords;
+
     public function __construct()
     {
         $this->middleware('permission:view users', ['only' => ['index', 'show']]);
         $this->middleware('permission:add users', ['only' => ['create', 'store']]);
         $this->middleware('permission:edit users', ['only' => ['edit', 'update']]);
         $this->middleware('permission:delete users', ['only' => ['destroy']]);
+        $this->registerTrashedMiddleware('users');
     }
 
     public function index(Request $request)
@@ -143,5 +149,27 @@ class UserController extends Controller
         $user->delete();
 
         return redirect()->route('users.index')->with('status', 'User deleted.');
+    }
+
+    public function restore(Request $request, int $id)
+    {
+        $user = $this->findOnlyTrashed(User::class, $id);
+        $user->restore();
+
+        return $this->trashedActionResponse($request, 'users.index', 'User restored.');
+    }
+
+    public function forceDelete(Request $request, int $id)
+    {
+        $user = $this->findOnlyTrashed(User::class, $id);
+
+        if ($blocked = UserForceDeleteGuard::blockIfForbidden($request, $user, $request->user())) {
+            return $blocked;
+        }
+
+        StoredMediaCleanup::deleteUserAvatar($user);
+        $user->forceDelete();
+
+        return $this->trashedActionResponse($request, 'users.index', 'User permanently deleted.');
     }
 }

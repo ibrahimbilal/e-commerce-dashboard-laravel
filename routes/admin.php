@@ -44,8 +44,8 @@ Route::prefix('/admin')->group(function () {
 		Route::post('/users/show-code', [App\Http\Controllers\Admin\UserController::class, 'show_codes'])->name('users.show_recovery_code');
 		Route::post('/users/generate-code', [App\Http\Controllers\Admin\UserController::class, 'regenerate_codes'])->name('users.regenerate_recovery_code');
 
-		Route::post('/users/{user}/restore', [App\Http\Controllers\Admin\UserController::class, 'restore'])->name('users.restore');
-		Route::post('/users/{user}/force-delete', [App\Http\Controllers\Admin\UserController::class, 'force_delete'])->name('users.force_delete');
+		Route::post('/users/{user}/restore', [App\Http\Controllers\Admin\UserController::class, 'restore'])->name('admin.users.restore');
+		Route::post('/users/{user}/force-delete', [App\Http\Controllers\Admin\UserController::class, 'force_delete'])->name('admin.users.force_delete');
 
 		Route::post('/users/bulk-delete', [App\Http\Controllers\Admin\UserController::class, 'bulk_destroy'])->name('users.bulk_delete');
 		Route::post('/users/bulk-restore', [App\Http\Controllers\Admin\UserController::class, 'bulk_restore'])->name('users.bulk_restore');

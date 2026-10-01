@@ -4,18 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\Product;
+use App\Http\Controllers\Concerns\ManagesTrashedRecords;
 use App\Models\Review;
 use App\Support\IndexListing;
 use Illuminate\Http\Request;
 
 class ReviewController extends Controller
 {
+    use ManagesTrashedRecords;
+
     public function __construct()
     {
         $this->middleware('permission:view reviews', ['only' => ['index', 'show']]);
         $this->middleware('permission:add reviews', ['only' => ['create', 'store']]);
         $this->middleware('permission:edit reviews', ['only' => ['edit', 'update']]);
         $this->middleware('permission:delete reviews', ['only' => ['destroy']]);
+        $this->registerTrashedMiddleware('reviews');
     }
 
     public function index(Request $request)
@@ -114,6 +118,22 @@ class ReviewController extends Controller
         $review->delete();
 
         return redirect()->route('reviews.index')->with('status', 'Review deleted.');
+    }
+
+    public function restore(Request $request, int $id)
+    {
+        $review = $this->findOnlyTrashed(Review::class, $id);
+        $review->restore();
+
+        return $this->trashedActionResponse($request, 'reviews.index', 'Review restored.');
+    }
+
+    public function forceDelete(Request $request, int $id)
+    {
+        $review = $this->findOnlyTrashed(Review::class, $id);
+        $review->forceDelete();
+
+        return $this->trashedActionResponse($request, 'reviews.index', 'Review permanently deleted.');
     }
 
     /**

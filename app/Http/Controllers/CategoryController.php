@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Concerns\ManagesTrashedRecords;
 use App\Models\Category;
 use App\Support\IndexListing;
 use App\Support\ReferentialDeleteGuard;
@@ -10,12 +11,15 @@ use Illuminate\Validation\ValidationException;
 
 class CategoryController extends Controller
 {
+    use ManagesTrashedRecords;
+
     public function __construct()
     {
         $this->middleware('permission:view categories', ['only' => ['index']]);
         $this->middleware('permission:add categories', ['only' => ['create', 'store']]);
         $this->middleware('permission:edit categories', ['only' => ['edit', 'update']]);
         $this->middleware('permission:delete categories', ['only' => ['destroy']]);
+        $this->registerTrashedMiddleware('categories');
     }
 
     public function index(Request $request)
@@ -132,6 +136,31 @@ class CategoryController extends Controller
         $category->delete();
 
         return redirect()->route('categories.index')->with('status', 'Category deleted.');
+    }
+
+    public function restore(Request $request, int $id)
+    {
+        $category = $this->findOnlyTrashed(Category::class, $id);
+        $category->restore();
+
+        return $this->trashedActionResponse($request, 'categories.index', 'Category restored.');
+    }
+
+    public function forceDelete(Request $request, int $id)
+    {
+        $category = $this->findOnlyTrashed(Category::class, $id);
+
+        if ($blocked = ReferentialDeleteGuard::blockIfInUse(
+            $request,
+            $category,
+            'Cannot permanently delete this category while products are assigned to it.'
+        )) {
+            return $blocked;
+        }
+
+        $category->forceDelete();
+
+        return $this->trashedActionResponse($request, 'categories.index', 'Category permanently deleted.');
     }
 
     private function assertValidCategoryParent(?int $categoryId, ?int $parentId): void

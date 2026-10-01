@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Concerns\ManagesTrashedRecords;
 use App\Models\Gallery;
 use App\Support\IndexListing;
+use App\Support\StoredMediaCleanup;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -12,12 +14,15 @@ use Illuminate\Support\Str;
 
 class GalleryController extends Controller
 {
+    use ManagesTrashedRecords;
+
     public function __construct()
     {
         $this->middleware('permission:view gallery', ['only' => ['index']]);
         $this->middleware('permission:add gallery', ['only' => ['store']]);
         $this->middleware('permission:edit gallery', ['only' => ['update']]);
         $this->middleware('permission:delete gallery', ['only' => ['destroy']]);
+        $this->registerTrashedMiddleware('gallery');
     }
 
     public function index(Request $request)
@@ -167,5 +172,22 @@ class GalleryController extends Controller
         return redirect()
             ->back(302, [], route('gallery.index'))
             ->with('status', 'Image deleted.');
+    }
+
+    public function restore(Request $request, int $id): JsonResponse|RedirectResponse
+    {
+        $gallery = $this->findOnlyTrashed(Gallery::class, $id);
+        $gallery->restore();
+
+        return $this->trashedActionResponse($request, 'gallery.index', 'Gallery image restored.');
+    }
+
+    public function forceDelete(Request $request, int $id): JsonResponse|RedirectResponse
+    {
+        $gallery = $this->findOnlyTrashed(Gallery::class, $id);
+        StoredMediaCleanup::deleteGalleryFiles($gallery);
+        $gallery->forceDelete();
+
+        return $this->trashedActionResponse($request, 'gallery.index', 'Gallery image permanently deleted.');
     }
 }

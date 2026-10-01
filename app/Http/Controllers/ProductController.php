@@ -9,20 +9,25 @@ use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\ProductAttribute;
 use App\Models\Tag;
+use App\Http\Controllers\Concerns\ManagesTrashedRecords;
 use App\Support\IndexListing;
 use App\Support\ReferentialDeleteGuard;
+use App\Support\StoredMediaCleanup;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class ProductController extends Controller
 {
+    use ManagesTrashedRecords;
+
     public function __construct()
     {
         $this->middleware('permission:view products', ['only' => ['index']]);
         $this->middleware('permission:add products', ['only' => ['create', 'store']]);
         $this->middleware('permission:edit products', ['only' => ['edit', 'update']]);
         $this->middleware('permission:delete products', ['only' => ['destroy']]);
+        $this->registerTrashedMiddleware('products');
     }
 
     public function index(Request $request)
@@ -140,6 +145,32 @@ class ProductController extends Controller
         $product->delete();
 
         return redirect()->route('products.index')->with('status', 'Product deleted.');
+    }
+
+    public function restore(Request $request, int $id)
+    {
+        $product = $this->findOnlyTrashed(Product::class, $id);
+        $product->restore();
+
+        return $this->trashedActionResponse($request, 'products.index', 'Product restored.');
+    }
+
+    public function forceDelete(Request $request, int $id)
+    {
+        $product = $this->findOnlyTrashed(Product::class, $id);
+
+        if ($blocked = ReferentialDeleteGuard::blockIfInUse(
+            $request,
+            $product,
+            'Cannot permanently delete this product because it appears on order line items.'
+        )) {
+            return $blocked;
+        }
+
+        StoredMediaCleanup::deleteProductImage($product);
+        $product->forceDelete();
+
+        return $this->trashedActionResponse($request, 'products.index', 'Product permanently deleted.');
     }
 
     /**

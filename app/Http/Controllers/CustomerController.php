@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Concerns\ManagesTrashedRecords;
 use App\Models\Customer;
 use App\Support\IndexListing;
 use App\Support\ReferentialDeleteGuard;
@@ -10,12 +11,15 @@ use Illuminate\Support\Facades\Hash;
 
 class CustomerController extends Controller
 {
+    use ManagesTrashedRecords;
+
     public function __construct()
     {
         $this->middleware('permission:view customers', ['only' => ['index', 'show']]);
         $this->middleware('permission:add customers', ['only' => ['create', 'store']]);
         $this->middleware('permission:edit customers', ['only' => ['edit', 'update']]);
         $this->middleware('permission:delete customers', ['only' => ['destroy']]);
+        $this->registerTrashedMiddleware('customers');
     }
 
     public function index(Request $request)
@@ -124,5 +128,30 @@ class CustomerController extends Controller
         $customer->delete();
 
         return redirect()->route('customers.index')->with('status', 'Customer deleted.');
+    }
+
+    public function restore(Request $request, int $id)
+    {
+        $customer = $this->findOnlyTrashed(Customer::class, $id);
+        $customer->restore();
+
+        return $this->trashedActionResponse($request, 'customers.index', 'Customer restored.');
+    }
+
+    public function forceDelete(Request $request, int $id)
+    {
+        $customer = $this->findOnlyTrashed(Customer::class, $id);
+
+        if ($blocked = ReferentialDeleteGuard::blockIfInUse(
+            $request,
+            $customer,
+            'Cannot permanently delete this customer because they have orders.'
+        )) {
+            return $blocked;
+        }
+
+        $customer->forceDelete();
+
+        return $this->trashedActionResponse($request, 'customers.index', 'Customer permanently deleted.');
     }
 }

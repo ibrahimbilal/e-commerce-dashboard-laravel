@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Concerns\ManagesTrashedRecords;
 use App\Models\Address;
 use App\Models\Coupon;
 use App\Models\Customer;
@@ -17,12 +18,15 @@ use Illuminate\Validation\ValidationException;
 
 class OrderController extends Controller
 {
+    use ManagesTrashedRecords;
+
     public function __construct()
     {
         $this->middleware('permission:view orders', ['only' => ['index', 'show']]);
         $this->middleware('permission:add orders', ['only' => ['create', 'store']]);
         $this->middleware('permission:edit orders', ['only' => ['edit', 'update']]);
         $this->middleware('permission:delete orders', ['only' => ['destroy']]);
+        $this->registerTrashedMiddleware('orders');
     }
 
     public function index(Request $request)
@@ -148,6 +152,22 @@ class OrderController extends Controller
         $order->delete();
 
         return redirect()->route('orders.index')->with('status', 'Order deleted.');
+    }
+
+    public function restore(Request $request, int $id)
+    {
+        $order = $this->findOnlyTrashed(Order::class, $id);
+        $order->restore();
+
+        return $this->trashedActionResponse($request, 'orders.index', 'Order restored.');
+    }
+
+    public function forceDelete(Request $request, int $id)
+    {
+        $order = $this->findOnlyTrashed(Order::class, $id);
+        $order->forceDelete();
+
+        return $this->trashedActionResponse($request, 'orders.index', 'Order permanently deleted.');
     }
 
     /**

@@ -2,18 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Concerns\ManagesTrashedRecords;
 use App\Models\Tag;
 use App\Support\IndexListing;
 use Illuminate\Http\Request;
 
 class TagController extends Controller
 {
+    use ManagesTrashedRecords;
+
     public function __construct()
     {
         $this->middleware('permission:view tags', ['only' => ['index', 'show']]);
         $this->middleware('permission:add tags', ['only' => ['create', 'store']]);
         $this->middleware('permission:edit tags', ['only' => ['edit', 'update']]);
         $this->middleware('permission:delete tags', ['only' => ['destroy']]);
+        $this->registerTrashedMiddleware('tags');
     }
 
     public function index(Request $request)
@@ -106,5 +110,21 @@ class TagController extends Controller
         $tag->delete();
 
         return redirect()->route('tags.index')->with('status', 'Tag deleted.');
+    }
+
+    public function restore(Request $request, int $id)
+    {
+        $tag = $this->findOnlyTrashed(Tag::class, $id);
+        $tag->restore();
+
+        return $this->trashedActionResponse($request, 'tags.index', 'Tag restored.');
+    }
+
+    public function forceDelete(Request $request, int $id)
+    {
+        $tag = $this->findOnlyTrashed(Tag::class, $id);
+        $tag->forceDelete();
+
+        return $this->trashedActionResponse($request, 'tags.index', 'Tag permanently deleted.');
     }
 }
