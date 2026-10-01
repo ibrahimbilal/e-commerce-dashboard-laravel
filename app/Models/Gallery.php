@@ -21,9 +21,11 @@ class Gallery extends Model
      */
 	protected $fillable = [
 		'url',
+		'title',
+		'alt',
 		'metas',
 		'sizes_url',
-		'user_id'
+		'user_id',
 	];
 
 	/**

@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use App\Support\DashboardMetrics;
 use App\Support\ProductImage;
 use Illuminate\Support\Facades\DB;
 
@@ -18,13 +19,7 @@ class DashboardController extends Controller
 
     public function __invoke()
     {
-        $stats = [
-            'orders' => Order::query()->count(),
-            'revenue' => (int) Order::query()->sum('amount'),
-            'customers' => Customer::query()->count(),
-            'products' => Product::query()->count(),
-            'orders_today' => Order::query()->whereDate('created_at', today())->count(),
-        ];
+        $stats = DashboardMetrics::stats();
 
         $recentOrders = Order::query()
             ->with(['customer', 'orderStatus'])
@@ -77,6 +72,16 @@ class DashboardController extends Controller
                 'regular_price' => (int) ($product->regular_price ?? 0),
             ]);
 
-        return view('dashboard.index', compact('stats', 'recentOrders', 'topProducts', 'recentProducts'));
+        $salesChartSeries = DashboardMetrics::salesChartSeries();
+        $orderStatusStats = DashboardMetrics::orderStatusStats();
+
+        return view('dashboard.index', compact(
+            'stats',
+            'recentOrders',
+            'topProducts',
+            'recentProducts',
+            'salesChartSeries',
+            'orderStatusStats',
+        ));
     }
 }
