@@ -25,15 +25,8 @@
 <!-- User Area-->
 <div class="header-btn action-item user-area flex-row-reverse d-flex justify-content-between align-items-center" data-window="#user-window" id="user"><span class="icon"><i class="fi-rr-angle-small-down"> </i></span>
 <div class="user-meta d-none d-xl-block me-2 text-end">
-<div class="user-name">{{ $displayName }}</div>
-@if ($roleName)
-<div class="user-role text-muted small text-capitalize">{{ $roleName }}</div>
-@endif
-@if ($authUser?->email)
-<div class="user-email text-muted small">{{ $authUser->email }}</div>
-@endif
-</div>
-<x-user-avatar :user="$authUser" size="lg" class="me-2"/>
+    <x-user-avatar :user="$authUser" size="lg" class="me-2"/>
+    <div class="user-name">{{ $displayName }}</div>
 </div>
 </div>
 <!-- Notifications-->
