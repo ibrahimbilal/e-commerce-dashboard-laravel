@@ -54,4 +54,35 @@ class CouponExpiredFilterTest extends TestCase
         $response->assertSee('Expired');
         $response->assertDontSee('Inactive Future');
     }
+
+    public function test_inactive_tab_counts_only_inactive_not_expired(): void
+    {
+        Coupon::query()->create([
+            'title' => 'Inactive Future',
+            'code' => 'INAC1',
+            'discount' => 10,
+            'type' => 'percent',
+            'usage_limit' => 0,
+            'usage_per_customer' => 0,
+            'expired_at' => now()->addWeek(),
+            'active' => false,
+        ]);
+        Coupon::query()->create([
+            'title' => 'Expired Inactive',
+            'code' => 'EXIN1',
+            'discount' => 10,
+            'type' => 'percent',
+            'usage_limit' => 0,
+            'usage_per_customer' => 0,
+            'expired_at' => now()->subDay(),
+            'active' => false,
+        ]);
+
+        $response = $this->actingAs($this->admin)->get(route('coupons.index', ['inactive' => '1']));
+
+        $response->assertOk();
+        $response->assertViewHas('counts', fn (array $counts) => ($counts['inactive'] ?? 0) === 1);
+        $response->assertSee('Inactive Future');
+        $response->assertDontSee('Expired Inactive');
+    }
 }

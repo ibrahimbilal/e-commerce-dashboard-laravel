@@ -24,6 +24,16 @@ class CouponQuery
             ->where('expired_at', '<', now());
     }
 
+    public static function inactiveNotExpired(): Builder
+    {
+        return Coupon::query()
+            ->where('active', false)
+            ->where(function (Builder $query) {
+                $query->whereNull('expired_at')
+                    ->orWhere('expired_at', '>=', now());
+            });
+    }
+
     public static function isUsableForNewSelection(Coupon $coupon): bool
     {
         if (! $coupon->active) {

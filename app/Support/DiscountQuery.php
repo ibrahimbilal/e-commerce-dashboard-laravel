@@ -25,4 +25,14 @@ class DiscountQuery
             ->whereNotNull('end_date')
             ->where('end_date', '<', now());
     }
+
+    public static function inactiveNotExpired(): Builder
+    {
+        return Discount::query()
+            ->where('active', false)
+            ->where(function (Builder $query) {
+                $query->whereNull('end_date')
+                    ->orWhere('end_date', '>=', now());
+            });
+    }
 }

@@ -2,8 +2,10 @@
 
 namespace App\Support;
 
+use App\Models\Address;
 use App\Models\Attribute;
 use App\Models\Category;
+use App\Models\Coupon;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -51,6 +53,8 @@ class ReferentialDeleteGuard
             Customer::class => Order::query()->where('customer_id', $model->id)->exists(),
             OrderStatus::class => Order::query()->where('order_status_id', $model->id)->exists(),
             Category::class => $model->products()->exists(),
+            Coupon::class => Order::query()->where('coupon_id', $model->id)->exists(),
+            Address::class => Order::query()->where('address_id', $model->id)->exists(),
             default => false,
         };
     }

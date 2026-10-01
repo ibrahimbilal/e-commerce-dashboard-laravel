@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Concerns\ManagesTrashedRecords;
 use App\Models\Discount;
 use App\Support\DiscountQuery;
 use App\Support\IndexListing;
@@ -9,22 +10,26 @@ use Illuminate\Http\Request;
 
 class DiscountController extends Controller
 {
+    use ManagesTrashedRecords;
+
     public function __construct()
     {
         $this->middleware('permission:view discounts', ['only' => ['index', 'show']]);
         $this->middleware('permission:add discounts', ['only' => ['create', 'store']]);
         $this->middleware('permission:edit discounts', ['only' => ['edit', 'update']]);
         $this->middleware('permission:delete discounts', ['only' => ['destroy']]);
+        $this->registerTrashedMiddleware('discounts');
     }
 
     public function index(Request $request)
     {
-        $filterKeys = ['search', 'trashed', 'active', 'expired'];
+        $filterKeys = ['search', 'trashed', 'active', 'expired', 'inactive'];
         $filters = IndexListing::activeFilters($request, $filterKeys);
 
         $counts = [
             'all' => Discount::query()->count(),
             'active' => DiscountQuery::activeWithinDates()->count(),
+            'inactive' => DiscountQuery::inactiveNotExpired()->count(),
             'expired' => DiscountQuery::expiredByDate()->count(),
             'trashed' => Discount::query()->onlyTrashed()->count(),
         ];
@@ -41,6 +46,10 @@ class DiscountController extends Controller
 
         if ($request->query('expired') === '1') {
             $query->whereIn('id', DiscountQuery::expiredByDate()->select('id'));
+        }
+
+        if ($request->query('inactive') === '1') {
+            $query->whereIn('id', DiscountQuery::inactiveNotExpired()->select('id'));
         }
 
         if ($search = $request->query('search')) {
@@ -106,5 +115,21 @@ class DiscountController extends Controller
         $discount->delete();
 
         return redirect()->route('discounts.index')->with('status', 'Discount deleted.');
+    }
+
+    public function restore(Request $request, int $id)
+    {
+        $discount = $this->findOnlyTrashed(Discount::class, $id);
+        $discount->restore();
+
+        return $this->trashedActionResponse($request, 'discounts.index', 'Discount restored.');
+    }
+
+    public function forceDelete(Request $request, int $id)
+    {
+        $discount = $this->findOnlyTrashed(Discount::class, $id);
+        $discount->forceDelete();
+
+        return $this->trashedActionResponse($request, 'discounts.index', 'Discount permanently deleted.');
     }
 }

@@ -2,29 +2,35 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Concerns\ManagesTrashedRecords;
 use App\Models\Coupon;
 use App\Support\CouponQuery;
 use App\Support\IndexListing;
+use App\Support\ReferentialDeleteGuard;
 use Illuminate\Http\Request;
 
 class CouponController extends Controller
 {
+    use ManagesTrashedRecords;
+
     public function __construct()
     {
         $this->middleware('permission:view discounts', ['only' => ['index', 'show']]);
         $this->middleware('permission:add discounts', ['only' => ['create', 'store']]);
         $this->middleware('permission:edit discounts', ['only' => ['edit', 'update']]);
         $this->middleware('permission:delete discounts', ['only' => ['destroy']]);
+        $this->registerTrashedMiddleware('discounts');
     }
 
     public function index(Request $request)
     {
-        $filterKeys = ['search', 'trashed', 'active', 'expired'];
+        $filterKeys = ['search', 'trashed', 'active', 'expired', 'inactive'];
         $filters = IndexListing::activeFilters($request, $filterKeys);
 
         $counts = [
             'all' => Coupon::query()->count(),
             'active' => CouponQuery::activeWithinDates()->count(),
+            'inactive' => CouponQuery::inactiveNotExpired()->count(),
             'expired' => CouponQuery::expiredByDate()->count(),
             'trashed' => Coupon::query()->onlyTrashed()->count(),
         ];
@@ -41,6 +47,10 @@ class CouponController extends Controller
 
         if ($request->query('expired') === '1') {
             $query->whereIn('id', CouponQuery::expiredByDate()->select('id'));
+        }
+
+        if ($request->query('inactive') === '1') {
+            $query->whereIn('id', CouponQuery::inactiveNotExpired()->select('id'));
         }
 
         if ($search = $request->query('search')) {
@@ -108,10 +118,43 @@ class CouponController extends Controller
         return redirect()->route('coupons.index')->with('status', 'Coupon updated.');
     }
 
-    public function destroy(Coupon $coupon)
+    public function destroy(Request $request, Coupon $coupon)
     {
+        if ($blocked = ReferentialDeleteGuard::blockIfInUse(
+            $request,
+            $coupon,
+            'Cannot delete this coupon because it is used on orders.'
+        )) {
+            return $blocked;
+        }
+
         $coupon->delete();
 
         return redirect()->route('coupons.index')->with('status', 'Coupon deleted.');
+    }
+
+    public function restore(Request $request, int $id)
+    {
+        $coupon = $this->findOnlyTrashed(Coupon::class, $id);
+        $coupon->restore();
+
+        return $this->trashedActionResponse($request, 'coupons.index', 'Coupon restored.');
+    }
+
+    public function forceDelete(Request $request, int $id)
+    {
+        $coupon = $this->findOnlyTrashed(Coupon::class, $id);
+
+        if ($blocked = ReferentialDeleteGuard::blockIfInUse(
+            $request,
+            $coupon,
+            'Cannot permanently delete this coupon because it is used on orders.'
+        )) {
+            return $blocked;
+        }
+
+        $coupon->forceDelete();
+
+        return $this->trashedActionResponse($request, 'coupons.index', 'Coupon permanently deleted.');
     }
 }
