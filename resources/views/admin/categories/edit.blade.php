@@ -47,9 +47,9 @@
 <div class="form-item second justify-content-between mb-2 d-flex align-items-sm-center">
 <label class="item-title meta-title" for="newitem-lang">category Lang:</label>
 <select class="form-select dropdown" id="newitem-lang" name="locale">
-<option data-flag="{{ asset('assets/images/flags/us.png') }}" value="en" @selected(old('locale', $category->locale ?? 'en') === 'en')>English</option>
-<option data-flag="./assets/images/flags/sa.png" value="ar" @selected(old('locale', $category->locale ?? '') === 'ar')>Arabic</option>
-<option data-flag="./assets/images/flags/fr.png" value="fr" @selected(old('locale', $category->locale ?? '') === 'fr')>French</option>
+<option data-flag="{{ asset('images/flags/us.png') }}" value="en" @selected(old('locale', $category->locale ?? 'en') === 'en')>English</option>
+<option data-flag="{{ asset('images/flags/sa.png') }}" value="ar" @selected(old('locale', $category->locale ?? '') === 'ar')>Arabic</option>
+<option data-flag="{{ asset('images/flags/fr.png') }}" value="fr" @selected(old('locale', $category->locale ?? '') === 'fr')>French</option>
 </select>
 </div>
 <div class="form-item second">
@@ -92,7 +92,7 @@
 </div>
 <div class="item-content"><a class="btn regular-btn gallery-btn" href="javascript:void(0)" style="width: 150px">Change Image</a>
 <div class="selected-img">
-<div class="img-holder mt-3"><img class="preview" src="{{ asset('assets/images/products/image-10.png') }}" width="70"/><span class="overlay"><i class="fi-rr-trash"> </i><span>remove</span></span></div>
+<div class="img-holder mt-3"><img class="preview" src="{{ asset('images/products/image-10.png') }}" width="70"/><span class="overlay"><i class="fi-rr-trash"> </i><span>remove</span></span></div>
 </div>
 </div>
 </div>

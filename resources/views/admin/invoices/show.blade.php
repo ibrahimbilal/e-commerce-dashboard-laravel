@@ -53,7 +53,7 @@
 <div class="invoice-body box-spaces mb-0">
 <div class="row">
 <div class="col-sm-4 col-lg-3 order-sm-2 d-flex justify-content-center align-items-center">
-<div class="logo-holder text-center"><img class="invoice-logo" src="{{ asset('assets/images/logo.png') }}"/>
+<div class="logo-holder text-center"><img class="invoice-logo" src="{{ asset('images/logo.png') }}"/>
 <p class="name mb-0 mt-2">Company Name</p>
 </div>
 </div>

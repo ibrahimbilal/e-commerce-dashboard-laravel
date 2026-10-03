@@ -130,7 +130,7 @@
 </div>
 <div class="item-content"><a class="btn regular-btn gallery-btn" href="javascript:void(0)" style="width: 150px">Change Image</a>
 <div class="selected-img">
-<div class="img-holder mt-3"><img class="preview" src="{{ asset('assets/images/products/image-10.png') }}" width="70"/><span class="overlay"><i class="fi-rr-trash"> </i><span>remove</span></span></div>
+<div class="img-holder mt-3"><img class="preview" src="{{ asset('images/products/image-10.png') }}" width="70"/><span class="overlay"><i class="fi-rr-trash"> </i><span>remove</span></span></div>
 </div>
 </div>
 </div>
@@ -140,9 +140,9 @@
 </div>
 <div class="item-content"><a class="btn regular-btn gallery-btn" href="javascript:void(0)" style="width: 150px">add Images</a>
 <div class="selected-img d-flex flex-wrap">
-<div class="img-holder mt-3 me-2"><img class="preview" src="{{ asset('assets/images/products/image-8.png') }}" width="70"/><span class="overlay"><i class="fi-rr-trash"> </i><span>remove</span></span></div>
-<div class="img-holder mt-3 me-2"><img class="preview" src="{{ asset('assets/images/products/image-6.png') }}" width="70"/><span class="overlay"><i class="fi-rr-trash"> </i><span>remove</span></span></div>
-<div class="img-holder mt-3"><img class="preview" src="{{ asset('assets/images/products/image-5.png') }}" width="70"/><span class="overlay"><i class="fi-rr-trash"> </i><span>remove</span></span></div>
+<div class="img-holder mt-3 me-2"><img class="preview" src="{{ asset('images/products/image-8.png') }}" width="70"/><span class="overlay"><i class="fi-rr-trash"> </i><span>remove</span></span></div>
+<div class="img-holder mt-3 me-2"><img class="preview" src="{{ asset('images/products/image-6.png') }}" width="70"/><span class="overlay"><i class="fi-rr-trash"> </i><span>remove</span></span></div>
+<div class="img-holder mt-3"><img class="preview" src="{{ asset('images/products/image-5.png') }}" width="70"/><span class="overlay"><i class="fi-rr-trash"> </i><span>remove</span></span></div>
 </div>
 </div>
 </div>

@@ -48,9 +48,9 @@
 <div class="form-item second justify-content-between mb-2 d-flex align-items-sm-center">
 <label class="item-title meta-title" for="newitem-lang">tag Lang:</label>
 <select class="form-select dropdown" id="newitem-lang" name="locale">
-<option data-flag="{{ asset('assets/images/flags/us.png') }}" value="en" @selected(old('locale', $tag->locale ?? 'en') === 'en')>English</option>
-<option data-flag="./assets/images/flags/sa.png" value="ar" @selected(old('locale', $tag->locale ?? '') === 'ar')>Arabic</option>
-<option data-flag="./assets/images/flags/fr.png" value="fr" @selected(old('locale', $tag->locale ?? '') === 'fr')>French</option>
+<option data-flag="{{ asset('images/flags/us.png') }}" value="en" @selected(old('locale', $tag->locale ?? 'en') === 'en')>English</option>
+<option data-flag="{{ asset('images/flags/sa.png') }}" value="ar" @selected(old('locale', $tag->locale ?? '') === 'ar')>Arabic</option>
+<option data-flag="{{ asset('images/flags/fr.png') }}" value="fr" @selected(old('locale', $tag->locale ?? '') === 'fr')>French</option>
 </select>
 </div>
 <div class="form-item second">
