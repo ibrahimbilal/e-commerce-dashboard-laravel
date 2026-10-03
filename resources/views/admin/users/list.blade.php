@@ -17,7 +17,7 @@
     // breadcrumbs params
     $params = [
         'page_title' => __('admin.menu.users.title'),
-        'add_route_name' => 'admin.users.create',
+        'add_route_name' => 'users.create',
         'breadcrumbs_items' => ['title' => __('admin.menu.users.title')],
 		'permissions' => 'add users'
     ];
@@ -27,14 +27,14 @@
         <div class="col-12 d-flex align-items-sm-center justify-content-between flex-column flex-sm-row mb-2">
             <div class="dash-filters">
                 <a class="item text-capitalize @if (!request()->trashed && !request()->role) text-bold @endif"
-                    href="{{ route('admin.users.index') }}">
+                    href="{{ route('users.index') }}">
                     {{ __('admin.filters.all') }} ({{ $users->count() }})
                 </a>
                 @isset($roles)
                     @foreach ($roles as $role)
                         @if ($role->users->count() > 0)
                             <a class="item text-capitalize @if ($role->name == request()->role) text-bold @endif"
-                                href="{{ route('admin.users.index', ['role' => $role->name]) }}">
+                                href="{{ route('users.index', ['role' => $role->name]) }}">
                                 {{ Str::ucfirst($role->name) }} ({{ $role->users->count() }})
                             </a>
                         @endif
@@ -43,7 +43,7 @@
 
                 @if ($trashed->count() > 0)
                     <a class="item text-capitalize @if (request()->trashed) text-bold @endif"
-                        href="{{ route('admin.users.index', ['trashed' => 1]) }}">
+                        href="{{ route('users.index', ['trashed' => 1]) }}">
                         {{ __('admin.filters.trashed') }} ({{ $trashed->count() }})
                     </a>
                 @endif
@@ -101,7 +101,7 @@
                                                 @if (!$user->deleted_at)
 													@can('edit users')
 														<a class="btn btn-warning btn-rounded me-2 py-1"
-															href="{{ route('admin.users.edit', $user->id) }}">
+															href="{{ route('users.edit', $user->id) }}">
 															<span class="icon"><i class="fi-rr-edit">
 																</i></span>{{ __('buttons.edit') }}
 														</a>
@@ -109,7 +109,7 @@
 													@can('delete users')
 														<a class="btn btn-danger btn-rounded me-2 py-1" id="delete"
 															data-id="{{ $user->id }}"
-															href="{{ route('admin.users.destroy', $user->id) }}">
+															href="{{ route('users.destroy', $user->id) }}">
 															<span class="icon"><i class="fi-rr-trash">
 																</i></span>{{ __('buttons.trash') }}
 														</a>
@@ -118,7 +118,7 @@
 													@can('restore users')
 														<a class="btn btn-primary btn-rounded me-2 py-1" id="restore"
 															data-id="{{ $user->id }}"
-															href="{{ route('admin.users.restore', $user->id) }}">
+															href="{{ route('users.restore', $user->id) }}">
 															<span class="icon"><i class="fi-rr-time-past">
 																</i></span>{{ __('buttons.restore') }}
 														</a>
@@ -126,7 +126,7 @@
 													@can('permanently_delete users')
 														<a class="btn btn-danger btn-rounded me-2 py-1" id="force-delete"
 															data-id="{{ $user->id }}"
-															href="{{ route('admin.users.force_delete', $user->id) }}">
+															href="{{ route('users.force_delete', $user->id) }}">
 															<span class="icon"><i class="fi-rr-trash">
 																</i></span>{{ __('bulk_action.option.force_delete') }}
 														</a>

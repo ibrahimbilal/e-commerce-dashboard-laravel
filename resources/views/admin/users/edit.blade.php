@@ -16,7 +16,7 @@
     // breadcrumbs params
     $params = [
         'page_title' => __('admin.menu.users.edit'),
-        'breadcrumbs_items' => [['title' => __('admin.menu.users.title'), 'route_name' => 'admin.users.index'], ['title' => __('admin.menu.users.edit')]],
+        'breadcrumbs_items' => [['title' => __('admin.menu.users.title'), 'route_name' => 'users.index'], ['title' => __('admin.menu.users.edit')]],
     ];
     @endphp
     @include('admin.inc.page_title', $params)
@@ -434,7 +434,7 @@
 						'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
 					},
 					type: 'POST',
-					url: "{{ route('admin.users.update', $user->id) }}",
+					url: "{{ route('users.update', $user->id) }}",
 					data: formData,
 					processData: false,
 					contentType: false,
@@ -495,7 +495,7 @@
 				if (result.isConfirmed) {
 					$.ajax({
 						type: 'DELETE',
-						url: "{{ route('admin.users.destroy', $user->id) }}",
+						url: "{{ route('users.destroy', $user->id) }}",
 						headers: {
 							"X-CSRF-TOKEN": "{{ csrf_token() }}",
 						},

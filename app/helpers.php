@@ -24,6 +24,15 @@ if (!function_exists('get_dashboard_menu')) {
 						"has_submeu" => false,
 						"badge" => '',
 						'permission' => ['view dashboard'],
+					],
+					[
+						"route_name" => 'admin.dashboard',
+						"active_if" => ['admin.dashboard'],
+						"icon" => 'apps',
+						"title" => 'E-Commerce Dashboard',
+						"has_submeu" => false,
+						"badge" => '',
+						'permission' => ['view dashboard'],
 					]
 				]
 			],
@@ -31,8 +40,8 @@ if (!function_exists('get_dashboard_menu')) {
 				'allow_to' => ['view products', 'view attributes', 'view reviews', 'view categories', 'view tags', 'view discounts'],
 				'group_items' => [
 					[
-						"route_name" => '',
-						"active_if" => ['products'],
+						"route_name" => 'admin.products.index',
+						"active_if" => ['admin.products.index', 'admin.products.create', 'admin.products.edit'],
 						"icon" => 'shopping-bag',
 						"title" => __('admin.menu.products.title'),
 						"has_submeu" => true,
@@ -40,22 +49,22 @@ if (!function_exists('get_dashboard_menu')) {
 						'permission' => ['view products'],
 						"submenu_items" => [
 							[
-								"route_name" => '',
-								"active_if" => ['products', 'attributes'],
+								"route_name" => 'admin.attributes.index',
+								"active_if" => ['admin.attributes.index', 'admin.attributes.create', 'admin.attributes.edit'],
 								"title" => __('admin.menu.attributes.title'),
 								'permission' => ['view attributes'],
 							],
 							[
-								"route_name" => '',
-								"active_if" => ['products', 'reviews'],
+								"route_name" => 'admin.reviews.index',
+								"active_if" => ['admin.reviews.index', 'admin.reviews.create', 'admin.reviews.edit', 'admin.reviews.show'],
 								"title" => __('admin.menu.reviews.title'),
 								'permission' => ['view reviews'],
 							],
 						]
 					],
 					[
-						"route_name" => '',
-						"active_if" => ['categories'],
+						"route_name" => 'admin.categories.index',
+						"active_if" => ['admin.categories.index', 'admin.categories.create', 'admin.categories.edit'],
 						"icon" => 'folder',
 						"title" => __('admin.menu.categories.title'),
 						"has_submeu" => false,
@@ -63,8 +72,8 @@ if (!function_exists('get_dashboard_menu')) {
 						'permission' => ['view categories'],
 					],
 					[
-						"route_name" => '',
-						"active_if" => ['tags'],
+						"route_name" => 'admin.tags.index',
+						"active_if" => ['admin.tags.index', 'admin.tags.create', 'admin.tags.edit'],
 						"icon" => 'label',
 						"title" => __('admin.menu.tags.title'),
 						"has_submeu" => false,
@@ -72,10 +81,19 @@ if (!function_exists('get_dashboard_menu')) {
 						'permission' => ['view tags'],
 					],
 					[
-						"route_name" => '',
-						"active_if" => ['discounts'],
+						"route_name" => 'admin.discounts.index',
+						"active_if" => ['admin.discounts.index', 'admin.discounts.create', 'admin.discounts.edit'],
 						"icon" => 'badge-percent',
 						"title" => __('admin.menu.discounts.title'),
+						"has_submeu" => false,
+						"badge" => '',
+						'permission' => ['view discounts'],
+					],
+					[
+						"route_name" => 'admin.coupons.index',
+						"active_if" => ['admin.coupons.index', 'admin.coupons.create', 'admin.coupons.edit'],
+						"icon" => 'ticket',
+						"title" => 'Coupons',
 						"has_submeu" => false,
 						"badge" => '',
 						'permission' => ['view discounts'],
@@ -86,8 +104,8 @@ if (!function_exists('get_dashboard_menu')) {
 				'allow_to' => ['view customers', 'view orders', 'view invoices'],
 				'group_items' => [
 					[
-						"route_name" => '',
-						"active_if" => ['customers'],
+						"route_name" => 'admin.customers.index',
+						"active_if" => ['admin.customers.index', 'admin.customers.create', 'admin.customers.edit', 'admin.customers.show'],
 						"icon" => 'users',
 						"title" => __('admin.menu.customers.title'),
 						"has_submeu" => false,
@@ -95,8 +113,8 @@ if (!function_exists('get_dashboard_menu')) {
 						'permission' => ['view customers'],
 					],
 					[
-						"route_name" => '',
-						"active_if" => ['orders'],
+						"route_name" => 'admin.orders.index',
+						"active_if" => ['admin.orders.index', 'admin.orders.create', 'admin.orders.edit', 'admin.orders.show'],
 						"icon" => 'box',
 						"title" => __('admin.menu.orders.title'),
 						"has_submeu" => false,
@@ -104,8 +122,17 @@ if (!function_exists('get_dashboard_menu')) {
 						'permission' => ['view orders'],
 					],
 					[
-						"route_name" => '',
-						"active_if" => ['invoices'],
+						"route_name" => 'admin.order-statuses.index',
+						"active_if" => ['admin.order-statuses.index', 'admin.order-statuses.create', 'admin.order-statuses.edit'],
+						"icon" => 'list-check',
+						"title" => 'Order Statuses',
+						"has_submeu" => false,
+						"badge" => '',
+						'permission' => ['view orders'],
+					],
+					[
+						"route_name" => 'admin.invoices.index',
+						"active_if" => ['admin.invoices.index', 'admin.invoices.create', 'admin.invoices.edit', 'admin.invoices.show'],
 						"icon" => 'document',
 						"title" => __('admin.menu.invoices.title'),
 						"has_submeu" => false,
@@ -118,8 +145,8 @@ if (!function_exists('get_dashboard_menu')) {
 				'allow_to' => ['view analytics', 'view marketing'],
 				'group_items' => [
 					[
-						"route_name" => '',
-						"active_if" => ['analytics'],
+						"route_name" => 'admin.analytics.overview',
+						"active_if" => ['admin.analytics.overview'],
 						"icon" => 'stats',
 						"title" => __('admin.menu.analytics.title'),
 						"has_submeu" => true,
@@ -127,16 +154,16 @@ if (!function_exists('get_dashboard_menu')) {
 						'permission' => ['view analytics'],
 						"submenu_items" => [
 							[
-								"route_name" => '',
-								"active_if" => ['analytics', 'overview'],
+								"route_name" => 'admin.analytics.overview',
+								"active_if" => ['admin.analytics.overview'],
 								"title" => __('admin.menu.analytics.0.overview'),
 								'permission' => ['view overview'],
 							]
 						]
 					],
 					[
-						"route_name" => '',
-						"active_if" => ['marketing'],
+						"route_name" => 'admin.marketing.index',
+						"active_if" => ['admin.marketing.index'],
 						"icon" => 'megaphone',
 						"title" => __('admin.menu.marketing.title'),
 						"has_submeu" => false,

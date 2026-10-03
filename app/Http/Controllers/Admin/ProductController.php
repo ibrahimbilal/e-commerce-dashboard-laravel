@@ -83,12 +83,12 @@ class ProductController extends Controller
 
         $products = $query->latest('id')->get();
 
-        return view('products.index', compact('products', 'counts', 'filters'));
+        return view('admin.products.index', compact('products', 'counts', 'filters'));
     }
 
     public function create()
     {
-        return view('products.create', $this->productFormLookups());
+        return view('admin.products.create', $this->productFormLookups());
     }
 
     public function store(Request $request)
@@ -109,14 +109,14 @@ class ProductController extends Controller
     {
         $product->load(['locales', 'categories', 'tags', 'productAttributes.attributeOne', 'productAttributes.attributeTwo', 'reviews.customer']);
 
-        return view('products.show', compact('product'));
+        return view('admin.products.show', compact('product'));
     }
 
     public function edit(Product $product)
     {
         $product->load(['locales', 'categories', 'tags', 'productAttributes']);
 
-        return view('products.edit', array_merge(
+        return view('admin.products.edit', array_merge(
             compact('product'),
             $this->productFormLookups()
         ));

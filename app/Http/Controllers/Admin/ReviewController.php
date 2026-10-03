@@ -64,12 +64,12 @@ class ReviewController extends Controller
 
         $reviews = $query->latest('id')->get();
 
-        return view('reviews.index', compact('reviews', 'counts', 'filters'));
+        return view('admin.reviews.index', compact('reviews', 'counts', 'filters'));
     }
 
     public function create()
     {
-        return view('reviews.create', $this->reviewFormLookups());
+        return view('admin.reviews.create', $this->reviewFormLookups());
     }
 
     public function store(Request $request)
@@ -90,12 +90,12 @@ class ReviewController extends Controller
     {
         $review->load(['customer', 'product.locales']);
 
-        return view('reviews.show', compact('review'));
+        return view('admin.reviews.show', compact('review'));
     }
 
     public function edit(Review $review)
     {
-        return view('reviews.edit', array_merge(
+        return view('admin.reviews.edit', array_merge(
             compact('review'),
             $this->reviewFormLookups()
         ));

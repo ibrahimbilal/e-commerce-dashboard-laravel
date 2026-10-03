@@ -45,12 +45,12 @@ class OrderStatusController extends Controller
 
         $orderStatuses = $query->orderBy('title')->get();
 
-        return view('order-statuses.index', compact('orderStatuses', 'counts', 'filters'));
+        return view('admin.order-statuses.index', compact('orderStatuses', 'counts', 'filters'));
     }
 
     public function create()
     {
-        return view('order-statuses.create');
+        return view('admin.order-statuses.create');
     }
 
     public function store(Request $request)
@@ -68,12 +68,12 @@ class OrderStatusController extends Controller
     {
         $orderStatus->load('orders.customer');
 
-        return view('order-statuses.show', compact('orderStatus'));
+        return view('admin.order-statuses.show', compact('orderStatus'));
     }
 
     public function edit(OrderStatus $orderStatus)
     {
-        return view('order-statuses.edit', compact('orderStatus'));
+        return view('admin.order-statuses.edit', compact('orderStatus'));
     }
 
     public function update(Request $request, OrderStatus $orderStatus)

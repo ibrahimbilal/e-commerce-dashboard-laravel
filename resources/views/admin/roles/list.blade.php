@@ -15,7 +15,7 @@
     // breadcrumbs params
     $params = [
         'page_title' => __('admin.menu.roles.title'),
-        'add_route_name' => 'admin.roles.create',
+        'add_route_name' => 'roles.create',
         'breadcrumbs_items' => ['title' => __('admin.menu.roles.title')],
 		'permissions' => 'add roles'
     ];
@@ -40,13 +40,13 @@
 										<td>
 											<div class="btn-group">
 												@can('edit roles')
-													<a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('admin.roles.edit', $role->id ) }}">
+													<a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route('roles.edit', $role->id ) }}">
 														<span class="icon"><i class="fi-rr-edit"> </i></span>{{ __('buttons.edit') }}
 													</a>
 												@endcan
 
 												@can('permanently_delete roles')
-													<a class="btn btn-danger btn-rounded me-2 py-1" id="delete" data-id="{{$role->id}}" href="{{ route('admin.roles.destroy', $role->id ) }}">
+													<a class="btn btn-danger btn-rounded me-2 py-1" id="delete" data-id="{{$role->id}}" href="{{ route('roles.destroy', $role->id ) }}">
 														<span class="icon"><i class="fi-rr-trash"> </i></span>{{ __('buttons.trash') }}
 													</a>
 												@endcan

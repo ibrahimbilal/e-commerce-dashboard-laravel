@@ -55,14 +55,14 @@ class CategoryController extends Controller
 
         $categories = $query->latest('id')->get();
 
-        return view('categories.index', compact('categories', 'counts', 'filters'));
+        return view('admin.categories.index', compact('categories', 'counts', 'filters'));
     }
 
     public function create()
     {
         $parents = Category::orderBy('title')->get();
 
-        return view('categories.create', compact('parents'));
+        return view('admin.categories.create', compact('parents'));
     }
 
     public function store(Request $request)
@@ -92,14 +92,14 @@ class CategoryController extends Controller
     {
         $category->load(['parent', 'children', 'products.locales']);
 
-        return view('categories.show', compact('category'));
+        return view('admin.categories.show', compact('category'));
     }
 
     public function edit(Category $category)
     {
         $parents = Category::whereKeyNot($category->id)->orderBy('title')->get();
 
-        return view('categories.edit', compact('category', 'parents'));
+        return view('admin.categories.edit', compact('category', 'parents'));
     }
 
     public function update(Request $request, Category $category)

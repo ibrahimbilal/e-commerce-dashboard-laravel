@@ -39,12 +39,12 @@ class AttributeController extends Controller
 
         $attributeList = $query->get();
 
-        return view('attributes.index', compact('attributeList', 'counts', 'filters'));
+        return view('admin.attributes.index', compact('attributeList', 'counts', 'filters'));
     }
 
     public function create()
     {
-        return view('attributes.create');
+        return view('admin.attributes.create');
     }
 
     public function store(Request $request)
@@ -63,12 +63,12 @@ class AttributeController extends Controller
     {
         $attribute->load(['productAttributesAsFirst.product', 'productAttributesAsSecond.product']);
 
-        return view('attributes.show', compact('attribute'));
+        return view('admin.attributes.show', compact('attribute'));
     }
 
     public function edit(Attribute $attribute)
     {
-        return view('attributes.edit', compact('attribute'));
+        return view('admin.attributes.edit', compact('attribute'));
     }
 
     public function update(Request $request, Attribute $attribute)

@@ -77,12 +77,12 @@ class OrderController extends Controller
 
         $orders = $query->latest('id')->get();
 
-        return view('orders.index', compact('orders', 'counts', 'filters'));
+        return view('admin.orders.index', compact('orders', 'counts', 'filters'));
     }
 
     public function create()
     {
-        return view('orders.create', $this->orderFormLookups());
+        return view('admin.orders.create', $this->orderFormLookups());
     }
 
     public function store(Request $request)
@@ -108,7 +108,7 @@ class OrderController extends Controller
     {
         $order->load(['customer', 'address', 'orderStatus', 'coupon', 'items.productAttribute.product', 'invoice']);
 
-        return view('orders.show', compact('order'));
+        return view('admin.orders.show', compact('order'));
     }
 
     public function edit(Order $order)
@@ -122,7 +122,7 @@ class OrderController extends Controller
             'items.productAttribute',
         ]);
 
-        return view('orders.edit', [
+        return view('admin.orders.edit', [
             'order' => $order,
             ...$this->orderFormLookups($order),
         ]);

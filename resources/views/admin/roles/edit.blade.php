@@ -13,7 +13,7 @@
     // breadcrumbs params
     $params = [
         'page_title' => __('admin.menu.roles.edit'),
-        'breadcrumbs_items' => [['title' => __('admin.menu.roles.title'), 'route_name' => 'admin.roles.index'], ['title' => __('admin.menu.roles.edit')]],
+        'breadcrumbs_items' => [['title' => __('admin.menu.roles.title'), 'route_name' => 'roles.index'], ['title' => __('admin.menu.roles.edit')]],
     ];
     @endphp
     @include('admin.inc.page_title', $params)
@@ -92,7 +92,7 @@
                     <label class="item-title meta-title">{{ __('metas.updated_at') }}</label><span class="ms-2">{{ format_date($role->updated_at) }}</span>
                 </div>
                 <div class="btns-holder d-flex justify-content-between mt-4">
-                    <a class="btn trans-btn w-100 text-start delete" href="{{ route('admin.roles.destroy', $role->id) }}">
+                    <a class="btn trans-btn w-100 text-start delete" href="{{ route('roles.destroy', $role->id) }}">
 						<span class="icon me-1"><i class="fi-rr-trash"> </i></span>{{ __('buttons.delete') }}
 					</a>
                     <button class="btn solid-btn" type="submit">{{ __('buttons.update') }}</button>
@@ -132,7 +132,7 @@
             var data = $(this).serialize();
             $.ajax({
                 type: 'PUT',
-                url: "{{ route('admin.roles.update', $role->id) }}",
+                url: "{{ route('roles.update', $role->id) }}",
                 headers: {
                     "X-CSRF-TOKEN": "{{ csrf_token() }}",
                 },
@@ -182,7 +182,7 @@
 				if (result.isConfirmed) {
 					$.ajax({
 						type: 'DELETE',
-						url: "{{ route('admin.roles.destroy', $role->id) }}",
+						url: "{{ route('roles.destroy', $role->id) }}",
 						headers: {
 							"X-CSRF-TOKEN": "{{ csrf_token() }}",
 						},

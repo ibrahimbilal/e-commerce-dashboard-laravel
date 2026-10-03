@@ -8,11 +8,12 @@
 ])
 
 @php
-    $showRoute = $resource.'.show';
-    $editRoute = $resource.'.edit';
-    $destroyRoute = $resource.'.destroy';
-    $restoreRoute = $resource.'.restore';
-    $forceDeleteRoute = $resource.'.force-delete';
+    $routeBase = str_starts_with($resource, 'admin.') ? $resource : 'admin.'.$resource;
+    $showRoute = $routeBase.'.show';
+    $editRoute = $routeBase.'.edit';
+    $destroyRoute = $routeBase.'.destroy';
+    $restoreRoute = $routeBase.'.restore';
+    $forceDeleteRoute = $routeBase.'.force-delete';
     $section = $permissionSection ?? match ($resource) {
         'order-statuses' => 'orders',
         'coupons' => 'discounts',

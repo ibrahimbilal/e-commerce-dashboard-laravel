@@ -14,7 +14,7 @@
     // breadcrumbs params
     $params = [
         'page_title' => __('admin.menu.users.add'),
-        'breadcrumbs_items' => [['title' => __('admin.menu.users.title'), 'route_name' => 'admin.users.index'], ['title' => __('admin.menu.users.add')]],
+        'breadcrumbs_items' => [['title' => __('admin.menu.users.title'), 'route_name' => 'users.index'], ['title' => __('admin.menu.users.add')]],
     ];
     @endphp
     @include('admin.inc.page_title', $params)
@@ -219,7 +219,7 @@
 						'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
 					},
 					type: 'POST',
-					url: "{{ route('admin.users.store') }}",
+					url: "{{ route('users.store') }}",
 					data: formData,
 					processData: false,
 					contentType: false,

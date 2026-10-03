@@ -109,7 +109,7 @@
             server: {
 				remove: null,
 				revert: null,
-				url: "{{ route('admin.gallery.store')}}",
+				url: "{{ route('gallery.store')}}",
 				process: {
 					headers: {
 						'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -124,7 +124,7 @@
 
             const data = $(this).serialize();
             const formID = $(this).data('id');
-			const formURL = "{{ route('admin.gallery.update', ':id') }}";
+			const formURL = "{{ route('gallery.update', ':id') }}";
 			url = formURL.replace(':id', formID);
 
 			console.log(formID)

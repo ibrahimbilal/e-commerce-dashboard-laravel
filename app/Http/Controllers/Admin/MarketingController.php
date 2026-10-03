@@ -50,7 +50,7 @@ class MarketingController extends Controller
 
         $subscribers = $query->get();
 
-        return view('marketing.index', compact('subscribers', 'counts', 'filters'));
+        return view('admin.marketing.index', compact('subscribers', 'counts', 'filters'));
     }
 
     public function store(Request $request)

@@ -50,12 +50,12 @@ class CustomerController extends Controller
 
         $customers = $query->latest('id')->get();
 
-        return view('customers.index', compact('customers', 'counts', 'filters'));
+        return view('admin.customers.index', compact('customers', 'counts', 'filters'));
     }
 
     public function create()
     {
-        return view('customers.create');
+        return view('admin.customers.create');
     }
 
     public function store(Request $request)
@@ -83,12 +83,12 @@ class CustomerController extends Controller
     {
         $customer->load(['addresses', 'orders.orderStatus', 'reviews.product', 'coupons']);
 
-        return view('customers.show', compact('customer'));
+        return view('admin.customers.show', compact('customer'));
     }
 
     public function edit(Customer $customer)
     {
-        return view('customers.edit', compact('customer'));
+        return view('admin.customers.edit', compact('customer'));
     }
 
     public function update(Request $request, Customer $customer)

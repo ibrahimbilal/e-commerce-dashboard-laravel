@@ -47,14 +47,14 @@ class TagController extends Controller
 
         $tags = $query->latest('id')->get();
 
-        return view('tags.index', compact('tags', 'counts', 'filters'));
+        return view('admin.tags.index', compact('tags', 'counts', 'filters'));
     }
 
     public function create()
     {
         $parents = Tag::orderBy('title')->get();
 
-        return view('tags.create', compact('parents'));
+        return view('admin.tags.create', compact('parents'));
     }
 
     public function store(Request $request)
@@ -79,14 +79,14 @@ class TagController extends Controller
     {
         $tag->load(['parent', 'children', 'products.locales']);
 
-        return view('tags.show', compact('tag'));
+        return view('admin.tags.show', compact('tag'));
     }
 
     public function edit(Tag $tag)
     {
         $parents = Tag::whereKeyNot($tag->id)->orderBy('title')->get();
 
-        return view('tags.edit', compact('tag', 'parents'));
+        return view('admin.tags.edit', compact('tag', 'parents'));
     }
 
     public function update(Request $request, Tag $tag)

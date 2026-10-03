@@ -27,7 +27,7 @@ class AnalyticsController extends Controller
         $topCategories = AnalyticsReport::topCategories($range);
         $topProducts = AnalyticsReport::topProducts($range);
 
-        return view('analytics.overview', compact(
+        return view('admin.analytics.overview', compact(
             'range',
             'analytics',
             'analyticsSeries',

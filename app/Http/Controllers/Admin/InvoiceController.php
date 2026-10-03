@@ -53,12 +53,12 @@ class InvoiceController extends Controller
 
         $invoices = $query->latest('id')->get();
 
-        return view('invoices.index', compact('invoices', 'counts', 'filters'));
+        return view('admin.invoices.index', compact('invoices', 'counts', 'filters'));
     }
 
     public function create()
     {
-        return view('invoices.create', $this->invoiceFormLookups());
+        return view('admin.invoices.create', $this->invoiceFormLookups());
     }
 
     public function store(Request $request)
@@ -81,12 +81,12 @@ class InvoiceController extends Controller
             'order.address',
         ]);
 
-        return view('invoices.show', compact('invoice'));
+        return view('admin.invoices.show', compact('invoice'));
     }
 
     public function edit(Invoice $invoice)
     {
-        return view('invoices.edit', array_merge(
+        return view('admin.invoices.edit', array_merge(
             compact('invoice'),
             $this->invoiceFormLookups()
         ));

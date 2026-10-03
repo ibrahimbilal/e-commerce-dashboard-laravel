@@ -1,6 +1,6 @@
 @push('scripts')
 @php
-    $customerAddressesUrlTemplate = str_replace('/0/', '/__CUSTOMER__/', route('customers.addresses', ['customer' => 0]));
+    $customerAddressesUrlTemplate = str_replace('/0/', '/__CUSTOMER__/', route('admin.customers.addresses', ['customer' => 0]));
 @endphp
 <script>
 $(function () {

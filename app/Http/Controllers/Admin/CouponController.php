@@ -64,12 +64,12 @@ class CouponController extends Controller
 
         $coupons = $query->latest('id')->get();
 
-        return view('coupons.index', compact('coupons', 'counts', 'filters'));
+        return view('admin.coupons.index', compact('coupons', 'counts', 'filters'));
     }
 
     public function create()
     {
-        return view('coupons.create');
+        return view('admin.coupons.create');
     }
 
     public function store(Request $request)
@@ -94,12 +94,12 @@ class CouponController extends Controller
     {
         $coupon->load(['orders.customer', 'customers']);
 
-        return view('coupons.show', compact('coupon'));
+        return view('admin.coupons.show', compact('coupon'));
     }
 
     public function edit(Coupon $coupon)
     {
-        return view('coupons.edit', compact('coupon'));
+        return view('admin.coupons.edit', compact('coupon'));
     }
 
     public function update(Request $request, Coupon $coupon)

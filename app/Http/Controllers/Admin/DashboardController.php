@@ -77,7 +77,7 @@ class DashboardController extends Controller
         $salesChartSeries = DashboardMetrics::salesChartSeries();
         $orderStatusStats = DashboardMetrics::orderStatusStats();
 
-        return view('dashboard.index', compact(
+        return view('admin.dashboard.index', compact(
             'stats',
             'recentOrders',
             'topProducts',

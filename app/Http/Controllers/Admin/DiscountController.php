@@ -60,12 +60,12 @@ class DiscountController extends Controller
 
         $discounts = $query->latest('id')->get();
 
-        return view('discounts.index', compact('discounts', 'counts', 'filters'));
+        return view('admin.discounts.index', compact('discounts', 'counts', 'filters'));
     }
 
     public function create()
     {
-        return view('discounts.create');
+        return view('admin.discounts.create');
     }
 
     public function store(Request $request)
@@ -87,12 +87,12 @@ class DiscountController extends Controller
 
     public function show(Discount $discount)
     {
-        return view('discounts.show', compact('discount'));
+        return view('admin.discounts.show', compact('discount'));
     }
 
     public function edit(Discount $discount)
     {
-        return view('discounts.edit', compact('discount'));
+        return view('admin.discounts.edit', compact('discount'));
     }
 
     public function update(Request $request, Discount $discount)
