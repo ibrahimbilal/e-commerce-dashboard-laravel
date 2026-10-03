@@ -65,16 +65,7 @@ class AdminSettingsPagesTest extends TestCase
     {
         AdminSettingDefaults::persistMissing();
 
-        $payload = array_intersect_key(
-            AdminSettingDefaults::theme(),
-            array_flip([
-                'logo_width', 'logo_height', 'mobile_logo_width',
-                'main_color', 'main_color_hover', 'box_bg_color', 'body_background',
-                'menu_badge_bg', 'menu_active_bg', 'text_color',
-                'dark_main_color', 'dark_main_color_hover', 'dark_box_bg_color',
-                'dark_body_background', 'dark_menu_badge_bg', 'dark_menu_active_bg', 'dark_text_color',
-            ])
-        );
+        $payload = $this->themeStorePayload();
         $payload['logo_height'] = '55';
 
         $response = $this->actingAs($this->admin)->post(route('theme-settings.store'), $payload, [
@@ -95,5 +86,78 @@ class AdminSettingsPagesTest extends TestCase
             ->assertOk()
             ->assertSee('value="55"', false)
             ->assertSee('>55</output>', false);
+    }
+
+    public function test_theme_settings_page_ok_when_mobile_logo_height_missing_from_database(): void
+    {
+        Setting::query()->where('setting_key', 'mobile_logo_height')->delete();
+
+        $this->actingAs($this->admin)
+            ->get(route('theme-settings.index'))
+            ->assertOk()
+            ->assertViewIs('admin.settings.theme');
+    }
+
+    public function test_theme_store_persists_mobile_logo_height(): void
+    {
+        AdminSettingDefaults::persistMissing();
+
+        $payload = $this->themeStorePayload();
+        $payload['mobile_logo_height'] = '25';
+
+        $response = $this->actingAs($this->admin)->post(route('theme-settings.store'), $payload, [
+            'Accept' => 'application/json',
+            'X-Requested-With' => 'XMLHttpRequest',
+        ]);
+
+        $response->assertOk();
+        $response->assertJson(['success' => true]);
+
+        $this->assertSame(
+            '25',
+            Setting::query()->where('setting_key', 'mobile_logo_height')->value('setting_value')
+        );
+    }
+
+    public function test_theme_store_without_mobile_logo_height_keeps_existing_value(): void
+    {
+        AdminSettingDefaults::persistMissing();
+
+        Setting::query()->updateOrCreate(
+            ['setting_key' => 'mobile_logo_height'],
+            ['setting_value' => '25']
+        );
+
+        $payload = $this->themeStorePayload();
+
+        $response = $this->actingAs($this->admin)->post(route('theme-settings.store'), $payload, [
+            'Accept' => 'application/json',
+            'X-Requested-With' => 'XMLHttpRequest',
+        ]);
+
+        $response->assertOk();
+        $response->assertJson(['success' => true]);
+
+        $this->assertSame(
+            '25',
+            Setting::query()->where('setting_key', 'mobile_logo_height')->value('setting_value')
+        );
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function themeStorePayload(): array
+    {
+        return array_intersect_key(
+            AdminSettingDefaults::theme(),
+            array_flip([
+                'logo_width', 'logo_height', 'mobile_logo_width',
+                'main_color', 'main_color_hover', 'box_bg_color', 'body_background',
+                'menu_badge_bg', 'menu_active_bg', 'text_color',
+                'dark_main_color', 'dark_main_color_hover', 'dark_box_bg_color',
+                'dark_body_background', 'dark_menu_badge_bg', 'dark_menu_active_bg', 'dark_text_color',
+            ])
+        );
     }
 }

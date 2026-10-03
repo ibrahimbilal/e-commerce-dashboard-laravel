@@ -29,6 +29,7 @@ class ThemeSettingController extends Controller
 		$settings = Setting::where('setting_key', '=', 'logo_width')
 							->orWhere('setting_key', '=', 'logo_height')
 							->orWhere('setting_key', '=', 'mobile_logo_width')
+							->orWhere('setting_key', '=', 'mobile_logo_height')
 							->orWhere('setting_key', '=', 'main_color')
 							->orWhere('setting_key', '=', 'main_color_hover')
 							->orWhere('setting_key', '=', 'box_bg_color')

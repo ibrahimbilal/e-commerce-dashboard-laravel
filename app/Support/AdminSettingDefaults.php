@@ -52,6 +52,7 @@ class AdminSettingDefaults
             'mobile_logo' => '',
             'dark_mobile_logo' => '',
             'mobile_logo_width' => '80',
+            'mobile_logo_height' => '30',
             'main_color' => '#2C2CCC',
             'main_color_hover' => '#1F1F99',
             'box_bg_color' => '#FFFFFF',
