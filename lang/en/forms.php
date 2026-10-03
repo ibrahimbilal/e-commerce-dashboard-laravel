@@ -57,6 +57,7 @@ return [
 
 	'logo' => 'logo:',
 	'logo_width' => 'logo Width:',
+	'logo_height' => 'logo Height:',
 	'mobile_logo' => 'Mobile logo:',
 	'mobile_logo_width' => 'Mobile logo Width:',
 	'main_color' => 'Main Color:',

@@ -81,6 +81,20 @@
 						<output class="text-center ms-2" id="rangevalue">{{ $sets['logo_width'] }}</output>
                     </div>
                 </div>
+                <div class="form-item second d-flex flex-wrap mt-3">
+                    <label class="item-title">{{ __('forms.logo_height') }}</label>
+                    <div class="rang-wrapper d-flex align-items-center">
+                        <input class="form-range"
+								name="logo_height"
+								type="range"
+								min="0"
+								max="300"
+								step="10"
+								value="@isset($sets['logo_height']){{ $sets['logo_height'] }}@endisset"
+								oninput="rangevalue_2.value=value">
+						<output class="text-center ms-2" id="rangevalue_2">{{ $sets['logo_height'] }}</output>
+                    </div>
+                </div>
                 <hr>
                 <div class="form-item second d-flex flex-wrap mt-3">
                     <div class="item-title mb-2">

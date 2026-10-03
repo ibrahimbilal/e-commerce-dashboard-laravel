@@ -57,6 +57,7 @@ return [
 
 	'logo' => 'الشعار:',
 	'logo_width' => 'عرض الشعار:',
+	'logo_height' => 'ارتفاع الشعار:',
 	'mobile_logo' => 'شعار الموبايل:',
 	'mobile_logo_width' => 'عرض شعار الموبايل:',
 	'main_color' => 'اللون الاساسي:',

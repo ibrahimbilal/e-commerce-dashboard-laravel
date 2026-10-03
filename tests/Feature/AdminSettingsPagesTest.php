@@ -57,7 +57,8 @@ class AdminSettingsPagesTest extends TestCase
 
         $this->actingAs($this->admin)
             ->get(route('theme-settings.index'))
-            ->assertOk();
+            ->assertOk()
+            ->assertSee('name="logo_height"', false);
     }
 
     public function test_theme_store_persists_logo_height(): void
@@ -88,5 +89,11 @@ class AdminSettingsPagesTest extends TestCase
             '55',
             Setting::query()->where('setting_key', 'logo_height')->value('setting_value')
         );
+
+        $this->actingAs($this->admin)
+            ->get(route('theme-settings.index'))
+            ->assertOk()
+            ->assertSee('value="55"', false)
+            ->assertSee('>55</output>', false);
     }
 }
