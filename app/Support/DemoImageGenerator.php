@@ -130,15 +130,15 @@ class DemoImageGenerator
 
     public static function themeAssetAbsolutePath(string $relativePath): string
     {
-        return public_path('assets/images/'.ltrim($relativePath, '/'));
+        return public_path('images/'.ltrim($relativePath, '/'));
     }
 
     /**
-     * @return list<string> paths relative to assets/images, sorted naturally
+     * @return list<string> paths relative to public/images, sorted naturally
      */
     public static function sortedThemeRelativePaths(string $subdir): array
     {
-        $directory = public_path('assets/images/'.trim($subdir, '/'));
+        $directory = public_path('images/'.trim($subdir, '/'));
 
         if (! is_dir($directory)) {
             return [];
