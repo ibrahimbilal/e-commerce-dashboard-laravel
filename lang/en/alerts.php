@@ -14,7 +14,13 @@ return [
 	'confirm' => [
 		'delete' => [
 			'text' => 'Do you really want to delete this item!',
+			'text_label' => 'Do you really want to move this :label to trash?',
 			'yes' => 'Yes, delete it!',
+		],
+		'permanent' => [
+			'text' => 'Do you really want to permanently delete this item? This cannot be undone!',
+			'text_label' => 'Do you really want to permanently delete this :label? This cannot be undone!',
+			'yes' => 'Yes, delete it permanently!',
 		],
 		'restore' => [
 			'text' => 'Do you really want to restore this item!',

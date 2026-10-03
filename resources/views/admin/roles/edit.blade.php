@@ -92,7 +92,11 @@
                     <label class="item-title meta-title">{{ __('metas.updated_at') }}</label><span class="ms-2">{{ format_date($role->updated_at) }}</span>
                 </div>
                 <div class="btns-holder d-flex justify-content-between mt-4">
-                    <a class="btn trans-btn w-100 text-start delete" href="{{ route('roles.destroy', $role->id) }}">
+                    <a class="btn trans-btn w-100 text-start delete" href="{{ route('roles.destroy', $role->id) }}"
+						data-confirm-delete="soft"
+						data-confirm-ajax
+						data-http-method="DELETE"
+						data-redirect-on-success>
 						<span class="icon me-1"><i class="fi-rr-trash"> </i></span>{{ __('buttons.delete') }}
 					</a>
                     <button class="btn solid-btn" type="submit">{{ __('buttons.update') }}</button>
@@ -165,63 +169,5 @@
 				}
             });
         });
-
-		// Delete Role
-		$('a.trans-btn.delete').on('click', function(e) {
-			e.preventDefault();
-			Swal.fire({
-				...SwalOptions,
-				title: "{{ __('alerts.confirm.title') }}",
-                text: "{{ __('alerts.confirm.delete.text') }}",
-                icon: 'warning',
-                showCancelButton: true,
-                cancelButtonColor: '#d33',
-                confirmButtonText: "{{ __('alerts.confirm.delete.yes') }}",
-                cancelButtonText: "{{ __('alerts.confirm.no') }}",
-			}).then((result) => {
-				if (result.isConfirmed) {
-					$.ajax({
-						type: 'DELETE',
-						url: "{{ route('roles.destroy', $role->id) }}",
-						headers: {
-							"X-CSRF-TOKEN": "{{ csrf_token() }}",
-						},
-						success: function(res) {
-							if (res.success) {
-								Swal.fire({
-									...SwalOptions,
-									titleText: res.title,
-									text: res.text,
-									icon: 'success',
-									willClose: () => {
-										window.location.replace(res.redirect);
-									}
-								});
-							} else {
-								Swal.fire({
-									...SwalOptions,
-									icon: 'error',
-									titleText: "{{ __('alerts.ops') }}",
-									html: '<ul class="errors-list">' + Object.keys(res.errors).map(k =>
-											'<li class="content">' + res.errors[k] + '</li>').join('') +
-										'</ul>',
-								});
-							}
-						}
-					});
-
-				} else if (result.dismiss === Swal.DismissReason.cancel) {
-					Swal.fire({
-						...SwalOptions,
-						title: "{{ __('alerts.cancel.title') }}",
-                        text: "{{ __('alerts.cancel.delete.text') }}",
-						icon: 'error',
-						timer: 1500,
-						timerProgressBar: true,
-						showConfirmButton: false,
-					})
-				}
-			})
-		});
     </script>
 @endpush

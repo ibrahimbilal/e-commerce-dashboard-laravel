@@ -13,6 +13,9 @@
 
     @stack('stylesheet')
 
+    <!-- Sweet Alert 2 (admin delete confirmations) -->
+    <link href="{{ asset('css/sweetalert2.min.css') }}" rel="stylesheet">
+
     <!-- Bootstrap -->
     <link rel="stylesheet" href="{{ asset('css/bs'.$rtl_ext.'.min.css') }}">
     <!-- Main Css File -->
@@ -51,6 +54,29 @@
 
     <!-- jQuery-->
     <script src="{{ asset('js/jquery.min.js') }}" type="text/javascript"></script>
+
+    <script src="{{ asset('js/sweetalert2.min.js') }}" type="text/javascript"></script>
+    <script>
+        window.AdminDeleteConfirmMessages = {
+            ok: @json(__('alerts.btn_text')),
+            ops: @json(__('alerts.ops')),
+            title: @json(__('alerts.confirm.title')),
+            no: @json(__('alerts.confirm.no')),
+            softText: @json(__('alerts.confirm.delete.text')),
+            softTextLabel: @json(__('alerts.confirm.delete.text_label')),
+            softYes: @json(__('alerts.confirm.delete.yes')),
+            permanentText: @json(__('alerts.confirm.permanent.text')),
+            permanentTextLabel: @json(__('alerts.confirm.permanent.text_label')),
+            permanentYes: @json(__('alerts.confirm.permanent.yes')),
+            restoreText: @json(__('alerts.confirm.restore.text')),
+            restoreYes: @json(__('alerts.confirm.restore.yes')),
+            cancelTitle: @json(__('alerts.cancel.title')),
+            cancelDeleteText: @json(__('alerts.cancel.delete.text')),
+            cancelRestoreText: @json(__('alerts.cancel.restore.text')),
+            unknownError: @json(__('alerts.errors.unknown')),
+        };
+    </script>
+    <script src="{{ asset('assets/js/delete-confirm.js') }}" type="text/javascript"></script>
 
     @stack('scripts')
 

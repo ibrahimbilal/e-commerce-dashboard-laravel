@@ -46,7 +46,11 @@
 												@endcan
 
 												@can('permanently_delete roles')
-													<a class="btn btn-danger btn-rounded me-2 py-1" id="delete" data-id="{{$role->id}}" href="{{ route('roles.destroy', $role->id ) }}">
+													<a class="btn btn-danger btn-rounded me-2 py-1" id="delete" data-id="{{$role->id}}" href="{{ route('roles.destroy', $role->id ) }}"
+														data-confirm-delete="soft"
+														data-confirm-ajax
+														data-http-method="DELETE"
+														data-remove="closest-tr">
 														<span class="icon"><i class="fi-rr-trash"> </i></span>{{ __('buttons.trash') }}
 													</a>
 												@endcan
@@ -155,75 +159,6 @@
 				]
 			}, 'colvis']
 		});
-
-		@can('permanently_delete roles')
-			let SwalOptions = {
-				showConfirmButton: true,
-				confirmButtonColor: 'var(--main-color)',
-				confirmButtonText: "{{ __('alerts.btn_text') }}",
-				scrollbarPadding: false,
-			};
-			// Delete Role
-			$('a#delete').on('click', function(e) {
-				e.preventDefault();
-				const itemId = $(this).data('id'),
-					url = $(this).attr('href'),
-					parentRow = $(this).parents('tr');
-				Swal.fire({
-					...SwalOptions,
-					title: "{{ __('alerts.confirm.title') }}",
-					text: "{{ __('alerts.confirm.delete.text') }}",
-					icon: 'warning',
-					showCancelButton: true,
-					cancelButtonColor: '#d33',
-					confirmButtonText: "{{ __('alerts.confirm.delete.yes') }}",
-					cancelButtonText: "{{ __('alerts.confirm.no') }}",
-				}).then((result) => {
-					if (result.isConfirmed) {
-						$.ajax({
-							type: 'DELETE',
-							url: url,
-							headers: {
-								"X-CSRF-TOKEN": "{{ csrf_token() }}",
-							},
-							success: function(res) {
-								if (res.success) {
-									Swal.fire({
-										...SwalOptions,
-										titleText: res.title,
-										text: res.text,
-										icon: 'success',
-										willClose: () => {
-											parentRow.hide(500);
-										}
-									});
-								} else {
-									Swal.fire({
-										...SwalOptions,
-										icon: 'error',
-										titleText: "{{ __('alerts.ops') }}",
-										html: '<ul class="errors-list">' + Object.keys(res.errors).map(k =>
-												'<li class="content">' + res.errors[k] + '</li>').join('') +
-											'</ul>',
-									});
-								}
-							}
-						});
-
-					} else if (result.dismiss === Swal.DismissReason.cancel) {
-						Swal.fire({
-							...SwalOptions,
-							title: "{{ __('alerts.cancel.title') }}",
-							text: "{{ __('alerts.cancel.delete.text') }}",
-							icon: 'error',
-							timer: 1500,
-							timerProgressBar: true,
-							showConfirmButton: false,
-						})
-					}
-				})
-			});
-		@endcan
 
 		const Toast = Swal.mixin({
 				toast: true,

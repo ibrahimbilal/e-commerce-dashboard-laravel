@@ -115,9 +115,12 @@
 					</tbody>
 				</table>
 				<div class="btns-holder d-flex justify-content-between mt-4">
-					<a id="delete" href="{{ route('gallery.destroy', $image->id) }}"
+					<a href="{{ route('gallery.destroy', $image->id) }}"
 						class="btn trans-btn text-start delete"
-						data-post-type="gallery"
+						data-confirm-delete="soft"
+						data-confirm-ajax
+						data-http-method="DELETE"
+						data-remove-gallery
 						data-id="{{ $image->id }}">
 						<span class="icon me-1">
 							<i class="fi-rr-trash"> </i>

@@ -401,13 +401,13 @@
 <div class="main-box box-spaces mb-0">
 <x-account-activity-meta :subject="$customer" />
 <div class="btns-holder d-flex justify-content-between mt-4">
-<button type="button" class="btn trans-btn w-100 text-start js-destroy-submit" form="customer-destroy-form" data-confirm-label="customer" data-post-type="customer"><span class="icon me-1"><i class="fi-rr-trash"> </i></span>delete account</button>
+<button type="button" class="btn trans-btn w-100 text-start" data-confirm-delete="soft" form="customer-destroy-form" data-confirm-label="customer" data-post-type="customer"><span class="icon me-1"><i class="fi-rr-trash"> </i></span>delete account</button>
 <button class="btn solid-btn" type="submit">update </button>
 </div>
 </div>
 </div>
 </form>
-<form method="POST" action="{{ route('admin.customers.destroy', $customer) }}" id="customer-destroy-form" class="destroy-resource-form d-none">@csrf @method('DELETE')</form>
+<form method="POST" action="{{ route('admin.customers.destroy', $customer) }}" id="customer-destroy-form" class="destroy-resource-form d-none" data-confirm-delete="soft">@csrf @method('DELETE')</form>
 @endsection
 
 @push('scripts')

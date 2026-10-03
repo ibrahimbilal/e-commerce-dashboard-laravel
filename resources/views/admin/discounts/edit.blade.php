@@ -83,7 +83,7 @@
 <div class="main-box box-spaces">
 <x-resource-timestamps :model="$discount" />
 <div class="btns-holder d-flex justify-content-between mt-4 gap-2 flex-wrap">
-<button type="button" class="btn trans-btn w-100 text-start js-destroy-submit" form="discount-destroy-form" data-confirm-label="discount" data-post-type="discount"><span class="icon me-1"><i class="fi-rr-trash"> </i></span>move to trash</button>
+<button type="button" class="btn trans-btn w-100 text-start" data-confirm-delete="soft" form="discount-destroy-form" data-confirm-label="discount" data-post-type="discount"><span class="icon me-1"><i class="fi-rr-trash"> </i></span>move to trash</button>
 <button class="btn solid-btn" type="submit">publish </button>
 </div>
 </div>
@@ -91,7 +91,7 @@
 </div>
 </div>
 </form>
-<form method="POST" action="{{ route('admin.discounts.destroy', $discount) }}" id="discount-destroy-form" class="destroy-resource-form d-none">@csrf @method('DELETE')</form>
+<form method="POST" action="{{ route('admin.discounts.destroy', $discount) }}" id="discount-destroy-form" class="destroy-resource-form d-none" data-confirm-delete="soft">@csrf @method('DELETE')</form>
 @endsection
 
 @push('scripts')

@@ -31,13 +31,13 @@
 <input class="form-control" id="order-status-title" name="title" type="text" value="{{ old('title', $orderStatus->title) }}" maxlength="100" required/>
 </div>
 <div class="btns-holder d-flex justify-content-between mt-4 gap-2 flex-wrap">
-<button type="button" class="btn trans-btn js-destroy-submit" form="order-status-destroy-form" data-confirm-label="order status"><span class="icon me-1"><i class="fi-rr-trash"> </i></span>delete</button>
+<button type="button" class="btn trans-btn" data-confirm-delete="soft" form="order-status-destroy-form" data-confirm-label="order status"><span class="icon me-1"><i class="fi-rr-trash"> </i></span>delete</button>
 <button class="btn solid-btn" type="submit">update </button>
 </div>
 </div>
 </div>
 </form>
-<form method="POST" action="{{ route('admin.order-statuses.destroy', $orderStatus) }}" id="order-status-destroy-form" class="destroy-resource-form d-none">@csrf @method('DELETE')</form>
+<form method="POST" action="{{ route('admin.order-statuses.destroy', $orderStatus) }}" id="order-status-destroy-form" class="destroy-resource-form d-none" data-confirm-delete="soft">@csrf @method('DELETE')</form>
 @endsection
 
 @push('scripts')

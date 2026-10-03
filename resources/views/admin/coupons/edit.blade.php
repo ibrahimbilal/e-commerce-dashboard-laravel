@@ -73,13 +73,13 @@
 <div class="col-sm-12 col-lg-3 meta-box">
 <div class="main-box box-spaces">
 <div class="btns-holder d-flex justify-content-between mt-4 gap-2 flex-wrap">
-<button type="button" class="btn trans-btn w-100 text-start js-destroy-submit" form="coupon-destroy-form" data-confirm-label="coupon" data-post-type="coupon"><span class="icon me-1"><i class="fi-rr-trash"> </i></span>move to trash</button>
+<button type="button" class="btn trans-btn w-100 text-start" data-confirm-delete="soft" form="coupon-destroy-form" data-confirm-label="coupon" data-post-type="coupon"><span class="icon me-1"><i class="fi-rr-trash"> </i></span>move to trash</button>
 <button class="btn solid-btn" type="submit">publish </button>
 </div>
 </div>
 </div>
 </form>
-<form method="POST" action="{{ route('admin.coupons.destroy', $coupon) }}" id="coupon-destroy-form" class="destroy-resource-form d-none">@csrf @method('DELETE')</form>
+<form method="POST" action="{{ route('admin.coupons.destroy', $coupon) }}" id="coupon-destroy-form" class="destroy-resource-form d-none" data-confirm-delete="soft">@csrf @method('DELETE')</form>
 @endsection
 
 @push('scripts')
