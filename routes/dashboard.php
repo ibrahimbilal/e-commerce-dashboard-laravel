@@ -72,7 +72,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified'])->group(
         'categories' => CategoryController::class,
         'coupons' => CouponController::class,
         'discounts' => DiscountController::class,
-        'tags' => TagController::class,
     ];
 
     foreach ($toggleResources as $prefix => $controller) {

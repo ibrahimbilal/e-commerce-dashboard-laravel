@@ -42,7 +42,7 @@ class UpdateUserRequest extends FormRequest
 			'birth_date' => ['nullable', 'date', 'date_format:Y-m-d', 'before_or_equal:' . date("Y-m-d", strtotime('-18 years'))],
 			'gender' => ['required', Rule::in(['male', 'female'])],
 			'role_name' => ['required','string', Rule::exists(Role::class, 'name')],
-			'status' => ['sometimes', 'string', Rule::in(['not_verified', 'verified', 'blocked'])],
+			'status' => ['sometimes', 'string', Rule::in(['active', 'inactive', 'not_verified'])],
 			'language' => ['required', 'string'],
 			'profile_picture' => [
 				File::image()

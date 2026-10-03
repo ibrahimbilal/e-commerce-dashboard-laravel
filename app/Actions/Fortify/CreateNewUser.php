@@ -41,6 +41,7 @@ class CreateNewUser implements CreatesNewUsers
 			],
 			'gender' => ['required',Rule::in(['male', 'female'])],
 			'role_name' => ['required','string', Rule::exists(Role::class, 'name')],
+			'status' => ['sometimes', 'string', Rule::in(['active', 'inactive'])],
 			'language' => ['required','string'],
 			'profile_picture' => [
 				'nullable',

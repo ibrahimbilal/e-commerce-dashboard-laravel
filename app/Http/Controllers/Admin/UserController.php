@@ -19,6 +19,7 @@ use App\Http\Requests\BulkActionRequest;
 use App\Http\Requests\UpdateUserRequest;
 use Stevebauman\Location\Facades\Location;
 use App\Http\Requests\UpdateProfileRequest;
+use App\Support\UserStatusToggle;
 use Laravel\Fortify\Actions\ConfirmPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
@@ -35,7 +36,7 @@ class UserController extends Controller
     {
         $this->middleware('permission:view users', ['only' => ['index']]);
         $this->middleware('permission:add users', ['only' => ['create', 'store']]);
-        $this->middleware('permission:edit users', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:edit users', ['only' => ['edit', 'update', 'toggle']]);
         $this->middleware('permission:delete users', ['only' => ['destroy', 'bulk_destroy']]);
         $this->middleware('permission:restore users', ['only' => ['restore', 'bulk_restore']]);
         $this->middleware('permission:permanently_delete users', ['only' => ['force_delete', 'bulk_force_delete']]);
@@ -179,6 +180,13 @@ class UserController extends Controller
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
+	public function toggle(Request $request, $id)
+	{
+		$user = User::query()->findOrFail($id);
+
+		return UserStatusToggle::apply($request, $user);
+	}
+
 	public function update(UpdateUserRequest $request, $id)
 	{
 		// the request will validated by 'UpdateUserRequest' class

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 
 use App\Http\Controllers\Concerns\ManagesTrashedRecords;
-use App\Http\Controllers\Concerns\TogglesAdminResourceFields;
 use App\Models\Tag;
 use App\Support\AdminResourceCounts;
 use App\Support\IndexListing;
@@ -14,13 +13,12 @@ use Illuminate\Http\Request;
 class TagController extends Controller
 {
     use ManagesTrashedRecords;
-    use TogglesAdminResourceFields;
 
     public function __construct()
     {
         $this->middleware('permission:view tags', ['only' => ['index', 'show']]);
         $this->middleware('permission:add tags', ['only' => ['create', 'store']]);
-        $this->middleware('permission:edit tags', ['only' => ['edit', 'update', 'toggle']]);
+        $this->middleware('permission:edit tags', ['only' => ['edit', 'update']]);
         $this->middleware('permission:delete tags', ['only' => ['destroy']]);
         $this->registerTrashedMiddleware('tags');
     }
@@ -119,19 +117,6 @@ class TagController extends Controller
             'admin.tags.index',
             'Tag deleted.',
             AdminResourceCounts::tags()
-        );
-    }
-
-    public function toggle(Request $request, int $id)
-    {
-        $tag = Tag::query()->findOrFail($id);
-
-        return $this->toggleResourceField(
-            $request,
-            $tag,
-            AdminResourceCounts::toggleFieldWhitelist()['tags'],
-            fn () => AdminResourceCounts::tags(),
-            'admin.tags.index'
         );
     }
 

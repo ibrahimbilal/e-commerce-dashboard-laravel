@@ -190,6 +190,8 @@ class AdminResourceCounts
     {
         return [
             'all' => User::query()->count(),
+            'active' => User::query()->where('status', 'active')->count(),
+            'inactive' => User::query()->where('status', 'inactive')->count(),
             'trashed' => User::query()->onlyTrashed()->count(),
         ];
     }
@@ -204,7 +206,6 @@ class AdminResourceCounts
             'categories' => ['active'],
             'coupons' => ['active'],
             'discounts' => ['active'],
-            'tags' => ['deleted'],
             'marketing.subscribers' => ['is_subscriber'],
         ];
     }

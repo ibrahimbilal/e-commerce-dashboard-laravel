@@ -51,6 +51,10 @@ Route::prefix('/admin')->group(function () {
 		Route::post('/users/bulk-restore', [App\Http\Controllers\Admin\UserController::class, 'bulk_restore'])->name('users.bulk_restore');
 		Route::post('/users/bulk-force-delete', [App\Http\Controllers\Admin\UserController::class, 'bulk_force_delete'])->name('users.bulk_force_delete');
 
+		Route::patch('/users/{user}/toggle', [App\Http\Controllers\Admin\UserController::class, 'toggle'])
+			->name('users.toggle')
+			->whereNumber('user');
+
 		Route::resource('/users', App\Http\Controllers\Admin\UserController::class);
 
 		// Roles Pages
