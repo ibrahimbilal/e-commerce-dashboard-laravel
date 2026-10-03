@@ -2,12 +2,26 @@
 
 namespace App\Models;
 
+use App\Support\AdminSettingDefaults;
+use App\Support\ThemeColors;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Setting extends Model
 {
     use HasFactory;
+
+    protected static function booted(): void
+    {
+        $clearThemeColorsCache = function (Setting $setting): void {
+            if (in_array($setting->setting_key, AdminSettingDefaults::themeColorSettingKeys(), true)) {
+                ThemeColors::forgetCached();
+            }
+        };
+
+        static::saved($clearThemeColorsCache);
+        static::deleted($clearThemeColorsCache);
+    }
 
 	/**
      * The attributes that are mass assignable.

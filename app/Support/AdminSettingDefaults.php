@@ -54,19 +54,19 @@ class AdminSettingDefaults
             'mobile_logo_width' => '80',
             'mobile_logo_height' => '30',
             'main_color' => '#2C2CCC',
-            'main_color_hover' => '#1F1F99',
+            'main_color_hover' => '#2323A2',
             'box_bg_color' => '#FFFFFF',
-            'body_background' => '#F7F7F7',
-            'menu_badge_bg' => '#E8E8FF',
-            'menu_active_bg' => '#EDEDFF',
+            'body_background' => '#F5F5F5',
+            'menu_badge_bg' => '#FF9F43',
+            'menu_active_bg' => '#F3F3FF',
             'text_color' => '#333333',
-            'dark_main_color' => '#6C6CFF',
-            'dark_main_color_hover' => '#5252E0',
-            'dark_box_bg_color' => '#1E1E2E',
-            'dark_body_background' => '#12121A',
-            'dark_menu_badge_bg' => '#2A2A40',
-            'dark_menu_active_bg' => '#2F2F48',
-            'dark_text_color' => '#EAEAEA',
+            'dark_main_color' => '#675AD0',
+            'dark_main_color_hover' => '#877BE6',
+            'dark_box_bg_color' => '#1D1D1D',
+            'dark_body_background' => '#121212',
+            'dark_menu_badge_bg' => '#FF9F43',
+            'dark_menu_active_bg' => '#3C3C3C',
+            'dark_text_color' => '#E1E1E1',
         ];
     }
 
@@ -190,6 +190,90 @@ class AdminSettingDefaults
             'order_canceled_recipients_type',
             'order_canceled_recipients',
         ];
+    }
+
+    /**
+     * @return array<string, string> setting_key => default #RRGGBB
+     */
+    public static function themeColorDefaults(): array
+    {
+        return array_intersect_key(
+            self::theme(),
+            array_flip(array_keys(self::themeColorKeyToCssVariableMap()))
+        );
+    }
+
+    /**
+     * @return array<string, string> setting_key => CSS custom property name (with leading --)
+     */
+    public static function themeColorKeyToCssVariableMap(): array
+    {
+        return [
+            'main_color' => '--main-color',
+            'main_color_hover' => '--main-color-hover',
+            'body_background' => '--body-background',
+            'menu_active_bg' => '--menu-active-bg',
+            'box_bg_color' => '--box-bg-color',
+            'text_color' => '--text-color',
+            'menu_badge_bg' => '--menu-badge-bg',
+            'dark_main_color' => '--main-color',
+            'dark_main_color_hover' => '--main-color-hover',
+            'dark_body_background' => '--body-background',
+            'dark_menu_active_bg' => '--menu-active-bg',
+            'dark_box_bg_color' => '--box-bg-color',
+            'dark_text_color' => '--text-color',
+            'dark_menu_badge_bg' => '--menu-badge-bg',
+        ];
+    }
+
+    /**
+     * @return list<string>
+     */
+    public static function themeColorSettingKeys(): array
+    {
+        return array_keys(self::themeColorKeyToCssVariableMap());
+    }
+
+    /**
+     * Pre-CSS-alignment defaults; used to upgrade seeded rows without touching user edits.
+     *
+     * @return array<string, string>
+     */
+    public static function legacyThemeColorDefaults(): array
+    {
+        return [
+            'main_color' => '#2C2CCC',
+            'main_color_hover' => '#1F1F99',
+            'body_background' => '#F7F7F7',
+            'menu_active_bg' => '#EDEDFF',
+            'box_bg_color' => '#FFFFFF',
+            'text_color' => '#333333',
+            'menu_badge_bg' => '#E8E8FF',
+            'dark_main_color' => '#6C6CFF',
+            'dark_main_color_hover' => '#5252E0',
+            'dark_body_background' => '#12121A',
+            'dark_menu_active_bg' => '#2F2F48',
+            'dark_box_bg_color' => '#1E1E2E',
+            'dark_text_color' => '#EAEAEA',
+            'dark_menu_badge_bg' => '#2A2A40',
+        ];
+    }
+
+    /**
+     * @return array<string, array{mode: string, var: string}>
+     */
+    public static function themeColorVariableMeta(): array
+    {
+        $meta = [];
+
+        foreach (self::themeColorKeyToCssVariableMap() as $key => $variable) {
+            $meta[$key] = [
+                'mode' => str_starts_with($key, 'dark_') ? 'dark' : 'light',
+                'var' => $variable,
+            ];
+        }
+
+        return $meta;
     }
 
     public static function persistMissing(): void
