@@ -60,6 +60,7 @@ return [
 	'logo_height' => 'ارتفاع الشعار:',
 	'mobile_logo' => 'شعار الموبايل:',
 	'mobile_logo_width' => 'عرض شعار الموبايل:',
+	'mobile_logo_height' => 'ارتفاع شعار الجوال',
 	'main_color' => 'اللون الاساسي:',
 	'main_color_hover' => 'اللون الاساسي (تمرير):',
 	'boxes_color' => 'لون الصناديق:',

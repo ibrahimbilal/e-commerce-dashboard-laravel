@@ -153,6 +153,20 @@
 						<output class="text-center ms-2" id="rangevalue_1">{{ $sets['mobile_logo_width'] }}</output>
                     </div>
                 </div>
+                <div class="form-item second d-flex flex-wrap mt-3">
+                    <label class="item-title">{{ __('forms.mobile_logo_height') }}</label>
+                    <div class="rang-wrapper d-flex align-items-center">
+                        <input class="form-range"
+								name="mobile_logo_height"
+								type="range"
+								min="0"
+								max="300"
+								step="10"
+								value="{{ $sets['mobile_logo_height'] ?? '' }}"
+								oninput="rangevalue_3.value=value">
+						<output class="text-center ms-2" id="rangevalue_3">{{ $sets['mobile_logo_height'] ?? '' }}</output>
+                    </div>
+                </div>
                 <hr>
                 <div class="row">
                     <div class="col-sm-6">

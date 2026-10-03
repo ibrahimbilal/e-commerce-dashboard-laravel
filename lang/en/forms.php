@@ -60,6 +60,7 @@ return [
 	'logo_height' => 'logo Height:',
 	'mobile_logo' => 'Mobile logo:',
 	'mobile_logo_width' => 'Mobile logo Width:',
+	'mobile_logo_height' => 'Mobile Logo Height',
 	'main_color' => 'Main Color:',
 	'main_color_hover' => 'Main Color (Hover):',
 	'boxes_color' => 'Boxes Color:',

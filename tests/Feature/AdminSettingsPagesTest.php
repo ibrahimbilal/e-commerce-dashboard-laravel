@@ -55,10 +55,14 @@ class AdminSettingsPagesTest extends TestCase
             ->get(route('emails-settings.index'))
             ->assertOk();
 
-        $this->actingAs($this->admin)
+        $themePage = $this->actingAs($this->admin)
             ->get(route('theme-settings.index'))
             ->assertOk()
             ->assertSee('name="logo_height"', false);
+
+        $html = $themePage->getContent();
+        $this->assertSame(1, substr_count($html, 'name="mobile_logo_width"'));
+        $this->assertSame(1, substr_count($html, 'name="mobile_logo_height"'));
     }
 
     public function test_theme_store_persists_logo_height(): void
@@ -103,7 +107,7 @@ class AdminSettingsPagesTest extends TestCase
         AdminSettingDefaults::persistMissing();
 
         $payload = $this->themeStorePayload();
-        $payload['mobile_logo_height'] = '25';
+        $payload['mobile_logo_height'] = '60';
 
         $response = $this->actingAs($this->admin)->post(route('theme-settings.store'), $payload, [
             'Accept' => 'application/json',
@@ -114,9 +118,15 @@ class AdminSettingsPagesTest extends TestCase
         $response->assertJson(['success' => true]);
 
         $this->assertSame(
-            '25',
+            '60',
             Setting::query()->where('setting_key', 'mobile_logo_height')->value('setting_value')
         );
+
+        $this->actingAs($this->admin)
+            ->get(route('theme-settings.index'))
+            ->assertOk()
+            ->assertSee('value="60"', false)
+            ->assertSee('id="rangevalue_3">60</output>', false);
     }
 
     public function test_theme_store_without_mobile_logo_height_keeps_existing_value(): void
