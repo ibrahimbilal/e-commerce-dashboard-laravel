@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Settings;
 use App\Models\Setting;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Settings\StoreSettingsRequest;
+use App\Support\AdminSettingDefaults;
 
 class StoreSettingController extends Controller
 {
@@ -46,6 +47,13 @@ class StoreSettingController extends Controller
 			// Compact only inputs data
 			$sets[$col->setting_key] = $col->setting_value;
 		}
+
+		$sets = AdminSettingDefaults::mergeLoaded($sets, array_keys(AdminSettingDefaults::store()));
+
+		if (! isset($sets['share_on']) || $sets['share_on'] === '' || $sets['share_on'] === null) {
+			$sets['share_on'] = '[]';
+		}
+
 		return view('admin.settings.store', compact('sets'));
 	}
 

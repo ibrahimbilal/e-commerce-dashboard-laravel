@@ -117,7 +117,7 @@ class AdminSettingDefaults
             'compare' => '',
             'out_of_stock_products' => '',
             'social_share' => '',
-            'share_on' => '',
+            'share_on' => '[]',
             'recently_viewed' => '',
             'recommend' => '',
         ];
