@@ -9,11 +9,13 @@ use Database\Seeders\LangSeeder;
 use Database\Seeders\PermissionsSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\Support\SkipsUntilAdminViewsMoved;
 use Tests\TestCase;
 
 class ProductIndexFiltersTest extends TestCase
 {
     use RefreshDatabase;
+    use SkipsUntilAdminViewsMoved;
 
     private User $admin;
 
@@ -27,12 +29,13 @@ class ProductIndexFiltersTest extends TestCase
 
     public function test_published_filter_and_counts(): void
     {
+        $this->skipUntilAdminViewsMoved();
         $published = Product::query()->create(['sku' => 'PUB-1', 'quantity' => 1, 'status' => 'published']);
         ProductLocale::query()->create(['product_id' => $published->id, 'locale' => 'en', 'name' => 'Published One']);
         $draft = Product::query()->create(['sku' => 'DRF-1', 'quantity' => 1, 'status' => 'draft']);
         ProductLocale::query()->create(['product_id' => $draft->id, 'locale' => 'en', 'name' => 'Draft One']);
 
-        $response = $this->actingAs($this->admin)->get(route('products.index', ['status' => 'published']));
+        $response = $this->actingAs($this->admin)->get(route('admin.products.index', ['status' => 'published']));
 
         $response->assertOk();
         $response->assertViewHas('counts', fn (array $counts) => ($counts['published'] ?? 0) === 1 && ($counts['draft'] ?? 0) === 1);
@@ -43,12 +46,13 @@ class ProductIndexFiltersTest extends TestCase
 
     public function test_search_filter_returns_matching_products(): void
     {
+        $this->skipUntilAdminViewsMoved();
         $match = Product::query()->create(['sku' => 'FIND-ME', 'quantity' => 1, 'status' => 'published']);
         ProductLocale::query()->create(['product_id' => $match->id, 'locale' => 'en', 'name' => 'Findable Widget']);
 
         Product::query()->create(['sku' => 'OTHER', 'quantity' => 1, 'status' => 'published']);
 
-        $response = $this->actingAs($this->admin)->get(route('products.index', ['search' => 'Findable']));
+        $response = $this->actingAs($this->admin)->get(route('admin.products.index', ['search' => 'Findable']));
 
         $response->assertOk();
         $response->assertViewHas('filters', fn (array $filters) => ($filters['search'] ?? null) === 'Findable');

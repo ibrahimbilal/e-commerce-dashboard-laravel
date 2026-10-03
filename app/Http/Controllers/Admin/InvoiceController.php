@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
 
 use App\Http\Controllers\Concerns\ManagesTrashedRecords;
 use App\Models\Invoice;
@@ -68,7 +70,7 @@ class InvoiceController extends Controller
 
         $invoice = Invoice::create($data);
 
-        return redirect()->route('invoices.show', $invoice)->with('status', 'Invoice created.');
+        return redirect()->route('admin.invoices.show', $invoice)->with('status', 'Invoice created.');
     }
 
     public function show(Invoice $invoice)
@@ -99,14 +101,14 @@ class InvoiceController extends Controller
 
         $invoice->update($data);
 
-        return redirect()->route('invoices.show', $invoice)->with('status', 'Invoice updated.');
+        return redirect()->route('admin.invoices.show', $invoice)->with('status', 'Invoice updated.');
     }
 
     public function destroy(Invoice $invoice)
     {
         $invoice->delete();
 
-        return redirect()->route('invoices.index')->with('status', 'Invoice deleted.');
+        return redirect()->route('admin.invoices.index')->with('status', 'Invoice deleted.');
     }
 
     public function restore(Request $request, int $id)
@@ -114,7 +116,7 @@ class InvoiceController extends Controller
         $invoice = $this->findOnlyTrashed(Invoice::class, $id);
         $invoice->restore();
 
-        return $this->trashedActionResponse($request, 'invoices.index', 'Invoice restored.');
+        return $this->trashedActionResponse($request, 'admin.invoices.index', 'Invoice restored.');
     }
 
     public function forceDelete(Request $request, int $id)
@@ -122,7 +124,7 @@ class InvoiceController extends Controller
         $invoice = $this->findOnlyTrashed(Invoice::class, $id);
         $invoice->forceDelete();
 
-        return $this->trashedActionResponse($request, 'invoices.index', 'Invoice permanently deleted.');
+        return $this->trashedActionResponse($request, 'admin.invoices.index', 'Invoice permanently deleted.');
     }
 
     /**

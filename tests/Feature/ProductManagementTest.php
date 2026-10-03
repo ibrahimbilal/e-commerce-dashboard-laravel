@@ -27,7 +27,7 @@ class ProductManagementTest extends TestCase
 
     public function test_product_create_persists_sku_and_quantity_and_locale(): void
     {
-        $response = $this->actingAs($this->admin)->post(route('products.store'), [
+        $response = $this->actingAs($this->admin)->post(route('admin.products.store'), [
             'sku' => 'SKU-100',
             'quantity' => 12,
             'locales' => [
@@ -61,7 +61,7 @@ class ProductManagementTest extends TestCase
             ['product_id' => $second->id, 'locale' => 'en', 'name' => 'Two'],
         ]);
 
-        $this->actingAs($this->admin)->put(route('products.update', $first), [
+        $this->actingAs($this->admin)->put(route('admin.products.update', $first), [
             'sku' => 'A-updated',
             'quantity' => 5,
             'locales' => [

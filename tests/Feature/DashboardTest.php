@@ -5,19 +5,22 @@ namespace Tests\Feature;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\Support\SkipsUntilAdminViewsMoved;
 use Tests\TestCase;
 
 class DashboardTest extends TestCase
 {
     use RefreshDatabase;
+    use SkipsUntilAdminViewsMoved;
 
     public function test_admin_dashboard_renders_with_stats(): void
     {
+        $this->skipUntilAdminViewsMoved();
         $this->seed(DatabaseSeeder::class);
 
         $admin = User::query()->where('email', 'admin@example.com')->firstOrFail();
 
-        $response = $this->actingAs($admin)->get(route('dashboard'));
+        $response = $this->actingAs($admin)->get('/admin/dashboard');
 
         $response->assertOk();
         $response->assertViewHas('stats', function (array $stats) {

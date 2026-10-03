@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\Subscriber;
 use App\Support\IndexListing;
@@ -66,7 +68,7 @@ class MarketingController extends Controller
             'token' => null,
         ]);
 
-        return redirect()->route('marketing.index')->with('status', 'Subscriber created.');
+        return redirect()->route('admin.marketing.index')->with('status', 'Subscriber created.');
     }
 
     public function update(Request $request, Subscriber $subscriber)
@@ -83,13 +85,13 @@ class MarketingController extends Controller
             'is_subscriber' => $data['is_subscriber'] ?? $subscriber->is_subscriber,
         ]);
 
-        return redirect()->route('marketing.index')->with('status', 'Subscriber updated.');
+        return redirect()->route('admin.marketing.index')->with('status', 'Subscriber updated.');
     }
 
     public function destroy(Subscriber $subscriber)
     {
         $subscriber->delete();
 
-        return redirect()->route('marketing.index')->with('status', 'Subscriber removed.');
+        return redirect()->route('admin.marketing.index')->with('status', 'Subscriber removed.');
     }
 }

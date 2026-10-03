@@ -65,7 +65,7 @@ class OrderCouponDiscountTest extends TestCase
             'active' => true,
         ]);
 
-        $this->actingAs($this->admin)->post(route('orders.store'), [
+        $this->actingAs($this->admin)->post(route('admin.orders.store'), [
             'customer_id' => $customer->id,
             'address_id' => $address->id,
             'order_status_id' => $status->id,

@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\Customer;
 use App\Models\Product;
@@ -81,7 +83,7 @@ class ReviewController extends Controller
 
         $review = Review::create($data);
 
-        return redirect()->route('reviews.index')->with('status', 'Review created.');
+        return redirect()->route('admin.reviews.index')->with('status', 'Review created.');
     }
 
     public function show(Review $review)
@@ -110,14 +112,14 @@ class ReviewController extends Controller
 
         $review->update($data);
 
-        return redirect()->route('reviews.index')->with('status', 'Review updated.');
+        return redirect()->route('admin.reviews.index')->with('status', 'Review updated.');
     }
 
     public function destroy(Review $review)
     {
         $review->delete();
 
-        return redirect()->route('reviews.index')->with('status', 'Review deleted.');
+        return redirect()->route('admin.reviews.index')->with('status', 'Review deleted.');
     }
 
     public function restore(Request $request, int $id)
@@ -125,7 +127,7 @@ class ReviewController extends Controller
         $review = $this->findOnlyTrashed(Review::class, $id);
         $review->restore();
 
-        return $this->trashedActionResponse($request, 'reviews.index', 'Review restored.');
+        return $this->trashedActionResponse($request, 'admin.reviews.index', 'Review restored.');
     }
 
     public function forceDelete(Request $request, int $id)
@@ -133,7 +135,7 @@ class ReviewController extends Controller
         $review = $this->findOnlyTrashed(Review::class, $id);
         $review->forceDelete();
 
-        return $this->trashedActionResponse($request, 'reviews.index', 'Review permanently deleted.');
+        return $this->trashedActionResponse($request, 'admin.reviews.index', 'Review permanently deleted.');
     }
 
     /**

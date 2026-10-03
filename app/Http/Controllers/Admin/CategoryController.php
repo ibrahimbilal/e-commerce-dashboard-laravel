@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
 
 use App\Http\Controllers\Concerns\ManagesTrashedRecords;
 use App\Models\Category;
@@ -83,12 +85,12 @@ class CategoryController extends Controller
 
         Category::create($data);
 
-        return redirect()->route('categories.index')->with('status', 'Category created.');
+        return redirect()->route('admin.categories.index')->with('status', 'Category created.');
     }
 
     public function show(Category $category)
     {
-        $category->load(['parent', 'children', 'products.locales']);
+        $category->load(['parent', 'children', 'admin.products.locales']);
 
         return view('categories.show', compact('category'));
     }
@@ -120,7 +122,7 @@ class CategoryController extends Controller
 
         $category->update($data);
 
-        return redirect()->route('categories.index')->with('status', 'Category updated.');
+        return redirect()->route('admin.categories.index')->with('status', 'Category updated.');
     }
 
     public function destroy(Request $request, Category $category)
@@ -135,7 +137,7 @@ class CategoryController extends Controller
 
         $category->delete();
 
-        return redirect()->route('categories.index')->with('status', 'Category deleted.');
+        return redirect()->route('admin.categories.index')->with('status', 'Category deleted.');
     }
 
     public function restore(Request $request, int $id)
@@ -143,7 +145,7 @@ class CategoryController extends Controller
         $category = $this->findOnlyTrashed(Category::class, $id);
         $category->restore();
 
-        return $this->trashedActionResponse($request, 'categories.index', 'Category restored.');
+        return $this->trashedActionResponse($request, 'admin.categories.index', 'Category restored.');
     }
 
     public function forceDelete(Request $request, int $id)
@@ -160,7 +162,7 @@ class CategoryController extends Controller
 
         $category->forceDelete();
 
-        return $this->trashedActionResponse($request, 'categories.index', 'Category permanently deleted.');
+        return $this->trashedActionResponse($request, 'admin.categories.index', 'Category permanently deleted.');
     }
 
     private function assertValidCategoryParent(?int $categoryId, ?int $parentId): void

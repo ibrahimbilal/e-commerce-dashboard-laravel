@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
 
 use App\Http\Controllers\Concerns\ManagesTrashedRecords;
 use App\Models\OrderStatus;
@@ -59,12 +61,12 @@ class OrderStatusController extends Controller
 
         $orderStatus = OrderStatus::create($data);
 
-        return redirect()->route('order-statuses.index')->with('status', 'Order status created.');
+        return redirect()->route('admin.order-statuses.index')->with('status', 'Order status created.');
     }
 
     public function show(OrderStatus $orderStatus)
     {
-        $orderStatus->load('orders.customer');
+        $orderStatus->load('admin.orders.customer');
 
         return view('order-statuses.show', compact('orderStatus'));
     }
@@ -82,7 +84,7 @@ class OrderStatusController extends Controller
 
         $orderStatus->update($data);
 
-        return redirect()->route('order-statuses.index')->with('status', 'Order status updated.');
+        return redirect()->route('admin.order-statuses.index')->with('status', 'Order status updated.');
     }
 
     public function destroy(Request $request, OrderStatus $orderStatus)
@@ -97,7 +99,7 @@ class OrderStatusController extends Controller
 
         $orderStatus->delete();
 
-        return redirect()->route('order-statuses.index')->with('status', 'Order status deleted.');
+        return redirect()->route('admin.order-statuses.index')->with('status', 'Order status deleted.');
     }
 
     public function restore(Request $request, int $id)
@@ -105,7 +107,7 @@ class OrderStatusController extends Controller
         $orderStatus = $this->findOnlyTrashed(OrderStatus::class, $id);
         $orderStatus->restore();
 
-        return $this->trashedActionResponse($request, 'order-statuses.index', 'Order status restored.');
+        return $this->trashedActionResponse($request, 'admin.order-statuses.index', 'Order status restored.');
     }
 
     public function forceDelete(Request $request, int $id)
@@ -122,6 +124,6 @@ class OrderStatusController extends Controller
 
         $orderStatus->forceDelete();
 
-        return $this->trashedActionResponse($request, 'order-statuses.index', 'Order status permanently deleted.');
+        return $this->trashedActionResponse($request, 'admin.order-statuses.index', 'Order status permanently deleted.');
     }
 }

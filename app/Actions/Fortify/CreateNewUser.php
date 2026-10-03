@@ -3,9 +3,10 @@
 namespace App\Actions\Fortify;
 
 use App\Models\User;
+use Illuminate\Validation\Rule;
+use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 
 class CreateNewUser implements CreatesNewUsers
@@ -13,36 +14,50 @@ class CreateNewUser implements CreatesNewUsers
     use PasswordValidationRules;
 
     /**
-     * @param  array<string, mixed>  $input
+     * Validate and create a newly registered user.
+     *
+     * @param  array  $input
+     * @return \App\Models\User
      */
-    public function create(array $input): User
+    public function create(array $input)
     {
-        Validator::make($input, [
-            'first_name' => ['required', 'string', 'max:50'],
-            'last_name' => ['required', 'string', 'max:50'],
+		Validator::make($input, [
+            'first_name' => ['required', 'string', 'max:255'],
+			'last_name'	=> ['required', 'string', 'max:255'],
             'email' => [
                 'required',
                 'string',
                 'email',
-                'max:50',
+                'max:255',
                 Rule::unique(User::class),
             ],
             'password' => $this->passwordRules(),
-            'mobile' => ['nullable', 'string', 'max:20'],
-            'profile_picture' => ['nullable', 'string', 'max:191'],
+			'mobile' => ['nullable', 'numeric', 'digits_between:9,15'],
+			'birth_date' => [
+				'nullable',
+				'date',
+				'date_format:Y-m-d',
+				'before_or_equal:' . date("Y-m-d", strtotime('-18 years'))
+			],
+			'gender' => ['required',Rule::in(['male', 'female'])],
+			'role_name' => ['required','string', Rule::exists(Role::class, 'name')],
+			'language' => ['required','string'],
+			'profile_picture' => [
+				'nullable',
+			],
         ])->validate();
 
-        $user = User::create([
+        return User::create([
             'first_name' => $input['first_name'],
             'last_name' => $input['last_name'],
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
-            'mobile' => $input['mobile'] ?? null,
-            'profile_picture' => $input['profile_picture'] ?? null,
+            'mobile' => $input['mobile'],
+            'birth_date' => $input['birth_date'],
+            'gender' => $input['gender'],
+            'role_name' => $input['role_name'],
+            'language' => $input['language'],
+            'profile_picture' => $input['profile_picture'],
         ]);
-
-        $user->markEmailAsVerified();
-
-        return $user;
     }
 }

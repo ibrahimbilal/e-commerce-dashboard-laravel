@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\Attribute;
 use App\Support\IndexListing;
@@ -54,7 +56,7 @@ class AttributeController extends Controller
 
         $attribute = Attribute::create($data);
 
-        return redirect()->route('attributes.index')->with('status', 'Attribute created.');
+        return redirect()->route('admin.attributes.index')->with('status', 'Attribute created.');
     }
 
     public function show(Attribute $attribute)
@@ -78,7 +80,7 @@ class AttributeController extends Controller
 
         $attribute->update($data);
 
-        return redirect()->route('attributes.index')->with('status', 'Attribute updated.');
+        return redirect()->route('admin.attributes.index')->with('status', 'Attribute updated.');
     }
 
     public function destroy(Request $request, Attribute $attribute)
@@ -93,6 +95,6 @@ class AttributeController extends Controller
 
         $attribute->delete();
 
-        return redirect()->route('attributes.index')->with('status', 'Attribute deleted.');
+        return redirect()->route('admin.attributes.index')->with('status', 'Attribute deleted.');
     }
 }

@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
 
 use App\Http\Controllers\Concerns\ManagesTrashedRecords;
 use App\Models\Coupon;
@@ -85,12 +87,12 @@ class CouponController extends Controller
 
         $coupon = Coupon::create($data);
 
-        return redirect()->route('coupons.index')->with('status', 'Coupon created.');
+        return redirect()->route('admin.coupons.index')->with('status', 'Coupon created.');
     }
 
     public function show(Coupon $coupon)
     {
-        $coupon->load(['orders.customer', 'customers']);
+        $coupon->load(['admin.orders.customer', 'customers']);
 
         return view('coupons.show', compact('coupon'));
     }
@@ -115,7 +117,7 @@ class CouponController extends Controller
 
         $coupon->update($data);
 
-        return redirect()->route('coupons.index')->with('status', 'Coupon updated.');
+        return redirect()->route('admin.coupons.index')->with('status', 'Coupon updated.');
     }
 
     public function destroy(Request $request, Coupon $coupon)
@@ -130,7 +132,7 @@ class CouponController extends Controller
 
         $coupon->delete();
 
-        return redirect()->route('coupons.index')->with('status', 'Coupon deleted.');
+        return redirect()->route('admin.coupons.index')->with('status', 'Coupon deleted.');
     }
 
     public function restore(Request $request, int $id)
@@ -138,7 +140,7 @@ class CouponController extends Controller
         $coupon = $this->findOnlyTrashed(Coupon::class, $id);
         $coupon->restore();
 
-        return $this->trashedActionResponse($request, 'coupons.index', 'Coupon restored.');
+        return $this->trashedActionResponse($request, 'admin.coupons.index', 'Coupon restored.');
     }
 
     public function forceDelete(Request $request, int $id)
@@ -155,6 +157,6 @@ class CouponController extends Controller
 
         $coupon->forceDelete();
 
-        return $this->trashedActionResponse($request, 'coupons.index', 'Coupon permanently deleted.');
+        return $this->trashedActionResponse($request, 'admin.coupons.index', 'Coupon permanently deleted.');
     }
 }

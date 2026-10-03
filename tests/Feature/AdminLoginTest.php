@@ -15,12 +15,12 @@ class AdminLoginTest extends TestCase
     {
         $this->seed([PermissionsSeeder::class, UserSeeder::class]);
 
-        $response = $this->post('/login', [
+        $response = $this->post('/admin/login', [
             'email' => 'admin@example.com',
             'password' => 'password',
         ]);
 
-        $response->assertRedirect('/dashboard');
+        $response->assertRedirect('/admin/dashboard');
         $this->assertAuthenticatedAs(
             \App\Models\User::query()->where('email', 'admin@example.com')->first()
         );

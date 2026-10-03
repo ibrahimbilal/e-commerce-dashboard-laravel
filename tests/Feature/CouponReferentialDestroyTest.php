@@ -54,9 +54,9 @@ class CouponReferentialDestroyTest extends TestCase
         ]);
 
         $this->actingAs($this->admin)
-            ->from(route('coupons.index'))
-            ->delete(route('coupons.destroy', $coupon))
-            ->assertRedirect(route('coupons.index'))
+            ->from(route('admin.coupons.index'))
+            ->delete(route('admin.coupons.destroy', $coupon))
+            ->assertRedirect(route('admin.coupons.index'))
             ->assertSessionHas('status');
 
         $this->assertDatabaseHas('coupons', ['id' => $coupon->id, 'deleted_at' => null]);
@@ -90,9 +90,9 @@ class CouponReferentialDestroyTest extends TestCase
         $coupon->delete();
 
         $this->actingAs($this->admin)
-            ->from(route('coupons.index', ['trashed' => 1]))
-            ->delete(route('coupons.force-delete', $coupon->id))
-            ->assertRedirect(route('coupons.index', ['trashed' => 1]))
+            ->from(route('admin.coupons.index', ['trashed' => 1]))
+            ->delete(route('admin.coupons.force-delete', $coupon->id))
+            ->assertRedirect(route('admin.coupons.index', ['trashed' => 1]))
             ->assertSessionHas('status');
 
         $this->assertSoftDeleted('coupons', ['id' => $coupon->id]);

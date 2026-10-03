@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
 
 use App\Http\Controllers\Concerns\ManagesTrashedRecords;
 use App\Models\Customer;
@@ -74,12 +76,12 @@ class CustomerController extends Controller
 
         $customer = Customer::create($data);
 
-        return redirect()->route('customers.show', $customer)->with('status', 'Customer created.');
+        return redirect()->route('admin.customers.show', $customer)->with('status', 'Customer created.');
     }
 
     public function show(Customer $customer)
     {
-        $customer->load(['addresses', 'orders.orderStatus', 'reviews.product', 'coupons']);
+        $customer->load(['addresses', 'admin.orders.orderStatus', 'admin.reviews.product', 'coupons']);
 
         return view('customers.show', compact('customer'));
     }
@@ -112,7 +114,7 @@ class CustomerController extends Controller
 
         $customer->update($data);
 
-        return redirect()->route('customers.show', $customer)->with('status', 'Customer updated.');
+        return redirect()->route('admin.customers.show', $customer)->with('status', 'Customer updated.');
     }
 
     public function destroy(Request $request, Customer $customer)
@@ -127,7 +129,7 @@ class CustomerController extends Controller
 
         $customer->delete();
 
-        return redirect()->route('customers.index')->with('status', 'Customer deleted.');
+        return redirect()->route('admin.customers.index')->with('status', 'Customer deleted.');
     }
 
     public function restore(Request $request, int $id)
@@ -135,7 +137,7 @@ class CustomerController extends Controller
         $customer = $this->findOnlyTrashed(Customer::class, $id);
         $customer->restore();
 
-        return $this->trashedActionResponse($request, 'customers.index', 'Customer restored.');
+        return $this->trashedActionResponse($request, 'admin.customers.index', 'Customer restored.');
     }
 
     public function forceDelete(Request $request, int $id)
@@ -152,6 +154,6 @@ class CustomerController extends Controller
 
         $customer->forceDelete();
 
-        return $this->trashedActionResponse($request, 'customers.index', 'Customer permanently deleted.');
+        return $this->trashedActionResponse($request, 'admin.customers.index', 'Customer permanently deleted.');
     }
 }

@@ -28,14 +28,14 @@ class PermissionForbiddenTest extends TestCase
     public function test_viewer_gets_403_on_order_store(): void
     {
         $this->actingAs($this->viewer)
-            ->post(route('orders.store'), [])
+            ->post(route('admin.orders.store'), [])
             ->assertForbidden();
     }
 
     public function test_viewer_gets_json_403_on_ajax_order_store(): void
     {
         $this->actingAs($this->viewer)
-            ->postJson(route('orders.store'), [])
+            ->postJson(route('admin.orders.store'), [])
             ->assertForbidden()
             ->assertJson(['responseStatus' => 403]);
     }

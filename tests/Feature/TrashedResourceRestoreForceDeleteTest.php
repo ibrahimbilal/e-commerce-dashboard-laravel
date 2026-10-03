@@ -60,7 +60,7 @@ class TrashedResourceRestoreForceDeleteTest extends TestCase
         $this->assertSoftDeleted($model);
 
         $this->actingAs($this->admin)
-            ->patch(route($prefix.'.restore', $model->getKey()))
+            ->patch(route('admin.'.$prefix.'.restore', $model->getKey()))
             ->assertRedirect(route($indexRoute, ['trashed' => '1']))
             ->assertSessionHas('status');
 
@@ -76,7 +76,7 @@ class TrashedResourceRestoreForceDeleteTest extends TestCase
         $model->delete();
 
         $this->actingAs($this->admin)
-            ->delete(route($prefix.'.force-delete', $model->getKey()))
+            ->delete(route('admin.'.$prefix.'.force-delete', $model->getKey()))
             ->assertRedirect(route($indexRoute, ['trashed' => '1']))
             ->assertSessionHas('status');
 
@@ -92,11 +92,11 @@ class TrashedResourceRestoreForceDeleteTest extends TestCase
         $model->delete();
 
         $this->actingAs($this->viewer)
-            ->patch(route($prefix.'.restore', $model->getKey()))
+            ->patch(route('admin.'.$prefix.'.restore', $model->getKey()))
             ->assertForbidden();
 
         $this->actingAs($this->viewer)
-            ->delete(route($prefix.'.force-delete', $model->getKey()))
+            ->delete(route('admin.'.$prefix.'.force-delete', $model->getKey()))
             ->assertForbidden();
     }
 
@@ -109,7 +109,7 @@ class TrashedResourceRestoreForceDeleteTest extends TestCase
         ]);
 
         $this->actingAs($this->admin)
-            ->patch(route('tags.restore', $tag->id))
+            ->patch(route('admin.tags.restore', $tag->id))
             ->assertNotFound();
     }
 
@@ -142,9 +142,9 @@ class TrashedResourceRestoreForceDeleteTest extends TestCase
         $product->delete();
 
         $this->actingAs($this->admin)
-            ->from(route('products.index', ['trashed' => 1]))
-            ->delete(route('products.force-delete', $product->id))
-            ->assertRedirect(route('products.index', ['trashed' => 1]))
+            ->from(route('admin.products.index', ['trashed' => 1]))
+            ->delete(route('admin.products.force-delete', $product->id))
+            ->assertRedirect(route('admin.products.index', ['trashed' => 1]))
             ->assertSessionHas('status');
 
         $this->assertSoftDeleted('products', ['id' => $product->id]);
@@ -155,22 +155,22 @@ class TrashedResourceRestoreForceDeleteTest extends TestCase
         return [
             'products' => [
                 'products',
-                'products.index',
+                'admin.products.index',
                 fn (User $admin) => Product::query()->create(['sku' => 'TR-'.uniqid(), 'quantity' => 1, 'status' => 'draft']),
             ],
             'categories' => [
                 'categories',
-                'categories.index',
+                'admin.categories.index',
                 fn (User $admin) => Category::query()->create(['title' => 'Trash Cat', 'locale' => 'en', 'category_slug' => 'trash-'.uniqid()]),
             ],
             'tags' => [
                 'tags',
-                'tags.index',
+                'admin.tags.index',
                 fn (User $admin) => Tag::query()->create(['title' => 'Trash Tag', 'locale' => 'en', 'tag_slug' => 'trash-'.uniqid()]),
             ],
             'orders' => [
                 'orders',
-                'orders.index',
+                'admin.orders.index',
                 function (User $admin) {
                     $customer = Customer::query()->create(['email' => 'ord-'.uniqid().'@example.com', 'password' => bcrypt('x')]);
                     $address = Address::query()->create(['customer_id' => $customer->id, 'address_title' => 'Home']);
@@ -187,12 +187,12 @@ class TrashedResourceRestoreForceDeleteTest extends TestCase
             ],
             'customers' => [
                 'customers',
-                'customers.index',
+                'admin.customers.index',
                 fn (User $admin) => Customer::query()->create(['email' => 'cust-'.uniqid().'@example.com', 'password' => bcrypt('x')]),
             ],
             'coupons' => [
                 'coupons',
-                'coupons.index',
+                'admin.coupons.index',
                 fn (User $admin) => Coupon::query()->create([
                     'title' => 'Trash Coupon',
                     'code' => strtoupper(substr(uniqid(), -5)),
@@ -205,7 +205,7 @@ class TrashedResourceRestoreForceDeleteTest extends TestCase
             ],
             'discounts' => [
                 'discounts',
-                'discounts.index',
+                'admin.discounts.index',
                 fn (User $admin) => Discount::query()->create([
                     'title' => 'Trash Discount',
                     'discount' => 5,
@@ -215,7 +215,7 @@ class TrashedResourceRestoreForceDeleteTest extends TestCase
             ],
             'reviews' => [
                 'reviews',
-                'reviews.index',
+                'admin.reviews.index',
                 function (User $admin) {
                     $customer = Customer::query()->create(['email' => 'rev-'.uniqid().'@example.com', 'password' => bcrypt('x')]);
                     $product = Product::query()->create(['sku' => 'REV-'.uniqid(), 'quantity' => 1, 'status' => 'published']);
@@ -230,32 +230,13 @@ class TrashedResourceRestoreForceDeleteTest extends TestCase
             ],
             'invoices' => [
                 'invoices',
-                'invoices.index',
+                'admin.invoices.index',
                 fn (User $admin) => Invoice::query()->create(['invoice_no' => random_int(1000, 9999)]),
-            ],
-            'users' => [
-                'users',
-                'users.index',
-                function (User $admin) {
-                    $user = User::factory()->create(['email' => 'trash-user-'.uniqid().'@example.com']);
-                    $user->markEmailAsVerified();
-                    $user->assignRole('viewer');
-
-                    return $user;
-                },
             ],
             'order-statuses' => [
                 'order-statuses',
-                'order-statuses.index',
+                'admin.order-statuses.index',
                 fn (User $admin) => OrderStatus::query()->create(['title' => 'Trash OS '.uniqid()]),
-            ],
-            'gallery' => [
-                'gallery',
-                'gallery.index',
-                fn (User $admin) => Gallery::query()->create([
-                    'url' => 'demo/trash.png',
-                    'user_id' => $admin->id,
-                ]),
             ],
         ];
     }

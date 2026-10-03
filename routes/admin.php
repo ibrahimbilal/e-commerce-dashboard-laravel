@@ -7,16 +7,16 @@ Route::prefix('/admin')->group(function () {
 	// Authentication
 	Route::get('/login', function () {
 		return view('admin.auth.login');
-	})->name('admin.login');
+	})->name('login');
 
 	// forget / reset / confirm password
 	Route::get('/forgot-password', function () {
 		return view('admin.auth.forgot-password');
-	})->name('admin.password.request');
+	})->name('password.request');
 
 	Route::get('/reset-password/{token}', function ($request) {
 		return view('admin.auth.reset-password', ['request' => $request]);
-	})->name('admin.password.reset');
+	})->name('password.reset');
 
 	Route::get('/user/confirm-password', function () {
 		return view('admin.auth.password-confirm');
@@ -25,12 +25,12 @@ Route::prefix('/admin')->group(function () {
 	// verify email
 	Route::get('/email/verify', function () {
 		return view('admin.auth.verify-email');
-	})->name('admin.verification.notice');
+	})->name('verification.notice');
 
 	// two factor authentication
 	Route::get('/two-factor-challeng', function () {
 		return view('admin.auth.two-factor-challeng');
-	})->name('admin.two-factor.login');
+	})->name('two-factor.login');
 
 	Route::middleware(['auth', 'verified'])->group(function () {
 
@@ -44,20 +44,20 @@ Route::prefix('/admin')->group(function () {
 		Route::post('/users/show-code', [App\Http\Controllers\Admin\UserController::class, 'show_codes'])->name('users.show_recovery_code');
 		Route::post('/users/generate-code', [App\Http\Controllers\Admin\UserController::class, 'regenerate_codes'])->name('users.regenerate_recovery_code');
 
-		Route::post('/users/{user}/restore', [App\Http\Controllers\Admin\UserController::class, 'restore'])->name('admin.users.restore');
-		Route::post('/users/{user}/force-delete', [App\Http\Controllers\Admin\UserController::class, 'force_delete'])->name('admin.users.force_delete');
+		Route::post('/users/{user}/restore', [App\Http\Controllers\Admin\UserController::class, 'restore'])->name('users.restore');
+		Route::post('/users/{user}/force-delete', [App\Http\Controllers\Admin\UserController::class, 'force_delete'])->name('users.force_delete');
 
 		Route::post('/users/bulk-delete', [App\Http\Controllers\Admin\UserController::class, 'bulk_destroy'])->name('users.bulk_delete');
 		Route::post('/users/bulk-restore', [App\Http\Controllers\Admin\UserController::class, 'bulk_restore'])->name('users.bulk_restore');
 		Route::post('/users/bulk-force-delete', [App\Http\Controllers\Admin\UserController::class, 'bulk_force_delete'])->name('users.bulk_force_delete');
 
-		Route::resource('/users', App\Http\Controllers\Admin\UserController::class)->names('admin.users');
+		Route::resource('/users', App\Http\Controllers\Admin\UserController::class);
 
 		// Roles Pages
-		Route::resource('/roles', App\Http\Controllers\Admin\RoleController::class)->names('admin.roles');
+		Route::resource('/roles', App\Http\Controllers\Admin\RoleController::class);
 
 		// Gallery Pages
-		Route::resource('/gallery', App\Http\Controllers\Admin\GalleryController::class)->names('admin.gallery');
+		Route::resource('/gallery', App\Http\Controllers\Admin\GalleryController::class);
 		Route::post('/gallery/get-metas', [App\Http\Controllers\Admin\GalleryController::class, 'get_image_meta'])->name('get_metas');
 
 		// Languages Pages

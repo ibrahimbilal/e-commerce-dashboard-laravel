@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\Customer;
 use App\Models\Order;
@@ -33,7 +35,7 @@ class DashboardController extends Controller
                 DB::raw('SUM(order_items.quantity) as quantity_sold'),
             ])
             ->join('products_attributes', 'products_attributes.id', '=', 'order_items.product_attribute_id')
-            ->join('products', 'products.id', '=', 'products_attributes.product_id')
+            ->join('products', 'admin.products.id', '=', 'products_attributes.product_id')
             ->groupBy('products_attributes.product_id')
             ->orderByDesc('quantity_sold')
             ->limit(5)

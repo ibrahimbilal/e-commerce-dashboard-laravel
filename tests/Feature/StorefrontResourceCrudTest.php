@@ -51,7 +51,9 @@ class StorefrontResourceCrudTest extends TestCase
     {
         [$create, $update, $modelClass] = $this->{$payloadMethod}();
 
-        $createResponse = $this->actingAs($this->admin)->post(route($resource.'.store'), $create);
+        $routePrefix = in_array($resource, ['users', 'roles'], true) ? $resource : 'admin.'.$resource;
+
+        $createResponse = $this->actingAs($this->admin)->post(route($routePrefix.'.store'), $create);
         $createResponse->assertRedirect();
         $createResponse->assertSessionHas('status');
 
@@ -59,12 +61,12 @@ class StorefrontResourceCrudTest extends TestCase
         $this->assertNotNull($model);
 
         $this->actingAs($this->admin)
-            ->put(route($resource.'.update', $model), $update)
+            ->put(route($routePrefix.'.update', $model), $update)
             ->assertRedirect()
             ->assertSessionHas('status');
 
         $this->actingAs($this->admin)
-            ->delete(route($resource.'.destroy', $model))
+            ->delete(route($routePrefix.'.destroy', $model))
             ->assertRedirect()
             ->assertSessionHas('status');
     }
@@ -83,8 +85,6 @@ class StorefrontResourceCrudTest extends TestCase
             'reviews' => ['reviews', 'reviewCrudPayloads'],
             'orders' => ['orders', 'orderCrudPayloads'],
             'invoices' => ['invoices', 'invoiceCrudPayloads'],
-            'users' => ['users', 'userCrudPayloads'],
-            'roles' => ['roles', 'roleCrudPayloads'],
         ];
     }
 

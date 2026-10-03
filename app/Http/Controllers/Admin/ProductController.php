@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\Attribute;
 use App\Models\Category;
@@ -100,12 +102,12 @@ class ProductController extends Controller
             return $product;
         });
 
-        return redirect()->route('products.edit', $product)->with('status', 'Product created.');
+        return redirect()->route('admin.products.edit', $product)->with('status', 'Product created.');
     }
 
     public function show(Product $product)
     {
-        $product->load(['locales', 'categories', 'tags', 'productAttributes.attributeOne', 'productAttributes.attributeTwo', 'reviews.customer']);
+        $product->load(['locales', 'categories', 'tags', 'productAttributes.attributeOne', 'productAttributes.attributeTwo', 'admin.reviews.customer']);
 
         return view('products.show', compact('product'));
     }
@@ -129,7 +131,7 @@ class ProductController extends Controller
             $this->applyProductRelations($product, $request, $validated);
         });
 
-        return redirect()->route('products.edit', $product)->with('status', 'Product updated.');
+        return redirect()->route('admin.products.edit', $product)->with('status', 'Product updated.');
     }
 
     public function destroy(Request $request, Product $product)
@@ -144,7 +146,7 @@ class ProductController extends Controller
 
         $product->delete();
 
-        return redirect()->route('products.index')->with('status', 'Product deleted.');
+        return redirect()->route('admin.products.index')->with('status', 'Product deleted.');
     }
 
     public function restore(Request $request, int $id)
@@ -152,7 +154,7 @@ class ProductController extends Controller
         $product = $this->findOnlyTrashed(Product::class, $id);
         $product->restore();
 
-        return $this->trashedActionResponse($request, 'products.index', 'Product restored.');
+        return $this->trashedActionResponse($request, 'admin.products.index', 'Product restored.');
     }
 
     public function forceDelete(Request $request, int $id)
@@ -170,7 +172,7 @@ class ProductController extends Controller
         StoredMediaCleanup::deleteProductImage($product);
         $product->forceDelete();
 
-        return $this->trashedActionResponse($request, 'products.index', 'Product permanently deleted.');
+        return $this->trashedActionResponse($request, 'admin.products.index', 'Product permanently deleted.');
     }
 
     /**

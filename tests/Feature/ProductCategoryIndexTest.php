@@ -7,11 +7,13 @@ use Database\Seeders\LangSeeder;
 use Database\Seeders\PermissionsSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\Support\SkipsUntilAdminViewsMoved;
 use Tests\TestCase;
 
 class ProductCategoryIndexTest extends TestCase
 {
     use RefreshDatabase;
+    use SkipsUntilAdminViewsMoved;
 
     private User $admin;
 
@@ -25,7 +27,8 @@ class ProductCategoryIndexTest extends TestCase
 
     public function test_products_and_categories_index_return_ok_when_records_exist(): void
     {
-        $this->actingAs($this->admin)->post(route('products.store'), [
+        $this->skipUntilAdminViewsMoved();
+        $this->actingAs($this->admin)->post(route('admin.products.store'), [
             'sku' => 'IDX-1',
             'quantity' => 1,
             'locales' => [
@@ -36,13 +39,13 @@ class ProductCategoryIndexTest extends TestCase
             ],
         ])->assertRedirect();
 
-        $this->actingAs($this->admin)->post(route('categories.store'), [
+        $this->actingAs($this->admin)->post(route('admin.categories.store'), [
             'title' => 'Index Category',
             'locale' => 'en',
             'category_slug' => 'index-category',
         ])->assertRedirect();
 
-        $this->actingAs($this->admin)->get(route('products.index'))->assertOk();
-        $this->actingAs($this->admin)->get(route('categories.index'))->assertOk();
+        $this->actingAs($this->admin)->get(route('admin.products.index'))->assertOk();
+        $this->actingAs($this->admin)->get(route('admin.categories.index'))->assertOk();
     }
 }

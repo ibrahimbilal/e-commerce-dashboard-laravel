@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
 
 use App\Http\Controllers\Concerns\ManagesTrashedRecords;
 use App\Models\Discount;
@@ -80,7 +82,7 @@ class DiscountController extends Controller
 
         $discount = Discount::create($data);
 
-        return redirect()->route('discounts.index')->with('status', 'Discount created.');
+        return redirect()->route('admin.discounts.index')->with('status', 'Discount created.');
     }
 
     public function show(Discount $discount)
@@ -107,14 +109,14 @@ class DiscountController extends Controller
 
         $discount->update($data);
 
-        return redirect()->route('discounts.index')->with('status', 'Discount updated.');
+        return redirect()->route('admin.discounts.index')->with('status', 'Discount updated.');
     }
 
     public function destroy(Discount $discount)
     {
         $discount->delete();
 
-        return redirect()->route('discounts.index')->with('status', 'Discount deleted.');
+        return redirect()->route('admin.discounts.index')->with('status', 'Discount deleted.');
     }
 
     public function restore(Request $request, int $id)
@@ -122,7 +124,7 @@ class DiscountController extends Controller
         $discount = $this->findOnlyTrashed(Discount::class, $id);
         $discount->restore();
 
-        return $this->trashedActionResponse($request, 'discounts.index', 'Discount restored.');
+        return $this->trashedActionResponse($request, 'admin.discounts.index', 'Discount restored.');
     }
 
     public function forceDelete(Request $request, int $id)
@@ -130,6 +132,6 @@ class DiscountController extends Controller
         $discount = $this->findOnlyTrashed(Discount::class, $id);
         $discount->forceDelete();
 
-        return $this->trashedActionResponse($request, 'discounts.index', 'Discount permanently deleted.');
+        return $this->trashedActionResponse($request, 'admin.discounts.index', 'Discount permanently deleted.');
     }
 }

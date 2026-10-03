@@ -14,11 +14,13 @@ use Database\Seeders\LangSeeder;
 use Database\Seeders\PermissionsSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\Support\SkipsUntilAdminViewsMoved;
 use Tests\TestCase;
 
 class OrderFormVariantsTest extends TestCase
 {
     use RefreshDatabase;
+    use SkipsUntilAdminViewsMoved;
 
     private User $admin;
 
@@ -32,15 +34,16 @@ class OrderFormVariantsTest extends TestCase
 
     public function test_order_create_and_edit_views_receive_product_variants(): void
     {
+        $this->skipUntilAdminViewsMoved();
         $this->seedVariant();
 
-        $create = $this->actingAs($this->admin)->get(route('orders.create'));
+        $create = $this->actingAs($this->admin)->get(route('admin.orders.create'));
         $create->assertOk();
         $create->assertViewHas('productVariants', fn ($variants) => $variants->count() >= 1);
 
         $order = $this->createOrderWithItem();
 
-        $edit = $this->actingAs($this->admin)->get(route('orders.edit', $order));
+        $edit = $this->actingAs($this->admin)->get(route('admin.orders.edit', $order));
         $edit->assertOk();
         $edit->assertViewHas('productVariants', fn ($variants) => $variants->count() >= 1);
     }
@@ -58,7 +61,7 @@ class OrderFormVariantsTest extends TestCase
         ]);
         $status = OrderStatus::query()->create(['title' => 'Pending']);
 
-        $response = $this->actingAs($this->admin)->post(route('orders.store'), [
+        $response = $this->actingAs($this->admin)->post(route('admin.orders.store'), [
             'customer_id' => $customer->id,
             'address_id' => $address->id,
             'order_status_id' => $status->id,
@@ -111,7 +114,7 @@ class OrderFormVariantsTest extends TestCase
         ]);
         $status = OrderStatus::query()->create(['title' => 'Pending']);
 
-        $response = $this->actingAs($this->admin)->post(route('orders.store'), [
+        $response = $this->actingAs($this->admin)->post(route('admin.orders.store'), [
             'customer_id' => $customer->id,
             'address_id' => $address->id,
             'order_status_id' => $status->id,

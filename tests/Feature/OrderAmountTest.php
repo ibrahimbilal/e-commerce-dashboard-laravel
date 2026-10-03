@@ -62,7 +62,7 @@ class OrderAmountTest extends TestCase
             'attribute_2_id' => $this->createAttribute('Size', 'M'),
         ]);
 
-        $this->actingAs($this->admin)->post(route('orders.store'), [
+        $this->actingAs($this->admin)->post(route('admin.orders.store'), [
             'customer_id' => $customer->id,
             'address_id' => $foreignAddress->id,
             'order_status_id' => $status->id,
@@ -71,7 +71,7 @@ class OrderAmountTest extends TestCase
             ],
         ])->assertSessionHasErrors('address_id');
 
-        $this->actingAs($this->admin)->post(route('orders.store'), [
+        $this->actingAs($this->admin)->post(route('admin.orders.store'), [
             'customer_id' => $customer->id,
             'address_id' => $address->id,
             'order_status_id' => $status->id,

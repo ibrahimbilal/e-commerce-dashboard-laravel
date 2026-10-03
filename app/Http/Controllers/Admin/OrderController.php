@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
 
 use App\Http\Controllers\Concerns\ManagesTrashedRecords;
 use App\Models\Address;
@@ -99,7 +101,7 @@ class OrderController extends Controller
             return $order;
         });
 
-        return redirect()->route('orders.edit', $order)->with('status', 'Order created.');
+        return redirect()->route('admin.orders.edit', $order)->with('status', 'Order created.');
     }
 
     public function show(Order $order)
@@ -144,14 +146,14 @@ class OrderController extends Controller
             $order->update($payload['order']);
         });
 
-        return redirect()->route('orders.edit', $order)->with('status', 'Order updated.');
+        return redirect()->route('admin.orders.edit', $order)->with('status', 'Order updated.');
     }
 
     public function destroy(Order $order)
     {
         $order->delete();
 
-        return redirect()->route('orders.index')->with('status', 'Order deleted.');
+        return redirect()->route('admin.orders.index')->with('status', 'Order deleted.');
     }
 
     public function restore(Request $request, int $id)
@@ -159,7 +161,7 @@ class OrderController extends Controller
         $order = $this->findOnlyTrashed(Order::class, $id);
         $order->restore();
 
-        return $this->trashedActionResponse($request, 'orders.index', 'Order restored.');
+        return $this->trashedActionResponse($request, 'admin.orders.index', 'Order restored.');
     }
 
     public function forceDelete(Request $request, int $id)
@@ -167,7 +169,7 @@ class OrderController extends Controller
         $order = $this->findOnlyTrashed(Order::class, $id);
         $order->forceDelete();
 
-        return $this->trashedActionResponse($request, 'orders.index', 'Order permanently deleted.');
+        return $this->trashedActionResponse($request, 'admin.orders.index', 'Order permanently deleted.');
     }
 
     /**

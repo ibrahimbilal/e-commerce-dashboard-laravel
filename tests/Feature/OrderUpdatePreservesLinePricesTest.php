@@ -37,7 +37,7 @@ class OrderUpdatePreservesLinePricesTest extends TestCase
 
         $variant->product->update(['regular_price' => 9999, 'sale_price' => null]);
 
-        $this->actingAs($this->admin)->put(route('orders.update', $order), [
+        $this->actingAs($this->admin)->put(route('admin.orders.update', $order), [
             'customer_id' => $order->customer_id,
             'address_id' => $order->address_id,
             'order_status_id' => $order->order_status_id,
@@ -54,7 +54,7 @@ class OrderUpdatePreservesLinePricesTest extends TestCase
             'price' => 100,
         ]);
 
-        $this->actingAs($this->admin)->put(route('orders.update', $order), [
+        $this->actingAs($this->admin)->put(route('admin.orders.update', $order), [
             'customer_id' => $order->customer_id,
             'address_id' => $order->address_id,
             'order_status_id' => $order->order_status_id,
@@ -102,7 +102,7 @@ class OrderUpdatePreservesLinePricesTest extends TestCase
             'attribute_2_id' => $this->createAttribute('Size', 'M'),
         ]);
 
-        $this->actingAs($this->admin)->post(route('orders.store'), [
+        $this->actingAs($this->admin)->post(route('admin.orders.store'), [
             'customer_id' => $customer->id,
             'address_id' => $address->id,
             'order_status_id' => $status->id,

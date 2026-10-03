@@ -20,7 +20,7 @@ class ProductsIndexAuthorizationTest extends TestCase
         $user->markEmailAsVerified();
 
         $this->actingAs($user)
-            ->get(route('products.index'))
+            ->get(route('admin.products.index'))
             ->assertForbidden();
     }
 }

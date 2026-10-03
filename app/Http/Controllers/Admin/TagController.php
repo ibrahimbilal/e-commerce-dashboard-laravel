@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
 
 use App\Http\Controllers\Concerns\ManagesTrashedRecords;
 use App\Models\Tag;
@@ -70,12 +72,12 @@ class TagController extends Controller
 
         Tag::create($data);
 
-        return redirect()->route('tags.index')->with('status', 'Tag created.');
+        return redirect()->route('admin.tags.index')->with('status', 'Tag created.');
     }
 
     public function show(Tag $tag)
     {
-        $tag->load(['parent', 'children', 'products.locales']);
+        $tag->load(['parent', 'children', 'admin.products.locales']);
 
         return view('tags.show', compact('tag'));
     }
@@ -102,14 +104,14 @@ class TagController extends Controller
 
         $tag->update($data);
 
-        return redirect()->route('tags.index')->with('status', 'Tag updated.');
+        return redirect()->route('admin.tags.index')->with('status', 'Tag updated.');
     }
 
     public function destroy(Tag $tag)
     {
         $tag->delete();
 
-        return redirect()->route('tags.index')->with('status', 'Tag deleted.');
+        return redirect()->route('admin.tags.index')->with('status', 'Tag deleted.');
     }
 
     public function restore(Request $request, int $id)
@@ -117,7 +119,7 @@ class TagController extends Controller
         $tag = $this->findOnlyTrashed(Tag::class, $id);
         $tag->restore();
 
-        return $this->trashedActionResponse($request, 'tags.index', 'Tag restored.');
+        return $this->trashedActionResponse($request, 'admin.tags.index', 'Tag restored.');
     }
 
     public function forceDelete(Request $request, int $id)
@@ -125,6 +127,6 @@ class TagController extends Controller
         $tag = $this->findOnlyTrashed(Tag::class, $id);
         $tag->forceDelete();
 
-        return $this->trashedActionResponse($request, 'tags.index', 'Tag permanently deleted.');
+        return $this->trashedActionResponse($request, 'admin.tags.index', 'Tag permanently deleted.');
     }
 }

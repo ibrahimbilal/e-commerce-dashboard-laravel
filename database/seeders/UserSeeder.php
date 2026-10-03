@@ -18,9 +18,14 @@ class UserSeeder extends Seeder
             'password' => Hash::make('password'),
             'first_name' => 'Admin',
             'last_name' => 'User',
+            'gender' => 'male',
+            'role_name' => 'admin',
+            'status' => 'active',
+            'language' => 'en',
         ]);
 
         $admin->markEmailAsVerified();
         $admin->assignRole('admin');
+        $admin->forceFill(['role_name' => 'admin'])->save();
     }
 }

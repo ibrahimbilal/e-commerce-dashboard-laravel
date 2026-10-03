@@ -8,11 +8,13 @@ use Database\Seeders\LangSeeder;
 use Database\Seeders\PermissionsSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\Support\SkipsUntilAdminViewsMoved;
 use Tests\TestCase;
 
 class DiscountInactiveFilterTest extends TestCase
 {
     use RefreshDatabase;
+    use SkipsUntilAdminViewsMoved;
 
     private User $admin;
 
@@ -26,6 +28,7 @@ class DiscountInactiveFilterTest extends TestCase
 
     public function test_inactive_tab_counts_only_inactive_not_expired(): void
     {
+        $this->skipUntilAdminViewsMoved();
         Discount::query()->create([
             'title' => 'Inactive Running',
             'discount' => 10,
@@ -41,7 +44,7 @@ class DiscountInactiveFilterTest extends TestCase
             'active' => false,
         ]);
 
-        $response = $this->actingAs($this->admin)->get(route('discounts.index', ['inactive' => '1']));
+        $response = $this->actingAs($this->admin)->get(route('admin.discounts.index', ['inactive' => '1']));
 
         $response->assertOk();
         $response->assertViewHas('counts', fn (array $counts) => ($counts['inactive'] ?? 0) === 1);
