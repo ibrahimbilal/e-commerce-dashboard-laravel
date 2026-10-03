@@ -60,6 +60,17 @@ class SendTo extends Component
 
 		$sets = AdminSettingDefaults::mergeLoaded($sets, AdminSettingDefaults::emailRecipientKeys());
 
+		foreach (AdminSettingDefaults::emailRecipientKeys() as $key) {
+			if (! str_ends_with($key, '_recipients')) {
+				continue;
+			}
+			if (isset($sets[$key]) && is_array($sets[$key])) {
+				continue;
+			}
+			$decoded = json_decode($sets[$key] ?? '[]', true);
+			$sets[$key] = is_array($decoded) ? $decoded : [];
+		}
+
         return view('components.send-to', compact('sets', 'users', 'roles'));
     }
 }
