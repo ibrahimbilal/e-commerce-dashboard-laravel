@@ -11,3 +11,4 @@ composer.phar
 # composer.lock
 
 /public/storage
+.phpunit.result.cache

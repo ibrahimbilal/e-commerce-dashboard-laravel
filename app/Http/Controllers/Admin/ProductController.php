@@ -107,7 +107,7 @@ class ProductController extends Controller
 
     public function show(Product $product)
     {
-        $product->load(['locales', 'categories', 'tags', 'productAttributes.attributeOne', 'productAttributes.attributeTwo', 'admin.reviews.customer']);
+        $product->load(['locales', 'categories', 'tags', 'productAttributes.attributeOne', 'productAttributes.attributeTwo', 'reviews.customer']);
 
         return view('products.show', compact('product'));
     }

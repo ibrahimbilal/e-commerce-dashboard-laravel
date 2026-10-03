@@ -66,7 +66,7 @@ class OrderStatusController extends Controller
 
     public function show(OrderStatus $orderStatus)
     {
-        $orderStatus->load('admin.orders.customer');
+        $orderStatus->load('orders.customer');
 
         return view('order-statuses.show', compact('orderStatus'));
     }

@@ -81,7 +81,7 @@ class CustomerController extends Controller
 
     public function show(Customer $customer)
     {
-        $customer->load(['addresses', 'admin.orders.orderStatus', 'admin.reviews.product', 'coupons']);
+        $customer->load(['addresses', 'orders.orderStatus', 'reviews.product', 'coupons']);
 
         return view('customers.show', compact('customer'));
     }

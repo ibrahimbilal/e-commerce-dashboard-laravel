@@ -77,7 +77,7 @@ class TagController extends Controller
 
     public function show(Tag $tag)
     {
-        $tag->load(['parent', 'children', 'admin.products.locales']);
+        $tag->load(['parent', 'children', 'products.locales']);
 
         return view('tags.show', compact('tag'));
     }

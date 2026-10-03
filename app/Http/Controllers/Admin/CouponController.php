@@ -92,7 +92,7 @@ class CouponController extends Controller
 
     public function show(Coupon $coupon)
     {
-        $coupon->load(['admin.orders.customer', 'customers']);
+        $coupon->load(['orders.customer', 'customers']);
 
         return view('coupons.show', compact('coupon'));
     }

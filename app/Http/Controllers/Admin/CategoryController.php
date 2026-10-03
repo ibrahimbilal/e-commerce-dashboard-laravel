@@ -90,7 +90,7 @@ class CategoryController extends Controller
 
     public function show(Category $category)
     {
-        $category->load(['parent', 'children', 'admin.products.locales']);
+        $category->load(['parent', 'children', 'products.locales']);
 
         return view('categories.show', compact('category'));
     }
