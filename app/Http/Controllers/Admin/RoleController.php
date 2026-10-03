@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 
+use App\Http\Requests\RolesPermissionsRequest;
+use App\Support\RoleDeleteGuard;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
-use App\Http\Requests\RolesPermissionsRequest;
 
 class RoleController extends Controller
 {
@@ -154,7 +156,7 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
 		try {
 
@@ -165,6 +167,10 @@ class RoleController extends Controller
 						->with([
 							'errors' => [__('alerts.roles.response.errors.not_exist')]
 						]);
+			}
+
+			if ($blocked = RoleDeleteGuard::blockIfProtected($request, $role)) {
+				return $blocked;
 			}
 
 			$role->delete();
