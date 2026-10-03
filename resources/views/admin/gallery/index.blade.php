@@ -24,9 +24,11 @@
     @include('admin.inc.page_title', $params)
 
     <div class="gallery-page">
-        <div class="upload-holder mb-3">
-            <form id="upload-form" method="post" enctype="multipart/form-data"></form>
-        </div>
+        @can('add gallery')
+            <div class="upload-holder mb-3">
+                <form id="upload-form" method="post" enctype="multipart/form-data"></form>
+            </div>
+        @endcan
         <div class="page-content row">
             <div class="col-sm-12 col-lg-9 float-start post-box order-1 open">
                 <div class="g-holder main-box box-spaces d-flex flex-column mb-0">
@@ -96,6 +98,7 @@
             scrollbarPadding: false,
         };
 
+		@can('add gallery')
 		// upload files
         $('#upload-form').filepond({
             allowFileSizeValidation: true,
@@ -117,6 +120,7 @@
 				}
 			},
         });
+		@endcan
 
         // form Ajax Request
         $(document).on('submit', 'form#edit-image-gallery', function(e) {

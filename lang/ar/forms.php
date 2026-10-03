@@ -56,8 +56,8 @@ return [
 	'date_time_doc' => 'توثيق عن تنسيق التاريخ والوقت.',
 
 	'logo' => 'الشعار:',
-	'logo_width' => 'عرض الشعار:',
-	'logo_height' => 'ارتفاع الشعار:',
+	'logo_width' => 'عرض الشعار',
+	'logo_height' => 'ارتفاع الشعار',
 	'mobile_logo' => 'شعار الموبايل:',
 	'mobile_logo_width' => 'عرض شعار الموبايل:',
 	'mobile_logo_height' => 'ارتفاع شعار الجوال',

@@ -56,8 +56,8 @@ return [
 	'date_time_doc' => 'Documentation on date and time formatting.',
 
 	'logo' => 'logo:',
-	'logo_width' => 'logo Width:',
-	'logo_height' => 'logo Height:',
+	'logo_width' => 'Logo Width',
+	'logo_height' => 'Logo Height',
 	'mobile_logo' => 'Mobile logo:',
 	'mobile_logo_width' => 'Mobile logo Width:',
 	'mobile_logo_height' => 'Mobile Logo Height',

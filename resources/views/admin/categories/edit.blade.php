@@ -127,7 +127,6 @@ separate keywords with comma (,)."><i class="fi-rr-info"> </i></span></label>
 <script src="{{ asset('js/speakingurl.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('js/jquery.stringtoslug.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('js/quill.min.js') }}" type="text/javascript"></script>
-<script src="{{ asset('js/sweetalert2.all.min.js') }}" type="text/javascript"></script>
 <script>
       // Data Tables
       const fontSizeArr = ['10px','12px','14px','16px','20px','24px','32px','36px','42px','54px'];

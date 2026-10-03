@@ -202,7 +202,6 @@ separate keywords with comma (,)."><i class="fi-rr-info"> </i></span></label>
 <script src="{{ asset('js/speakingurl.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('js/jquery.stringtoslug.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('js/quill.min.js') }}" type="text/javascript"></script>
-<script src="{{ asset('js/sweetalert2.all.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('js/pickadate/picker.js') }}" type="text/javascript"></script>
 <script src="{{ asset('js/pickadate/picker.date.js') }}" type="text/javascript"></script>
 <script>

@@ -42,5 +42,4 @@
 
 @push('scripts')
 <script async="" src="{{ asset('js/async.js') }}" type="text/javascript"></script>
-<script src="{{ asset('js/sweetalert2.all.min.js') }}" type="text/javascript"></script>
 @endpush

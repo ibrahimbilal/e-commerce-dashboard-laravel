@@ -84,7 +84,6 @@
 
 @push('scripts')
 <script async="" src="{{ asset('js/async.js') }}" type="text/javascript"></script>
-<script src="{{ asset('js/sweetalert2.all.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('js/pickadate/picker.js') }}" type="text/javascript"></script>
 <script src="{{ asset('js/pickadate/picker.date.js') }}" type="text/javascript"></script>
 @endpush

@@ -335,8 +335,6 @@
 @endsection
 
 @push('scripts')
-    <!-- Sweet Alert -->
-    <script src="{{ asset('js/sweetalert2.min.js') }}" type="text/javascript"></script>
     <script type="application/json" id="theme-color-preview-config">{!! json_encode([
         'variables' => $themeColorVariables ?? [],
         'defaults' => $themeColorDefaults ?? [],
