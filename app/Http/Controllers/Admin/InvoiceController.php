@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Concerns\ManagesTrashedRecords;
 use App\Models\Invoice;
 use App\Models\Order;
+use App\Support\AdminResourceCounts;
 use App\Support\IndexListing;
 use Illuminate\Http\Request;
 
@@ -104,11 +105,16 @@ class InvoiceController extends Controller
         return redirect()->route('admin.invoices.show', $invoice)->with('status', 'Invoice updated.');
     }
 
-    public function destroy(Invoice $invoice)
+    public function destroy(Request $request, Invoice $invoice)
     {
         $invoice->delete();
 
-        return redirect()->route('admin.invoices.index')->with('status', 'Invoice deleted.');
+        return $this->destroyActionResponse(
+            $request,
+            'admin.invoices.index',
+            'Invoice deleted.',
+            AdminResourceCounts::invoices()
+        );
     }
 
     public function restore(Request $request, int $id)
@@ -116,7 +122,12 @@ class InvoiceController extends Controller
         $invoice = $this->findOnlyTrashed(Invoice::class, $id);
         $invoice->restore();
 
-        return $this->trashedActionResponse($request, 'admin.invoices.index', 'Invoice restored.');
+        return $this->trashedActionResponse(
+            $request,
+            'admin.invoices.index',
+            'Invoice restored.',
+            AdminResourceCounts::invoices()
+        );
     }
 
     public function forceDelete(Request $request, int $id)
@@ -124,7 +135,12 @@ class InvoiceController extends Controller
         $invoice = $this->findOnlyTrashed(Invoice::class, $id);
         $invoice->forceDelete();
 
-        return $this->trashedActionResponse($request, 'admin.invoices.index', 'Invoice permanently deleted.');
+        return $this->trashedActionResponse(
+            $request,
+            'admin.invoices.index',
+            'Invoice permanently deleted.',
+            AdminResourceCounts::invoices()
+        );
     }
 
     /**

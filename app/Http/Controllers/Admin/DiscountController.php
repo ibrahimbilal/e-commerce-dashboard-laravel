@@ -5,20 +5,23 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 
 use App\Http\Controllers\Concerns\ManagesTrashedRecords;
+use App\Http\Controllers\Concerns\TogglesAdminResourceFields;
 use App\Models\Discount;
 use App\Support\DiscountQuery;
+use App\Support\AdminResourceCounts;
 use App\Support\IndexListing;
 use Illuminate\Http\Request;
 
 class DiscountController extends Controller
 {
     use ManagesTrashedRecords;
+    use TogglesAdminResourceFields;
 
     public function __construct()
     {
         $this->middleware('permission:view discounts', ['only' => ['index', 'show']]);
         $this->middleware('permission:add discounts', ['only' => ['create', 'store']]);
-        $this->middleware('permission:edit discounts', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:edit discounts', ['only' => ['edit', 'update', 'toggle']]);
         $this->middleware('permission:delete discounts', ['only' => ['destroy']]);
         $this->registerTrashedMiddleware('discounts');
     }
@@ -112,11 +115,29 @@ class DiscountController extends Controller
         return redirect()->route('admin.discounts.index')->with('status', 'Discount updated.');
     }
 
-    public function destroy(Discount $discount)
+    public function destroy(Request $request, Discount $discount)
     {
         $discount->delete();
 
-        return redirect()->route('admin.discounts.index')->with('status', 'Discount deleted.');
+        return $this->destroyActionResponse(
+            $request,
+            'admin.discounts.index',
+            'Discount deleted.',
+            AdminResourceCounts::discounts()
+        );
+    }
+
+    public function toggle(Request $request, int $id)
+    {
+        $discount = Discount::query()->findOrFail($id);
+
+        return $this->toggleResourceField(
+            $request,
+            $discount,
+            AdminResourceCounts::toggleFieldWhitelist()['discounts'],
+            fn () => AdminResourceCounts::discounts(),
+            'admin.discounts.index'
+        );
     }
 
     public function restore(Request $request, int $id)
@@ -124,7 +145,12 @@ class DiscountController extends Controller
         $discount = $this->findOnlyTrashed(Discount::class, $id);
         $discount->restore();
 
-        return $this->trashedActionResponse($request, 'admin.discounts.index', 'Discount restored.');
+        return $this->trashedActionResponse(
+            $request,
+            'admin.discounts.index',
+            'Discount restored.',
+            AdminResourceCounts::discounts()
+        );
     }
 
     public function forceDelete(Request $request, int $id)
@@ -132,6 +158,11 @@ class DiscountController extends Controller
         $discount = $this->findOnlyTrashed(Discount::class, $id);
         $discount->forceDelete();
 
-        return $this->trashedActionResponse($request, 'admin.discounts.index', 'Discount permanently deleted.');
+        return $this->trashedActionResponse(
+            $request,
+            'admin.discounts.index',
+            'Discount permanently deleted.',
+            AdminResourceCounts::discounts()
+        );
     }
 }

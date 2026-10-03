@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 
 use App\Http\Controllers\Concerns\ManagesTrashedRecords;
+use App\Http\Controllers\Concerns\TogglesAdminResourceFields;
 use App\Models\Category;
+use App\Support\AdminResourceCounts;
 use App\Support\IndexListing;
 use App\Support\ReferentialDeleteGuard;
 use Illuminate\Http\Request;
@@ -14,12 +16,13 @@ use Illuminate\Validation\ValidationException;
 class CategoryController extends Controller
 {
     use ManagesTrashedRecords;
+    use TogglesAdminResourceFields;
 
     public function __construct()
     {
         $this->middleware('permission:view categories', ['only' => ['index']]);
         $this->middleware('permission:add categories', ['only' => ['create', 'store']]);
-        $this->middleware('permission:edit categories', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:edit categories', ['only' => ['edit', 'update', 'toggle']]);
         $this->middleware('permission:delete categories', ['only' => ['destroy']]);
         $this->registerTrashedMiddleware('categories');
     }
@@ -137,7 +140,25 @@ class CategoryController extends Controller
 
         $category->delete();
 
-        return redirect()->route('admin.categories.index')->with('status', 'Category deleted.');
+        return $this->destroyActionResponse(
+            $request,
+            'admin.categories.index',
+            'Category deleted.',
+            AdminResourceCounts::categories()
+        );
+    }
+
+    public function toggle(Request $request, int $id)
+    {
+        $category = Category::query()->findOrFail($id);
+
+        return $this->toggleResourceField(
+            $request,
+            $category,
+            AdminResourceCounts::toggleFieldWhitelist()['categories'],
+            fn () => AdminResourceCounts::categories(),
+            'admin.categories.index'
+        );
     }
 
     public function restore(Request $request, int $id)
@@ -145,7 +166,12 @@ class CategoryController extends Controller
         $category = $this->findOnlyTrashed(Category::class, $id);
         $category->restore();
 
-        return $this->trashedActionResponse($request, 'admin.categories.index', 'Category restored.');
+        return $this->trashedActionResponse(
+            $request,
+            'admin.categories.index',
+            'Category restored.',
+            AdminResourceCounts::categories()
+        );
     }
 
     public function forceDelete(Request $request, int $id)
@@ -162,7 +188,12 @@ class CategoryController extends Controller
 
         $category->forceDelete();
 
-        return $this->trashedActionResponse($request, 'admin.categories.index', 'Category permanently deleted.');
+        return $this->trashedActionResponse(
+            $request,
+            'admin.categories.index',
+            'Category permanently deleted.',
+            AdminResourceCounts::categories()
+        );
     }
 
     private function assertValidCategoryParent(?int $categoryId, ?int $parentId): void

@@ -5,19 +5,22 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 
 use App\Http\Controllers\Concerns\ManagesTrashedRecords;
+use App\Http\Controllers\Concerns\TogglesAdminResourceFields;
 use App\Models\Tag;
+use App\Support\AdminResourceCounts;
 use App\Support\IndexListing;
 use Illuminate\Http\Request;
 
 class TagController extends Controller
 {
     use ManagesTrashedRecords;
+    use TogglesAdminResourceFields;
 
     public function __construct()
     {
         $this->middleware('permission:view tags', ['only' => ['index', 'show']]);
         $this->middleware('permission:add tags', ['only' => ['create', 'store']]);
-        $this->middleware('permission:edit tags', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:edit tags', ['only' => ['edit', 'update', 'toggle']]);
         $this->middleware('permission:delete tags', ['only' => ['destroy']]);
         $this->registerTrashedMiddleware('tags');
     }
@@ -107,11 +110,29 @@ class TagController extends Controller
         return redirect()->route('admin.tags.index')->with('status', 'Tag updated.');
     }
 
-    public function destroy(Tag $tag)
+    public function destroy(Request $request, Tag $tag)
     {
         $tag->delete();
 
-        return redirect()->route('admin.tags.index')->with('status', 'Tag deleted.');
+        return $this->destroyActionResponse(
+            $request,
+            'admin.tags.index',
+            'Tag deleted.',
+            AdminResourceCounts::tags()
+        );
+    }
+
+    public function toggle(Request $request, int $id)
+    {
+        $tag = Tag::query()->findOrFail($id);
+
+        return $this->toggleResourceField(
+            $request,
+            $tag,
+            AdminResourceCounts::toggleFieldWhitelist()['tags'],
+            fn () => AdminResourceCounts::tags(),
+            'admin.tags.index'
+        );
     }
 
     public function restore(Request $request, int $id)
@@ -119,7 +140,12 @@ class TagController extends Controller
         $tag = $this->findOnlyTrashed(Tag::class, $id);
         $tag->restore();
 
-        return $this->trashedActionResponse($request, 'admin.tags.index', 'Tag restored.');
+        return $this->trashedActionResponse(
+            $request,
+            'admin.tags.index',
+            'Tag restored.',
+            AdminResourceCounts::tags()
+        );
     }
 
     public function forceDelete(Request $request, int $id)
@@ -127,6 +153,11 @@ class TagController extends Controller
         $tag = $this->findOnlyTrashed(Tag::class, $id);
         $tag->forceDelete();
 
-        return $this->trashedActionResponse($request, 'admin.tags.index', 'Tag permanently deleted.');
+        return $this->trashedActionResponse(
+            $request,
+            'admin.tags.index',
+            'Tag permanently deleted.',
+            AdminResourceCounts::tags()
+        );
     }
 }

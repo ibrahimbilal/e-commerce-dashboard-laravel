@@ -23,17 +23,63 @@ trait ManagesTrashedRecords
         return $modelClass::onlyTrashed()->findOrFail($id);
     }
 
-    protected function trashedActionResponse(Request $request, string $indexRouteName, string $message): RedirectResponse|JsonResponse
-    {
+    /**
+     * @param  array<string, int>  $counts
+     * @param  array<string, mixed>  $extra
+     */
+    protected function adminResourceActionResponse(
+        Request $request,
+        string $indexRouteName,
+        string $message,
+        array $counts,
+        bool $success = true,
+        array $extra = [],
+        ?array $redirectRouteParameters = null
+    ): RedirectResponse|JsonResponse {
         if ($request->expectsJson()) {
-            return response()->json([
-                'success' => true,
+            return response()->json(array_merge([
+                'success' => $success,
                 'message' => $message,
-            ]);
+                'counts' => $counts,
+            ], $extra));
         }
 
-        return redirect()
-            ->route($indexRouteName, ['trashed' => '1'])
-            ->with('status', $message);
+        $redirect = redirect()->route($indexRouteName, $redirectRouteParameters ?? []);
+
+        return $success
+            ? $redirect->with('status', $message)
+            : $redirect->with('status', $message);
+    }
+
+    /**
+     * @param  array<string, int>  $counts
+     */
+    protected function trashedActionResponse(
+        Request $request,
+        string $indexRouteName,
+        string $message,
+        array $counts
+    ): RedirectResponse|JsonResponse {
+        return $this->adminResourceActionResponse(
+            $request,
+            $indexRouteName,
+            $message,
+            $counts,
+            true,
+            [],
+            ['trashed' => '1']
+        );
+    }
+
+    /**
+     * @param  array<string, int>  $counts
+     */
+    protected function destroyActionResponse(
+        Request $request,
+        string $indexRouteName,
+        string $message,
+        array $counts
+    ): RedirectResponse|JsonResponse {
+        return $this->adminResourceActionResponse($request, $indexRouteName, $message, $counts);
     }
 }

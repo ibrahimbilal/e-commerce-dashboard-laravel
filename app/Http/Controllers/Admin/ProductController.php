@@ -12,6 +12,8 @@ use App\Models\Product;
 use App\Models\ProductAttribute;
 use App\Models\Tag;
 use App\Http\Controllers\Concerns\ManagesTrashedRecords;
+use App\Http\Controllers\Concerns\TogglesAdminResourceFields;
+use App\Support\AdminResourceCounts;
 use App\Support\IndexListing;
 use App\Support\ReferentialDeleteGuard;
 use App\Support\StoredMediaCleanup;
@@ -22,12 +24,13 @@ use Illuminate\Validation\ValidationException;
 class ProductController extends Controller
 {
     use ManagesTrashedRecords;
+    use TogglesAdminResourceFields;
 
     public function __construct()
     {
         $this->middleware('permission:view products', ['only' => ['index']]);
         $this->middleware('permission:add products', ['only' => ['create', 'store']]);
-        $this->middleware('permission:edit products', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:edit products', ['only' => ['edit', 'update', 'toggle']]);
         $this->middleware('permission:delete products', ['only' => ['destroy']]);
         $this->registerTrashedMiddleware('products');
     }
@@ -146,7 +149,12 @@ class ProductController extends Controller
 
         $product->delete();
 
-        return redirect()->route('admin.products.index')->with('status', 'Product deleted.');
+        return $this->destroyActionResponse(
+            $request,
+            'admin.products.index',
+            'Product deleted.',
+            AdminResourceCounts::products()
+        );
     }
 
     public function restore(Request $request, int $id)
@@ -154,7 +162,25 @@ class ProductController extends Controller
         $product = $this->findOnlyTrashed(Product::class, $id);
         $product->restore();
 
-        return $this->trashedActionResponse($request, 'admin.products.index', 'Product restored.');
+        return $this->trashedActionResponse(
+            $request,
+            'admin.products.index',
+            'Product restored.',
+            AdminResourceCounts::products()
+        );
+    }
+
+    public function toggle(Request $request, int $id)
+    {
+        $product = Product::query()->findOrFail($id);
+
+        return $this->toggleResourceField(
+            $request,
+            $product,
+            AdminResourceCounts::toggleFieldWhitelist()['products'],
+            fn () => AdminResourceCounts::products(),
+            'admin.products.index'
+        );
     }
 
     public function forceDelete(Request $request, int $id)
@@ -172,7 +198,12 @@ class ProductController extends Controller
         StoredMediaCleanup::deleteProductImage($product);
         $product->forceDelete();
 
-        return $this->trashedActionResponse($request, 'admin.products.index', 'Product permanently deleted.');
+        return $this->trashedActionResponse(
+            $request,
+            'admin.products.index',
+            'Product permanently deleted.',
+            AdminResourceCounts::products()
+        );
     }
 
     /**

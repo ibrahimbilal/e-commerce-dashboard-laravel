@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 
 use App\Http\Controllers\Concerns\ManagesTrashedRecords;
 use App\Models\Customer;
+use App\Support\AdminResourceCounts;
 use App\Support\IndexListing;
 use App\Support\ReferentialDeleteGuard;
 use Illuminate\Http\Request;
@@ -129,7 +130,12 @@ class CustomerController extends Controller
 
         $customer->delete();
 
-        return redirect()->route('admin.customers.index')->with('status', 'Customer deleted.');
+        return $this->destroyActionResponse(
+            $request,
+            'admin.customers.index',
+            'Customer deleted.',
+            AdminResourceCounts::customers()
+        );
     }
 
     public function restore(Request $request, int $id)
@@ -137,7 +143,12 @@ class CustomerController extends Controller
         $customer = $this->findOnlyTrashed(Customer::class, $id);
         $customer->restore();
 
-        return $this->trashedActionResponse($request, 'admin.customers.index', 'Customer restored.');
+        return $this->trashedActionResponse(
+            $request,
+            'admin.customers.index',
+            'Customer restored.',
+            AdminResourceCounts::customers()
+        );
     }
 
     public function forceDelete(Request $request, int $id)
@@ -154,6 +165,11 @@ class CustomerController extends Controller
 
         $customer->forceDelete();
 
-        return $this->trashedActionResponse($request, 'admin.customers.index', 'Customer permanently deleted.');
+        return $this->trashedActionResponse(
+            $request,
+            'admin.customers.index',
+            'Customer permanently deleted.',
+            AdminResourceCounts::customers()
+        );
     }
 }

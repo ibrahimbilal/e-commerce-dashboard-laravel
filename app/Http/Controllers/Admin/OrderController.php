@@ -12,6 +12,7 @@ use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\ProductAttribute;
 use App\Support\CouponQuery;
+use App\Support\AdminResourceCounts;
 use App\Support\IndexListing;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -149,11 +150,16 @@ class OrderController extends Controller
         return redirect()->route('admin.orders.edit', $order)->with('status', 'Order updated.');
     }
 
-    public function destroy(Order $order)
+    public function destroy(Request $request, Order $order)
     {
         $order->delete();
 
-        return redirect()->route('admin.orders.index')->with('status', 'Order deleted.');
+        return $this->destroyActionResponse(
+            $request,
+            'admin.orders.index',
+            'Order deleted.',
+            AdminResourceCounts::orders()
+        );
     }
 
     public function restore(Request $request, int $id)
@@ -161,7 +167,12 @@ class OrderController extends Controller
         $order = $this->findOnlyTrashed(Order::class, $id);
         $order->restore();
 
-        return $this->trashedActionResponse($request, 'admin.orders.index', 'Order restored.');
+        return $this->trashedActionResponse(
+            $request,
+            'admin.orders.index',
+            'Order restored.',
+            AdminResourceCounts::orders()
+        );
     }
 
     public function forceDelete(Request $request, int $id)
@@ -169,7 +180,12 @@ class OrderController extends Controller
         $order = $this->findOnlyTrashed(Order::class, $id);
         $order->forceDelete();
 
-        return $this->trashedActionResponse($request, 'admin.orders.index', 'Order permanently deleted.');
+        return $this->trashedActionResponse(
+            $request,
+            'admin.orders.index',
+            'Order permanently deleted.',
+            AdminResourceCounts::orders()
+        );
     }
 
     /**

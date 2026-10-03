@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 
 use App\Http\Controllers\Concerns\ManagesTrashedRecords;
+use App\Http\Controllers\Concerns\TogglesAdminResourceFields;
 use App\Models\Coupon;
 use App\Support\CouponQuery;
+use App\Support\AdminResourceCounts;
 use App\Support\IndexListing;
 use App\Support\ReferentialDeleteGuard;
 use Illuminate\Http\Request;
@@ -14,12 +16,13 @@ use Illuminate\Http\Request;
 class CouponController extends Controller
 {
     use ManagesTrashedRecords;
+    use TogglesAdminResourceFields;
 
     public function __construct()
     {
         $this->middleware('permission:view discounts', ['only' => ['index', 'show']]);
         $this->middleware('permission:add discounts', ['only' => ['create', 'store']]);
-        $this->middleware('permission:edit discounts', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:edit discounts', ['only' => ['edit', 'update', 'toggle']]);
         $this->middleware('permission:delete discounts', ['only' => ['destroy']]);
         $this->registerTrashedMiddleware('discounts');
     }
@@ -132,7 +135,25 @@ class CouponController extends Controller
 
         $coupon->delete();
 
-        return redirect()->route('admin.coupons.index')->with('status', 'Coupon deleted.');
+        return $this->destroyActionResponse(
+            $request,
+            'admin.coupons.index',
+            'Coupon deleted.',
+            AdminResourceCounts::coupons()
+        );
+    }
+
+    public function toggle(Request $request, int $id)
+    {
+        $coupon = Coupon::query()->findOrFail($id);
+
+        return $this->toggleResourceField(
+            $request,
+            $coupon,
+            AdminResourceCounts::toggleFieldWhitelist()['coupons'],
+            fn () => AdminResourceCounts::coupons(),
+            'admin.coupons.index'
+        );
     }
 
     public function restore(Request $request, int $id)
@@ -140,7 +161,12 @@ class CouponController extends Controller
         $coupon = $this->findOnlyTrashed(Coupon::class, $id);
         $coupon->restore();
 
-        return $this->trashedActionResponse($request, 'admin.coupons.index', 'Coupon restored.');
+        return $this->trashedActionResponse(
+            $request,
+            'admin.coupons.index',
+            'Coupon restored.',
+            AdminResourceCounts::coupons()
+        );
     }
 
     public function forceDelete(Request $request, int $id)
@@ -157,6 +183,11 @@ class CouponController extends Controller
 
         $coupon->forceDelete();
 
-        return $this->trashedActionResponse($request, 'admin.coupons.index', 'Coupon permanently deleted.');
+        return $this->trashedActionResponse(
+            $request,
+            'admin.coupons.index',
+            'Coupon permanently deleted.',
+            AdminResourceCounts::coupons()
+        );
     }
 }

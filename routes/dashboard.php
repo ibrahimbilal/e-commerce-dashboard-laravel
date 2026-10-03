@@ -66,6 +66,24 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified'])->group(
             ->name($prefix.'.force-delete')
             ->whereNumber('id');
     }
+
+    $toggleResources = [
+        'products' => ProductController::class,
+        'categories' => CategoryController::class,
+        'coupons' => CouponController::class,
+        'discounts' => DiscountController::class,
+        'tags' => TagController::class,
+    ];
+
+    foreach ($toggleResources as $prefix => $controller) {
+        Route::patch($prefix.'/{id}/toggle', [$controller, 'toggle'])
+            ->name($prefix.'.toggle')
+            ->whereNumber('id');
+    }
+
+    Route::patch('marketing/subscribers/{subscriber}/toggle', [MarketingController::class, 'toggleSubscriber'])
+        ->name('marketing.subscribers.toggle')
+        ->whereNumber('subscriber');
 });
 
 // Legacy route name used by storefront blades and error pages until Fronty renames links.

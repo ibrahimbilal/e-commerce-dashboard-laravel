@@ -3,18 +3,22 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Concerns\TogglesAdminResourceFields;
 
 use App\Models\Subscriber;
+use App\Support\AdminResourceCounts;
 use App\Support\IndexListing;
 use Illuminate\Http\Request;
 
 class MarketingController extends Controller
 {
+    use TogglesAdminResourceFields;
+
     public function __construct()
     {
         $this->middleware('permission:view marketing', ['only' => ['index']]);
         $this->middleware('permission:add marketing', ['only' => ['store']]);
-        $this->middleware('permission:edit marketing', ['only' => ['update']]);
+        $this->middleware('permission:edit marketing', ['only' => ['update', 'toggleSubscriber']]);
         $this->middleware('permission:delete marketing', ['only' => ['destroy']]);
     }
 
@@ -93,5 +97,16 @@ class MarketingController extends Controller
         $subscriber->delete();
 
         return redirect()->route('admin.marketing.index')->with('status', 'Subscriber removed.');
+    }
+
+    public function toggleSubscriber(Request $request, Subscriber $subscriber)
+    {
+        return $this->toggleResourceField(
+            $request,
+            $subscriber,
+            AdminResourceCounts::toggleFieldWhitelist()['marketing.subscribers'],
+            fn () => AdminResourceCounts::marketing(),
+            'admin.marketing.index'
+        );
     }
 }

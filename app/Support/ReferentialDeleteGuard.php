@@ -27,7 +27,9 @@ class ReferentialDeleteGuard
 
         if ($request->expectsJson()) {
             return response()->json([
+                'success' => false,
                 'message' => $message,
+                'counts' => [],
                 'errors' => ['delete' => [$message]],
             ], 422);
         }

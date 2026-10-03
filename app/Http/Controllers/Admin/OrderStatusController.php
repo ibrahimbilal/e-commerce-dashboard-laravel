@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 
 use App\Http\Controllers\Concerns\ManagesTrashedRecords;
 use App\Models\OrderStatus;
+use App\Support\AdminResourceCounts;
 use App\Support\IndexListing;
 use App\Support\ReferentialDeleteGuard;
 use Illuminate\Http\Request;
@@ -99,7 +100,12 @@ class OrderStatusController extends Controller
 
         $orderStatus->delete();
 
-        return redirect()->route('admin.order-statuses.index')->with('status', 'Order status deleted.');
+        return $this->destroyActionResponse(
+            $request,
+            'admin.order-statuses.index',
+            'Order status deleted.',
+            AdminResourceCounts::orderStatuses()
+        );
     }
 
     public function restore(Request $request, int $id)
@@ -107,7 +113,12 @@ class OrderStatusController extends Controller
         $orderStatus = $this->findOnlyTrashed(OrderStatus::class, $id);
         $orderStatus->restore();
 
-        return $this->trashedActionResponse($request, 'admin.order-statuses.index', 'Order status restored.');
+        return $this->trashedActionResponse(
+            $request,
+            'admin.order-statuses.index',
+            'Order status restored.',
+            AdminResourceCounts::orderStatuses()
+        );
     }
 
     public function forceDelete(Request $request, int $id)
@@ -124,6 +135,11 @@ class OrderStatusController extends Controller
 
         $orderStatus->forceDelete();
 
-        return $this->trashedActionResponse($request, 'admin.order-statuses.index', 'Order status permanently deleted.');
+        return $this->trashedActionResponse(
+            $request,
+            'admin.order-statuses.index',
+            'Order status permanently deleted.',
+            AdminResourceCounts::orderStatuses()
+        );
     }
 }
