@@ -9,13 +9,11 @@ use Database\Seeders\LangSeeder;
 use Database\Seeders\PermissionsSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\Support\SkipsUntilAdminViewsMoved;
 use Tests\TestCase;
 
 class ProductIndexFiltersTest extends TestCase
 {
     use RefreshDatabase;
-    use SkipsUntilAdminViewsMoved;
 
     private User $admin;
 
@@ -29,7 +27,6 @@ class ProductIndexFiltersTest extends TestCase
 
     public function test_published_filter_and_counts(): void
     {
-        $this->skipUntilAdminViewsMoved();
         $published = Product::query()->create(['sku' => 'PUB-1', 'quantity' => 1, 'status' => 'published']);
         ProductLocale::query()->create(['product_id' => $published->id, 'locale' => 'en', 'name' => 'Published One']);
         $draft = Product::query()->create(['sku' => 'DRF-1', 'quantity' => 1, 'status' => 'draft']);
@@ -38,6 +35,7 @@ class ProductIndexFiltersTest extends TestCase
         $response = $this->actingAs($this->admin)->get(route('admin.products.index', ['status' => 'published']));
 
         $response->assertOk();
+        $response->assertViewIs('admin.products.index');
         $response->assertViewHas('counts', fn (array $counts) => ($counts['published'] ?? 0) === 1 && ($counts['draft'] ?? 0) === 1);
         $response->assertViewHas('filters', fn (array $filters) => ($filters['status'] ?? null) === 'published');
         $response->assertSee('Published One');
@@ -46,7 +44,6 @@ class ProductIndexFiltersTest extends TestCase
 
     public function test_search_filter_returns_matching_products(): void
     {
-        $this->skipUntilAdminViewsMoved();
         $match = Product::query()->create(['sku' => 'FIND-ME', 'quantity' => 1, 'status' => 'published']);
         ProductLocale::query()->create(['product_id' => $match->id, 'locale' => 'en', 'name' => 'Findable Widget']);
 
@@ -55,6 +52,7 @@ class ProductIndexFiltersTest extends TestCase
         $response = $this->actingAs($this->admin)->get(route('admin.products.index', ['search' => 'Findable']));
 
         $response->assertOk();
+        $response->assertViewIs('admin.products.index');
         $response->assertViewHas('filters', fn (array $filters) => ($filters['search'] ?? null) === 'Findable');
         $response->assertSee('Findable Widget');
     }

@@ -7,13 +7,11 @@ use Database\Seeders\LangSeeder;
 use Database\Seeders\PermissionsSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\Support\SkipsUntilAdminViewsMoved;
 use Tests\TestCase;
 
 class ProductCategoryIndexTest extends TestCase
 {
     use RefreshDatabase;
-    use SkipsUntilAdminViewsMoved;
 
     private User $admin;
 
@@ -27,7 +25,6 @@ class ProductCategoryIndexTest extends TestCase
 
     public function test_products_and_categories_index_return_ok_when_records_exist(): void
     {
-        $this->skipUntilAdminViewsMoved();
         $this->actingAs($this->admin)->post(route('admin.products.store'), [
             'sku' => 'IDX-1',
             'quantity' => 1,
@@ -45,7 +42,7 @@ class ProductCategoryIndexTest extends TestCase
             'category_slug' => 'index-category',
         ])->assertRedirect();
 
-        $this->actingAs($this->admin)->get(route('admin.products.index'))->assertOk();
-        $this->actingAs($this->admin)->get(route('admin.categories.index'))->assertOk();
+        $this->actingAs($this->admin)->get(route('admin.products.index'))->assertOk()->assertViewIs('admin.products.index');
+        $this->actingAs($this->admin)->get(route('admin.categories.index'))->assertOk()->assertViewIs('admin.categories.index');
     }
 }

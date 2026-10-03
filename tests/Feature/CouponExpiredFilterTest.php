@@ -8,13 +8,11 @@ use Database\Seeders\LangSeeder;
 use Database\Seeders\PermissionsSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\Support\SkipsUntilAdminViewsMoved;
 use Tests\TestCase;
 
 class CouponExpiredFilterTest extends TestCase
 {
     use RefreshDatabase;
-    use SkipsUntilAdminViewsMoved;
 
     private User $admin;
 
@@ -28,7 +26,6 @@ class CouponExpiredFilterTest extends TestCase
 
     public function test_expired_tab_counts_only_past_end_date(): void
     {
-        $this->skipUntilAdminViewsMoved();
         Coupon::query()->create([
             'title' => 'Inactive Future',
             'code' => 'INFUT',
@@ -53,6 +50,7 @@ class CouponExpiredFilterTest extends TestCase
         $response = $this->actingAs($this->admin)->get(route('admin.coupons.index', ['expired' => '1']));
 
         $response->assertOk();
+        $response->assertViewIs('admin.coupons.index');
         $response->assertViewHas('counts', fn (array $counts) => ($counts['expired'] ?? 0) === 1);
         $response->assertSee('Expired');
         $response->assertDontSee('Inactive Future');
@@ -60,7 +58,6 @@ class CouponExpiredFilterTest extends TestCase
 
     public function test_inactive_tab_counts_only_inactive_not_expired(): void
     {
-        $this->skipUntilAdminViewsMoved();
         Coupon::query()->create([
             'title' => 'Inactive Future',
             'code' => 'INAC1',
@@ -85,6 +82,7 @@ class CouponExpiredFilterTest extends TestCase
         $response = $this->actingAs($this->admin)->get(route('admin.coupons.index', ['inactive' => '1']));
 
         $response->assertOk();
+        $response->assertViewIs('admin.coupons.index');
         $response->assertViewHas('counts', fn (array $counts) => ($counts['inactive'] ?? 0) === 1);
         $response->assertSee('Inactive Future');
         $response->assertDontSee('Expired Inactive');

@@ -85,10 +85,10 @@ class MarketingAndResourceAuthorizationTest extends TestCase
 
     public function test_admin_can_access_analytics_overview(): void
     {
-        $this->markTestSkipped('Analytics overview view pending Fronty admin layout move.');
         $this->actingAs($this->admin)
             ->get(route('admin.analytics.overview'))
-            ->assertOk();
+            ->assertOk()
+            ->assertViewIs('admin.analytics.overview');
     }
 
 }

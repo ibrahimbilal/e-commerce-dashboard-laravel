@@ -14,13 +14,11 @@ use Database\Seeders\LangSeeder;
 use Database\Seeders\PermissionsSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\Support\SkipsUntilAdminViewsMoved;
 use Tests\TestCase;
 
 class OrderFormVariantsTest extends TestCase
 {
     use RefreshDatabase;
-    use SkipsUntilAdminViewsMoved;
 
     private User $admin;
 
@@ -34,17 +32,18 @@ class OrderFormVariantsTest extends TestCase
 
     public function test_order_create_and_edit_views_receive_product_variants(): void
     {
-        $this->skipUntilAdminViewsMoved();
         $this->seedVariant();
 
         $create = $this->actingAs($this->admin)->get(route('admin.orders.create'));
         $create->assertOk();
+        $create->assertViewIs('admin.orders.create');
         $create->assertViewHas('productVariants', fn ($variants) => $variants->count() >= 1);
 
         $order = $this->createOrderWithItem();
 
         $edit = $this->actingAs($this->admin)->get(route('admin.orders.edit', $order));
         $edit->assertOk();
+        $edit->assertViewIs('admin.orders.edit');
         $edit->assertViewHas('productVariants', fn ($variants) => $variants->count() >= 1);
     }
 

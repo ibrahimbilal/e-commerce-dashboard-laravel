@@ -52,12 +52,13 @@ class CreateNewUser implements CreatesNewUsers
             'last_name' => $input['last_name'],
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
-            'mobile' => $input['mobile'],
-            'birth_date' => $input['birth_date'],
+            'mobile' => $input['mobile'] ?? null,
+            'birth_date' => $input['birth_date'] ?? null,
             'gender' => $input['gender'],
             'role_name' => $input['role_name'],
+            'status' => $input['status'] ?? 'active',
             'language' => $input['language'],
-            'profile_picture' => $input['profile_picture'],
+            'profile_picture' => $input['profile_picture'] ?? null,
         ]);
     }
 }
