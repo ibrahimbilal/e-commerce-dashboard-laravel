@@ -6,17 +6,13 @@
     }
 
     var messages = window.AdminDeleteConfirmMessages || {};
+    var tableActions = window.AdminTableActions;
     var swalDefaults = {
         showConfirmButton: true,
         confirmButtonColor: 'var(--main-color)',
         confirmButtonText: messages.ok || 'OK',
         scrollbarPadding: false,
     };
-
-    function csrfToken() {
-        var meta = document.querySelector('meta[name="_token"]');
-        return meta ? meta.getAttribute('content') : '';
-    }
 
     function modeCopy(mode, label) {
         var withLabel = function (template, fallback) {
@@ -73,103 +69,6 @@
         });
     }
 
-    function showErrors(errors) {
-        var list = Object.keys(errors || {})
-            .map(function (key) {
-                return '<li class="content">' + errors[key] + '</li>';
-            })
-            .join('');
-
-        Swal.fire({
-            ...swalDefaults,
-            icon: 'error',
-            titleText: messages.ops || 'Oops...',
-            html: '<div class="alerts danger"><ul class="list" style="text-align: start">' + list + '</ul></div>',
-        });
-    }
-
-    function afterAjaxSuccess(trigger, res) {
-        if (res.success) {
-            Swal.fire({
-                ...swalDefaults,
-                titleText: res.title,
-                text: res.text,
-                icon: 'success',
-                willClose: function () {
-                    if (trigger.hasAttribute('data-redirect-on-success') && res.redirect) {
-                        window.location.replace(res.redirect);
-                        return;
-                    }
-                    if (trigger.hasAttribute('data-remove-gallery')) {
-                        var id = trigger.getAttribute('data-id');
-                        var item = document.querySelector('.gallery-page .img-item[data-id="' + id + '"]');
-                        if (item) {
-                            item.classList.remove('selected');
-                            item.remove();
-                        }
-                        var meta = document.querySelector('.gallery-page .meta-box');
-                        var post = document.querySelector('.gallery-page .post-box');
-                        if (meta) {
-                            meta.classList.add('hide');
-                            meta.innerHTML = '';
-                        }
-                        if (post) {
-                            post.classList.add('open');
-                        }
-                        return;
-                    }
-                    if (trigger.getAttribute('data-remove') === 'closest-tr') {
-                        var row = trigger.closest('tr');
-                        if (row) {
-                            row.style.display = 'none';
-                        }
-                    }
-                },
-            });
-        } else {
-            showErrors(res.errors);
-        }
-    }
-
-    function runAjax(trigger) {
-        var url = trigger.getAttribute('href') || trigger.getAttribute('data-url');
-        if (!url) {
-            return;
-        }
-
-        var method = (trigger.getAttribute('data-http-method') || 'DELETE').toUpperCase();
-        var headers = {
-            'X-CSRF-TOKEN': csrfToken(),
-            Accept: 'application/json',
-        };
-
-        fetch(url, {
-            method: method,
-            headers: headers,
-            credentials: 'same-origin',
-        })
-            .then(function (response) {
-                return response.json().then(function (body) {
-                    if (!response.ok) {
-                        throw body;
-                    }
-                    return body;
-                });
-            })
-            .then(function (body) {
-                afterAjaxSuccess(trigger, body);
-            })
-            .catch(function (err) {
-                if (err && err.errors) {
-                    showErrors(err.errors);
-                } else if (err && err.responseJSON && err.responseJSON.errors) {
-                    showErrors(err.responseJSON.errors);
-                } else {
-                    showErrors({ error: messages.unknownError || 'There Is Error!' });
-                }
-            });
-    }
-
     function resolveForm(trigger) {
         if (trigger.form) {
             return trigger.form;
@@ -190,6 +89,23 @@
         }
     }
 
+    function runConfirmedAction(trigger) {
+        if (trigger.hasAttribute('data-confirm-ajax') && tableActions) {
+            tableActions.runTriggerAjax(trigger);
+            return;
+        }
+
+        var form = resolveForm(trigger);
+        if (form && tableActions && tableActions.usesJsonForm(form)) {
+            tableActions.runFormJson(form, trigger);
+            return;
+        }
+
+        if (form) {
+            submitForm(form);
+        }
+    }
+
     function confirmAndRun(trigger, mode) {
         var label = trigger.getAttribute('data-confirm-label') || '';
         var copy = modeCopy(mode, label);
@@ -205,14 +121,7 @@
             cancelButtonText: copy.no,
         }).then(function (result) {
             if (result.isConfirmed) {
-                if (trigger.hasAttribute('data-confirm-ajax')) {
-                    runAjax(trigger);
-                    return;
-                }
-                var form = resolveForm(trigger);
-                if (form) {
-                    submitForm(form);
-                }
+                runConfirmedAction(trigger);
             } else if (result.dismiss === Swal.DismissReason.cancel) {
                 showCancelToast(copy);
             }
@@ -270,7 +179,11 @@
                 cancelButtonText: copy.no,
             }).then(function (result) {
                 if (result.isConfirmed) {
-                    submitForm(form);
+                    if (tableActions && tableActions.usesJsonForm(form)) {
+                        tableActions.runFormJson(form, submitter);
+                    } else {
+                        submitForm(form);
+                    }
                 } else if (result.dismiss === Swal.DismissReason.cancel) {
                     showCancelToast(copy);
                 }

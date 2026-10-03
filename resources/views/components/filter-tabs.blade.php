@@ -71,7 +71,7 @@
                 $href = route($routeName, $buildQuery($tab['params'] ?? []));
                 $activeClass = $isTabActive($tab) ? ' active' : '';
             @endphp
-            <a class="item text-capitalize{{ $activeClass }}" href="{{ $href }}">{{ $label }}{{ $countSuffix }}</a>
+            <a class="item text-capitalize{{ $activeClass }}" href="{{ $href }}" data-count-key="{{ $countKey }}" data-count-label="{{ $label }}">{{ $label }}{{ $countSuffix }}</a>
         @endforeach
     </div>
 @endif

@@ -60,7 +60,12 @@
 <td class="text-center">{{ $coupon->orders_count ?? 0 }}</td>
 <td class="text-center">
 <label class="switch">
-<input class="switch" type="checkbox" disabled @checked($coupon->active)/><span class="slider"></span>
+@can('edit discounts')
+<input class="switch admin-field-toggle" type="checkbox" data-toggle-url="{{ route('admin.coupons.toggle', $coupon) }}" data-toggle-field="active" @checked($coupon->active)/>
+@else
+<input class="switch" type="checkbox" disabled @checked($coupon->active)/>
+@endcan
+<span class="slider"></span>
 </label>
 </td>
 <td>

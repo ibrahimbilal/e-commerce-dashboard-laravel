@@ -59,7 +59,12 @@
 <td>{{ $discount->end_date?->format('H:i d/m/Y') ?? '—' }}</td>
 <td class="text-center">
 <label class="switch">
-<input class="switch" type="checkbox" disabled @checked($discount->active)/><span class="slider"></span>
+@can('edit discounts')
+<input class="switch admin-field-toggle" type="checkbox" data-toggle-url="{{ route('admin.discounts.toggle', $discount) }}" data-toggle-field="active" @checked($discount->active)/>
+@else
+<input class="switch" type="checkbox" disabled @checked($discount->active)/>
+@endcan
+<span class="slider"></span>
 </label>
 </td>
 <td>

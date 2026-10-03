@@ -63,7 +63,12 @@
 <td class="text-center">{{ $category->products_count ?? '—' }}</td>
 <td class="text-center">
 <label class="switch">
-<input class="switch" type="checkbox" disabled @checked($category->active)/><span class="slider"></span>
+@can('edit categories')
+<input class="switch admin-field-toggle" type="checkbox" data-toggle-url="{{ route('admin.categories.toggle', $category) }}" data-toggle-field="active" @checked($category->active)/>
+@else
+<input class="switch" type="checkbox" disabled @checked($category->active)/>
+@endcan
+<span class="slider"></span>
 </label>
 </td>
 <td>

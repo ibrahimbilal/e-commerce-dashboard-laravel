@@ -67,6 +67,7 @@
 <th class="text-uppercase">name</th>
 <th class="text-uppercase">email</th>
 <th class="text-uppercase">country</th>
+<th class="text-uppercase text-center">subscriber</th>
 <th class="text-uppercase">created date</th>
 @if ($showActions)
 <th class="text-uppercase">action</th>
@@ -80,6 +81,16 @@
 <td class="text-capitalize">{{ trim(($subscriber->first_name ?? '').' '.($subscriber->last_name ?? '')) ?: '—' }}</td>
 <td class="text-uppercase">{{ $subscriber->email ?? '—' }}</td>
 <td class="text-capitalize">{{ $subscriber->country ?? '—' }}</td>
+<td class="text-center">
+<label class="switch">
+@can('edit marketing')
+<input class="switch admin-field-toggle" type="checkbox" data-toggle-url="{{ route('admin.marketing.subscribers.toggle', $subscriber) }}" data-toggle-field="is_subscriber" @checked($subscriber->is_subscriber)/>
+@else
+<input class="switch" type="checkbox" disabled @checked($subscriber->is_subscriber)/>
+@endcan
+<span class="slider"></span>
+</label>
+</td>
 <td class="text-uppercase">{{ $subscriber->created_at?->format('H:i d/m/Y') ?? '—' }}</td>
 @if ($showActions)
 <td>
@@ -150,11 +161,11 @@ if ($.fn.DataTable && $('#subscribers').length) {
       		},
       		{
       			bSortable: false,
-      			aTargets: [0{{ $showActions ? ', 5' : '' }}]
+      			aTargets: [0{{ $showActions ? ', 6' : ', 5' }}]
       		},
       		{
       			bSearchable: false,
-      			aTargets: [0{{ $showActions ? ', 5' : '' }}]
+      			aTargets: [0{{ $showActions ? ', 6' : ', 5' }}]
       		}
       	],
       	select: {
@@ -162,7 +173,7 @@ if ($.fn.DataTable && $('#subscribers').length) {
       		selector: 'td:first-child'
       	},
       	order: [
-      		[{{ $showActions ? 4 : 3 }}, 'desc']
+      		[{{ $showActions ? 5 : 4 }}, 'desc']
       	],
       	language: {
       		emptyTable: 'No subscribers found.',

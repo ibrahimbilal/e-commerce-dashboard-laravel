@@ -76,12 +76,22 @@
 <td class="text-capitalize">{{ $product->status ?? '—' }}</td>
 <td class="text-center">
 <label class="switch">
-<input class="switch" type="checkbox" disabled @checked($product->featured)/><span class="slider"></span>
+@can('edit products')
+<input class="switch admin-field-toggle" type="checkbox" data-toggle-url="{{ route('admin.products.toggle', $product) }}" data-toggle-field="featured" @checked($product->featured)/>
+@else
+<input class="switch" type="checkbox" disabled @checked($product->featured)/>
+@endcan
+<span class="slider"></span>
 </label>
 </td>
 <td class="text-center">
 <label class="switch">
-<input class="switch" type="checkbox" disabled @checked($product->new)/><span class="slider"></span>
+@can('edit products')
+<input class="switch admin-field-toggle" type="checkbox" data-toggle-url="{{ route('admin.products.toggle', $product) }}" data-toggle-field="new" @checked($product->new)/>
+@else
+<input class="switch" type="checkbox" disabled @checked($product->new)/>
+@endcan
+<span class="slider"></span>
 </label>
 </td>
 <td>{{ $product->created_at?->format('H:i d/m/Y') ?? '—' }}</td>

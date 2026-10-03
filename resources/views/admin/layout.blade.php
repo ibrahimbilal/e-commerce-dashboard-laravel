@@ -76,7 +76,13 @@
             cancelRestoreText: @json(__('alerts.cancel.restore.text')),
             unknownError: @json(__('alerts.errors.unknown')),
         };
+        window.AdminTableActionMessages = {
+            genericError: @json(__('alerts.errors.unknown')),
+            ops: @json(__('alerts.ops')),
+            ok: @json(__('alerts.btn_text')),
+        };
     </script>
+    <script src="{{ asset('assets/js/table-actions.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/js/delete-confirm.js') }}" type="text/javascript"></script>
 
     @stack('scripts')

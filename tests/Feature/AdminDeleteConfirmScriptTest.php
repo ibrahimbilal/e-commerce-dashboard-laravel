@@ -30,7 +30,9 @@ class AdminDeleteConfirmScriptTest extends TestCase
         $this->actingAs($admin)
             ->get(route('admin.products.index'))
             ->assertOk()
+            ->assertSee('assets/js/table-actions.js', false)
             ->assertSee('assets/js/delete-confirm.js', false)
-            ->assertSee('AdminDeleteConfirmMessages', false);
+            ->assertSee('AdminDeleteConfirmMessages', false)
+            ->assertSee('AdminTableActionMessages', false);
     }
 }
