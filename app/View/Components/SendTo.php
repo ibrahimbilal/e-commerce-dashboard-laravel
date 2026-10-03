@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Setting;
 use Illuminate\View\Component;
 use Spatie\Permission\Models\Role;
+use App\Support\AdminSettingDefaults;
 
 class SendTo extends Component
 {
@@ -56,6 +57,8 @@ class SendTo extends Component
 				$sets[$col->setting_key] = json_decode($col->setting_value);
 			}
 		}
+
+		$sets = AdminSettingDefaults::mergeLoaded($sets, AdminSettingDefaults::emailRecipientKeys());
 
         return view('components.send-to', compact('sets', 'users', 'roles'));
     }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Settings;
 use App\Models\Setting;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Settings\ThemeSettingsRequest;
+use App\Support\AdminSettingDefaults;
 
 class ThemeSettingController extends Controller
 {
@@ -26,6 +27,7 @@ class ThemeSettingController extends Controller
     {
 
 		$settings = Setting::where('setting_key', '=', 'logo_width')
+							->orWhere('setting_key', '=', 'logo_height')
 							->orWhere('setting_key', '=', 'mobile_logo_width')
 							->orWhere('setting_key', '=', 'main_color')
 							->orWhere('setting_key', '=', 'main_color_hover')
@@ -47,6 +49,8 @@ class ThemeSettingController extends Controller
 			// Compact only inputs data
 			$sets[$col->setting_key] = $col->setting_value;
 		}
+		$sets = AdminSettingDefaults::mergeLoaded($sets, AdminSettingDefaults::themePageKeys());
+
 		return view('admin.settings.theme', compact('sets'));
     }
 
@@ -60,10 +64,10 @@ class ThemeSettingController extends Controller
     public function store(ThemeSettingsRequest $request)
     {
 
-		foreach( $request->request->all() as $key => $value ) {
+		foreach ($request->request->all() as $key => $value) {
 			Setting::updateOrCreate(
-				['setting_key' =>  $key],
-				['setting_value' =>  $value],
+				['setting_key' => $key],
+				['setting_value' => $value ?? ''],
 			);
 		}
 

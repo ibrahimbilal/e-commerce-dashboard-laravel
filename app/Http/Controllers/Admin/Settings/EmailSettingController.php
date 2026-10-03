@@ -8,6 +8,7 @@ use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Settings\EmailSettingsRequest;
 use App\Models\User;
+use App\Support\AdminSettingDefaults;
 
 class EmailSettingController extends Controller
 {
@@ -47,6 +48,8 @@ class EmailSettingController extends Controller
 			// Compact only inputs data
 			$sets[$col->setting_key] = $col->setting_value;
 		}
+		$sets = AdminSettingDefaults::mergeLoaded($sets, AdminSettingDefaults::emailPageKeys());
+
 		return view('admin.settings.email', compact('sets'));
 	}
 
