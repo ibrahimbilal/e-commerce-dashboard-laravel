@@ -32,7 +32,7 @@ if (!function_exists('get_dashboard_menu')) {
 				'group_items' => [
 					[
 						"route_name" => 'admin.products.index',
-						"active_if" => ['admin.products.index', 'admin.products.create', 'admin.products.edit'],
+						"active_if" => ['admin.products.index', 'admin.products.create', 'admin.products.edit', 'admin.attributes.index', 'admin.attributes.create', 'admin.attributes.edit', 'admin.reviews.index', 'admin.reviews.create', 'admin.reviews.edit', 'admin.reviews.show'],
 						"icon" => 'shopping-bag',
 						"title" => __('admin.menu.products.title'),
 						"has_submeu" => true,
@@ -105,21 +105,20 @@ if (!function_exists('get_dashboard_menu')) {
 					],
 					[
 						"route_name" => 'admin.orders.index',
-						"active_if" => ['admin.orders.index', 'admin.orders.create', 'admin.orders.edit', 'admin.orders.show'],
+						"active_if" => ['admin.orders.index', 'admin.orders.create', 'admin.orders.edit', 'admin.orders.show', 'admin.order-statuses.index', 'admin.order-statuses.create', 'admin.order-statuses.edit'],
 						"icon" => 'box',
 						"title" => __('admin.menu.orders.title'),
-						"has_submeu" => false,
+						"has_submeu" => true,
 						"badge" => '35',
 						'permission' => ['view orders'],
-					],
-					[
-						"route_name" => 'admin.order-statuses.index',
-						"active_if" => ['admin.order-statuses.index', 'admin.order-statuses.create', 'admin.order-statuses.edit'],
-						"icon" => 'list-check',
-						"title" => 'Order Statuses',
-						"has_submeu" => false,
-						"badge" => '',
-						'permission' => ['view orders'],
+						"submenu_items" => [
+							[
+								"route_name" => 'admin.order-statuses.index',
+								"active_if" => ['admin.order-statuses.index', 'admin.order-statuses.create', 'admin.order-statuses.edit'],
+								"title" => 'Statuses',
+								'permission' => ['view orders'],
+							]
+						]
 					],
 					[
 						"route_name" => 'admin.invoices.index',
@@ -140,17 +139,9 @@ if (!function_exists('get_dashboard_menu')) {
 						"active_if" => ['admin.analytics.overview'],
 						"icon" => 'stats',
 						"title" => __('admin.menu.analytics.title'),
-						"has_submeu" => true,
+						"has_submeu" => false,
 						"badge" => '',
 						'permission' => ['view analytics'],
-						"submenu_items" => [
-							[
-								"route_name" => 'admin.analytics.overview',
-								"active_if" => ['admin.analytics.overview'],
-								"title" => __('admin.menu.analytics.0.overview'),
-								'permission' => ['view overview'],
-							]
-						]
 					],
 					[
 						"route_name" => 'admin.marketing.index',

@@ -43,7 +43,7 @@
     <form method="POST" action="{{ route($destroyRoute, $model) }}" class="d-inline destroy-resource-form" data-confirm-delete="soft" data-confirm-label="{{ $destroyLabel }}">
         @csrf
         @method('DELETE')
-        <button type="button" class="btn btn-danger btn-rounded me-2 py-1" data-confirm-delete="soft" data-confirm-label="{{ $destroyLabel }}">
+        <button type="button" class="btn btn-danger btn-rounded me-2 py-1 bg-transparent" data-confirm-delete="soft" data-confirm-label="{{ $destroyLabel }}">
             <span class="icon"><i class="fi-rr-trash"> </i></span>trash
         </button>
     </form>
@@ -52,7 +52,7 @@
     <form method="POST" action="{{ route($restoreRoute, $model) }}" class="d-inline" data-confirm-delete="restore" data-confirm-label="{{ $destroyLabel }}">
         @csrf
         @method('PATCH')
-        <button type="button" class="btn btn-primary btn-rounded me-2 py-1" data-confirm-delete="restore" data-confirm-label="{{ $destroyLabel }}">
+        <button type="button" class="btn btn-primary btn-rounded me-2 py-1 bg-transparent" data-confirm-delete="restore" data-confirm-label="{{ $destroyLabel }}">
             <span class="icon"><i class="fi-rr-undo"> </i></span>restore
         </button>
     </form>
@@ -61,7 +61,7 @@
     <form method="POST" action="{{ route($forceDeleteRoute, $model) }}" class="d-inline destroy-resource-form" data-confirm-delete="permanent" data-confirm-label="{{ $destroyLabel }}">
         @csrf
         @method('DELETE')
-        <button type="button" class="btn btn-danger btn-rounded me-2 py-1" data-confirm-delete="permanent" data-confirm-label="{{ $destroyLabel }}">
+        <button type="button" class="btn btn-danger btn-rounded me-2 py-1 bg-transparent" data-confirm-delete="permanent" data-confirm-label="{{ $destroyLabel }}">
             <span class="icon"><i class="fi-rr-cross-circle"> </i></span>delete permanently
         </button>
     </form>

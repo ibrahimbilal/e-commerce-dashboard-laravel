@@ -25,11 +25,11 @@
     $productFilterTabs = [
         ['label' => 'All', 'key' => 'all', 'params' => []],
         ['label' => 'Published', 'key' => 'published', 'params' => ['status' => 'published']],
-        ['label' => 'Draft', 'key' => 'draft', 'params' => ['status' => 'draft']],
-        ['label' => 'Trashed', 'key' => 'trashed', 'params' => ['trashed' => '1']],
         ['label' => 'Featured', 'key' => 'featured', 'params' => ['featured' => '1']],
         ['label' => 'New', 'key' => 'new', 'params' => ['new' => '1']],
         ['label' => 'Sale', 'key' => 'sale', 'params' => ['sale' => '1']],
+        ['label' => 'Draft', 'key' => 'draft', 'params' => ['status' => 'draft']],
+        ['label' => 'Trashed', 'key' => 'trashed', 'params' => ['trashed' => '1']],
     ];
 @endphp
 <div class="row">
