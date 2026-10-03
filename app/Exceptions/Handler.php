@@ -57,9 +57,7 @@ class Handler extends ExceptionHandler
                 ], 403);
             }
 
-            if ($request->method() !== 'GET') {
-                abort(403);
-            }
+            abort(403);
         });
     }
 }

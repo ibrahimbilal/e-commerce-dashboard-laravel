@@ -61,32 +61,18 @@ class DemoDataSeeder extends Seeder
 
     private function seedStaffUsers(): void
     {
-        $manager = User::factory()->create([
-            'email' => 'manager@example.com',
-            'first_name' => 'Demo',
-            'last_name' => 'Manager',
-            'password' => Hash::make('password'),
-        ]);
-        $manager->markEmailAsVerified();
-        $manager->assignRole('manager');
-
-        $viewer = User::factory()->create([
-            'email' => 'viewer@example.com',
-            'first_name' => 'Demo',
-            'last_name' => 'Viewer',
-            'password' => Hash::make('password'),
-        ]);
-        $viewer->markEmailAsVerified();
-        $viewer->assignRole('viewer');
-
         User::factory(8)->create()->each(function (User $user) {
             $user->markEmailAsVerified();
             $user->assignRole(fake()->randomElement(['manager', 'viewer']));
             $this->assignDemoUserAvatar($user);
         });
 
-        $this->assignDemoUserAvatar($manager);
-        $this->assignDemoUserAvatar($viewer);
+        foreach (['manager@example.com', 'viewer@example.com'] as $email) {
+            $user = User::query()->where('email', $email)->first();
+            if ($user) {
+                $this->assignDemoUserAvatar($user);
+            }
+        }
     }
 
     private function seedAttributes(): void

@@ -47,5 +47,7 @@ class RoleSeeder extends Seeder
             ->pluck('name');
 
         $viewer->syncPermissions($viewerPermissions);
+
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
     }
 }

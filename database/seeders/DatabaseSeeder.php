@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\PermissionRegistrar;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,11 +15,14 @@ class DatabaseSeeder extends Seeder
         $this->call([
             PermissionsSeeder::class,
             LangSeeder::class,
-            UserSeeder::class,
             RoleSeeder::class,
+            UserSeeder::class,
+            StaffUserSeeder::class,
             SettingsSeeder::class,
             AdminAvatarSeeder::class,
             DemoDataSeeder::class,
         ]);
+
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
     }
 }
