@@ -21,7 +21,7 @@ class UserFactory extends Factory
 			'mobile' => substr(fake()->e164PhoneNumber(), 0, 20),
             'birth_date' => fake()->optional()->date(),
             'gender' => fake()->randomElement(['male', 'female']),
-            'role_name' => 'not_verified',
+            'role_name' => '',
             'status' => 'active',
             'language' => 'en',
 			'profile_picture' => null,
