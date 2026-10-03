@@ -282,7 +282,25 @@ if (!function_exists('toGmtOffset')) {
 	 */
 	function toGmtOffset($timezone)
 	{
-		$userTimeZone = new DateTimeZone($timezone);
+		if ($timezone === '') {
+			return '';
+		}
+
+		static $knownTimezones = null;
+		if ($knownTimezones === null) {
+			$knownTimezones = array_flip(DateTimeZone::listIdentifiers(DateTimeZone::ALL_WITH_BC));
+		}
+
+		if (! isset($knownTimezones[$timezone])) {
+			return '';
+		}
+
+		try {
+			$userTimeZone = new DateTimeZone($timezone);
+		} catch (\Exception $exception) {
+			return '';
+		}
+
 		$offset = $userTimeZone->getOffset(new DateTime("now", new DateTimeZone('GMT'))); // Offset in seconds
 		$seconds = abs($offset);
 		$sign = $offset > 0 ? '+' : '-';
