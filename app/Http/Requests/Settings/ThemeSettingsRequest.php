@@ -29,21 +29,21 @@ class ThemeSettingsRequest extends FormRequest
             'mobile_logo_width'		=> 'required|numeric|min:0|max:300',
             'mobile_logo_height'	=> 'required|numeric|min:0|max:300',
 
-            'main_color'			=> ['required', 'regex:/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/'],
-            'main_color_hover'		=> ['required', 'regex:/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/'],
-            'box_bg_color'			=> ['required', 'regex:/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/'],
-            'body_background'		=> ['required', 'regex:/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/'],
-            'menu_badge_bg'			=> ['required', 'regex:/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/'],
-            'menu_active_bg'		=> ['required', 'regex:/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/'],
-            'text_color'			=> ['required', 'regex:/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/'],
+            'main_color'			=> ['required', 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i'],
+            'main_color_hover'		=> ['required', 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i'],
+            'box_bg_color'			=> ['required', 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i'],
+            'body_background'		=> ['required', 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i'],
+            'menu_badge_bg'			=> ['required', 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i'],
+            'menu_active_bg'		=> ['required', 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i'],
+            'text_color'			=> ['required', 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i'],
 
-            'dark_main_color'		=> ['required', 'regex:/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/'],
-            'dark_main_color_hover'	=> ['required', 'regex:/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/'],
-            'dark_box_bg_color'		=> ['required', 'regex:/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/'],
-            'dark_body_background'	=> ['required', 'regex:/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/'],
-            'dark_menu_badge_bg'	=> ['required', 'regex:/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/'],
-            'dark_menu_active_bg'	=> ['required', 'regex:/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/'],
-            'dark_text_color'		=> ['required', 'regex:/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/']
+            'dark_main_color'		=> ['required', 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i'],
+            'dark_main_color_hover'	=> ['required', 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i'],
+            'dark_box_bg_color'		=> ['required', 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i'],
+            'dark_body_background'	=> ['required', 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i'],
+            'dark_menu_badge_bg'	=> ['required', 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i'],
+            'dark_menu_active_bg'	=> ['required', 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i'],
+            'dark_text_color'		=> ['required', 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i']
         ];
     }
 }
