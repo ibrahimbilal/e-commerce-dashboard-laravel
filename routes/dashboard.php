@@ -67,3 +67,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified'])->group(
             ->whereNumber('id');
     }
 });
+
+// Legacy route name used by storefront blades and error pages until Fronty renames links.
+Route::redirect('/dashboard', '/admin/dashboard')->name('dashboard');
