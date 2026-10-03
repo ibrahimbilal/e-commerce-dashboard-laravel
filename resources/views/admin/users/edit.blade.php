@@ -72,13 +72,15 @@
 						@endforelse
                     </select>
                 </div>
-                <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
-                    <label class="item-title" for="user-status">{{ __('forms.status.title') }}</label>
-                    <select class="form-select" id="user-status" name="status">
-                        <option value="not_verified" @selected($user->status == 'not_verified')>{{ __('forms.status.not_verified') }}</option>
-                        <option value="verified" @selected($user->status == 'verified')>{{ __('forms.status.verified') }}</option>
-                        <option value="blocked" @selected($user->status == 'blocked')>{{ __('forms.status.blocked') }}</option>
-                    </select>
+                <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
+                    <label class="item-title" for="user-active">{{ __('forms.status.title') }}</label>
+                    <label class="switch">
+                        <input type="hidden" name="status" value="inactive">
+                        <input class="switch" id="user-active" name="status" type="checkbox" value="active"
+                            @checked($user->status === 'active')
+                            @disabled((int) auth()->id() === (int) $user->id)>
+                        <span class="slider"></span>
+                    </label>
                 </div>
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
                     <label class="item-title" for="user-language">{{ __('forms.lang') }}</label>

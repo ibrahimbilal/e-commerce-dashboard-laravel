@@ -91,6 +91,14 @@
                         <option value="fr">French</option>
                     </select>
                 </div>
+                <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
+                    <label class="item-title" for="user-active">{{ __('forms.status.title') }}</label>
+                    <label class="switch">
+                        <input type="hidden" name="status" value="inactive">
+                        <input class="switch" id="user-active" name="status" type="checkbox" value="active" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
                 <div class="form-item second d-flex mt-3 flex-wrap flex-sm-nowrap">
 					<div class="item-title d-block mb-2">
                         <label class="item-title mb-2" for="profile-picture">{{ __('forms.profile_picture.title') }}</label>

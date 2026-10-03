@@ -95,7 +95,20 @@
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->role_name }}</td>
                                         <td>{{ $user->created_at }}</td>
-                                        <td class="status-title">{{ __('forms.status.' . $user->status) }}</td>
+                                        <td class="text-center status-title">
+                                            <label class="switch">
+                                                @if (auth()->user()?->can('edit users') && (int) auth()->id() !== (int) $user->id && ! $user->deleted_at)
+                                                    <input class="switch admin-field-toggle" type="checkbox"
+                                                        data-toggle-url="{{ route('users.toggle', $user) }}"
+                                                        data-toggle-field="status"
+                                                        @checked($user->status === 'active') />
+                                                @else
+                                                    <input class="switch" type="checkbox" disabled
+                                                        @checked($user->status === 'active') />
+                                                @endif
+                                                <span class="slider"></span>
+                                            </label>
+                                        </td>
                                         <td>
                                             <div class="btn-group">
                                                 @if (!$user->deleted_at)
@@ -186,11 +199,11 @@
                 },
                 {
                     bSortable: false,
-                    aTargets: [0, 1, 3, 7]
+                    aTargets: [0, 1, 3, 6, 7]
                 },
                 {
                     bSearchable: false,
-                    aTargets: [0, 1, 7]
+                    aTargets: [0, 1, 6, 7]
                 }
             ],
             select: {

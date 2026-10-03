@@ -23,6 +23,8 @@ return [
 	],
 	'status' => [
 		'title' => 'حالة الحساب:',
+		'active' => 'نشط',
+		'inactive' => 'غير نشط',
 		'not_verified' => 'غير مفعل',
 		'verified' => 'مفعل',
 		'blocked' => 'محظور',

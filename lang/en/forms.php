@@ -23,6 +23,8 @@ return [
 	],
 	'status' => [
 		'title' => 'Account Status:',
+		'active' => 'Active',
+		'inactive' => 'Inactive',
 		'not_verified' => 'Not Verified',
 		'verified' => 'Verified',
 		'blocked' => 'Blocked',

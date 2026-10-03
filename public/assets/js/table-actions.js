@@ -177,13 +177,35 @@
         });
     }
 
+    function applyToggleChecked(input, body) {
+        var field = body.field || input.getAttribute('data-toggle-field') || '';
+        var value = body.value;
+
+        if (field === 'status') {
+            if (typeof value === 'boolean') {
+                input.checked = value;
+            } else if (value === 'active') {
+                input.checked = true;
+            } else if (value === 'inactive') {
+                input.checked = false;
+            }
+            return;
+        }
+
+        if (typeof value === 'boolean') {
+            input.checked = value;
+        } else if (value === 'active' || value === 1 || value === '1' || value === true) {
+            input.checked = true;
+        } else if (value === 'inactive' || value === 0 || value === '0' || value === false) {
+            input.checked = false;
+        }
+    }
+
     function handleToggleSuccess(input, body) {
         if (body.counts) {
             updateFilterTabCounts(body.counts);
         }
-        if (typeof body.value === 'boolean') {
-            input.checked = body.value;
-        }
+        applyToggleChecked(input, body);
         if (body.message) {
             showSuccessToast(body.message);
         }
