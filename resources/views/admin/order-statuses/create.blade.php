@@ -2,8 +2,8 @@
 
 @section('title', 'E-Commerce Project')
 
-@push('styles')
-<link href="{{ asset('assets/css/sweetalert2.min.css') }}" rel="stylesheet"/>
+@push('stylesheet')
+<link href="{{ asset('css/sweetalert2.min.css') }}" rel="stylesheet"/>
 @endpush
 
 @section('content')
@@ -38,6 +38,6 @@
 @endsection
 
 @push('scripts')
-<script async="" src="{{ asset('assets/js/async.js') }}" type="text/javascript"></script>
-<script src="{{ asset('assets/js/sweetalert2.all.min.js') }}" type="text/javascript"></script>
+<script async="" src="{{ asset('js/async.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/sweetalert2.all.min.js') }}" type="text/javascript"></script>
 @endpush

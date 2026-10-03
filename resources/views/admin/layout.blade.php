@@ -9,6 +9,7 @@
 
     <!-- Icons -->
     <link rel="stylesheet" href="{{ asset('css/uicons-regular-rounded.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/uicons-solid-rounded.css') }}">
 
     @stack('stylesheet')
 

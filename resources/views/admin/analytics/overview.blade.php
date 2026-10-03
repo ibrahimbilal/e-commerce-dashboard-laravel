@@ -2,8 +2,8 @@
 
 @section('title', 'Analytics')
 
-@push('styles')
-<link href="{{ asset('assets/css/apexcharts.css') }}" rel="stylesheet"/>
+@push('stylesheet')
+<link href="{{ asset('css/apexcharts.css') }}" rel="stylesheet"/>
 @endpush
 
 @section('content')
@@ -215,8 +215,8 @@ Not tracked
 @endsection
 
 @push('scripts')
-<script async="" src="{{ asset('assets/js/async.js') }}" type="text/javascript"></script>
-<script src="{{ asset('assets/js/apexcharts.min.js') }}" type="text/javascript"></script>
+<script async="" src="{{ asset('js/async.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/apexcharts.min.js') }}" type="text/javascript"></script>
 @php
     $analyticsChartPayload = [
         'labels' => $analyticsSeries['labels'] ?? [],
@@ -229,5 +229,5 @@ Not tracked
 <script>
 window.__analyticsOverview = @json($analyticsChartPayload);
 </script>
-<script src="{{ asset('assets/js/charts.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/charts.js') }}" type="text/javascript"></script>
 @endpush

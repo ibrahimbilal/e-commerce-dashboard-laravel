@@ -241,7 +241,7 @@
 @endsection
 
 @push('scripts')
-<script async="" src="{{ asset('assets/js/async.js') }}" type="text/javascript"></script>
-<script src="{{ asset('assets/js/html2pdf.min.js') }}" type="text/javascript"></script>
+<script async="" src="{{ asset('js/async.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/html2pdf.min.js') }}" type="text/javascript"></script>
 @endpush
 

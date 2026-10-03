@@ -2,8 +2,8 @@
 
 @section('title', 'E-Commerce Project')
 
-@push('styles')
-<link href="{{ asset('assets/css/pickadate.css') }}" rel="stylesheet"/>
+@push('stylesheet')
+<link href="{{ asset('css/pickadate.css') }}" rel="stylesheet"/>
 @endpush
 
 @section('content')
@@ -409,8 +409,8 @@
 @endsection
 
 @push('scripts')
-<script async="" src="{{ asset('assets/js/async.js') }}" type="text/javascript"></script>
-<script src="{{ asset('assets/js/sweetalert2.all.min.js') }}" type="text/javascript"></script>
-<script src="{{ asset('assets/js/pickadate/picker.js') }}" type="text/javascript"></script>
-<script src="{{ asset('assets/js/pickadate/picker.date.js') }}" type="text/javascript"></script>
+<script async="" src="{{ asset('js/async.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/sweetalert2.all.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/pickadate/picker.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/pickadate/picker.date.js') }}" type="text/javascript"></script>
 @endpush

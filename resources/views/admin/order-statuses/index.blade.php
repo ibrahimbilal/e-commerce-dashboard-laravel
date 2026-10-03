@@ -2,8 +2,8 @@
 
 @section('title', 'E-Commerce Project')
 
-@push('styles')
-<link href="{{ asset('assets/css/datatables.min.css') }}" rel="stylesheet"/>
+@push('stylesheet')
+<link href="{{ asset('css/datatables.min.css') }}" rel="stylesheet"/>
 @endpush
 
 @section('content')
@@ -57,8 +57,8 @@
 @endsection
 
 @push('scripts')
-<script async="" src="{{ asset('assets/js/async.js') }}" type="text/javascript"></script>
-<script src="{{ asset('assets/js/datatables.min.js') }}" type="text/javascript"></script>
+<script async="" src="{{ asset('js/async.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/datatables.min.js') }}" type="text/javascript"></script>
 <script>
 if ($.fn.DataTable && $('#order-statuses').length) {
       $('#order-statuses').DataTable({

@@ -14,7 +14,7 @@ class AdminController extends Controller
 	// Admin Panel Index
 	public function index()
 	{
-		return view('admin.index');
+		return redirect()->route('admin.dashboard');
 	}
 
 }

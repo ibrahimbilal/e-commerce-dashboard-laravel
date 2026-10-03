@@ -2,12 +2,12 @@
 
 @section('title', 'E-Commerce Project')
 
-@push('styles')
-<link href="{{ asset('assets/css/uicons-solid-rounded.css') }}" rel="stylesheet"/>
-<link href="{{ asset('assets/css/select2.min.css') }}" rel="stylesheet"/>
-<link href="{{ asset('assets/css/quill.snow.min.css') }}" rel="stylesheet"/>
-<link href="{{ asset('assets/css/sweetalert2.min.css') }}" rel="stylesheet"/>
-<link href="{{ asset('assets/css/pickadate.css') }}" rel="stylesheet"/>
+@push('stylesheet')
+<link href="{{ asset('css/uicons-solid-rounded.css') }}" rel="stylesheet"/>
+<link href="{{ asset('css/select2.min.css') }}" rel="stylesheet"/>
+<link href="{{ asset('css/quill.snow.min.css') }}" rel="stylesheet"/>
+<link href="{{ asset('css/sweetalert2.min.css') }}" rel="stylesheet"/>
+<link href="{{ asset('css/pickadate.css') }}" rel="stylesheet"/>
 @endpush
 
 @section('content')
@@ -194,15 +194,15 @@ separate keywords with comma (,)."><i class="fi-rr-info"> </i></span></label>
 @endsection
 
 @push('scripts')
-<script async="" src="{{ asset('assets/js/async.js') }}" type="text/javascript"></script>
-<script src="{{ asset('assets/js/select2.min.js') }}" type="text/javascript"></script>
-<script src="{{ asset('assets/js/select2_args.js') }}" type="text/javascript"></script>
-<script src="{{ asset('assets/js/speakingurl.min.js') }}" type="text/javascript"></script>
-<script src="{{ asset('assets/js/jquery.stringtoslug.min.js') }}" type="text/javascript"></script>
-<script src="{{ asset('assets/js/quill.min.js') }}" type="text/javascript"></script>
-<script src="{{ asset('assets/js/sweetalert2.all.min.js') }}" type="text/javascript"></script>
-<script src="{{ asset('assets/js/pickadate/picker.js') }}" type="text/javascript"></script>
-<script src="{{ asset('assets/js/pickadate/picker.date.js') }}" type="text/javascript"></script>
+<script async="" src="{{ asset('js/async.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/select2.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/select2_args.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/speakingurl.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/jquery.stringtoslug.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/quill.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/sweetalert2.all.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/pickadate/picker.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/pickadate/picker.date.js') }}" type="text/javascript"></script>
 <script>
       // Data Tables
       const fontSizeArr = ['10px','12px','14px','16px','20px','24px','32px','36px','42px','54px'];

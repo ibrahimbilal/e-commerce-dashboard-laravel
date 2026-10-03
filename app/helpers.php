@@ -17,19 +17,10 @@ if (!function_exists('get_dashboard_menu')) {
 				'allow_to' => ['view dashboard'],
 				'group_items' => [
 					[
-						"route_name" => 'admin.index',
-						"active_if" => ['admin.index'],
-						"icon" => 'apps',
-						"title" => __('admin.menu.dashboard.title'),
-						"has_submeu" => false,
-						"badge" => '',
-						'permission' => ['view dashboard'],
-					],
-					[
 						"route_name" => 'admin.dashboard',
 						"active_if" => ['admin.dashboard'],
 						"icon" => 'apps',
-						"title" => 'E-Commerce Dashboard',
+						"title" => 'Dashboard',
 						"has_submeu" => false,
 						"badge" => '',
 						'permission' => ['view dashboard'],

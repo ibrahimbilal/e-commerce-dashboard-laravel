@@ -2,10 +2,10 @@
 
 @section('title', 'Dashboard')
 
-@push('styles')
-<link href="{{ asset('assets/css/swiper-bundle.min.css') }}" rel="stylesheet"/>
-<link href="{{ asset('assets/css/apexcharts.css') }}" rel="stylesheet"/>
-<link href="{{ asset('assets/css/datatables.min.css') }}" rel="stylesheet"/>
+@push('stylesheet')
+<link href="{{ asset('css/swiper-bundle.min.css') }}" rel="stylesheet"/>
+<link href="{{ asset('css/apexcharts.css') }}" rel="stylesheet"/>
+<link href="{{ asset('css/datatables.min.css') }}" rel="stylesheet"/>
 <style>
 .dashboard-top-selling .list-item .img {
 	max-width: 60px;
@@ -40,9 +40,8 @@
         ['value' => data_get($stats, 'customers', 0), 'label' => 'Customers', 'icon' => 'fi-rr-users', 'color' => 'mauve', 'format' => 'compact', 'change' => data_get($stats, 'customers_change'), 'icon_suffix' => ' '],
         ['value' => data_get($stats, 'orders', 0), 'label' => 'Orders', 'icon' => 'fi-rr-box', 'color' => 'green', 'format' => 'compact', 'change' => data_get($stats, 'orders_change'), 'icon_suffix' => ' '],
         ['value' => data_get($stats, 'sales', data_get($stats, 'revenue', 0)), 'label' => 'Sales', 'icon' => 'fi-rr-dollar', 'color' => 'red', 'format' => 'compact', 'change' => data_get($stats, 'sales_change'), 'icon_suffix' => ' '],
-        ['value' => data_get($stats, 'revenue', 0), 'label' => 'Revenue', 'icon' => 'fi-rr-dollar', 'color' => 'orange', 'format' => 'number', 'change' => null, 'icon_suffix' => ''],
-        ['value' => data_get($stats, 'products', 0), 'label' => 'Products', 'icon' => 'fi-rr-shopping-bag', 'color' => 'mauve', 'format' => 'number', 'change' => null, 'label_class' => 'mb-0', 'icon_suffix' => ''],
-        ['value' => data_get($stats, 'subscribers', 0), 'label' => 'Subscribers', 'icon' => 'fi-rr-paper-plane', 'color' => 'green', 'format' => 'compact', 'change' => data_get($stats, 'subscribers_change'), 'icon_suffix' => ' '],
+        ['value' => data_get($stats, 'products', 0), 'label' => 'Products', 'icon' => 'fi-rr-shopping-bag', 'color' => 'orange', 'format' => 'number', 'change' => null, 'label_class' => 'mb-0', 'icon_suffix' => ''],
+        ['value' => data_get($stats, 'subscribers', 0), 'label' => 'Subscribers', 'icon' => 'fi-rr-paper-plane', 'color' => 'mauve', 'format' => 'compact', 'change' => data_get($stats, 'subscribers_change'), 'icon_suffix' => ' '],
     ];
 @endphp
 <div class="page-header">
@@ -181,14 +180,14 @@ ${{ number_format((float) $price) }}
 @endsection
 
 @push('scripts')
-<script async="" src="{{ asset('assets/js/async.js') }}" type="text/javascript"></script>
-<script src="{{ asset('assets/js/apexcharts.min.js') }}" type="text/javascript"></script>
+<script async="" src="{{ asset('js/async.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/apexcharts.min.js') }}" type="text/javascript"></script>
 <script>
 window.__dashboardChartSeries = @json($salesChartSeries);
 </script>
-<script src="{{ asset('assets/js/charts.js') }}" type="text/javascript"></script>
-<script src="{{ asset('assets/js/swiper-bundle.min.js') }}" type="text/javascript"></script>
-<script src="{{ asset('assets/js/datatables.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/charts.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/swiper-bundle.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/datatables.min.js') }}" type="text/javascript"></script>
 <script>
 if ($.fn.DataTable && $('#dashboard-recent-orders').length && ! $.fn.dataTable.isDataTable('#dashboard-recent-orders')) {
       $('#dashboard-recent-orders').DataTable({

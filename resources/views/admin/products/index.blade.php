@@ -2,7 +2,6 @@
 
 @section('title', 'E-Commerce Project')
 
-
 @section('content')
 <x-flash-messages />
 <div class="page-header">
@@ -100,13 +99,13 @@
 </div>
 @endsection
 
-@push('styles')
-<link href="{{ asset('assets/css/datatables.min.css') }}" rel="stylesheet"/>
+@push('stylesheet')
+<link href="{{ asset('css/datatables.min.css') }}" rel="stylesheet"/>
 @endpush
 
 @push('scripts')
-<script async="" src="{{ asset('assets/js/async.js') }}" type="text/javascript"></script>
-<script src="{{ asset('assets/js/datatables.min.js') }}" type="text/javascript"></script>
+<script async="" src="{{ asset('js/async.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/datatables.min.js') }}" type="text/javascript"></script>
 <script>
 if ($.fn.DataTable && $('#products').length) {
       // Data Tables

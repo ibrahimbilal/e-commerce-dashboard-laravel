@@ -1043,8 +1043,6 @@ aside {
   background-color: var(--warning-color);
 }
 .table-holder table tbody td.prod-img .img-holder {
-  background-color: var(--box-bg-color);
-  padding: 5px;
   width: 100px;
   text-align: center;
 }
@@ -1056,8 +1054,6 @@ aside {
   text-transform: capitalize;
 }
 .table-holder table tbody td.customer-img .img-holder {
-  background-color: var(--box-bg-color);
-  padding: 5px;
   width: 80px;
   text-align: center;
   border-radius: 50%;
