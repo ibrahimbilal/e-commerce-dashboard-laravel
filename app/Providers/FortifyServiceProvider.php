@@ -46,7 +46,7 @@ class FortifyServiceProvider extends ServiceProvider
                 return null;
             }
 
-            if ($user->status !== 'active') {
+            if ($user->status === 'inactive') {
                 return null;
             }
 

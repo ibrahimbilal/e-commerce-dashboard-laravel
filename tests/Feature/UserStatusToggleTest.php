@@ -103,6 +103,24 @@ class UserStatusToggleTest extends TestCase
         $this->assertGuest();
     }
 
+    public function test_not_verified_user_can_still_log_in(): void
+    {
+        $user = User::factory()->create([
+            'email' => 'not-verified@example.com',
+            'password' => Hash::make('password'),
+            'status' => 'not_verified',
+            'email_verified_at' => null,
+        ]);
+        $user->assignRole('viewer');
+
+        $this->post('/admin/login', [
+            'email' => 'not-verified@example.com',
+            'password' => 'password',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+    }
+
     public function test_update_user_request_accepts_active_and_inactive_status(): void
     {
         $user = User::factory()->create([
