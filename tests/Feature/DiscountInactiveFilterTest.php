@@ -46,6 +46,19 @@ class DiscountInactiveFilterTest extends TestCase
         $response->assertOk();
         $response->assertViewIs('admin.discounts.index');
         $response->assertViewHas('counts', fn (array $counts) => ($counts['inactive'] ?? 0) === 1);
+
+        Discount::query()->create([
+            'title' => 'Scheduled Active',
+            'discount' => 12,
+            'type' => 'percent',
+            'start_date' => now()->addWeek(),
+            'end_date' => now()->addMonth(),
+            'active' => true,
+        ]);
+
+        $scheduled = $this->actingAs($this->admin)->get(route('admin.discounts.index', ['inactive' => '1']));
+        $scheduled->assertOk();
+        $scheduled->assertSee('Scheduled Active');
         $response->assertSee('Inactive Running');
         $response->assertDontSee('Expired Inactive');
     }

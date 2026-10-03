@@ -21,6 +21,7 @@ use App\Models\Subscriber;
 use App\Models\Tag;
 use App\Models\User;
 use App\Support\DemoImageGenerator;
+use App\Support\GalleryFileMetas;
 use App\Support\StoredMedia;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Seeder;
@@ -480,7 +481,11 @@ class DemoDataSeeder extends Seeder
 
             Gallery::query()->create([
                 'url' => $url,
-                'metas' => ['alt' => 'Demo gallery '.$i],
+                'metas' => GalleryFileMetas::fromPublicDiskRelativePath(
+                    $url,
+                    'Demo gallery '.$i,
+                    'Demo gallery '.$i
+                ),
                 'sizes_url' => null,
                 'user_id' => $userId,
             ]);
