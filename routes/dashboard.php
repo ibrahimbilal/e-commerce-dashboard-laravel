@@ -67,7 +67,3 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified'])->group(
             ->whereNumber('id');
     }
 });
-
-Route::middleware(['auth', 'verified'])
-    ->get('/admin/dashboard', DashboardController::class)
-    ->name('dashboard');
