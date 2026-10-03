@@ -139,14 +139,15 @@ class AdminSettingsPagesTest extends TestCase
         );
 
         $payload = $this->themeStorePayload();
+        unset($payload['mobile_logo_height']);
 
         $response = $this->actingAs($this->admin)->post(route('theme-settings.store'), $payload, [
             'Accept' => 'application/json',
             'X-Requested-With' => 'XMLHttpRequest',
         ]);
 
-        $response->assertOk();
-        $response->assertJson(['success' => true]);
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['mobile_logo_height']);
 
         $this->assertSame(
             '25',
@@ -162,7 +163,7 @@ class AdminSettingsPagesTest extends TestCase
         return array_intersect_key(
             AdminSettingDefaults::theme(),
             array_flip([
-                'logo_width', 'logo_height', 'mobile_logo_width',
+                'logo_width', 'logo_height', 'mobile_logo_width', 'mobile_logo_height',
                 'main_color', 'main_color_hover', 'box_bg_color', 'body_background',
                 'menu_badge_bg', 'menu_active_bg', 'text_color',
                 'dark_main_color', 'dark_main_color_hover', 'dark_box_bg_color',

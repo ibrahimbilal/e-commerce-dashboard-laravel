@@ -27,7 +27,7 @@ class ThemeSettingsRequest extends FormRequest
             'logo_width'			=> 'required|numeric|min:0|max:300',
             'logo_height'			=> 'required|numeric|min:0|max:300',
             'mobile_logo_width'		=> 'required|numeric|min:0|max:300',
-            'mobile_logo_height'	=> 'nullable|numeric|min:0|max:300',
+            'mobile_logo_height'	=> 'required|numeric|min:0|max:300',
 
             'main_color'			=> ['required', 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i'],
             'main_color_hover'		=> ['required', 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i'],
