@@ -79,6 +79,14 @@ return [
 	'dark_badge_color' => 'Badge Color (Dark):',
 	'dark_text_color' => 'Text Color (Dark):',
 
+	'reset_default_colors' => 'Reset default colors',
+	'reset_default_colors_confirm' => [
+		'title' => 'Are you sure?',
+		'text' => 'Reset all theme colors to their default values? Nothing is saved until you click Save.',
+		'yes' => 'Yes, reset colors!',
+		'no' => 'No, cancel!',
+	],
+
 	'country' => 'Country:',
 	'select_country' => '-- Select Country --',
 	'state' => 'State:',

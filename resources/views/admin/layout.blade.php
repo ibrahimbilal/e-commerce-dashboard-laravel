@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="{{ asset('css/bs'.$rtl_ext.'.min.css') }}">
     <!-- Main Css File -->
     <link rel="stylesheet" href="{{ asset('css/style'.$rtl_ext.'.min.css') }}">
+    @include('admin.inc.theme-css-variables')
 
     <!-- Fonts -->
 	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">

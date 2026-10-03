@@ -64,7 +64,7 @@ class ThemeColorsTest extends TestCase
         ThemeColors::forgetCached();
 
         $payload = $this->themeStorePayload();
-        $payload['main_color'] = '#AABBCC';
+        $payload['main_color'] = '#123456';
 
         $this->actingAs($this->admin)->post(route('theme-settings.store'), $payload, [
             'Accept' => 'application/json',
@@ -72,11 +72,30 @@ class ThemeColorsTest extends TestCase
         ])->assertOk();
 
         $variables = ThemeColors::cssVariables();
-        $this->assertSame('#AABBCC', $variables['light']['--main-color']);
+        $this->assertSame('#123456', $variables['light']['--main-color']);
 
-        $this->actingAs($this->admin)->get(route('admin.dashboard'))->assertOk();
+        $dashboard = $this->actingAs($this->admin)->get(route('admin.dashboard'));
+        $dashboard->assertOk();
+        $dashboard->assertSee('id="theme-css-variables"', false);
+        $dashboard->assertSee('--main-color:#123456', false);
 
-        $this->assertSame('#AABBCC', ThemeColors::cssVariables()['light']['--main-color']);
+        $products = $this->actingAs($this->admin)->get(route('admin.products.index'));
+        $products->assertOk();
+        $products->assertSee('id="theme-css-variables"', false);
+        $products->assertSee('--main-color:#123456', false);
+
+        $this->assertSame('#123456', ThemeColors::cssVariables()['light']['--main-color']);
+    }
+
+    public function test_theme_settings_page_includes_reset_default_colors_button(): void
+    {
+        AdminSettingDefaults::persistMissing();
+
+        $this->actingAs($this->admin)
+            ->get(route('theme-settings.index'))
+            ->assertOk()
+            ->assertSee('id="reset-theme-colors"', false)
+            ->assertSee('theme-color-preview-config', false);
     }
 
     public function test_theme_settings_page_receives_color_defaults_for_reset(): void

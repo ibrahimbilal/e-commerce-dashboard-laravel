@@ -317,6 +317,9 @@
                         </div>
                     </div>
                 </div>
+                <div class="form-item second mt-3">
+                    <button type="button" class="btn trans-btn" id="reset-theme-colors">{{ __('forms.reset_default_colors') }}</button>
+                </div>
 
             </div>
         </div>
@@ -334,6 +337,18 @@
 @push('scripts')
     <!-- Sweet Alert -->
     <script src="{{ asset('js/sweetalert2.min.js') }}" type="text/javascript"></script>
+    <script type="application/json" id="theme-color-preview-config">{!! json_encode([
+        'variables' => $themeColorVariables ?? [],
+        'defaults' => $themeColorDefaults ?? [],
+        'messages' => [
+            'ok' => __('alerts.btn_text'),
+            'confirmTitle' => __('forms.reset_default_colors_confirm.title'),
+            'confirmText' => __('forms.reset_default_colors_confirm.text'),
+            'confirmYes' => __('forms.reset_default_colors_confirm.yes'),
+            'confirmNo' => __('forms.reset_default_colors_confirm.no'),
+        ],
+    ], JSON_THROW_ON_ERROR | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) !!}</script>
+    <script src="{{ asset('assets/js/theme-color-preview.js') }}" type="text/javascript"></script>
     <script>
         // form Ajax Request
         $('form#settings-forms').on('submit', function(e) {
