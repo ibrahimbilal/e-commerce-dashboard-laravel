@@ -2999,6 +2999,7 @@ hr {
 
 .swal2-popup {
   background-color: var(--box-bg-color) !important;
+  box-shadow: 3px 3px 6px 0 var(--box-shadow-color) !important;
 }
 
 .swal2-title,

@@ -12,6 +12,11 @@
             timer: 1500,
             timerProgressBar: true,
             scrollbarPadding: false,
+            toast: true,
+            position: 'top-end',
+            customClass: {
+                popup: 'flex-row',
+            }
         };
 
         return Swal.fire(Object.assign({}, base, opts || {}));
