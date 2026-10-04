@@ -150,8 +150,18 @@ return [
     */
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'regular_price' => [
+            'required' => 'السعر مطلوب.',
+        ],
+        'category_ids' => [
+            'required' => 'يرجى اختيار فئة واحدة على الأقل.',
+            'min' => 'يرجى اختيار فئة واحدة على الأقل.',
+        ],
+        'product_name' => [
+            'required' => 'اسم المنتج مطلوب.',
+        ],
+        'sale_price' => [
+            'lt' => 'يجب أن يكون سعر التخفيض أقل من السعر.',
         ],
     ],
 
@@ -171,6 +181,27 @@ return [
 		'password' => 'كلمة المرور',
 		'first_name' => 'الاسم الأول',
 		'last_name' => 'الاسم الأخير',
+        'product_name' => 'اسم المنتج',
+        'regular_price' => 'السعر',
+        'sale_price' => 'سعر التخفيض',
+        'schedule_sale' => 'تاريخ انتهاء التخفيض',
+        'last_sale_date' => 'تاريخ انتهاء التخفيض',
+        'quantity' => 'كمية المخزون',
+        'product_quantity' => 'كمية المخزون',
+        'sku' => 'رمز SKU',
+        'product_sku' => 'رمز SKU',
+        'status' => 'الحالة',
+        'category_ids' => 'الفئات',
+        'tag_ids' => 'الوسوم',
+        'product_tags' => 'الوسوم',
+        'product_img' => 'صورة المنتج',
+        'product_description' => 'وصف المنتج',
+        'product_slug' => 'رابط المنتج',
+        'meta_title' => 'عنوان SEO',
+        'meta_keywords' => 'كلمات SEO',
+        'meta_description' => 'وصف SEO',
+        'product_attribute_1' => 'خاصية المتغير',
+        'product_attribute_2' => 'خاصية المتغير',
 	],
 
 ];

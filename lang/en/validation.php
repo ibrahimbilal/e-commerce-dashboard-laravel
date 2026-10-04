@@ -150,8 +150,18 @@ return [
     */
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'regular_price' => [
+            'required' => 'Price is required.',
+        ],
+        'category_ids' => [
+            'required' => 'Please select at least one category.',
+            'min' => 'Please select at least one category.',
+        ],
+        'product_name' => [
+            'required' => 'Product name is required.',
+        ],
+        'sale_price' => [
+            'lt' => 'Sale price must be lower than the price.',
         ],
     ],
 
@@ -166,6 +176,28 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'product_name' => 'product name',
+        'regular_price' => 'price',
+        'sale_price' => 'sale price',
+        'schedule_sale' => 'sale end date',
+        'last_sale_date' => 'sale end date',
+        'quantity' => 'stock quantity',
+        'product_quantity' => 'stock quantity',
+        'sku' => 'SKU',
+        'product_sku' => 'SKU',
+        'status' => 'status',
+        'category_ids' => 'categories',
+        'tag_ids' => 'tags',
+        'product_tags' => 'tags',
+        'product_img' => 'product image',
+        'product_description' => 'product description',
+        'product_slug' => 'product slug',
+        'meta_title' => 'meta title',
+        'meta_keywords' => 'meta keywords',
+        'meta_description' => 'meta description',
+        'product_attribute_1' => 'variant attribute',
+        'product_attribute_2' => 'variant attribute',
+    ],
 
 ];

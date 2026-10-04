@@ -237,67 +237,78 @@ class ProductController extends Controller
      */
     private function validateProductRequest(Request $request): array
     {
-        $validated = $request->validate([
-            'sku' => ['nullable', 'string'],
-            'product_sku' => ['nullable', 'string'],
-            'product_img' => ['nullable', 'string', 'max:191'],
-            'regular_price' => ['required', 'numeric', 'min:0'],
-            'sale_price' => ['nullable', 'numeric', 'min:0', 'lt:regular_price'],
-            'schedule_sale' => ['nullable', 'date'],
-            'last_sale_date' => ['nullable', 'date', 'after_or_equal:schedule_sale'],
-            'quantity' => ['nullable', 'integer', 'min:0'],
-            'product_quantity' => ['nullable', 'integer', 'min:0'],
-            'status' => ['nullable', 'string', Rule::in(['published', 'draft'])],
-            'new' => ['sometimes', 'boolean'],
-            'featured' => ['sometimes', 'boolean'],
-            'category_ids' => ['required', 'array', 'min:1'],
-            'category_ids.*' => ['integer', 'exists:categories,id'],
-            'tag_ids' => ['nullable', 'array'],
-            'tag_ids.*' => ['integer', 'exists:tags,id'],
-            'product_tags' => ['nullable', 'array'],
-            'product_tags.*' => ['integer', 'exists:tags,id'],
-            'locales' => ['nullable', 'array'],
-            'locales.*.name' => ['nullable', 'string', 'max:100'],
-            'locales.*.description' => ['nullable', 'string'],
-            'locales.*.product_slug' => ['nullable', 'string', 'max:191'],
-            'locales.*.meta_title' => ['nullable', 'string', 'max:191'],
-            'locales.*.meta_keywords' => ['nullable', 'string', 'max:191'],
-            'locales.*.meta_description' => ['nullable', 'string', 'max:191'],
-            'product_name' => ['nullable', 'string', 'max:100'],
-            'product_slug' => ['nullable', 'string', 'max:191'],
-            'description' => ['nullable', 'string'],
-            'meta_title' => ['nullable', 'string', 'max:191'],
-            'meta_keywords' => ['nullable', 'string', 'max:191'],
-            'meta_description' => ['nullable', 'string', 'max:191'],
-            'langs' => ['nullable', 'string', 'max:10'],
-            'product_attributes' => ['nullable', 'array'],
-            'product_attributes.*.id' => ['nullable', 'integer', 'exists:products_attributes,id'],
-            'product_attributes.*.attribute_1_id' => ['required_with:product_attributes', 'integer', 'exists:attributes,id'],
-            'product_attributes.*.attribute_2_id' => ['required_with:product_attributes', 'integer', 'exists:attributes,id'],
-        ]);
-
-        if (! $this->productRequestHasTitle($request)) {
-            throw ValidationException::withMessages([
-                'product_name' => ['The product name is required.'],
-            ]);
-        }
-
-        return $validated;
+        return $request->validate(
+            [
+                'sku' => ['nullable', 'string'],
+                'product_sku' => ['nullable', 'string'],
+                'product_img' => ['nullable', 'string', 'max:191'],
+                'regular_price' => ['required', 'numeric', 'min:0'],
+                'sale_price' => ['nullable', 'numeric', 'min:0', 'lt:regular_price'],
+                'schedule_sale' => ['nullable', 'date'],
+                'last_sale_date' => ['nullable', 'date', 'after_or_equal:schedule_sale'],
+                'quantity' => ['nullable', 'integer', 'min:0'],
+                'product_quantity' => ['nullable', 'integer', 'min:0'],
+                'status' => ['nullable', 'string', Rule::in(['published', 'draft'])],
+                'new' => ['sometimes', 'boolean'],
+                'featured' => ['sometimes', 'boolean'],
+                'category_ids' => ['required', 'array', 'min:1'],
+                'category_ids.*' => ['integer', 'exists:categories,id'],
+                'tag_ids' => ['nullable', 'array'],
+                'tag_ids.*' => ['integer', 'exists:tags,id'],
+                'product_tags' => ['nullable', 'array'],
+                'product_tags.*' => ['integer', 'exists:tags,id'],
+                'locales' => ['nullable', 'array'],
+                'locales.*.name' => ['nullable', 'string', 'max:100'],
+                'locales.*.description' => ['nullable', 'string'],
+                'locales.*.product_slug' => ['nullable', 'string', 'max:191'],
+                'locales.*.meta_title' => ['nullable', 'string', 'max:191'],
+                'locales.*.meta_keywords' => ['nullable', 'string', 'max:191'],
+                'locales.*.meta_description' => ['nullable', 'string', 'max:191'],
+                'product_name' => ['required', 'string', 'max:100'],
+                'product_slug' => ['nullable', 'string', 'max:191'],
+                'description' => ['nullable', 'string'],
+                'meta_title' => ['nullable', 'string', 'max:191'],
+                'meta_keywords' => ['nullable', 'string', 'max:191'],
+                'meta_description' => ['nullable', 'string', 'max:191'],
+                'langs' => ['nullable', 'string', 'max:10'],
+                'product_attributes' => ['nullable', 'array'],
+                'product_attributes.*.id' => ['nullable', 'integer', 'exists:products_attributes,id'],
+                'product_attributes.*.attribute_1_id' => ['required_with:product_attributes', 'integer', 'exists:attributes,id'],
+                'product_attributes.*.attribute_2_id' => ['required_with:product_attributes', 'integer', 'exists:attributes,id'],
+            ],
+            [],
+            $this->productValidationAttributeNames()
+        );
     }
 
-    private function productRequestHasTitle(Request $request): bool
+    /**
+     * @return array<string, string>
+     */
+    private function productValidationAttributeNames(): array
     {
-        if (filled($request->input('product_name'))) {
-            return true;
-        }
-
-        foreach ((array) $request->input('locales', []) as $locale) {
-            if (is_array($locale) && filled($locale['name'] ?? null)) {
-                return true;
-            }
-        }
-
-        return false;
+        return [
+            'product_name' => __('validation.attributes.product_name'),
+            'regular_price' => __('validation.attributes.regular_price'),
+            'sale_price' => __('validation.attributes.sale_price'),
+            'schedule_sale' => __('validation.attributes.schedule_sale'),
+            'last_sale_date' => __('validation.attributes.last_sale_date'),
+            'quantity' => __('validation.attributes.quantity'),
+            'product_quantity' => __('validation.attributes.product_quantity'),
+            'sku' => __('validation.attributes.sku'),
+            'product_sku' => __('validation.attributes.product_sku'),
+            'status' => __('validation.attributes.status'),
+            'category_ids' => __('validation.attributes.category_ids'),
+            'tag_ids' => __('validation.attributes.tag_ids'),
+            'product_tags' => __('validation.attributes.product_tags'),
+            'product_img' => __('validation.attributes.product_img'),
+            'description' => __('validation.attributes.product_description'),
+            'product_slug' => __('validation.attributes.product_slug'),
+            'meta_title' => __('validation.attributes.meta_title'),
+            'meta_keywords' => __('validation.attributes.meta_keywords'),
+            'meta_description' => __('validation.attributes.meta_description'),
+            'product_attributes.*.attribute_1_id' => __('validation.attributes.product_attribute_1'),
+            'product_attributes.*.attribute_2_id' => __('validation.attributes.product_attribute_2'),
+        ];
     }
 
     /**

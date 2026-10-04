@@ -40,6 +40,8 @@ class ProductCategoryIndexTest extends TestCase
             'regular_price' => 500,
             'status' => 'published',
             'category_ids' => [$categoryId],
+            'product_name' => 'Index Product',
+            'langs' => 'en',
             'locales' => [
                 'en' => [
                     'name' => 'Index Product',

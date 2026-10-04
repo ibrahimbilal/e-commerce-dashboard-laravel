@@ -40,6 +40,8 @@ class ProductManagementTest extends TestCase
             'regular_price' => 1999,
             'status' => 'published',
             'category_ids' => [$category->id],
+            'product_name' => 'Widget',
+            'langs' => 'en',
             'locales' => [
                 'en' => [
                     'name' => 'Widget',
@@ -84,6 +86,8 @@ class ProductManagementTest extends TestCase
             'regular_price' => 10,
             'status' => 'published',
             'category_ids' => [$category->id],
+            'product_name' => 'OneUpdated',
+            'langs' => 'en',
             'locales' => [
                 'en' => [
                     'name' => 'OneUpdated',

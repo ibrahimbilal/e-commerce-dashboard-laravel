@@ -51,13 +51,28 @@ class ProductValidationTest extends TestCase
         ], $overrides);
     }
 
-    public function test_store_requires_core_fields(): void
+    public function test_store_requires_core_fields_together_in_one_response(): void
     {
         $response = $this->actingAs($this->admin)->postJson(route('admin.products.store'), []);
 
         $response->assertUnprocessable();
         $response->assertJsonStructure(['message', 'errors']);
-        $response->assertJsonValidationErrors(['regular_price', 'category_ids']);
+        $response->assertJsonValidationErrors(['product_name', 'regular_price', 'category_ids']);
+
+        $errors = $response->json('errors');
+        $this->assertContains('Price is required.', $errors['regular_price']);
+        $this->assertContains('Please select at least one category.', $errors['category_ids']);
+        $this->assertContains('Product name is required.', $errors['product_name']);
+    }
+
+    public function test_store_validation_messages_are_translated_in_arabic_locale(): void
+    {
+        app()->setLocale('ar');
+
+        $response = $this->actingAs($this->admin)->postJson(route('admin.products.store'), []);
+
+        $response->assertUnprocessable();
+        $this->assertContains('اسم المنتج مطلوب.', $response->json('errors.product_name'));
     }
 
     public function test_store_defaults_status_to_draft_when_missing(): void
@@ -130,16 +145,6 @@ class ProductValidationTest extends TestCase
 
         $response->assertUnprocessable();
         $response->assertJsonValidationErrors(['last_sale_date']);
-    }
-
-    public function test_store_accepts_locale_title_without_product_name_field(): void
-    {
-        $payload = $this->validPayload();
-        unset($payload['product_name']);
-
-        $this->actingAs($this->admin)->post(route('admin.products.store'), $payload)->assertRedirect();
-
-        $this->assertDatabaseHas('product_locales', ['name' => 'Valid Product']);
     }
 
     public function test_update_validation_errors_redirect_back_with_input_for_normal_post(): void

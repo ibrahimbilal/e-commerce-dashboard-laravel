@@ -142,6 +142,8 @@ class StorefrontResourceCrudTest extends TestCase
                 'regular_price' => 100,
                 'status' => 'published',
                 'category_ids' => [$category->id],
+                'product_name' => 'Crud',
+                'langs' => 'en',
                 'locales' => ['en' => ['name' => 'Crud', 'product_slug' => 'crud']],
             ],
             [
@@ -150,6 +152,8 @@ class StorefrontResourceCrudTest extends TestCase
                 'regular_price' => 120,
                 'status' => 'published',
                 'category_ids' => [$category->id],
+                'product_name' => 'Crud2',
+                'langs' => 'en',
                 'locales' => ['en' => ['name' => 'Crud2', 'product_slug' => 'crud2']],
             ],
             Product::class,

@@ -182,6 +182,8 @@ class AdminMovedResourceStoreJsonResponseTest extends TestCase
                         'regular_price' => 100,
                         'status' => 'published',
                         'category_ids' => [$category->id],
+                        'product_name' => 'Json Product',
+                        'langs' => 'en',
                         'locales' => [
                             'en' => [
                                 'name' => 'Json Product',
