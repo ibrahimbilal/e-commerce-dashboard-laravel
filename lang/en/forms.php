@@ -23,12 +23,11 @@ return [
 	],
 	'status' => [
 		'title' => 'Account Status:',
-		'active' => 'Active',
-		'inactive' => 'Inactive',
 		'not_verified' => 'Not Verified',
 		'verified' => 'Verified',
 		'blocked' => 'Blocked',
 	],
+	'is_active' => 'Active account',
 	'lang' => 'Language:',
 	'profile_picture' => [
 		'title' => 'Profile Picture:',

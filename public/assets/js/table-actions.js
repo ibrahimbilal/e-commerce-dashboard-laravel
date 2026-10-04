@@ -178,25 +178,16 @@
     }
 
     function applyToggleChecked(input, body) {
-        var field = body.field || input.getAttribute('data-toggle-field') || '';
         var value = body.value;
-
-        if (field === 'status') {
-            if (typeof value === 'boolean') {
-                input.checked = value;
-            } else if (value === 'active') {
-                input.checked = true;
-            } else if (value === 'inactive') {
-                input.checked = false;
-            }
-            return;
-        }
 
         if (typeof value === 'boolean') {
             input.checked = value;
-        } else if (value === 'active' || value === 1 || value === '1' || value === true) {
+            return;
+        }
+
+        if (value === 1 || value === '1' || value === true) {
             input.checked = true;
-        } else if (value === 'inactive' || value === 0 || value === '0' || value === false) {
+        } else if (value === 0 || value === '0' || value === false) {
             input.checked = false;
         }
     }

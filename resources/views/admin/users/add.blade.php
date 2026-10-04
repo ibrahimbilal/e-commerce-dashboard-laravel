@@ -75,7 +75,7 @@
                 </div>
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
                     <label class="item-title" for="user-role">{{ __('forms.role.title') }}</label>
-                    <select class="form-select" id="user-role" name="role_name">
+                    <select class="form-select w-100 flex-grow-1" id="user-role" name="role_name">
 						@forelse ( $roles as $role )
 							<option value="{{ $role->name }}">{{ $role->name }}</option>
 						@empty
@@ -92,10 +92,10 @@
                     </select>
                 </div>
                 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
-                    <label class="item-title" for="user-active">{{ __('forms.status.title') }}</label>
+                    <label class="item-title" for="user-is-active">{{ __('forms.is_active') }}</label>
                     <label class="switch">
-                        <input type="hidden" name="status" value="inactive">
-                        <input class="switch" id="user-active" name="status" type="checkbox" value="active" checked>
+                        <input type="hidden" name="is_active" value="0">
+                        <input class="switch" id="user-is-active" name="is_active" type="checkbox" value="1" checked>
                         <span class="slider"></span>
                     </label>
                 </div>

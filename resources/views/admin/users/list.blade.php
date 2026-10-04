@@ -100,11 +100,11 @@
                                                 @if (auth()->user()?->can('edit users') && (int) auth()->id() !== (int) $user->id && ! $user->deleted_at)
                                                     <input class="switch admin-field-toggle" type="checkbox"
                                                         data-toggle-url="{{ route('users.toggle', $user) }}"
-                                                        data-toggle-field="status"
-                                                        @checked($user->status === 'active') />
+                                                        data-toggle-field="is_active"
+                                                        @checked($user->is_active) />
                                                 @else
                                                     <input class="switch" type="checkbox" disabled
-                                                        @checked($user->status === 'active') />
+                                                        @checked($user->is_active) />
                                                 @endif
                                                 <span class="slider"></span>
                                             </label>

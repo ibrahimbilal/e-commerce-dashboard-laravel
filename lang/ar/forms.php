@@ -23,12 +23,11 @@ return [
 	],
 	'status' => [
 		'title' => 'حالة الحساب:',
-		'active' => 'نشط',
-		'inactive' => 'غير نشط',
 		'not_verified' => 'غير مفعل',
 		'verified' => 'مفعل',
 		'blocked' => 'محظور',
 	],
+	'is_active' => 'الحساب نشط',
 	'lang' => 'اللغة:',
 	'profile_picture' => [
 		'title' => 'صورة الحساب:',

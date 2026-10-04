@@ -62,7 +62,7 @@
                 </div>
                 <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
                     <label class="item-title" for="user-role">{{ __('forms.role.title') }}</label>
-                    <select class="form-select" id="user-role" name="role_name">
+                    <select class="form-select w-100 flex-grow-1" id="user-role" name="role_name">
                         @forelse ($roles as $role)
                             <option value="{{ $role->name }}" @selected($user->role_name == $role->name)>
                                 {{ $role->name }}
@@ -72,23 +72,21 @@
 						@endforelse
                     </select>
                 </div>
-                @php
-                    $canEditSelfStatus = (int) auth()->id() !== (int) $user->id;
-                    $legacyStatus = ! in_array($user->status, ['active', 'inactive'], true);
-                @endphp
+                <div class="form-item second d-flex flex-wrap flex-sm-nowrap mt-3">
+                    <label class="item-title" for="user-status">{{ __('forms.status.title') }}</label>
+                    <select class="form-select w-100 flex-grow-1" id="user-status" name="status">
+                        <option value="not_verified" @selected($user->status == 'not_verified')>{{ __('forms.status.not_verified') }}</option>
+                        <option value="verified" @selected($user->status == 'verified')>{{ __('forms.status.verified') }}</option>
+                        <option value="blocked" @selected($user->status == 'blocked')>{{ __('forms.status.blocked') }}</option>
+                    </select>
+                </div>
                 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
-                    <label class="item-title" for="user-active">{{ __('forms.status.title') }}</label>
+                    <label class="item-title" for="user-is-active">{{ __('forms.is_active') }}</label>
                     <label class="switch">
-                        @if ($legacyStatus)
-                            <input type="hidden" name="status" id="user-status-field" value="{{ $user->status }}">
-                            <input class="switch" id="user-active" type="checkbox" value="active" data-user-status-legacy
-                                @disabled(! $canEditSelfStatus)>
-                        @else
-                            <input type="hidden" name="status" value="inactive">
-                            <input class="switch" id="user-active" name="status" type="checkbox" value="active"
-                                @checked($user->status === 'active')
-                                @disabled(! $canEditSelfStatus)>
-                        @endif
+                        <input type="hidden" name="is_active" value="0">
+                        <input class="switch" id="user-is-active" name="is_active" type="checkbox" value="1"
+                            @checked(old('is_active', $user->is_active))
+                            @disabled((int) auth()->id() === (int) $user->id)>
                         <span class="slider"></span>
                     </label>
                 </div>
@@ -495,16 +493,5 @@
 				});
 			}
         });
-
-        (function () {
-            var toggle = document.getElementById('user-active');
-            var hidden = document.getElementById('user-status-field');
-            if (!toggle || !hidden || !toggle.hasAttribute('data-user-status-legacy')) {
-                return;
-            }
-            toggle.addEventListener('change', function () {
-                hidden.value = toggle.checked ? 'active' : 'inactive';
-            });
-        })();
     </script>
 @endpush
