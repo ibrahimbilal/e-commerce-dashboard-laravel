@@ -3013,4 +3013,11 @@ tr.bg-active:not(:last-child) {
   border-bottom: 1rem solid var(--box-bg-color);
 }
 
+#product-desc.is-invalid .editor-container,
+[data-error-for].is-invalid .editor-container {
+  outline: 1px solid var(--danger-color);
+  outline-offset: 2px;
+  border-radius: 0.25rem;
+}
+
 /*# sourceMappingURL=style.css.map */

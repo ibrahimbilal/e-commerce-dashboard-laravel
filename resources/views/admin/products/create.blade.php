@@ -55,8 +55,11 @@
 <div class="divider"></div>
 <div class="form-item primary">
 <h2 class="box-title item-title">product description</h2>
-<div id="product-desc">
+<div id="product-desc" data-error-for="description" @error('description') class="is-invalid" @enderror>
 <div class="editor-container"></div>
+@error('description')
+<div class="invalid-feedback d-block">{{ $message }}</div>
+@enderror
 <input type="hidden" name="description" id="description-input" value="{{ e($localeDescription) }}"/>
 </div>
 </div>

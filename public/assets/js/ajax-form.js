@@ -52,21 +52,29 @@
         });
     }
 
+    function findErrorForHost(form, key) {
+        return (
+            form.querySelector('[data-error-for="' + cssEscape(key) + '"]') ||
+            form.querySelector('[data-error-for="' + cssEscape(key.replace(/\.\d+/g, '')) + '"]') ||
+            form.querySelector('[data-error-for="' + cssEscape(key.replace(/\.\d+$/, '')) + '"]')
+        );
+    }
+
     function findFieldTarget(form, key) {
+        var errorHost = findErrorForHost(form, key);
         var names = candidateNames(key);
         var i;
         for (i = 0; i < names.length; i++) {
             var selector = '[name="' + cssEscape(names[i]) + '"]';
             var field = form.querySelector(selector);
             if (field) {
+                if (field.type === 'hidden' && errorHost) {
+                    return errorHost;
+                }
                 return field;
             }
         }
-        return (
-            form.querySelector('[data-error-for="' + cssEscape(key) + '"]') ||
-            form.querySelector('[data-error-for="' + cssEscape(key.replace(/\.\d+/g, '')) + '"]') ||
-            form.querySelector('[data-error-for="' + cssEscape(key.replace(/\.\d+$/, '')) + '"]')
-        );
+        return errorHost;
     }
 
     function clearFormErrors(form) {
