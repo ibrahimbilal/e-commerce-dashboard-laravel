@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 
+use App\Http\Controllers\Concerns\ManagesTrashedRecords;
 use App\Models\Attribute;
 use App\Support\AdminFormResponse;
+use App\Support\AdminResourceCounts;
 use App\Support\AttributeTermSync;
 use App\Support\IndexListing;
 use Illuminate\Http\Request;
@@ -14,6 +16,8 @@ use Illuminate\Validation\ValidationException;
 
 class AttributeController extends Controller
 {
+    use ManagesTrashedRecords;
+
     public function __construct()
     {
         $this->middleware('permission:view attributes', ['only' => ['index', 'show']]);
@@ -131,6 +135,11 @@ class AttributeController extends Controller
 
         $attribute->delete();
 
-        return redirect()->route('admin.attributes.index')->with('status', 'Attribute deleted.');
+        return $this->destroyActionResponse(
+            $request,
+            'admin.attributes.index',
+            'Attribute deleted.',
+            AdminResourceCounts::attributes()
+        );
     }
 }

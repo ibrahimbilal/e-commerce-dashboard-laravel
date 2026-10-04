@@ -145,5 +145,86 @@ class AttributeTermRepeaterTest extends TestCase
         $this->actingAs($this->admin)->deleteJson(route('admin.attributes.destroy', $term))
             ->assertUnprocessable()
             ->assertJsonValidationErrors(['terms']);
+
+        $this->assertDatabaseHas('attributes', ['id' => $term->id]);
+    }
+
+    public function test_json_delete_unused_attribute_returns_success_with_counts(): void
+    {
+        $term = Attribute::query()->create([
+            'attribute_key' => 'Finish',
+            'attribute_value' => 'Matte',
+            'term_title' => 'Matte',
+            'term_type' => 'text',
+        ]);
+
+        $this->actingAs($this->admin)
+            ->deleteJson(route('admin.attributes.destroy', $term), [], [
+                'X-Requested-With' => 'XMLHttpRequest',
+                'Accept' => 'application/json',
+            ])
+            ->assertOk()
+            ->assertJson([
+                'success' => true,
+                'message' => 'Attribute deleted.',
+            ])
+            ->assertJsonStructure(['counts' => ['all']]);
+
+        $this->assertDatabaseMissing('attributes', ['id' => $term->id]);
+    }
+
+    public function test_spoofed_delete_unused_attribute_returns_json_success(): void
+    {
+        $term = Attribute::query()->create([
+            'attribute_key' => 'Finish',
+            'attribute_value' => 'Gloss',
+            'term_title' => 'Gloss',
+            'term_type' => 'text',
+        ]);
+
+        $this->actingAs($this->admin)
+            ->post(route('admin.attributes.destroy', $term), [
+                '_method' => 'DELETE',
+            ], [
+                'X-Requested-With' => 'XMLHttpRequest',
+                'Accept' => 'application/json',
+            ])
+            ->assertOk()
+            ->assertJson(['success' => true]);
+
+        $this->assertDatabaseMissing('attributes', ['id' => $term->id]);
+    }
+
+    public function test_spoofed_delete_in_use_attribute_returns_422_terms_error(): void
+    {
+        $keep = Attribute::query()->create([
+            'attribute_key' => 'Edge',
+            'attribute_value' => 'Soft',
+            'term_title' => 'Soft',
+            'term_type' => 'text',
+        ]);
+        $blocked = Attribute::query()->create([
+            'attribute_key' => 'Edge',
+            'attribute_value' => 'Sharp',
+            'term_title' => 'Sharp',
+            'term_type' => 'text',
+        ]);
+        $product = Product::query()->create(['sku' => 'VAR-3', 'quantity' => 1, 'status' => 'published']);
+        ProductAttribute::query()->create([
+            'product_id' => $product->id,
+            'attribute_1_id' => $blocked->id,
+            'attribute_2_id' => $keep->id,
+        ]);
+
+        $this->actingAs($this->admin)
+            ->post(route('admin.attributes.destroy', $blocked), [
+                '_method' => 'DELETE',
+            ], [
+                'Accept' => 'application/json',
+            ])
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['terms']);
+
+        $this->assertDatabaseHas('attributes', ['id' => $blocked->id]);
     }
 }
