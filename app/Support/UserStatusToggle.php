@@ -3,11 +3,13 @@
 namespace App\Support;
 
 use App\Models\User;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class UserStatusToggle
 {
@@ -23,9 +25,7 @@ class UserStatusToggle
 
         $targetActive = self::resolveTargetActive($user, $validated['value'] ?? null);
 
-        if ($blocked = self::blockIfForbidden($request, $user, $targetActive)) {
-            return $blocked;
-        }
+        self::ensureDeactivationAllowed($request, $user, $targetActive);
 
         $user->forceFill(['is_active' => $targetActive])->save();
 
@@ -46,26 +46,37 @@ class UserStatusToggle
             ->with('status', $message);
     }
 
-    private static function resolveTargetActive(User $user, mixed $value): bool
+    /**
+     * @throws ValidationException
+     * @throws HttpResponseException
+     */
+    public static function ensureDeactivationAllowed(Request $request, User $user, bool $targetActive): void
     {
-        if ($value !== null) {
-            return (bool) $value;
+        $message = self::deactivationBlockedMessage($user, $targetActive);
+        if ($message === null) {
+            return;
         }
 
-        return ! (bool) $user->is_active;
+        if ($request->expectsJson()) {
+            throw new HttpResponseException(response()->json([
+                'success' => false,
+                'message' => $message,
+            ], 422));
+        }
+
+        throw ValidationException::withMessages([
+            'is_active' => $message,
+        ]);
     }
 
-    /**
-     * @return JsonResponse|RedirectResponse|null
-     */
-    private static function blockIfForbidden(Request $request, User $user, bool $targetActive)
+    public static function deactivationBlockedMessage(User $user, bool $targetActive): ?string
     {
         if ($targetActive) {
             return null;
         }
 
         if ((int) Auth::id() === (int) $user->id) {
-            return self::deny($request, 'You cannot deactivate your own account.');
+            return 'You cannot deactivate your own account.';
         }
 
         if ($user->hasRole('admin') && $user->is_active) {
@@ -75,27 +86,19 @@ class UserStatusToggle
                 ->count();
 
             if ($activeAdmins <= 1) {
-                return self::deny($request, 'Cannot deactivate the last active admin account.');
+                return 'Cannot deactivate the last active admin account.';
             }
         }
 
         return null;
     }
 
-    /**
-     * @return JsonResponse|RedirectResponse
-     */
-    private static function deny(Request $request, string $message)
+    private static function resolveTargetActive(User $user, mixed $value): bool
     {
-        if ($request->expectsJson()) {
-            return response()->json([
-                'success' => false,
-                'message' => $message,
-            ], 422);
+        if ($value !== null) {
+            return (bool) $value;
         }
 
-        return redirect()
-            ->back()
-            ->with('errors', [$message]);
+        return ! (bool) $user->is_active;
     }
 }

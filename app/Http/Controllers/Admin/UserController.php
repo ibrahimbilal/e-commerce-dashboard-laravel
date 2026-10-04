@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\NewUserRequest;
 use App\Http\Traits\UploadFilesTraits;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\ValidationException;
 use App\Http\Requests\BulkActionRequest;
 use App\Http\Requests\UpdateUserRequest;
 use Stevebauman\Location\Facades\Location;
@@ -204,6 +206,10 @@ class UserController extends Controller
 				]);
 			}
 
+			if ($request->has('is_active') && ! $request->boolean('is_active')) {
+				UserStatusToggle::ensureDeactivationAllowed($request, $user, false);
+			}
+
 			// make accoount unverified when change it's status to not_verified
 			if ( $request->has('status') ) {
 				if (($user->status !== $request->get('status')) && $request->get('status') == 'not_verified') {
@@ -270,6 +276,10 @@ class UserController extends Controller
 			]);
 
 		} catch (\Exception $ex) {
+			if ($ex instanceof ValidationException || $ex instanceof HttpResponseException) {
+				throw $ex;
+			}
+
 			return response()->json(['errors' => [__('alerts.errors.unknown')]]);
 		}
 	}
