@@ -101,7 +101,7 @@ class ProductController extends Controller
         $validated = $this->validateProductRequest($request);
 
         $product = DB::transaction(function () use ($request, $validated) {
-            $product = Product::create($this->productDataFromValidated($request, $validated));
+            $product = Product::create($this->productDataFromValidated($request, $validated, null));
             $this->applyProductRelations($product, $request, $validated);
 
             return $product;
@@ -136,7 +136,7 @@ class ProductController extends Controller
         $validated = $this->validateProductRequest($request);
 
         DB::transaction(function () use ($request, $product, $validated) {
-            $product->update($this->productDataFromValidated($request, $validated));
+            $product->update($this->productDataFromValidated($request, $validated, $product));
             $this->applyProductRelations($product, $request, $validated);
         });
 
@@ -247,7 +247,7 @@ class ProductController extends Controller
             'last_sale_date' => ['nullable', 'date', 'after_or_equal:schedule_sale'],
             'quantity' => ['nullable', 'integer', 'min:0'],
             'product_quantity' => ['nullable', 'integer', 'min:0'],
-            'status' => ['required', 'string', Rule::in(['published', 'draft'])],
+            'status' => ['nullable', 'string', Rule::in(['published', 'draft'])],
             'new' => ['sometimes', 'boolean'],
             'featured' => ['sometimes', 'boolean'],
             'category_ids' => ['required', 'array', 'min:1'],
@@ -304,8 +304,16 @@ class ProductController extends Controller
      * @param  array<string, mixed>  $validated
      * @return array<string, mixed>
      */
-    private function productDataFromValidated(Request $request, array $validated): array
+    private function productDataFromValidated(Request $request, array $validated, ?Product $existingProduct = null): array
     {
+        if ($request->filled('status')) {
+            $status = $validated['status'];
+        } elseif ($existingProduct !== null) {
+            $status = $existingProduct->status;
+        } else {
+            $status = 'draft';
+        }
+
         return [
             'sku' => $validated['sku'] ?? $validated['product_sku'] ?? '',
             'product_img' => $validated['product_img'] ?? null,
@@ -313,7 +321,7 @@ class ProductController extends Controller
             'sale_price' => $validated['sale_price'] ?? null,
             'schedule_sale' => $validated['schedule_sale'] ?? $validated['last_sale_date'] ?? null,
             'quantity' => $validated['quantity'] ?? $validated['product_quantity'] ?? 0,
-            'status' => $validated['status'] ?? null,
+            'status' => $status,
             'new' => $request->boolean('new'),
             'featured' => $request->boolean('featured'),
         ];

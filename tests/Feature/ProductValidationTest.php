@@ -57,14 +57,42 @@ class ProductValidationTest extends TestCase
 
         $response->assertUnprocessable();
         $response->assertJsonStructure(['message', 'errors']);
-        $response->assertJsonValidationErrors(['regular_price', 'status', 'category_ids']);
+        $response->assertJsonValidationErrors(['regular_price', 'category_ids']);
+    }
+
+    public function test_store_defaults_status_to_draft_when_missing(): void
+    {
+        $payload = $this->validPayload();
+        unset($payload['status']);
+
+        $this->actingAs($this->admin)->post(route('admin.products.store'), $payload)->assertRedirect();
+
+        $this->assertSame('draft', Product::query()->latest('id')->value('status'));
+    }
+
+    public function test_update_preserves_status_when_missing(): void
+    {
+        $product = Product::query()->create([
+            'sku' => 'VAL-STATUS',
+            'regular_price' => 100,
+            'quantity' => 1,
+            'status' => 'published',
+        ]);
+        $product->categories()->attach($this->category->id);
+
+        $this->actingAs($this->admin)->put(route('admin.products.update', $product), [
+            'regular_price' => 120,
+            'category_ids' => [$this->category->id],
+            'product_name' => 'Renamed',
+        ])->assertRedirect();
+
+        $this->assertSame('published', $product->fresh()->status);
     }
 
     public function test_store_requires_product_title(): void
     {
         $response = $this->actingAs($this->admin)->postJson(route('admin.products.store'), [
             'regular_price' => 100,
-            'status' => 'published',
             'category_ids' => [$this->category->id],
         ]);
 
