@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\User;
 use Database\Seeders\LangSeeder;
@@ -27,9 +28,18 @@ class ProductManagementTest extends TestCase
 
     public function test_product_create_persists_sku_and_quantity_and_locale(): void
     {
+        $category = Category::query()->create([
+            'title' => 'Widgets',
+            'locale' => 'en',
+            'category_slug' => 'widgets',
+        ]);
+
         $response = $this->actingAs($this->admin)->post(route('admin.products.store'), [
             'sku' => 'SKU-100',
             'quantity' => 12,
+            'regular_price' => 1999,
+            'status' => 'published',
+            'category_ids' => [$category->id],
             'locales' => [
                 'en' => [
                     'name' => 'Widget',
@@ -61,9 +71,19 @@ class ProductManagementTest extends TestCase
             ['product_id' => $second->id, 'locale' => 'en', 'name' => 'Two'],
         ]);
 
+        $category = Category::query()->create([
+            'title' => 'Locale Cat',
+            'locale' => 'en',
+            'category_slug' => 'locale-cat',
+        ]);
+        $first->categories()->attach($category->id);
+
         $this->actingAs($this->admin)->put(route('admin.products.update', $first), [
             'sku' => 'A-updated',
             'quantity' => 5,
+            'regular_price' => 10,
+            'status' => 'published',
+            'category_ids' => [$category->id],
             'locales' => [
                 'en' => [
                     'name' => 'OneUpdated',

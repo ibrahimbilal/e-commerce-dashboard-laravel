@@ -129,9 +129,29 @@ class StorefrontResourceCrudTest extends TestCase
      */
     private function productCrudPayloads(): array
     {
+        $category = Category::query()->create([
+            'title' => 'Crud Cat',
+            'locale' => 'en',
+            'category_slug' => 'crud-cat',
+        ]);
+
         return [
-            ['sku' => 'CRUD-1', 'quantity' => 2, 'locales' => ['en' => ['name' => 'Crud', 'product_slug' => 'crud']]],
-            ['sku' => 'CRUD-2', 'quantity' => 3, 'locales' => ['en' => ['name' => 'Crud2', 'product_slug' => 'crud2']]],
+            [
+                'sku' => 'CRUD-1',
+                'quantity' => 2,
+                'regular_price' => 100,
+                'status' => 'published',
+                'category_ids' => [$category->id],
+                'locales' => ['en' => ['name' => 'Crud', 'product_slug' => 'crud']],
+            ],
+            [
+                'sku' => 'CRUD-2',
+                'quantity' => 3,
+                'regular_price' => 120,
+                'status' => 'published',
+                'category_ids' => [$category->id],
+                'locales' => ['en' => ['name' => 'Crud2', 'product_slug' => 'crud2']],
+            ],
             Product::class,
         ];
     }

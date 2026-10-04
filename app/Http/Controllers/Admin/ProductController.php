@@ -19,6 +19,7 @@ use App\Support\ReferentialDeleteGuard;
 use App\Support\StoredMediaCleanup;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class ProductController extends Controller
@@ -227,20 +228,20 @@ class ProductController extends Controller
      */
     private function validateProductRequest(Request $request): array
     {
-        return $request->validate([
+        $validated = $request->validate([
             'sku' => ['nullable', 'string'],
             'product_sku' => ['nullable', 'string'],
             'product_img' => ['nullable', 'string', 'max:191'],
-            'regular_price' => ['nullable', 'integer'],
-            'sale_price' => ['nullable', 'integer'],
-            'schedule_sale' => ['nullable', 'string', 'max:191'],
-            'last_sale_date' => ['nullable', 'string', 'max:191'],
+            'regular_price' => ['required', 'numeric', 'min:0'],
+            'sale_price' => ['nullable', 'numeric', 'min:0', 'lt:regular_price'],
+            'schedule_sale' => ['nullable', 'date'],
+            'last_sale_date' => ['nullable', 'date', 'after_or_equal:schedule_sale'],
             'quantity' => ['nullable', 'integer', 'min:0'],
             'product_quantity' => ['nullable', 'integer', 'min:0'],
-            'status' => ['nullable', 'string', 'max:191'],
+            'status' => ['required', 'string', Rule::in(['published', 'draft'])],
             'new' => ['sometimes', 'boolean'],
             'featured' => ['sometimes', 'boolean'],
-            'category_ids' => ['nullable', 'array'],
+            'category_ids' => ['required', 'array', 'min:1'],
             'category_ids.*' => ['integer', 'exists:categories,id'],
             'tag_ids' => ['nullable', 'array'],
             'tag_ids.*' => ['integer', 'exists:tags,id'],
@@ -265,6 +266,29 @@ class ProductController extends Controller
             'product_attributes.*.attribute_1_id' => ['required_with:product_attributes', 'integer', 'exists:attributes,id'],
             'product_attributes.*.attribute_2_id' => ['required_with:product_attributes', 'integer', 'exists:attributes,id'],
         ]);
+
+        if (! $this->productRequestHasTitle($request)) {
+            throw ValidationException::withMessages([
+                'product_name' => ['The product name is required.'],
+            ]);
+        }
+
+        return $validated;
+    }
+
+    private function productRequestHasTitle(Request $request): bool
+    {
+        if (filled($request->input('product_name'))) {
+            return true;
+        }
+
+        foreach ((array) $request->input('locales', []) as $locale) {
+            if (is_array($locale) && filled($locale['name'] ?? null)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

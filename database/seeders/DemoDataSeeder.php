@@ -179,6 +179,7 @@ class DemoDataSeeder extends Seeder
                 'name' => 'Featured Product '.$product->id,
                 'product_slug' => 'featured-'.$product->id,
             ]);
+            $product->categories()->attach($categories->random(rand(1, 2))->pluck('id'));
             $product->update(['featured' => true, 'sale_price' => (int) ($product->regular_price * 0.8)]);
             $this->assignDemoProductImage($product, 'Featured Product '.$product->id);
         }
