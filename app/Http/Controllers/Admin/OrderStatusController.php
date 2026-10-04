@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 
 use App\Http\Controllers\Concerns\ManagesTrashedRecords;
 use App\Models\OrderStatus;
+use App\Support\AdminFormResponse;
 use App\Support\AdminResourceCounts;
 use App\Support\IndexListing;
 use App\Support\ReferentialDeleteGuard;
@@ -62,7 +63,11 @@ class OrderStatusController extends Controller
 
         $orderStatus = OrderStatus::create($data);
 
-        return redirect()->route('admin.order-statuses.index')->with('status', 'Order status created.');
+        return AdminFormResponse::saved(
+            $request,
+            'Order status created.',
+            fn () => redirect()->route('admin.order-statuses.index')
+        );
     }
 
     public function show(OrderStatus $orderStatus)
@@ -85,7 +90,11 @@ class OrderStatusController extends Controller
 
         $orderStatus->update($data);
 
-        return redirect()->route('admin.order-statuses.index')->with('status', 'Order status updated.');
+        return AdminFormResponse::saved(
+            $request,
+            'Order status updated.',
+            fn () => redirect()->route('admin.order-statuses.index')
+        );
     }
 
     public function destroy(Request $request, OrderStatus $orderStatus)

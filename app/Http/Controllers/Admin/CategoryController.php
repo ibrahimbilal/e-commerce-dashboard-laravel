@@ -8,6 +8,7 @@ use App\Http\Controllers\Concerns\ManagesTrashedRecords;
 use App\Http\Controllers\Concerns\TogglesAdminResourceFields;
 use App\Models\Category;
 use App\Support\AdminResourceCounts;
+use App\Support\AdminFormResponse;
 use App\Support\IndexListing;
 use App\Support\ReferentialDeleteGuard;
 use Illuminate\Http\Request;
@@ -88,7 +89,11 @@ class CategoryController extends Controller
 
         Category::create($data);
 
-        return redirect()->route('admin.categories.index')->with('status', 'Category created.');
+        return AdminFormResponse::saved(
+            $request,
+            'Category created.',
+            fn () => redirect()->route('admin.categories.index')
+        );
     }
 
     public function show(Category $category)
@@ -125,7 +130,11 @@ class CategoryController extends Controller
 
         $category->update($data);
 
-        return redirect()->route('admin.categories.index')->with('status', 'Category updated.');
+        return AdminFormResponse::saved(
+            $request,
+            'Category updated.',
+            fn () => redirect()->route('admin.categories.index')
+        );
     }
 
     public function destroy(Request $request, Category $category)

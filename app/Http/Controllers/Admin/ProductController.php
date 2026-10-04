@@ -13,6 +13,7 @@ use App\Models\ProductAttribute;
 use App\Models\Tag;
 use App\Http\Controllers\Concerns\ManagesTrashedRecords;
 use App\Http\Controllers\Concerns\TogglesAdminResourceFields;
+use App\Support\AdminFormResponse;
 use App\Support\AdminResourceCounts;
 use App\Support\IndexListing;
 use App\Support\ReferentialDeleteGuard;
@@ -106,7 +107,11 @@ class ProductController extends Controller
             return $product;
         });
 
-        return redirect()->route('admin.products.edit', $product)->with('status', 'Product created.');
+        return AdminFormResponse::saved(
+            $request,
+            'Product created.',
+            fn () => redirect()->route('admin.products.edit', $product)
+        );
     }
 
     public function show(Product $product)
@@ -135,7 +140,11 @@ class ProductController extends Controller
             $this->applyProductRelations($product, $request, $validated);
         });
 
-        return redirect()->route('admin.products.edit', $product)->with('status', 'Product updated.');
+        return AdminFormResponse::saved(
+            $request,
+            'Product updated.',
+            fn () => redirect()->route('admin.products.edit', $product)
+        );
     }
 
     public function destroy(Request $request, Product $product)

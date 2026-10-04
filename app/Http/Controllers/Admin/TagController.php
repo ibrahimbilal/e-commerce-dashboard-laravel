@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 
 use App\Http\Controllers\Concerns\ManagesTrashedRecords;
 use App\Models\Tag;
+use App\Support\AdminFormResponse;
 use App\Support\AdminResourceCounts;
 use App\Support\IndexListing;
 use Illuminate\Http\Request;
@@ -73,7 +74,11 @@ class TagController extends Controller
 
         Tag::create($data);
 
-        return redirect()->route('admin.tags.index')->with('status', 'Tag created.');
+        return AdminFormResponse::saved(
+            $request,
+            'Tag created.',
+            fn () => redirect()->route('admin.tags.index')
+        );
     }
 
     public function show(Tag $tag)
@@ -105,7 +110,11 @@ class TagController extends Controller
 
         $tag->update($data);
 
-        return redirect()->route('admin.tags.index')->with('status', 'Tag updated.');
+        return AdminFormResponse::saved(
+            $request,
+            'Tag updated.',
+            fn () => redirect()->route('admin.tags.index')
+        );
     }
 
     public function destroy(Request $request, Tag $tag)

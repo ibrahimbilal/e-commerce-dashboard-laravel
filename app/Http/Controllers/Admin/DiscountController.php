@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Concerns\ManagesTrashedRecords;
 use App\Http\Controllers\Concerns\TogglesAdminResourceFields;
 use App\Models\Discount;
+use App\Support\AdminFormResponse;
 use App\Support\DiscountQuery;
 use App\Support\AdminResourceCounts;
 use App\Support\IndexListing;
@@ -85,7 +86,11 @@ class DiscountController extends Controller
 
         $discount = Discount::create($data);
 
-        return redirect()->route('admin.discounts.index')->with('status', 'Discount created.');
+        return AdminFormResponse::saved(
+            $request,
+            'Discount created.',
+            fn () => redirect()->route('admin.discounts.index')
+        );
     }
 
     public function show(Discount $discount)
@@ -112,7 +117,11 @@ class DiscountController extends Controller
 
         $discount->update($data);
 
-        return redirect()->route('admin.discounts.index')->with('status', 'Discount updated.');
+        return AdminFormResponse::saved(
+            $request,
+            'Discount updated.',
+            fn () => redirect()->route('admin.discounts.index')
+        );
     }
 
     public function destroy(Request $request, Discount $discount)

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 
 use App\Http\Controllers\Concerns\ManagesTrashedRecords;
 use App\Models\Customer;
+use App\Support\AdminFormResponse;
 use App\Support\AdminResourceCounts;
 use App\Support\IndexListing;
 use App\Support\ReferentialDeleteGuard;
@@ -77,7 +78,11 @@ class CustomerController extends Controller
 
         $customer = Customer::create($data);
 
-        return redirect()->route('admin.customers.show', $customer)->with('status', 'Customer created.');
+        return AdminFormResponse::saved(
+            $request,
+            'Customer created.',
+            fn () => redirect()->route('admin.customers.show', $customer)
+        );
     }
 
     public function show(Customer $customer)
@@ -115,7 +120,11 @@ class CustomerController extends Controller
 
         $customer->update($data);
 
-        return redirect()->route('admin.customers.show', $customer)->with('status', 'Customer updated.');
+        return AdminFormResponse::saved(
+            $request,
+            'Customer updated.',
+            fn () => redirect()->route('admin.customers.show', $customer)
+        );
     }
 
     public function destroy(Request $request, Customer $customer)

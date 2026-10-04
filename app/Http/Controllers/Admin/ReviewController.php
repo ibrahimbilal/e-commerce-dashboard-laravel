@@ -8,6 +8,7 @@ use App\Models\Customer;
 use App\Models\Product;
 use App\Http\Controllers\Concerns\ManagesTrashedRecords;
 use App\Models\Review;
+use App\Support\AdminFormResponse;
 use App\Support\AdminResourceCounts;
 use App\Support\IndexListing;
 use Illuminate\Http\Request;
@@ -84,7 +85,11 @@ class ReviewController extends Controller
 
         $review = Review::create($data);
 
-        return redirect()->route('admin.reviews.index')->with('status', 'Review created.');
+        return AdminFormResponse::saved(
+            $request,
+            'Review created.',
+            fn () => redirect()->route('admin.reviews.index')
+        );
     }
 
     public function show(Review $review)
@@ -113,7 +118,11 @@ class ReviewController extends Controller
 
         $review->update($data);
 
-        return redirect()->route('admin.reviews.index')->with('status', 'Review updated.');
+        return AdminFormResponse::saved(
+            $request,
+            'Review updated.',
+            fn () => redirect()->route('admin.reviews.index')
+        );
     }
 
     public function destroy(Request $request, Review $review)

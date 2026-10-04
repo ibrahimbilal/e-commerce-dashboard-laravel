@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Concerns\ManagesTrashedRecords;
 use App\Models\Invoice;
 use App\Models\Order;
+use App\Support\AdminFormResponse;
 use App\Support\AdminResourceCounts;
 use App\Support\IndexListing;
 use Illuminate\Http\Request;
@@ -71,7 +72,11 @@ class InvoiceController extends Controller
 
         $invoice = Invoice::create($data);
 
-        return redirect()->route('admin.invoices.show', $invoice)->with('status', 'Invoice created.');
+        return AdminFormResponse::saved(
+            $request,
+            'Invoice created.',
+            fn () => redirect()->route('admin.invoices.show', $invoice)
+        );
     }
 
     public function show(Invoice $invoice)
@@ -102,7 +107,11 @@ class InvoiceController extends Controller
 
         $invoice->update($data);
 
-        return redirect()->route('admin.invoices.show', $invoice)->with('status', 'Invoice updated.');
+        return AdminFormResponse::saved(
+            $request,
+            'Invoice updated.',
+            fn () => redirect()->route('admin.invoices.show', $invoice)
+        );
     }
 
     public function destroy(Request $request, Invoice $invoice)

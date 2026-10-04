@@ -11,6 +11,7 @@ use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\ProductAttribute;
+use App\Support\AdminFormResponse;
 use App\Support\CouponQuery;
 use App\Support\AdminResourceCounts;
 use App\Support\IndexListing;
@@ -102,7 +103,11 @@ class OrderController extends Controller
             return $order;
         });
 
-        return redirect()->route('admin.orders.edit', $order)->with('status', 'Order created.');
+        return AdminFormResponse::saved(
+            $request,
+            'Order created.',
+            fn () => redirect()->route('admin.orders.edit', $order)
+        );
     }
 
     public function show(Order $order)
@@ -147,7 +152,11 @@ class OrderController extends Controller
             $order->update($payload['order']);
         });
 
-        return redirect()->route('admin.orders.edit', $order)->with('status', 'Order updated.');
+        return AdminFormResponse::saved(
+            $request,
+            'Order updated.',
+            fn () => redirect()->route('admin.orders.edit', $order)
+        );
     }
 
     public function destroy(Request $request, Order $order)

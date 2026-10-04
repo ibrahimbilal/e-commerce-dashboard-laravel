@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Concerns\ManagesTrashedRecords;
 use App\Http\Controllers\Concerns\TogglesAdminResourceFields;
 use App\Models\Coupon;
+use App\Support\AdminFormResponse;
 use App\Support\CouponQuery;
 use App\Support\AdminResourceCounts;
 use App\Support\IndexListing;
@@ -90,7 +91,11 @@ class CouponController extends Controller
 
         $coupon = Coupon::create($data);
 
-        return redirect()->route('admin.coupons.index')->with('status', 'Coupon created.');
+        return AdminFormResponse::saved(
+            $request,
+            'Coupon created.',
+            fn () => redirect()->route('admin.coupons.index')
+        );
     }
 
     public function show(Coupon $coupon)
@@ -120,7 +125,11 @@ class CouponController extends Controller
 
         $coupon->update($data);
 
-        return redirect()->route('admin.coupons.index')->with('status', 'Coupon updated.');
+        return AdminFormResponse::saved(
+            $request,
+            'Coupon updated.',
+            fn () => redirect()->route('admin.coupons.index')
+        );
     }
 
     public function destroy(Request $request, Coupon $coupon)

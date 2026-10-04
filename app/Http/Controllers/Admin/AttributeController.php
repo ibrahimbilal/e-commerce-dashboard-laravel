@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 
 use App\Models\Attribute;
+use App\Support\AdminFormResponse;
 use App\Support\IndexListing;
 use App\Support\ReferentialDeleteGuard;
 use Illuminate\Http\Request;
@@ -56,7 +57,11 @@ class AttributeController extends Controller
 
         $attribute = Attribute::create($data);
 
-        return redirect()->route('admin.attributes.index')->with('status', 'Attribute created.');
+        return AdminFormResponse::saved(
+            $request,
+            'Attribute created.',
+            fn () => redirect()->route('admin.attributes.index')
+        );
     }
 
     public function show(Attribute $attribute)
@@ -80,7 +85,11 @@ class AttributeController extends Controller
 
         $attribute->update($data);
 
-        return redirect()->route('admin.attributes.index')->with('status', 'Attribute updated.');
+        return AdminFormResponse::saved(
+            $request,
+            'Attribute updated.',
+            fn () => redirect()->route('admin.attributes.index')
+        );
     }
 
     public function destroy(Request $request, Attribute $attribute)
