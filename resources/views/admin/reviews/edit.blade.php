@@ -17,7 +17,7 @@
 </div>
 </div>
 </div>
-<form action="{{ route('admin.reviews.update', $review) }}" class="row clearfix" method="POST" data-ajax-form>
+<form action="{{ route('admin.reviews.update', $review) }}" class="row clearfix" method="POST" data-ajax-form novalidate>
 @csrf
 @method('PUT')
 <div class="col-sm-12 col-lg-8 post-box">

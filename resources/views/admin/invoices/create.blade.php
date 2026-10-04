@@ -14,7 +14,7 @@
 </div>
 </div>
 </div>
-<form action="{{ route('admin.invoices.store') }}" method="POST" class="row" data-ajax-form>
+<form action="{{ route('admin.invoices.store') }}" method="POST" class="row" data-ajax-form novalidate>
 @csrf
 <div class="col-12 col-lg-6">
 <div class="main-box box-spaces">

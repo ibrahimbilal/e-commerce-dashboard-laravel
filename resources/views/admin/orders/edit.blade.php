@@ -21,7 +21,7 @@
 </div>
 </div>
 </div>
-<form action="{{ route('admin.orders.update', $order) }}" class="row clearfix" data-post-type="order" id="add-newitem-form" method="POST" data-ajax-form>
+<form action="{{ route('admin.orders.update', $order) }}" class="row clearfix" data-post-type="order" id="add-newitem-form" method="POST" data-ajax-form novalidate>
 @csrf
 @method('PUT')
 <div class="col-sm-12 float-start post-box order-sm-1">

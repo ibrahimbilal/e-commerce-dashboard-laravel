@@ -21,7 +21,7 @@
 </div>
 </div>
 </div>
-<form action="{{ route('admin.attributes.update', $attribute) }}" class="row clearfix" data-post-type="attribute" id="add-newitem-form" method="POST" data-ajax-form>
+<form action="{{ route('admin.attributes.update', $attribute) }}" class="row clearfix" data-post-type="attribute" id="add-newitem-form" method="POST" data-ajax-form novalidate>
 @csrf
 @method('PUT')
 <div class="col-sm-12">

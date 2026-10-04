@@ -23,7 +23,7 @@
 </div>
 </div>
 </div>
-<form action="{{ route('admin.tags.update', $tag) }}" class="row clearfix" data-post-type="tag" id="add-newitem-form" method="POST" data-ajax-form>
+<form action="{{ route('admin.tags.update', $tag) }}" class="row clearfix" data-post-type="tag" id="add-newitem-form" method="POST" data-ajax-form novalidate>
 @csrf
 @method('PUT')
 <div class="col-sm-12 col-lg-9 post-box">

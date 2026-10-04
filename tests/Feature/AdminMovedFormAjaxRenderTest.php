@@ -81,6 +81,7 @@ class AdminMovedFormAjaxRenderTest extends TestCase
             $response = $this->actingAs($this->admin)->get($url);
             $response->assertOk();
             $response->assertSee('data-ajax-form', false);
+            $response->assertSee('novalidate', false);
             $response->assertSee('assets/js/ajax-form.js', false);
         }
     }
@@ -92,7 +93,9 @@ class AdminMovedFormAjaxRenderTest extends TestCase
         $response->assertSee('name="product_name"', false);
         $response->assertSee('required', false);
         $response->assertSee('name="status"', false);
+        $response->assertSee('id="product-cat"', false);
         $response->assertSee('data-error-for="category_ids"', false);
+        $response->assertSee('novalidate', false);
         $response->assertSee('text-danger', false);
         $response->assertSee('name="regular_price"', false);
         $response->assertSee('step="0.01"', false);

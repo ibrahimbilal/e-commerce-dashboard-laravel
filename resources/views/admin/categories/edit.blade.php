@@ -24,7 +24,7 @@
 </div>
 </div>
 </div>
-<form action="{{ route('admin.categories.update', $category) }}" class="row d-block clearfix" data-post-type="Category" id="add-newitem-form" method="POST" data-ajax-form>
+<form action="{{ route('admin.categories.update', $category) }}" class="row d-block clearfix" data-post-type="Category" id="add-newitem-form" method="POST" data-ajax-form novalidate>
 @csrf
 @method('PUT')
 <div class="col-sm-12 col-lg-9 float-start post-box">

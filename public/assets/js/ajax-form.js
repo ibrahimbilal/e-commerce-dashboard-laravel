@@ -147,17 +147,106 @@
         return true;
     }
 
+    function compareDomOrder(a, b) {
+        if (a === b) {
+            return 0;
+        }
+        var position = a.compareDocumentPosition(b);
+        if (position & Node.DOCUMENT_POSITION_FOLLOWING) {
+            return -1;
+        }
+        if (position & Node.DOCUMENT_POSITION_PRECEDING) {
+            return 1;
+        }
+        return 0;
+    }
+
+    function firstInvalidHostInForm(form) {
+        var hosts = Array.prototype.slice.call(form.querySelectorAll('.is-invalid')).filter(function (el) {
+            return !el.closest('[' + SUMMARY_ATTR + ']');
+        });
+        if (!hosts.length) {
+            return null;
+        }
+        hosts.sort(compareDomOrder);
+        return hosts[0];
+    }
+
+    function revealHiddenPanel(host) {
+        if (!host) {
+            return;
+        }
+
+        var tabBox = host.closest('.tab-box');
+        if (tabBox && !tabBox.classList.contains('active')) {
+            var tabSelector = tabBox.id ? '#' + tabBox.id : null;
+            var tabsHolder = host.closest('.tabs-holder');
+            if (tabSelector && tabsHolder) {
+                var tabBtn = tabsHolder.querySelector('.tab-btn[data-tab-id="' + cssEscape(tabSelector) + '"]');
+                if (tabBtn) {
+                    tabBtn.click();
+                }
+            }
+        }
+
+        var collapseEl = host.closest('.collapse');
+        if (collapseEl && !collapseEl.classList.contains('show')) {
+            if (window.bootstrap && window.bootstrap.Collapse) {
+                window.bootstrap.Collapse.getOrCreateInstance(collapseEl).show();
+            } else {
+                collapseEl.classList.add('show');
+            }
+        }
+    }
+
+    function focusValidationHost(host) {
+        if (!host) {
+            return;
+        }
+        if (host.hasAttribute('data-error-for')) {
+            var treeInput = host.querySelector('input[type="checkbox"], input[type="radio"]');
+            if (treeInput) {
+                treeInput.focus();
+                return;
+            }
+        }
+        if (typeof host.focus === 'function' && host.matches('input, select, textarea, button')) {
+            host.focus();
+            return;
+        }
+        var focusable = host.querySelector(
+            'input:not([type="hidden"]), select, textarea, button:not([disabled])'
+        );
+        if (focusable && typeof focusable.focus === 'function') {
+            focusable.focus();
+        }
+    }
+
+    function scrollAndFocusFirstInvalid(form) {
+        var firstHost = firstInvalidHostInForm(form);
+        if (!firstHost) {
+            return;
+        }
+
+        revealHiddenPanel(firstHost);
+
+        window.requestAnimationFrame(function () {
+            window.setTimeout(function () {
+                revealHiddenPanel(firstHost);
+                firstHost.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                focusValidationHost(firstHost);
+            }, 50);
+        });
+    }
+
     function applyValidationErrors(form, errors) {
         var unmapped = [];
-        var firstHost = null;
 
         Object.keys(errors).forEach(function (key) {
             var raw = errors[key];
             var message = Array.isArray(raw) ? raw[0] : String(raw);
             if (!showFieldError(form, key, message)) {
                 unmapped.push({ key: key, message: message });
-            } else if (!firstHost) {
-                firstHost = feedbackHost(findFieldTarget(form, key));
             }
         });
 
@@ -171,17 +260,12 @@
             });
             summary.classList.remove('d-none');
             summary.classList.add('show');
-            if (!firstHost) {
+            if (!firstInvalidHostInForm(form)) {
                 summary.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
         }
 
-        if (firstHost) {
-            if (typeof firstHost.focus === 'function' && firstHost.matches('input, select, textarea, button')) {
-                firstHost.focus();
-            }
-            firstHost.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+        scrollAndFocusFirstInvalid(form);
     }
 
     function showErrorAlert(title, text) {

@@ -21,7 +21,7 @@
 </div>
 </div>
 </div>
-<form action="{{ route('admin.orders.store') }}" class="row clearfix" data-post-type="order" id="add-newitem-form" method="POST" data-ajax-form>
+<form action="{{ route('admin.orders.store') }}" class="row clearfix" data-post-type="order" id="add-newitem-form" method="POST" data-ajax-form novalidate>
 @csrf
 <div class="col-sm-12 float-start post-box order-sm-1">
 <div class="main-box box-spaces">

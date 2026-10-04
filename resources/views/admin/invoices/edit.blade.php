@@ -14,7 +14,7 @@
 </div>
 </div>
 </div>
-<form action="{{ route('admin.invoices.update', $invoice) }}" method="POST" class="row" data-ajax-form>
+<form action="{{ route('admin.invoices.update', $invoice) }}" method="POST" class="row" data-ajax-form novalidate>
 @csrf
 @method('PUT')
 <div class="col-12 col-lg-6">

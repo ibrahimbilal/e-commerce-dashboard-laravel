@@ -21,7 +21,7 @@
 </div>
 </div>
 </div>
-<form action="{{ route('admin.attributes.store') }}" class="row clearfix" data-post-type="attribute" id="add-newitem-form" method="POST" data-ajax-form>
+<form action="{{ route('admin.attributes.store') }}" class="row clearfix" data-post-type="attribute" id="add-newitem-form" method="POST" data-ajax-form novalidate>
 @csrf
 <div class="col-sm-12">
 <div class="main-box box-spaces">

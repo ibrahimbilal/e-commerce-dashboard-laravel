@@ -25,7 +25,7 @@
 </div>
 </div>
 </div>
-<form action="{{ route('admin.products.update', $product) }}" class="row d-block clearfix" data-post-type="Product" id="add-newitem-form" method="POST" data-ajax-form>
+<form action="{{ route('admin.products.update', $product) }}" class="row d-block clearfix" data-post-type="Product" id="add-newitem-form" method="POST" data-ajax-form novalidate>
 @csrf
 @method('PUT')
 <input type="hidden" name="status" id="product-status" value="{{ old('status', $product->status ?? 'draft') }}"/>
