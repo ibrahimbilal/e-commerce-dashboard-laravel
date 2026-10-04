@@ -99,7 +99,7 @@
 <a class="btn btn-warning btn-rounded me-2 py-1" type="button" data-bs-toggle="modal" data-bs-target="#edit-subscriber-{{ $subscriber->id }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a>
 @endcan
 @can('delete marketing')
-<form method="POST" action="{{ route('admin.marketing.subscribers.destroy', $subscriber) }}" class="d-inline destroy-resource-form" data-confirm-delete="soft" data-confirm-label="subscriber">
+<form method="POST" action="{{ route('admin.marketing.subscribers.destroy', $subscriber) }}" class="d-inline destroy-resource-form" data-admin-json-row-action data-confirm-delete="soft" data-confirm-label="subscriber">
 @csrf
 @method('DELETE')
 <button type="button" class="btn btn-danger btn-rounded me-2 py-1 bg-transparent" data-confirm-delete="soft" data-confirm-label="subscriber"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button>

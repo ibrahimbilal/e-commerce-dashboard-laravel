@@ -177,16 +177,8 @@
             return;
         }
 
-        var tabBox = host.closest('.tab-box');
-        if (tabBox && !tabBox.classList.contains('active')) {
-            var tabSelector = tabBox.id ? '#' + tabBox.id : null;
-            var tabsHolder = host.closest('.tabs-holder');
-            if (tabSelector && tabsHolder) {
-                var tabBtn = tabsHolder.querySelector('.tab-btn[data-tab-id="' + cssEscape(tabSelector) + '"]');
-                if (tabBtn) {
-                    tabBtn.click();
-                }
-            }
+        if (host.closest('.tab-box')) {
+            activateTabForHost(host);
         }
 
         var collapseEl = host.closest('.collapse');
@@ -252,14 +244,20 @@
             return;
         }
 
-        revealHiddenPanel(firstHost);
+        function focusAfterReveal() {
+            revealHiddenPanel(firstHost);
+            firstHost.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            focusValidationHost(firstHost);
+        }
 
+        if (firstHost.closest('.tab-box')) {
+            activateTabForHost(firstHost, focusAfterReveal);
+            return;
+        }
+
+        revealHiddenPanel(firstHost);
         window.requestAnimationFrame(function () {
-            window.setTimeout(function () {
-                revealHiddenPanel(firstHost);
-                firstHost.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                focusValidationHost(firstHost);
-            }, 50);
+            window.setTimeout(focusAfterReveal, 50);
         });
     }
 
@@ -381,9 +379,73 @@
         if (!status) {
             return;
         }
-        var statusInput = form.querySelector('[name="status"]');
+        var statusInput = form.querySelector('#product-status') || form.querySelector('[name="status"]');
         if (statusInput) {
             statusInput.value = status;
+        }
+    }
+
+    function tabButtonForBox(tabsHolder, tabBox) {
+        if (!tabsHolder || !tabBox || !tabBox.id) {
+            return null;
+        }
+        var tabIdAttr = '#' + tabBox.id;
+        var buttons = tabsHolder.querySelectorAll('.tab-btn');
+        var i;
+        for (i = 0; i < buttons.length; i++) {
+            if (buttons[i].getAttribute('data-tab-id') === tabIdAttr) {
+                return buttons[i];
+            }
+        }
+        return null;
+    }
+
+    function showTabBoxFallback(tabsHolder, tabBox) {
+        if (!tabBox) {
+            return;
+        }
+        var tabsBoxs = tabBox.closest('.tabs-boxs');
+        if (tabsBoxs) {
+            tabsBoxs.querySelectorAll('.tab-box').forEach(function (box) {
+                box.classList.remove('active');
+                box.style.display = 'none';
+            });
+        }
+        tabBox.classList.add('active');
+        tabBox.style.display = 'block';
+        if (tabsHolder) {
+            tabsHolder.querySelectorAll('.tab-btn').forEach(function (btn) {
+                btn.classList.remove('active');
+            });
+            var tabBtn = tabButtonForBox(tabsHolder, tabBox);
+            if (tabBtn) {
+                tabBtn.classList.add('active');
+            }
+        }
+    }
+
+    function activateTabForHost(host, done) {
+        var tabBox = host.closest('.tab-box');
+        if (!tabBox || tabBox.classList.contains('active')) {
+            if (typeof done === 'function') {
+                done();
+            }
+            return;
+        }
+        var tabsHolder = host.closest('.tabs-holder');
+        var tabBtn = tabButtonForBox(tabsHolder, tabBox);
+        if (tabBtn) {
+            tabBtn.click();
+            window.setTimeout(function () {
+                if (typeof done === 'function') {
+                    done();
+                }
+            }, 400);
+            return;
+        }
+        showTabBoxFallback(tabsHolder, tabBox);
+        if (typeof done === 'function') {
+            done();
         }
     }
 
@@ -468,12 +530,7 @@
 
         form.querySelectorAll('[data-ajax-form-trigger]').forEach(function (button) {
             button.addEventListener('click', function () {
-                applySubmitterStatus(form, button);
-                if (typeof form.requestSubmit === 'function') {
-                    form.requestSubmit(button);
-                } else {
-                    submitAjaxForm(form, button);
-                }
+                submitAjaxForm(form, button);
             });
         });
 

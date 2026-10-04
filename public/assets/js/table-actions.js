@@ -304,47 +304,59 @@
         return runFetch(url, method, trigger);
     }
 
-    function bindToggleInputs() {
-        document.querySelectorAll('.admin-field-toggle:not([data-toggle-bound])').forEach(function (input) {
-            input.setAttribute('data-toggle-bound', '1');
-            input.addEventListener('change', function () {
-                var url = input.getAttribute('data-toggle-url');
-                var field = input.getAttribute('data-toggle-field');
-                if (!url || !field) {
-                    return;
-                }
+    var toggleInputsDelegated = false;
 
-                var priorChecked = !input.checked;
-                var payload = {
-                    field: field,
-                    value: input.checked,
-                };
+    function handleToggleInputChange(input) {
+        var url = input.getAttribute('data-toggle-url');
+        var field = input.getAttribute('data-toggle-field');
+        if (!url || !field) {
+            return;
+        }
 
-                fetch(url, {
-                    method: 'PATCH',
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken(),
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(payload),
-                    credentials: 'same-origin',
-                })
-                    .catch(function () {
-                        input.checked = priorChecked;
-                        var networkErr = {};
-                        handleFailure(networkErr);
-                        throw networkErr;
-                    })
-                    .then(parseJsonResponse)
-                    .then(function (body) {
-                        handleToggleSuccess(input, body);
-                    })
-                    .catch(function (err) {
-                        input.checked = priorChecked;
-                        handleFailure(err);
-                    });
+        var priorChecked = !input.checked;
+        var payload = {
+            field: field,
+            value: input.checked,
+        };
+
+        fetch(url, {
+            method: 'PATCH',
+            headers: {
+                'X-CSRF-TOKEN': csrfToken(),
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+            credentials: 'same-origin',
+        })
+            .catch(function () {
+                input.checked = priorChecked;
+                var networkErr = {};
+                handleFailure(networkErr);
+                throw networkErr;
+            })
+            .then(parseJsonResponse)
+            .then(function (body) {
+                handleToggleSuccess(input, body);
+            })
+            .catch(function (err) {
+                input.checked = priorChecked;
+                handleFailure(err);
             });
+    }
+
+    function bindToggleInputs() {
+        if (toggleInputsDelegated) {
+            return;
+        }
+        toggleInputsDelegated = true;
+
+        document.addEventListener('change', function (event) {
+            var input = event.target;
+            if (!input || !input.classList || !input.classList.contains('admin-field-toggle')) {
+                return;
+            }
+            handleToggleInputChange(input);
         });
     }
 
