@@ -197,6 +197,25 @@
                 collapseEl.classList.add('show');
             }
         }
+
+        var repeater = host.closest('.repeater');
+        if (repeater && window.AdminRepeater && typeof window.AdminRepeater.openRepeater === 'function') {
+            var inputs = repeater.querySelector('.repeater-inputs');
+            if (inputs && window.getComputedStyle(inputs).display === 'none') {
+                window.AdminRepeater.openRepeater(repeater);
+            }
+        } else if (repeater) {
+            var repeaterInputs = repeater.querySelector('.repeater-inputs');
+            if (repeaterInputs && window.getComputedStyle(repeaterInputs).display === 'none') {
+                if (window.jQuery) {
+                    window.jQuery(repeater).find('.repeater-inputs').slideDown();
+                    window.jQuery(repeater).find('.icon').addClass('active');
+                } else {
+                    repeaterInputs.style.display = 'block';
+                    repeaterInputs.classList.add('active');
+                }
+            }
+        }
     }
 
     function focusValidationHost(host) {
@@ -207,6 +226,11 @@
             var treeInput = host.querySelector('input[type="checkbox"], input[type="radio"]');
             if (treeInput) {
                 treeInput.focus();
+                return;
+            }
+            var holderInput = host.querySelector('input:not([type="hidden"]), select, textarea');
+            if (holderInput && typeof holderInput.focus === 'function') {
+                holderInput.focus();
                 return;
             }
         }

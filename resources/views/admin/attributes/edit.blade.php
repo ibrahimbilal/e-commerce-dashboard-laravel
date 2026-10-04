@@ -37,37 +37,8 @@
 <div class="form-item primary">
 <h2 class="box-title item-title">Attribute Terms</h2>
 </div>
-<div class="alerts warning">
-<ul class="list">
-<li class="content">You Haven't Create Any Terms Yet.</li>
-</ul>
-</div>
-<div class="repeater-holder">
-<div class="repeater mb-3">
-<div class="repeater-title p-3 mb-3 d-flex justify-content-between align-items-center">
-<h3 class="h5 mb-0">Term Title</h3>
-<div class="icons d-flex align-items-center"><span class="icon active"><i class="fi-rr-angle-small-down"> </i></span><span class="remove" flow="up" tooltip="Remove"><i class="fi-rr-trash"> </i></span></div>
-</div>
-<div class="repeater-inputs px-3 active">
-<div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap">
-<label class="item-title" for="term-title">term title:</label>
-<input class="form-control" id="term-title" type="text" disabled="disabled" placeholder="Terms UI only (not saved with attribute)"/>
-</div>
-<div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
-<label class="item-title" for="term-type">term type:</label>
-<select class="form-select" id="term-type">
-<option>Text</option>
-<option>Color</option>
-</select>
-</div>
-<div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
-<label class="item-title" for="term-value">term value:</label>
-<input class="form-control" id="term-value" name="attribute_value" type="text" value="{{ old('attribute_value', $attribute->attribute_value ?? '') }}" />
-</div>
-</div>
-</div>
-</div>
-<div class="add-repeater-item mt-3"><a class="btn">Add New Attribute Term</a></div>
+@include('components.admin.attribute-terms-repeater', ['attribute' => $attribute ?? null, 'terms' => $terms ?? null])
+
 </div>
 </div>
 <div class="col-sm-12 meta-box">
@@ -93,6 +64,7 @@
 </form>
 <form method="POST" action="{{ route('admin.attributes.destroy', $attribute) }}" id="attribute-destroy-form" class="destroy-resource-form d-none" data-confirm-delete="soft">@csrf @method('DELETE')</form>
 @include('components.ajax-form-assets')
+@include('components.repeater-assets')
 @endsection
 
 @push('scripts')
