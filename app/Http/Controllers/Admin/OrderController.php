@@ -253,8 +253,8 @@ class OrderController extends Controller
     private function validatedOrderPayload(Request $request, ?Order $order = null): array
     {
         $rules = [
-            'customer_id' => ['required_without:customer', 'integer', 'exists:customers,id'],
-            'customer' => ['required_without:customer_id', 'integer', 'exists:customers,id'],
+            'customer_id' => ['nullable', 'integer', 'exists:customers,id'],
+            'customer' => ['nullable', 'integer', 'exists:customers,id'],
             'address_id' => ['required', 'integer', 'exists:addresses,id'],
             'order_status_id' => ['required_without:order_status', 'integer', 'exists:order_statuses,id'],
             'order_status' => ['required_without:order_status_id', 'integer', 'exists:order_statuses,id'],
@@ -265,6 +265,12 @@ class OrderController extends Controller
             'items.*.product_attribute_id' => ['required', 'integer', 'exists:products_attributes,id'],
             'items.*.quantity' => ['required', 'integer', 'min:1'],
         ];
+
+        if (! $request->filled('customer_id') && ! $request->filled('customer')) {
+            throw ValidationException::withMessages([
+                'customer_id' => [__('validation.custom.customer_id.required')],
+            ]);
+        }
 
         $validated = $request->validate($rules);
 

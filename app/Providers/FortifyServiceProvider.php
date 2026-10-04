@@ -12,6 +12,7 @@ use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Fortify;
 use Laravel\Fortify\Contracts\RegisterResponse;
 
@@ -46,8 +47,16 @@ class FortifyServiceProvider extends ServiceProvider
                 return null;
             }
 
-            if (! $user->is_active || $user->status === 'blocked') {
-                return null;
+            if ($user->status === 'blocked') {
+                throw ValidationException::withMessages([
+                    Fortify::username() => [__('auth.blocked')],
+                ]);
+            }
+
+            if (! $user->is_active) {
+                throw ValidationException::withMessages([
+                    Fortify::username() => [__('auth.inactive')],
+                ]);
             }
 
             return $user;

@@ -64,7 +64,9 @@ class DemoDataSeeder extends Seeder
     {
         User::factory(8)->create()->each(function (User $user) {
             $user->markEmailAsVerified();
-            $user->assignRole(fake()->randomElement(['manager', 'viewer']));
+            $role = fake()->randomElement(['manager', 'viewer']);
+            $user->assignRole($role);
+            $user->forceFill(['role_name' => $role])->save();
             $this->assignDemoUserAvatar($user);
         });
 

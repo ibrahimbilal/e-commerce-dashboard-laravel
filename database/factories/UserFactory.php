@@ -18,7 +18,7 @@ class UserFactory extends Factory
 			'email' => fake()->unique()->numerify('user####').'@example.com',
 			'email_verified_at' => now(),
 			'password' => Hash::make('password'),
-			'mobile' => substr(fake()->e164PhoneNumber(), 0, 20),
+			'mobile' => fake()->numerify(str_repeat('#', fake()->numberBetween(10, 12))),
             'birth_date' => fake()->optional()->date(),
             'gender' => fake()->randomElement(['male', 'female']),
             'role_name' => '',

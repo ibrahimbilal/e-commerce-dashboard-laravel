@@ -171,6 +171,9 @@ return [
         'attribute_key' => [
             'duplicate' => 'This attribute key already exists.',
         ],
+        'customer_id' => [
+            'required' => 'Select an existing customer or enter new customer details.',
+        ],
         'terms' => [
             'in_use' => 'The term ":term" is used on product variants and cannot be removed.',
             'id' => [
