@@ -26,7 +26,7 @@
 <form action="{{ route('admin.tags.update', $tag) }}" class="row clearfix" data-post-type="tag" id="add-newitem-form" method="POST" data-ajax-form novalidate>
 @csrf
 @method('PUT')
-<div class="col-sm-12 col-lg-9 post-box">
+<div class="col-sm-12 col-lg-9 post-box flex-grow-1">
 <div class="main-box box-spaces">
 <div class="form-item primary">
 <h2 class="box-title item-title">tag title</h2>
@@ -41,7 +41,7 @@
 </div>
 </div>
 </div>
-<div class="col-sm-12 col-lg-3 meta-box">
+<div class="col-sm-12 meta-box">
 <div class="row d-block clearfix">
 <div class="col-sm-6 col-lg-12 float-end float-lg-none">
 <div class="main-box box-spaces">
@@ -78,7 +78,7 @@
 </div>
 </div>
 </div>
-<div class="col-sm-12 col-lg-9 post-box">
+<div class="col-sm-12 col-lg-9 post-box flex-grow-1">
 <div class="main-box box-spaces mb-0">
 <div class="form-item primary">
 <h2 class="box-title item-title">tag details</h2>

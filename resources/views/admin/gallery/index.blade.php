@@ -30,7 +30,7 @@
             </div>
         @endcan
         <div class="page-content row">
-            <div class="col-sm-12 col-lg-9 float-start post-box order-1 open">
+            <div class="col-sm-12 float-start post-box order-1 open">
                 <div class="g-holder main-box box-spaces d-flex flex-column mb-0">
                     <div class="d-flex justify-content-between align-items-sm-center flex-column-reverse flex-sm-row mb-2">
                         {{-- Bulk Action Form Params --}}
@@ -68,7 +68,7 @@
                     </div>
                 </div>
             </div>
-			<div class="col-sm-12 col-lg-3 float-end meta-box order-lg-1 hide"></div>
+			<div class="col-sm-12 float-end meta-box order-lg-1 hide"></div>
         </div>
     </div>
 @endsection

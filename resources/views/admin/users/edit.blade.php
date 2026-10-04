@@ -23,7 +23,7 @@
 
     <form class="row d-block clearfix" id="edit-user" method="POST" enctype="multipart/form-data">
 		@method('PUT')
-        <div class="col-sm-12 col-lg-9 float-start post-box">
+        <div class="col-sm-12 float-start post-box">
             <div class="main-box box-spaces">
                 <div class="form-item primary mb-3">
                     <h2 class="box-title item-title">{{ __('admin.sections.user_details') }}</h2>
@@ -199,7 +199,7 @@
         </div>
 	</form>
 	<div class="row d-block clearfix">
-        <div class="col-sm-12 col-lg-9 float-start post-box">
+        <div class="col-sm-12 float-start post-box">
             <div class="main-box box-spaces">
                 <div class="form-item primary">
                     <h2 class="box-title item-title">{{ __('admin.sections.sessions') }}</h2>
@@ -247,7 +247,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-12 col-lg-9 float-start post-box">
+        <div class="col-sm-12 float-start post-box">
             <div class="main-box box-spaces mb-0">
                 <div class="form-item primary">
                     <h2 class="box-title item-title">{{ __('admin.sections.activities') }}</h2>

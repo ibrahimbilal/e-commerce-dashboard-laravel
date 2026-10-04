@@ -19,7 +19,7 @@
     @include('admin.inc.page_title', $params)
 
     <form class="row d-block clearfix" id="settings-forms" method="POST">
-        <div class="col-sm-12 col-lg-9 float-start post-box">
+        <div class="col-sm-12 float-start post-box">
             <div class="main-box box-spaces mb-0">
                 <div class="form-item primary mb-3">
                     <h2 class="box-title item-title">{{ __('admin.sections.currencies_settings') }}</h2>

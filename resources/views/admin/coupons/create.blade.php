@@ -24,7 +24,7 @@
 </div>
 <form action="{{ route('admin.coupons.store') }}" class="row clearfix" data-post-type="coupon" id="add-newitem-form" method="POST" data-ajax-form novalidate>
 @csrf
-<div class="col-sm-12 col-lg-9 post-box">
+<div class="col-sm-12 col-lg-9 post-box flex-grow-1">
 <div class="main-box box-spaces">
 <div class="form-item primary">
 <h2 class="box-title item-title">coupon details</h2>
@@ -69,7 +69,7 @@
 </div>
 </div>
 </div>
-<div class="col-sm-12 col-lg-3 meta-box">
+<div class="col-sm-12 meta-box">
 <div class="main-box box-spaces">
 <div class="btns-holder d-flex justify-content-end mt-4">
 <button class="btn solid-btn" type="submit">publish </button>

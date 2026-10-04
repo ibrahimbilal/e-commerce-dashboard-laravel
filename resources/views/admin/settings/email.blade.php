@@ -21,7 +21,7 @@
     @include('admin.inc.page_title', $params)
 
     <form class="row d-block clearfix" id="settings-form" data-post-type="settings">
-        <div class="col-sm-12 col-lg-9 float-start post-box">
+        <div class="col-sm-12 float-start post-box">
             <div class="main-box box-spaces">
                 <div class="form-item primary mb-3">
                     <h2 class="box-title item-title">{{ __('admin.sections.emails_settings') }}</h2>

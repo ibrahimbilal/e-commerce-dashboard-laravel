@@ -26,7 +26,7 @@
 </div>
 <form action="{{ route('admin.categories.store') }}" class="row d-block clearfix" data-post-type="Category" id="add-newitem-form" method="POST" data-ajax-form novalidate>
 @csrf
-<div class="col-sm-12 col-lg-9 float-start post-box">
+<div class="col-sm-12 float-start post-box">
 <div class="main-box box-spaces">
 <div class="form-item primary">
 <h2 class="box-title item-title">category title</h2>
@@ -39,7 +39,7 @@
 </div>
 </div>
 </div>
-<div class="col-sm-12 col-lg-3 float-end meta-box">
+<div class="col-sm-12 float-end meta-box">
 <div class="row d-block clearfix">
 <div class="col-sm-6 col-lg-12 float-end float-lg-none">
 <div class="main-box box-spaces">
@@ -69,7 +69,7 @@
 @include('components.category-parent-select')
 </div>
 </div>
-<div class="col-sm-12 col-lg-9 float-start post-box">
+<div class="col-sm-12 float-start post-box">
 <div class="main-box box-spaces mb-0">
 <div class="form-item primary">
 <h2 class="box-title item-title">category details</h2>

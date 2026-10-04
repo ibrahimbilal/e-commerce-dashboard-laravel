@@ -43,7 +43,7 @@
     $localeMetaDescription = old('meta_description', $productLocale?->meta_description ?? '');
     $localeMetaKeywords = old('meta_keywords', $productLocale?->meta_keywords ?? '');
 @endphp
-<div class="col-sm-12 col-lg-9 float-start post-box">
+<div class="col-sm-12 float-start post-box">
 <div class="main-box box-spaces">
 <div class="form-item primary">
 <h2 class="box-title item-title">product name<span class="text-danger">*</span></h2>
@@ -59,7 +59,7 @@
 </div>
 </div>
 </div>
-<div class="col-sm-12 col-lg-3 float-end meta-box">
+<div class="col-sm-12 float-end meta-box">
 <div class="row d-block clearfix">
 <div class="col-sm-6 col-lg-12 float-end float-lg-none">
 <div class="main-box box-spaces">
@@ -93,7 +93,7 @@
 </div>
 </div>
 </div>
-<div class="col-sm-12 col-lg-9 float-start post-box">
+<div class="col-sm-12 float-start post-box">
 <div class="main-box box-spaces mb-0">
 <div class="form-item primary">
 <h2 class="box-title item-title">product details</h2>
