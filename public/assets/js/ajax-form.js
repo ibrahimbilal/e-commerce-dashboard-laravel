@@ -1,7 +1,6 @@
 (function () {
     'use strict';
 
-    var SUMMARY_ATTR = 'data-ajax-form-summary';
     var FEEDBACK_ATTR = 'data-ajax-form-feedback';
 
     function csrfToken(form) {
@@ -84,31 +83,39 @@
         form.querySelectorAll('[' + FEEDBACK_ATTR + ']').forEach(function (el) {
             el.remove();
         });
-        var summary = form.querySelector('[' + SUMMARY_ATTR + ']');
-        if (summary) {
-            summary.classList.add('d-none');
-            summary.classList.remove('show');
-            var list = summary.querySelector('[data-ajax-form-summary-list]');
-            if (list) {
-                list.innerHTML = '';
-            }
-        }
+        form.querySelectorAll('.ajax-form-error-summary').forEach(function (summary) {
+            summary.remove();
+        });
     }
 
-    function ensureSummary(form) {
-        var summary = form.querySelector('[' + SUMMARY_ATTR + ']');
-        if (summary) {
-            return summary;
-        }
-        summary = document.createElement('div');
-        summary.className = 'alert alert-danger alert-dismissible fade ajax-form-error-summary d-none';
-        summary.setAttribute(SUMMARY_ATTR, '');
-        summary.setAttribute('role', 'alert');
-        summary.innerHTML =
-            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
-            '<ul class="mb-0 ps-3" data-ajax-form-summary-list></ul>';
-        form.insertBefore(summary, form.firstChild);
-        return summary;
+    function escapeHtml(text) {
+        var div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function ajaxFormMessages() {
+        return window.AdminAjaxFormMessages || {};
+    }
+
+    function uniqueErrorMessages(errors) {
+        var seen = {};
+        var items = [];
+
+        Object.keys(errors).forEach(function (key) {
+            var raw = errors[key];
+            var messages = Array.isArray(raw) ? raw : [raw];
+            messages.forEach(function (message) {
+                var text = String(message);
+                if (seen[text]) {
+                    return;
+                }
+                seen[text] = true;
+                items.push(text);
+            });
+        });
+
+        return items;
     }
 
     function feedbackHost(target) {
@@ -162,9 +169,7 @@
     }
 
     function firstInvalidHostInForm(form) {
-        var hosts = Array.prototype.slice.call(form.querySelectorAll('.is-invalid')).filter(function (el) {
-            return !el.closest('[' + SUMMARY_ATTR + ']');
-        });
+        var hosts = Array.prototype.slice.call(form.querySelectorAll('.is-invalid'));
         if (!hosts.length) {
             return null;
         }
@@ -239,33 +244,43 @@
         });
     }
 
-    function applyValidationErrors(form, errors) {
-        var unmapped = [];
-
+    function showValidationErrorSwal(form, errors) {
         Object.keys(errors).forEach(function (key) {
             var raw = errors[key];
             var message = Array.isArray(raw) ? raw[0] : String(raw);
-            if (!showFieldError(form, key, message)) {
-                unmapped.push({ key: key, message: message });
-            }
+            showFieldError(form, key, message);
         });
 
-        if (unmapped.length) {
-            var summary = ensureSummary(form);
-            var list = summary.querySelector('[data-ajax-form-summary-list]');
-            unmapped.forEach(function (item) {
-                var li = document.createElement('li');
-                li.textContent = item.message;
-                list.appendChild(li);
-            });
-            summary.classList.remove('d-none');
-            summary.classList.add('show');
-            if (!firstInvalidHostInForm(form)) {
-                summary.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }
+        var items = uniqueErrorMessages(errors);
+        var copy = ajaxFormMessages();
+        var titleText = copy.ops || 'Oops...';
+        var confirmButtonText = copy.ok || 'OK';
+
+        if (typeof Swal === 'undefined') {
+            scrollAndFocusFirstInvalid(form);
+            return;
         }
 
-        scrollAndFocusFirstInvalid(form);
+        var html =
+            '<div class="alerts danger"><ul class="list" style="text-align: start">' +
+            items
+                .map(function (message) {
+                    return '<li class="content">' + escapeHtml(message) + '</li>';
+                })
+                .join('') +
+            '</ul></div>';
+
+        Swal.fire({
+            icon: 'error',
+            titleText: titleText,
+            html: html,
+            showConfirmButton: true,
+            confirmButtonColor: 'var(--main-color)',
+            confirmButtonText: confirmButtonText,
+            scrollbarPadding: false,
+        }).then(function () {
+            scrollAndFocusFirstInvalid(form);
+        });
     }
 
     function showErrorAlert(title, text) {
@@ -381,7 +396,7 @@
                 if (response.status === 422) {
                     return parseJsonSafe(response).then(function (json) {
                         if (json && json.errors) {
-                            applyValidationErrors(form, json.errors);
+                            showValidationErrorSwal(form, json.errors);
                         } else {
                             showErrorAlert('Validation failed', json && json.message ? json.message : 'Validation failed.');
                         }
