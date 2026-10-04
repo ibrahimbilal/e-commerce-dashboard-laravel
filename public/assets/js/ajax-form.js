@@ -146,11 +146,6 @@
         }
         var host = feedbackHost(target);
         host.classList.add('is-invalid');
-        var feedback = document.createElement('div');
-        feedback.className = 'invalid-feedback d-block';
-        feedback.setAttribute(FEEDBACK_ATTR, '');
-        feedback.textContent = message;
-        host.insertAdjacentElement('afterend', feedback);
         return true;
     }
 

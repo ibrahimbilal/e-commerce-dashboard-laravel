@@ -47,19 +47,13 @@
 <div class="main-box box-spaces">
 <div class="form-item primary">
 <h2 class="box-title item-title">product name<span class="text-danger">*</span></h2>
-<input class="form-control @error('product_name') is-invalid @enderror" id="item-title" name="product_name" type="text" value="{{ $localeName }}" required/>
-@error('product_name')
-<div class="invalid-feedback d-block">{{ $message }}</div>
-@enderror
+<input class="form-control" id="item-title" name="product_name" type="text" value="{{ $localeName }}" required/>
 </div>
 <div class="divider"></div>
 <div class="form-item primary">
 <h2 class="box-title item-title">product description</h2>
-<div id="product-desc" data-error-for="description" @error('description') class="is-invalid" @enderror>
+<div id="product-desc" data-error-for="description">
 <div class="editor-container"></div>
-@error('description')
-<div class="invalid-feedback d-block">{{ $message }}</div>
-@enderror
 <input type="hidden" name="description" id="description-input" value="{{ e($localeDescription) }}"/>
 </div>
 </div>
@@ -81,15 +75,9 @@
 </div>
 </div>
 <div class="col-sm-6 col-lg-12 float-start float-lg-none">
-<div class="main-box box-spaces form-item @error('category_ids') is-invalid @enderror @error('category_ids.*') is-invalid @enderror" id="product-cat" data-error-for="category_ids">
+<div class="main-box box-spaces form-item" id="product-cat" data-error-for="category_ids">
 <h2 class="box-title item-title">product category<span class="text-danger">*</span></h2>
 @include('components.product-category-tree', ['categories' => $categories, 'selectedCategoryIds' => $selectedCategoryIds])
-@error('category_ids')
-<div class="invalid-feedback d-block">{{ $message }}</div>
-@enderror
-@error('category_ids.*')
-<div class="invalid-feedback d-block">{{ $message }}</div>
-@enderror
 </div>
 </div>
 <div class="col-sm-6 col-lg-12 float-end float-lg-none">
@@ -162,17 +150,11 @@
 <div class="tab-box" id="price">
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap">
 <label class="item-title" for="reg-price">Regular Price:<span class="text-danger">*</span><span class="icon info ms-2" flow="up" tooltip="the price at which the product are sold"><i class="fi-rr-info"> </i></span></label>
-<input class="form-control @error('regular_price') is-invalid @enderror" id="reg-price" name="regular_price" type="number" step="0.01" min="0" value="{{ old('regular_price') }}" required/>
-@error('regular_price')
-<div class="invalid-feedback d-block">{{ $message }}</div>
-@enderror
+<input class="form-control" id="reg-price" name="regular_price" type="number" step="0.01" min="0" value="{{ old('regular_price') }}" required/>
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="sale-price">Sale Price:<span class="icon info ms-2" flow="up" tooltip="the price at which something is sold at after it's price has been reduced."><i class="fi-rr-info"> </i></span></label>
-<input class="form-control @error('sale_price') is-invalid @enderror" id="sale-price" name="sale_price" type="number" step="0.01" min="0" value="{{ old('sale_price') }}"/>
-@error('sale_price')
-<div class="invalid-feedback d-block">{{ $message }}</div>
-@enderror
+<input class="form-control" id="sale-price" name="sale_price" type="number" step="0.01" min="0" value="{{ old('sale_price') }}"/>
 </div>
 <div class="form-item second d-flex align-items-center mt-3">
 <label class="item-title" for="schedule">Schedule Sale Price:<span class="icon info ms-2" flow="up" tooltip="check this if you want Schedule Sale of product."><i class="fi-rr-info"> </i></span></label>
@@ -183,13 +165,7 @@
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="last-sale-date">Last Day Of Sale:<span class="icon info ms-2" flow="up" tooltip="the date which sale will be end."><i class="fi-rr-info"> </i></span></label>
 <div class="position-relative w-100">
-<input class="form-control @error('schedule_sale') is-invalid @enderror @error('last_sale_date') is-invalid @enderror" data-toggle="datepicker" id="last-sale-date" name="schedule_sale" type="text" value="{{ old('schedule_sale', old('last_sale_date')) }}"/>
-@error('schedule_sale')
-<div class="invalid-feedback d-block">{{ $message }}</div>
-@enderror
-@error('last_sale_date')
-<div class="invalid-feedback d-block">{{ $message }}</div>
-@enderror
+<input class="form-control" data-toggle="datepicker" id="last-sale-date" name="schedule_sale" type="text" value="{{ old('schedule_sale', old('last_sale_date')) }}"/>
 </div>
 </div>
 </div>
