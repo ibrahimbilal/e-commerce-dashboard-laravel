@@ -27,7 +27,7 @@
 </div>
 <form action="{{ route('admin.products.store') }}" class="row d-block clearfix" data-post-type="Product" id="add-newitem-form" method="POST" data-ajax-form>
 @csrf
-<input type="hidden" name="status" id="product-status" value="{{ old('status', 'draft') }}" required/>
+<input type="hidden" name="status" id="product-status" value="{{ old('status', 'draft') }}"/>
 
 @php
     $selectedCategoryIds = array_map('intval', (array) old('category_ids', isset($product) ? $product->categories->pluck('id')->all() : []));
