@@ -39,5 +39,28 @@ class UsersFormRoleSelectRenderTest extends TestCase
 
         $selfEdit = $this->actingAs($admin)->get(route('users.edit', $admin));
         $selfEdit->assertRedirect(route('users.profile'));
+
+        $sessions = array_to_object([[
+            'agent' => (object) [
+                'is_desktop' => true,
+                'platform' => 'Linux',
+                'browser' => 'Chrome',
+                'device' => 'desktop',
+            ],
+            'ip_address' => '127.0.0.1',
+            'is_current_device' => true,
+            'last_active' => 'now',
+            'last_active_formated' => '01/01/2026 00:00',
+            'country' => 'Test',
+            'city' => 'Test',
+        ]]);
+
+        $selfEditView = view('admin.users.edit', [
+            'user' => $admin,
+            'roles' => \Spatie\Permission\Models\Role::all(),
+            'sessions' => $sessions,
+        ])->render();
+
+        $this->assertStringNotContainsString('name="is_active"', $selfEditView);
     }
 }

@@ -83,10 +83,13 @@
                 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
                     <label class="item-title" for="user-is-active">{{ __('forms.is_active') }}</label>
                     <label class="switch">
-                        <input type="hidden" name="is_active" value="0">
-                        <input class="switch" id="user-is-active" name="is_active" type="checkbox" value="1"
-                            @checked(old('is_active', $user->is_active))
-                            @disabled((int) auth()->id() === (int) $user->id)>
+                        @if ((int) auth()->id() === (int) $user->id)
+                            <input class="switch" id="user-is-active" type="checkbox" @checked($user->is_active) disabled>
+                        @else
+                            <input type="hidden" name="is_active" value="0">
+                            <input class="switch" id="user-is-active" name="is_active" type="checkbox" value="1"
+                                @checked(old('is_active', $user->is_active))>
+                        @endif
                         <span class="slider"></span>
                     </label>
                 </div>
