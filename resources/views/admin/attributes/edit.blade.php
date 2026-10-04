@@ -50,9 +50,8 @@
 <input class="form-control mt-2" id="item-slug" type="text" value="{{ old('attribute_slug', $attribute->attribute_slug ?? '') }}" />
 </div>
 <x-resource-timestamps :model="$attribute" />
-<div class="btns-holder d-flex justify-content-between mt-4">
-<button class="btn regular-btn draft" data-post-type="tag">save as draft</button>
-<button class="btn solid-btn" type="submit">publish </button>
+<div class="btns-holder d-flex mt-4">
+<button class="btn solid-btn w-100" type="submit">publish </button>
 </div>
 <div class="btns-holder d-flex justify-content-between mt-2">
 <button type="button" class="btn trans-btn w-100 text-start" data-confirm-delete="soft" form="attribute-destroy-form" data-confirm-label="attribute" data-post-type="tag"><span class="icon me-1"><i class="fi-rr-trash"> </i></span>move to trash</button>
