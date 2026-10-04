@@ -65,6 +65,10 @@ class StorefrontResourceCrudTest extends TestCase
             ->assertRedirect()
             ->assertSessionHas('status');
 
+        if ($resource === 'attributes') {
+            $model = $modelClass::query()->latest('id')->firstOrFail();
+        }
+
         $this->actingAs($this->admin)
             ->delete(route($routePrefix.'.destroy', $model))
             ->assertRedirect()
@@ -118,8 +122,18 @@ class StorefrontResourceCrudTest extends TestCase
     private function attributeCrudPayloads(): array
     {
         return [
-            ['attribute_key' => 'Material', 'attribute_value' => 'Cotton'],
-            ['attribute_key' => 'Material', 'attribute_value' => 'Wool'],
+            [
+                'attribute_key' => 'Material',
+                'terms' => [
+                    ['title' => 'Cotton', 'type' => 'text', 'value' => 'Cotton'],
+                ],
+            ],
+            [
+                'attribute_key' => 'Material',
+                'terms' => [
+                    ['title' => 'Wool', 'type' => 'text', 'value' => 'Wool'],
+                ],
+            ],
             Attribute::class,
         ];
     }

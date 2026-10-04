@@ -163,6 +163,23 @@ return [
         'sale_price' => [
             'lt' => 'Sale price must be lower than the price.',
         ],
+        'addresses' => [
+            'id' => [
+                'invalid' => 'The selected address is invalid for this customer.',
+            ],
+        ],
+        'attribute_key' => [
+            'duplicate' => 'This attribute key already exists.',
+        ],
+        'terms' => [
+            'in_use' => 'The term ":term" is used on product variants and cannot be removed.',
+            'id' => [
+                'invalid' => 'The selected term is invalid for this attribute.',
+            ],
+            'value' => [
+                'color_hex' => 'Enter a valid hex color (for example #ff0000).',
+            ],
+        ],
     ],
 
     /*
@@ -198,6 +215,22 @@ return [
         'meta_description' => 'meta description',
         'product_attribute_1' => 'variant attribute',
         'product_attribute_2' => 'variant attribute',
+        'addresses' => 'addresses',
+        'address_id' => 'address',
+        'address_title' => 'address title',
+        'address_mobile' => 'mobile',
+        'address_country' => 'country',
+        'address_state' => 'state',
+        'address_city' => 'city',
+        'address_1' => 'address line 1',
+        'address_2' => 'address line 2',
+        'address_postcode' => 'postcode',
+        'attribute_key' => 'attribute key',
+        'terms' => 'terms',
+        'term_id' => 'term',
+        'term_title' => 'term title',
+        'term_type' => 'term type',
+        'term_value' => 'term value',
     ],
 
 ];

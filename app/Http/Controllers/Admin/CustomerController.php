@@ -8,9 +8,11 @@ use App\Http\Controllers\Concerns\ManagesTrashedRecords;
 use App\Models\Customer;
 use App\Support\AdminFormResponse;
 use App\Support\AdminResourceCounts;
+use App\Support\CustomerAddressSync;
 use App\Support\IndexListing;
 use App\Support\ReferentialDeleteGuard;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class CustomerController extends Controller
@@ -62,7 +64,7 @@ class CustomerController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
+        $data = $request->validate(array_merge([
             'email' => ['required', 'email', 'max:50', 'unique:customers,email'],
             'password' => ['required', 'string', 'min:8'],
             'gender' => ['nullable', 'string', 'max:191'],
@@ -72,11 +74,16 @@ class CustomerController extends Controller
             'mobile' => ['nullable', 'string', 'max:20'],
             'profile_picture' => ['nullable', 'string', 'max:191'],
             'ip_address' => ['nullable', 'string', 'max:50'],
-        ]);
+        ], CustomerAddressSync::customerRules()), [], CustomerAddressSync::validationAttributeNames());
 
         $data['password'] = Hash::make($data['password']);
 
-        $customer = Customer::create($data);
+        $customer = DB::transaction(function () use ($request, $data) {
+            $customer = Customer::create(collect($data)->except(['addresses', 'addresses_sync'])->all());
+            CustomerAddressSync::createForCustomer($customer, $request);
+
+            return $customer;
+        });
 
         return AdminFormResponse::saved(
             $request,
@@ -94,12 +101,16 @@ class CustomerController extends Controller
 
     public function edit(Customer $customer)
     {
+        $customer->load(['addresses' => fn ($query) => $query->orderBy('id')]);
+
         return view('admin.customers.edit', compact('customer'));
     }
 
     public function update(Request $request, Customer $customer)
     {
-        $data = $request->validate([
+        CustomerAddressSync::assertAddressIdsBelongToCustomer($request, $customer);
+
+        $data = $request->validate(array_merge([
             'email' => ['required', 'email', 'max:50', 'unique:customers,email,'.$customer->id],
             'password' => ['nullable', 'string', 'min:8'],
             'gender' => ['nullable', 'string', 'max:191'],
@@ -110,7 +121,7 @@ class CustomerController extends Controller
             'profile_picture' => ['nullable', 'string', 'max:191'],
             'ip_address' => ['nullable', 'string', 'max:50'],
             'deleted' => ['sometimes', 'boolean'],
-        ]);
+        ], CustomerAddressSync::customerRules()), [], CustomerAddressSync::validationAttributeNames());
 
         if (! empty($data['password'])) {
             $data['password'] = Hash::make($data['password']);
@@ -118,7 +129,10 @@ class CustomerController extends Controller
             unset($data['password']);
         }
 
-        $customer->update($data);
+        DB::transaction(function () use ($request, $customer, $data) {
+            $customer->update(collect($data)->except(['addresses', 'addresses_sync'])->all());
+            CustomerAddressSync::syncForCustomer($customer, $request);
+        });
 
         return AdminFormResponse::saved(
             $request,

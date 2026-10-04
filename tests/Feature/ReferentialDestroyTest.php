@@ -62,7 +62,7 @@ class ReferentialDestroyTest extends TestCase
             ->from(route('admin.attributes.index'))
             ->delete(route('admin.attributes.destroy', $attribute))
             ->assertRedirect(route('admin.attributes.index'))
-            ->assertSessionHas('status');
+            ->assertSessionHasErrors('terms');
 
         $this->assertDatabaseHas('attributes', ['id' => $attribute->id]);
     }

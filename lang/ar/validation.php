@@ -163,6 +163,23 @@ return [
         'sale_price' => [
             'lt' => 'يجب أن يكون سعر التخفيض أقل من السعر.',
         ],
+        'addresses' => [
+            'id' => [
+                'invalid' => 'العنوان المحدد غير صالح لهذا العميل.',
+            ],
+        ],
+        'attribute_key' => [
+            'duplicate' => 'مفتاح الخاصية موجود بالفعل.',
+        ],
+        'terms' => [
+            'in_use' => 'المصطلح ":term" مستخدم في متغيرات المنتج ولا يمكن حذفه.',
+            'id' => [
+                'invalid' => 'المصطلح المحدد غير صالح لهذه الخاصية.',
+            ],
+            'value' => [
+                'color_hex' => 'أدخل لونًا hex صالحًا (مثل #ff0000).',
+            ],
+        ],
     ],
 
     /*
@@ -202,6 +219,22 @@ return [
         'meta_description' => 'وصف SEO',
         'product_attribute_1' => 'خاصية المتغير',
         'product_attribute_2' => 'خاصية المتغير',
+        'addresses' => 'العناوين',
+        'address_id' => 'العنوان',
+        'address_title' => 'عنوان العنوان',
+        'address_mobile' => 'الجوال',
+        'address_country' => 'الدولة',
+        'address_state' => 'المنطقة',
+        'address_city' => 'المدينة',
+        'address_1' => 'السطر الأول',
+        'address_2' => 'السطر الثاني',
+        'address_postcode' => 'الرمز البريدي',
+        'attribute_key' => 'مفتاح الخاصية',
+        'terms' => 'المصطلحات',
+        'term_id' => 'المصطلح',
+        'term_title' => 'عنوان المصطلح',
+        'term_type' => 'نوع المصطلح',
+        'term_value' => 'قيمة المصطلح',
 	],
 
 ];

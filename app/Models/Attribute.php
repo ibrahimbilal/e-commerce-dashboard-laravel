@@ -12,6 +12,8 @@ class Attribute extends Model
     protected $fillable = [
         'attribute_key',
         'attribute_value',
+        'term_title',
+        'term_type',
     ];
 
     public function productAttributesAsFirst(): HasMany

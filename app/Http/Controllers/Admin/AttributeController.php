@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Attribute;
 use App\Support\AdminFormResponse;
+use App\Support\AttributeTermSync;
 use App\Support\IndexListing;
-use App\Support\ReferentialDeleteGuard;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class AttributeController extends Controller
 {
@@ -50,12 +52,18 @@ class AttributeController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'attribute_key' => ['required', 'string', 'max:100'],
-            'attribute_value' => ['required', 'string', 'max:100'],
-        ]);
+        $validated = $request->validate(
+            AttributeTermSync::termRules(),
+            [],
+            AttributeTermSync::validationAttributeNames()
+        );
 
-        $attribute = Attribute::create($data);
+        AttributeTermSync::assertColorValues($validated);
+        AttributeTermSync::assertAttributeKeyAvailableForStore($validated['attribute_key']);
+
+        DB::transaction(function () use ($validated) {
+            AttributeTermSync::storeTerms($validated);
+        });
 
         return AdminFormResponse::saved(
             $request,
@@ -73,17 +81,32 @@ class AttributeController extends Controller
 
     public function edit(Attribute $attribute)
     {
-        return view('admin.attributes.edit', compact('attribute'));
+        $terms = Attribute::query()
+            ->where('attribute_key', $attribute->attribute_key)
+            ->orderBy('id')
+            ->get();
+
+        return view('admin.attributes.edit', compact('attribute', 'terms'));
     }
 
     public function update(Request $request, Attribute $attribute)
     {
-        $data = $request->validate([
-            'attribute_key' => ['required', 'string', 'max:100'],
-            'attribute_value' => ['required', 'string', 'max:100'],
-        ]);
+        $siblings = Attribute::query()
+            ->where('attribute_key', $attribute->attribute_key)
+            ->orderBy('id')
+            ->get();
 
-        $attribute->update($data);
+        AttributeTermSync::assertTermIdsAreSiblings($request, $siblings->pluck('id')->all());
+
+        $validated = $request->validate(
+            AttributeTermSync::termRules(),
+            [],
+            AttributeTermSync::validationAttributeNames()
+        );
+
+        AttributeTermSync::assertColorValues($validated);
+
+        AttributeTermSync::syncUpdate($attribute, $validated);
 
         return AdminFormResponse::saved(
             $request,
@@ -94,12 +117,16 @@ class AttributeController extends Controller
 
     public function destroy(Request $request, Attribute $attribute)
     {
-        if ($blocked = ReferentialDeleteGuard::blockIfInUse(
-            $request,
-            $attribute,
-            'Cannot delete this attribute because it is used on order line items.'
-        )) {
-            return $blocked;
+        try {
+            AttributeTermSync::assertDestroyAllowed($attribute);
+        } catch (ValidationException $exception) {
+            if ($request->expectsJson()) {
+                throw $exception;
+            }
+
+            return redirect()
+                ->back()
+                ->withErrors($exception->errors());
         }
 
         $attribute->delete();

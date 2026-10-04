@@ -84,7 +84,12 @@ class AdminMovedResourceStoreJsonResponseTest extends TestCase
         return [
             'attributes' => [
                 'admin.attributes.store',
-                fn () => ['attribute_key' => 'Color', 'attribute_value' => 'Red'],
+                fn () => [
+                    'attribute_key' => 'Color',
+                    'terms' => [
+                        ['title' => 'Red', 'type' => 'color', 'value' => '#f00'],
+                    ],
+                ],
                 fn () => [
                     'message' => 'Attribute created.',
                     'redirect' => route('admin.attributes.index'),
