@@ -21,7 +21,7 @@
 </div>
 </div>
 </div>
-<form action="{{ route('admin.orders.update', $order) }}" class="row clearfix" data-post-type="order" id="add-newitem-form" method="POST">
+<form action="{{ route('admin.orders.update', $order) }}" class="row clearfix" data-post-type="order" id="add-newitem-form" method="POST" data-ajax-form>
 @csrf
 @method('PUT')
 <div class="col-sm-12 float-start post-box order-sm-1">
@@ -78,9 +78,9 @@
 @include('components.order-customer-address-script')
 </form>
 <form method="POST" action="{{ route('admin.orders.destroy', $order) }}" id="order-destroy-form" class="destroy-resource-form d-none" data-confirm-delete="soft">@csrf @method('DELETE')</form>
+@include('components.ajax-form-assets')
 @endsection
 
 @push('scripts')
 <script async="" src="{{ asset('js/async.js') }}" type="text/javascript"></script>
 @endpush
-

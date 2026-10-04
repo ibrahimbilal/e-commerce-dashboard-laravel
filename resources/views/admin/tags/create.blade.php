@@ -23,7 +23,7 @@
 </div>
 </div>
 </div>
-<form action="{{ route('admin.tags.store') }}" class="row clearfix" data-post-type="tag" id="add-newitem-form" method="POST">
+<form action="{{ route('admin.tags.store') }}" class="row clearfix" data-post-type="tag" id="add-newitem-form" method="POST" data-ajax-form>
 @csrf
 <div class="col-sm-12 col-lg-9 post-box">
 <div class="main-box box-spaces">
@@ -114,6 +114,7 @@ separate keywords with comma (,)."><i class="fi-rr-info"> </i></span></label>
 </div>
 </div>
 </form>
+@include('components.ajax-form-assets')
 @endsection
 
 @push('scripts')
@@ -155,4 +156,3 @@ separate keywords with comma (,)."><i class="fi-rr-info"> </i></span></label>
       }
     </script>
 @endpush
-

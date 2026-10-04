@@ -14,7 +14,7 @@
 </div>
 </div>
 </div>
-<form action="{{ route('admin.invoices.update', $invoice) }}" method="POST" class="row">
+<form action="{{ route('admin.invoices.update', $invoice) }}" method="POST" class="row" data-ajax-form>
 @csrf
 @method('PUT')
 <div class="col-12 col-lg-6">
@@ -26,4 +26,5 @@
 </div>
 </div>
 </form>
+@include('components.ajax-form-assets')
 @endsection

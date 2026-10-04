@@ -21,7 +21,7 @@
 </div>
 </div>
 </div>
-<form action="{{ route('admin.order-statuses.update', $orderStatus) }}" class="row clearfix" id="add-newitem-form" method="POST">
+<form action="{{ route('admin.order-statuses.update', $orderStatus) }}" class="row clearfix" id="add-newitem-form" method="POST" data-ajax-form>
 @csrf
 @method('PUT')
 <div class="col-sm-12 col-lg-8 post-box">
@@ -38,6 +38,7 @@
 </div>
 </form>
 <form method="POST" action="{{ route('admin.order-statuses.destroy', $orderStatus) }}" id="order-status-destroy-form" class="destroy-resource-form d-none" data-confirm-delete="soft">@csrf @method('DELETE')</form>
+@include('components.ajax-form-assets')
 @endsection
 
 @push('scripts')

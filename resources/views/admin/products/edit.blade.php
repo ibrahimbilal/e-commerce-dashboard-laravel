@@ -25,9 +25,10 @@
 </div>
 </div>
 </div>
-<form action="{{ route('admin.products.update', $product) }}" class="row d-block clearfix" data-post-type="Product" id="add-newitem-form" method="POST">
+<form action="{{ route('admin.products.update', $product) }}" class="row d-block clearfix" data-post-type="Product" id="add-newitem-form" method="POST" data-ajax-form>
 @csrf
 @method('PUT')
+<input type="hidden" name="status" id="product-status" value="{{ old('status', $product->status ?? 'draft') }}" required/>
 
 @php
     $selectedCategoryIds = array_map('intval', (array) old('category_ids', isset($product) ? $product->categories->pluck('id')->all() : []));
@@ -46,8 +47,11 @@
 <div class="col-sm-12 col-lg-9 float-start post-box">
 <div class="main-box box-spaces">
 <div class="form-item primary">
-<h2 class="box-title item-title">product name</h2>
-<input class="form-control" id="item-title" name="product_name" type="text" value="{{ $localeName }}"/>
+<h2 class="box-title item-title">product name<span class="text-danger">*</span></h2>
+<input class="form-control @error('product_name') is-invalid @enderror" id="item-title" name="product_name" type="text" value="{{ $localeName }}" required/>
+@error('product_name')
+<div class="invalid-feedback d-block">{{ $message }}</div>
+@enderror
 </div>
 <div class="divider"></div>
 <div class="form-item primary">
@@ -66,8 +70,8 @@
 @include('components.product-form-sidebar-meta', ['activeLang' => $activeLang])
 <x-resource-timestamps :model="$product" />
 <div class="btns-holder d-flex justify-content-between mt-4">
-<button class="btn regular-btn draft" data-post-type="Product">save as draft</button>
-<button class="btn solid-btn" type="submit">publish </button>
+<button class="btn regular-btn draft" type="button" data-post-type="Product" data-ajax-status="draft" data-ajax-form-trigger>save as draft</button>
+<button class="btn solid-btn" type="submit" data-ajax-status="published">publish </button>
 </div>
 <div class="btns-holder d-flex justify-content-between mt-2">
 <button type="button" class="btn trans-btn w-100 text-start" data-confirm-delete="soft" form="product-destroy-form" data-confirm-label="product" data-post-type="Product"><span class="icon me-1"><i class="fi-rr-trash"> </i></span>move to trash</button>
@@ -75,9 +79,15 @@
 </div>
 </div>
 <div class="col-sm-6 col-lg-12 float-start float-lg-none">
-<div class="main-box box-spaces form-item" id="product-cat">
-<h2 class="box-title item-title">product category</h2>
+<div class="main-box box-spaces form-item @error('category_ids') is-invalid @enderror @error('category_ids.*') is-invalid @enderror" id="product-cat" data-error-for="category_ids">
+<h2 class="box-title item-title">product category<span class="text-danger">*</span></h2>
 @include('components.product-category-tree', ['categories' => $categories, 'selectedCategoryIds' => $selectedCategoryIds])
+@error('category_ids')
+<div class="invalid-feedback d-block">{{ $message }}</div>
+@enderror
+@error('category_ids.*')
+<div class="invalid-feedback d-block">{{ $message }}</div>
+@enderror
 </div>
 </div>
 <div class="col-sm-6 col-lg-12 float-end float-lg-none">
@@ -149,12 +159,18 @@
 </div>
 <div class="tab-box" id="price">
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap">
-<label class="item-title" for="reg-price">Regular Price:<span class="icon info ms-2" flow="up" tooltip="the price at which the product are sold"><i class="fi-rr-info"> </i></span></label>
-<input class="form-control" id="reg-price" name="regular_price" type="text" value="{{ old('regular_price', $product->regular_price ?? '') }}" />
+<label class="item-title" for="reg-price">Regular Price:<span class="text-danger">*</span><span class="icon info ms-2" flow="up" tooltip="the price at which the product are sold"><i class="fi-rr-info"> </i></span></label>
+<input class="form-control @error('regular_price') is-invalid @enderror" id="reg-price" name="regular_price" type="number" step="0.01" min="0" value="{{ old('regular_price', $product->regular_price ?? '') }}" required/>
+@error('regular_price')
+<div class="invalid-feedback d-block">{{ $message }}</div>
+@enderror
 </div>
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="sale-price">Sale Price:<span class="icon info ms-2" flow="up" tooltip="the price at which something is sold at after it's price has been reduced."><i class="fi-rr-info"> </i></span></label>
-<input class="form-control" id="sale-price" name="sale_price" type="text" value="{{ old('sale_price', $product->sale_price ?? '') }}" />
+<input class="form-control @error('sale_price') is-invalid @enderror" id="sale-price" name="sale_price" type="number" step="0.01" min="0" value="{{ old('sale_price', $product->sale_price ?? '') }}"/>
+@error('sale_price')
+<div class="invalid-feedback d-block">{{ $message }}</div>
+@enderror
 </div>
 <div class="form-item second d-flex align-items-center mt-3">
 <label class="item-title" for="schedule">Schedule Sale Price:<span class="icon info ms-2" flow="up" tooltip="check this if you want Schedule Sale of product."><i class="fi-rr-info"> </i></span></label>
@@ -165,7 +181,13 @@
 <div class="form-item second d-flex align-items-center flex-wrap flex-sm-nowrap mt-3">
 <label class="item-title" for="last-sale-date">Last Day Of Sale:<span class="icon info ms-2" flow="up" tooltip="the date which sale will be end."><i class="fi-rr-info"> </i></span></label>
 <div class="position-relative w-100">
-<input class="form-control" data-toggle="datepicker" id="last-sale-date" name="schedule_sale" type="text" value="{{ old('schedule_sale', $product->schedule_sale ?? '') }}" />
+<input class="form-control @error('schedule_sale') is-invalid @enderror @error('last_sale_date') is-invalid @enderror" data-toggle="datepicker" id="last-sale-date" name="schedule_sale" type="text" value="{{ old('schedule_sale', old('last_sale_date', $product->schedule_sale ?? '')) }}"/>
+@error('schedule_sale')
+<div class="invalid-feedback d-block">{{ $message }}</div>
+@enderror
+@error('last_sale_date')
+<div class="invalid-feedback d-block">{{ $message }}</div>
+@enderror
 </div>
 </div>
 </div>
@@ -193,6 +215,7 @@ separate keywords with comma (,)."><i class="fi-rr-info"> </i></span></label>
 </div>
 </form>
 <form method="POST" action="{{ route('admin.products.destroy', $product) }}" id="product-destroy-form" class="destroy-resource-form d-none" data-confirm-delete="soft">@csrf @method('DELETE')</form>
+@include('components.ajax-form-assets')
 @endsection
 
 @push('scripts')
@@ -247,4 +270,3 @@ separate keywords with comma (,)."><i class="fi-rr-info"> </i></span></label>
       }
     </script>
 @endpush
-

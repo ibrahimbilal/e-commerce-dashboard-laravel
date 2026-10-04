@@ -24,7 +24,7 @@
 </div>
 </div>
 </div>
-<form action="{{ route('admin.categories.update', $category) }}" class="row d-block clearfix" data-post-type="Category" id="add-newitem-form" method="POST">
+<form action="{{ route('admin.categories.update', $category) }}" class="row d-block clearfix" data-post-type="Category" id="add-newitem-form" method="POST" data-ajax-form>
 @csrf
 @method('PUT')
 <div class="col-sm-12 col-lg-9 float-start post-box">
@@ -118,6 +118,7 @@ separate keywords with comma (,)."><i class="fi-rr-info"> </i></span></label>
 </div>
 </form>
 <form method="POST" action="{{ route('admin.categories.destroy', $category) }}" id="category-destroy-form" class="destroy-resource-form d-none" data-confirm-delete="soft">@csrf @method('DELETE')</form>
+@include('components.ajax-form-assets')
 @endsection
 
 @push('scripts')
@@ -159,4 +160,3 @@ separate keywords with comma (,)."><i class="fi-rr-info"> </i></span></label>
       }
     </script>
 @endpush
-

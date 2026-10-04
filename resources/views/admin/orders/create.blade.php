@@ -21,7 +21,7 @@
 </div>
 </div>
 </div>
-<form action="{{ route('admin.orders.store') }}" class="row clearfix" data-post-type="order" id="add-newitem-form" method="POST">
+<form action="{{ route('admin.orders.store') }}" class="row clearfix" data-post-type="order" id="add-newitem-form" method="POST" data-ajax-form>
 @csrf
 <div class="col-sm-12 float-start post-box order-sm-1">
 <div class="main-box box-spaces">
@@ -73,9 +73,9 @@
 </div>
 @include('components.order-customer-address-script')
 </form>
+@include('components.ajax-form-assets')
 @endsection
 
 @push('scripts')
 <script async="" src="{{ asset('js/async.js') }}" type="text/javascript"></script>
 @endpush
-

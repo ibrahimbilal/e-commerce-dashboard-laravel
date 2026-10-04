@@ -17,7 +17,7 @@
 </div>
 </div>
 </div>
-<form action="{{ route('admin.reviews.update', $review) }}" class="row clearfix" method="POST">
+<form action="{{ route('admin.reviews.update', $review) }}" class="row clearfix" method="POST" data-ajax-form>
 @csrf
 @method('PUT')
 <div class="col-sm-12 col-lg-8 post-box">
@@ -32,4 +32,5 @@
 </div>
 </div>
 </form>
+@include('components.ajax-form-assets')
 @endsection

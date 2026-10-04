@@ -22,7 +22,7 @@
 </div>
 </div>
 </div>
-<form action="{{ route('admin.discounts.store') }}" class="row clearfix" data-post-type="discount" id="add-newitem-form" method="POST">
+<form action="{{ route('admin.discounts.store') }}" class="row clearfix" data-post-type="discount" id="add-newitem-form" method="POST" data-ajax-form>
 @csrf
 <div class="col-sm-12">
 <div class="main-box box-spaces">
@@ -90,6 +90,7 @@
 </div>
 </div>
 </form>
+@include('components.ajax-form-assets')
 @endsection
 
 @push('scripts')
@@ -97,4 +98,3 @@
 <script src="{{ asset('js/pickadate/picker.js') }}" type="text/javascript"></script>
 <script src="{{ asset('js/pickadate/picker.date.js') }}" type="text/javascript"></script>
 @endpush
-

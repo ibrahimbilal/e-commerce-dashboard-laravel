@@ -21,7 +21,7 @@
 </div>
 </div>
 </div>
-<form action="{{ route('admin.attributes.update', $attribute) }}" class="row clearfix" data-post-type="attribute" id="add-newitem-form" method="POST">
+<form action="{{ route('admin.attributes.update', $attribute) }}" class="row clearfix" data-post-type="attribute" id="add-newitem-form" method="POST" data-ajax-form>
 @csrf
 @method('PUT')
 <div class="col-sm-12">
@@ -92,6 +92,7 @@
 </div>
 </form>
 <form method="POST" action="{{ route('admin.attributes.destroy', $attribute) }}" id="attribute-destroy-form" class="destroy-resource-form d-none" data-confirm-delete="soft">@csrf @method('DELETE')</form>
+@include('components.ajax-form-assets')
 @endsection
 
 @push('scripts')
@@ -99,4 +100,3 @@
 <script src="{{ asset('js/speakingurl.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('js/jquery.stringtoslug.min.js') }}" type="text/javascript"></script>
 @endpush
-

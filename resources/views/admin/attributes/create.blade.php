@@ -21,7 +21,7 @@
 </div>
 </div>
 </div>
-<form action="{{ route('admin.attributes.store') }}" class="row clearfix" data-post-type="attribute" id="add-newitem-form" method="POST">
+<form action="{{ route('admin.attributes.store') }}" class="row clearfix" data-post-type="attribute" id="add-newitem-form" method="POST" data-ajax-form>
 @csrf
 <div class="col-sm-12">
 <div class="main-box box-spaces">
@@ -90,6 +90,7 @@
 </div>
 </div>
 </form>
+@include('components.ajax-form-assets')
 @endsection
 
 @push('scripts')
@@ -97,4 +98,3 @@
 <script src="{{ asset('js/speakingurl.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('js/jquery.stringtoslug.min.js') }}" type="text/javascript"></script>
 @endpush
-
