@@ -27,64 +27,67 @@ class UserStatusToggleTest extends TestCase
         $this->admin = User::query()->where('email', 'admin@example.com')->firstOrFail();
     }
 
-    public function test_status_toggle_activates_and_deactivates_user(): void
+    public function test_is_active_toggle_deactivates_and_activates_user(): void
     {
         $user = User::factory()->create([
             'email' => 'toggle-target@example.com',
-            'status' => 'active',
+            'status' => 'verified',
+            'is_active' => true,
         ]);
         $user->assignRole('viewer');
 
         $this->actingAs($this->admin)
-            ->patchJson(route('users.toggle', $user->getKey()), ['field' => 'status', 'value' => false])
+            ->patchJson(route('users.toggle', $user->getKey()), ['field' => 'is_active', 'value' => false])
             ->assertOk()
             ->assertJson([
                 'success' => true,
-                'field' => 'status',
+                'field' => 'is_active',
                 'value' => false,
             ])
-            ->assertJsonStructure(['message', 'counts' => ['all', 'active', 'inactive', 'trashed']]);
+            ->assertJsonStructure(['message', 'counts' => ['all', 'active', 'inactive', 'blocked', 'trashed']]);
 
-        $this->assertSame('inactive', $user->fresh()->status);
+        $this->assertFalse($user->fresh()->is_active);
+        $this->assertSame('verified', $user->fresh()->status);
 
         $this->actingAs($this->admin)
-            ->patchJson(route('users.toggle', $user->getKey()), ['field' => 'status'])
+            ->patchJson(route('users.toggle', $user->getKey()), ['field' => 'is_active'])
             ->assertOk()
             ->assertJsonPath('value', true);
 
-        $this->assertSame('active', $user->fresh()->status);
+        $this->assertTrue($user->fresh()->is_active);
     }
 
     public function test_user_cannot_deactivate_own_account(): void
     {
         $this->actingAs($this->admin)
-            ->patchJson(route('users.toggle', $this->admin->getKey()), ['field' => 'status', 'value' => false])
+            ->patchJson(route('users.toggle', $this->admin->getKey()), ['field' => 'is_active', 'value' => false])
             ->assertStatus(422)
             ->assertJson([
                 'success' => false,
                 'message' => 'You cannot deactivate your own account.',
             ]);
 
-        $this->assertSame('active', $this->admin->fresh()->status);
+        $this->assertTrue($this->admin->fresh()->is_active);
     }
 
     public function test_cannot_deactivate_last_active_admin(): void
     {
         $editor = User::factory()->create([
             'email' => 'users-editor@example.com',
-            'status' => 'active',
+            'status' => 'verified',
+            'is_active' => true,
         ]);
         $editor->givePermissionTo('edit users');
 
         $this->actingAs($editor)
-            ->patchJson(route('users.toggle', $this->admin->getKey()), ['field' => 'status', 'value' => false])
+            ->patchJson(route('users.toggle', $this->admin->getKey()), ['field' => 'is_active', 'value' => false])
             ->assertStatus(422)
             ->assertJson([
                 'success' => false,
                 'message' => 'Cannot deactivate the last active admin account.',
             ]);
 
-        $this->assertSame('active', $this->admin->fresh()->status);
+        $this->assertTrue($this->admin->fresh()->is_active);
     }
 
     public function test_inactive_user_cannot_log_in(): void
@@ -92,11 +95,29 @@ class UserStatusToggleTest extends TestCase
         User::factory()->create([
             'email' => 'inactive@example.com',
             'password' => Hash::make('password'),
-            'status' => 'inactive',
+            'status' => 'verified',
+            'is_active' => false,
         ])->assignRole('viewer');
 
         $this->post('/admin/login', [
             'email' => 'inactive@example.com',
+            'password' => 'password',
+        ]);
+
+        $this->assertGuest();
+    }
+
+    public function test_blocked_user_cannot_log_in(): void
+    {
+        User::factory()->create([
+            'email' => 'blocked@example.com',
+            'password' => Hash::make('password'),
+            'status' => 'blocked',
+            'is_active' => true,
+        ])->assignRole('viewer');
+
+        $this->post('/admin/login', [
+            'email' => 'blocked@example.com',
             'password' => 'password',
         ]);
 
@@ -109,6 +130,7 @@ class UserStatusToggleTest extends TestCase
             'email' => 'not-verified@example.com',
             'password' => Hash::make('password'),
             'status' => 'not_verified',
+            'is_active' => true,
             'email_verified_at' => null,
         ]);
         $user->assignRole('viewer');
@@ -121,11 +143,12 @@ class UserStatusToggleTest extends TestCase
         $this->assertAuthenticatedAs($user);
     }
 
-    public function test_update_user_request_accepts_active_and_inactive_status(): void
+    public function test_update_user_request_accepts_verified_status_and_is_active(): void
     {
         $user = User::factory()->create([
             'email' => 'form-status@example.com',
-            'status' => 'active',
+            'status' => 'verified',
+            'is_active' => true,
         ]);
         $user->assignRole('viewer');
 
@@ -136,12 +159,15 @@ class UserStatusToggleTest extends TestCase
                 'email' => $user->email,
                 'gender' => $user->gender,
                 'role_name' => 'viewer',
-                'status' => 'inactive',
+                'status' => 'blocked',
+                'is_active' => false,
                 'language' => 'en',
             ])
             ->assertOk()
             ->assertJson(['success' => true]);
 
-        $this->assertSame('inactive', $user->fresh()->status);
+        $user->refresh();
+        $this->assertSame('blocked', $user->status);
+        $this->assertFalse($user->is_active);
     }
 }

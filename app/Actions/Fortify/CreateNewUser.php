@@ -41,7 +41,7 @@ class CreateNewUser implements CreatesNewUsers
 			],
 			'gender' => ['required',Rule::in(['male', 'female'])],
 			'role_name' => ['required','string', Rule::exists(Role::class, 'name')],
-			'status' => ['sometimes', 'string', Rule::in(['active', 'inactive'])],
+			'is_active' => ['sometimes', 'boolean'],
 			'language' => ['required','string'],
 			'profile_picture' => [
 				'nullable',
@@ -57,7 +57,12 @@ class CreateNewUser implements CreatesNewUsers
             'birth_date' => $input['birth_date'] ?? null,
             'gender' => $input['gender'],
             'role_name' => $input['role_name'],
-            'status' => $input['status'] ?? 'active',
+            'status' => in_array($input['status'] ?? '', ['not_verified', 'verified', 'blocked'], true)
+                ? $input['status']
+                : 'not_verified',
+            'is_active' => array_key_exists('is_active', $input)
+                ? (bool) $input['is_active']
+                : (($input['status'] ?? '') !== 'inactive'),
             'language' => $input['language'],
             'profile_picture' => $input['profile_picture'] ?? null,
         ]);

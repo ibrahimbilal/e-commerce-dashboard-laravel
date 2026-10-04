@@ -51,7 +51,7 @@ class NewUserRequest extends FormRequest
 			],
 			'gender' => ['required',Rule::in(['male', 'female'])],
 			'role_name' => ['required','string', Rule::exists(Role::class, 'name')],
-			'status' => ['sometimes', 'string', Rule::in(['active', 'inactive'])],
+			'is_active' => ['sometimes', 'boolean'],
 			'language' => ['required','string'],
 			'profile_picture' => [
 				File::image()

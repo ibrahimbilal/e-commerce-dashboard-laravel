@@ -20,7 +20,8 @@ class UserSeeder extends Seeder
             'last_name' => 'User',
             'gender' => 'male',
             'role_name' => 'admin',
-            'status' => 'active',
+            'status' => 'verified',
+            'is_active' => true,
             'language' => 'en',
         ]);
 

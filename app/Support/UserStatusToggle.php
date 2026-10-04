@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
+
 class UserStatusToggle
 {
     /**
@@ -16,26 +17,25 @@ class UserStatusToggle
     public static function apply(Request $request, User $user)
     {
         $validated = $request->validate([
-            'field' => ['required', 'string', Rule::in(['status'])],
+            'field' => ['required', 'string', Rule::in(['is_active'])],
             'value' => ['nullable', 'boolean'],
         ]);
 
         $targetActive = self::resolveTargetActive($user, $validated['value'] ?? null);
-        $newStatus = $targetActive ? 'active' : 'inactive';
 
-        if ($blocked = self::blockIfForbidden($request, $user, $newStatus)) {
+        if ($blocked = self::blockIfForbidden($request, $user, $targetActive)) {
             return $blocked;
         }
 
-        $user->forceFill(['status' => $newStatus])->save();
+        $user->forceFill(['is_active' => $targetActive])->save();
 
-        $message = 'Status updated.';
+        $message = 'Is active updated.';
 
         if ($request->expectsJson()) {
             return response()->json([
                 'success' => true,
                 'message' => $message,
-                'field' => 'status',
+                'field' => 'is_active',
                 'value' => $targetActive,
                 'counts' => AdminResourceCounts::users(),
             ]);
@@ -52,15 +52,15 @@ class UserStatusToggle
             return (bool) $value;
         }
 
-        return $user->status !== 'active';
+        return ! (bool) $user->is_active;
     }
 
     /**
      * @return JsonResponse|RedirectResponse|null
      */
-    private static function blockIfForbidden(Request $request, User $user, string $newStatus)
+    private static function blockIfForbidden(Request $request, User $user, bool $targetActive)
     {
-        if ($newStatus !== 'inactive') {
+        if ($targetActive) {
             return null;
         }
 
@@ -68,9 +68,9 @@ class UserStatusToggle
             return self::deny($request, 'You cannot deactivate your own account.');
         }
 
-        if ($user->hasRole('admin') && $user->status === 'active') {
+        if ($user->hasRole('admin') && $user->is_active) {
             $activeAdmins = User::query()
-                ->where('status', 'active')
+                ->where('is_active', true)
                 ->whereHas('roles', fn ($query) => $query->where('name', 'admin'))
                 ->count();
 

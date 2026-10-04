@@ -20,7 +20,8 @@ class StaffUserSeeder extends Seeder
             'last_name' => 'Manager',
             'gender' => 'male',
             'role_name' => 'manager',
-            'status' => 'active',
+            'status' => 'verified',
+            'is_active' => true,
             'language' => 'en',
         ]);
         $manager->markEmailAsVerified();
@@ -34,7 +35,8 @@ class StaffUserSeeder extends Seeder
             'last_name' => 'Viewer',
             'gender' => 'female',
             'role_name' => 'viewer',
-            'status' => 'active',
+            'status' => 'verified',
+            'is_active' => true,
             'language' => 'en',
         ]);
         $viewer->markEmailAsVerified();

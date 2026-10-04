@@ -100,6 +100,10 @@ class UserController extends Controller
 				$request->merge(['profile_picture' => null]);
 			}
 
+			if (! $request->has('is_active')) {
+				$request->merge(['is_active' => true]);
+			}
+
 			// send data to 'Fortify' Register method
 			$user = $creator->create($request->request->all());
 			$user->assignRole($request->input('role_name'));

@@ -78,11 +78,13 @@ class AdminCriticalFixesTest extends TestCase
     {
         $manager = User::query()->where('email', 'manager@example.com')->firstOrFail();
         $this->assertSame('manager', $manager->role_name);
-        $this->assertSame('active', $manager->status);
+        $this->assertSame('verified', $manager->status);
+        $this->assertTrue($manager->is_active);
 
         $viewer = User::query()->where('email', 'viewer@example.com')->firstOrFail();
         $this->assertSame('viewer', $viewer->role_name);
-        $this->assertSame('active', $viewer->status);
+        $this->assertSame('verified', $viewer->status);
+        $this->assertTrue($viewer->is_active);
     }
 
     public function test_gallery_get_metas_returns_success_for_seeded_image(): void

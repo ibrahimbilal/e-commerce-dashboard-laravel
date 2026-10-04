@@ -190,8 +190,9 @@ class AdminResourceCounts
     {
         return [
             'all' => User::query()->count(),
-            'active' => User::query()->where('status', 'active')->count(),
-            'inactive' => User::query()->where('status', 'inactive')->count(),
+            'active' => User::query()->where('is_active', true)->count(),
+            'inactive' => User::query()->where('is_active', false)->count(),
+            'blocked' => User::query()->where('status', 'blocked')->count(),
             'trashed' => User::query()->onlyTrashed()->count(),
         ];
     }

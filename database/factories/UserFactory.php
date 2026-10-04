@@ -22,7 +22,8 @@ class UserFactory extends Factory
             'birth_date' => fake()->optional()->date(),
             'gender' => fake()->randomElement(['male', 'female']),
             'role_name' => '',
-            'status' => 'active',
+            'status' => 'verified',
+            'is_active' => true,
             'language' => 'en',
 			'profile_picture' => null,
         ];
