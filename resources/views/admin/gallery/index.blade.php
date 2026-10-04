@@ -143,9 +143,7 @@
                 data: data,
                 success: function(res) {
                     if (res.success) {
-                        Swal.fire({
-                            ...SwalOptions,
-                            icon: 'success',
+                        AdminSwalSuccess({
                             title: res.title,
                         });
                     } else {
@@ -232,8 +230,9 @@
         @endif
 
         @if (session('success'))
-            Toast.fire({
-                icon: 'success',
+            AdminSwalSuccess({
+                toast: true,
+                position: 'top-start',
                 titleText: "{{ session('success') }}",
             });
         @endif

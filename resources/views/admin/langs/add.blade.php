@@ -65,9 +65,7 @@
                 data: data,
                 success: function(res) {
                     if (res.success) {
-                        Swal.fire({
-							...SwalOptions,
-                            icon: 'success',
+                        AdminSwalSuccess({
                             title: res.text,
                             willClose: () => {
                                 window.location.replace(res.redirect);

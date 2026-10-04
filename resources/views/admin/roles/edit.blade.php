@@ -143,9 +143,7 @@
                 data: data,
                 success: function(res) {
                     if (res.success) {
-                        Swal.fire({
-                            ...SwalOptions,
-							icon: 'success',
+                        AdminSwalSuccess({
 							titleText: res.text,
                         });
                     } else {

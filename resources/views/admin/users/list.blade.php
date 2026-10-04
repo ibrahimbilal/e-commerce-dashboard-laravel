@@ -406,11 +406,9 @@
 						},
 						success: function(res) {
 							if (res.success) {
-								Swal.fire({
-									...SwalOptions,
+								AdminSwalSuccess({
 									title: res.title,
 									text: res.text,
-									icon: 'success',
 									willClose: () => {
 										rows.each(function(i, el) {
 											if (jQuery.inArray($(this).data('id'), ids) >= 0) {
@@ -472,8 +470,9 @@
         @endif
 
         @if (session('success'))
-            Toast.fire({
-                icon: 'success',
+            AdminSwalSuccess({
+                toast: true,
+                position: 'top-start',
                 titleText: "{{ session('success') }}",
             });
         @endif

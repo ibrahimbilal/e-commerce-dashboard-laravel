@@ -244,9 +244,7 @@
 					},
 					success: function(res) {
 						if (res.success) {
-							Swal.fire({
-								...SwalOptions,
-								icon: 'success',
+							AdminSwalSuccess({
 								titleText: res.text,
 								willClose: () => {
 									window.location.replace(res.redirect);

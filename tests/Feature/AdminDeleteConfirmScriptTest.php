@@ -34,5 +34,11 @@ class AdminDeleteConfirmScriptTest extends TestCase
             ->assertSee('assets/js/delete-confirm.js', false)
             ->assertSee('AdminDeleteConfirmMessages', false)
             ->assertSee('AdminTableActionMessages', false);
+
+        $tableActionsJs = file_get_contents(public_path('assets/js/table-actions.js'));
+        $this->assertStringContainsString('AdminSwalSuccess', $tableActionsJs);
+        $this->assertStringContainsString('timer: 1500', $tableActionsJs);
+        $this->assertStringContainsString('timerProgressBar: true', $tableActionsJs);
+        $this->assertStringContainsString('showConfirmButton: false', $tableActionsJs);
     }
 }

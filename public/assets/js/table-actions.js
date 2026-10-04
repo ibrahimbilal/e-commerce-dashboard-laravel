@@ -1,9 +1,31 @@
 (function () {
     'use strict';
 
+    window.AdminSwalSuccess = function (opts) {
+        if (typeof Swal === 'undefined') {
+            return Promise.resolve({});
+        }
+
+        var base = {
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1500,
+            timerProgressBar: true,
+            scrollbarPadding: false,
+        };
+
+        return Swal.fire(Object.assign({}, base, opts || {}));
+    };
+})();
+
+(function () {
+    'use strict';
+
     if (typeof Swal === 'undefined') {
         return;
     }
+
+    var adminSwalSuccess = window.AdminSwalSuccess;
 
     var deleteMessages = window.AdminDeleteConfirmMessages || {};
     var messages = window.AdminTableActionMessages || {};
@@ -40,9 +62,7 @@
     }
 
     function showSuccessToast(text, title) {
-        Swal.fire({
-            ...swalDefaults,
-            icon: 'success',
+        adminSwalSuccess({
             titleText: title || undefined,
             text: text || '',
         });
@@ -139,11 +159,9 @@
     }
 
     function handleRoleStyleSuccess(trigger, body) {
-        Swal.fire({
-            ...swalDefaults,
+        adminSwalSuccess({
             titleText: body.title,
             text: body.text || body.message,
-            icon: 'success',
             willClose: function () {
                 if (body.redirect) {
                     window.location.replace(body.redirect);
@@ -163,9 +181,7 @@
         var toastText = body.message || body.text || '';
         var row = resolveTriggerRow(trigger);
 
-        Swal.fire({
-            ...swalDefaults,
-            icon: 'success',
+        adminSwalSuccess({
             text: toastText,
             willClose: function () {
                 if (trigger && trigger.hasAttribute('data-redirect-on-success') && body.redirect) {

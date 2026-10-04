@@ -506,9 +506,7 @@
 					},
 					success: function(res) {
 						if (res.success) {
-							Swal.fire({
-								...SwalOptions,
-								icon: 'success',
+							AdminSwalSuccess({
 								titleText: res.text,
 							});
 						} else {
@@ -594,29 +592,33 @@
 		@endif
 
 		@if (session('success'))
-			Toast.fire({
-				icon: 'success',
+			AdminSwalSuccess({
+				toast: true,
+				position: 'top-start',
 				titleText: "{{ session('success') }}",
 			});
 		@endif
 
 		@if (session('status') == 'two-factor-authentication-enabled')
-			Toast.fire({
-				icon: 'success',
+			AdminSwalSuccess({
+				toast: true,
+				position: 'top-start',
 				titleText: "{{ __('admin.pages.users.two_factor.enabled') }}",
 			});
 		@endif
 
 		@if (session('status') == 'two-factor-authentication-confirmed')
-			Toast.fire({
-				icon: 'success',
+			AdminSwalSuccess({
+				toast: true,
+				position: 'top-start',
 				titleText: "{{ __('admin.pages.users.two_factor.confirmed') }}",
 			});
 		@endif
 
 		@if (session('status') == 'two-factor-authentication-disabled')
-			Toast.fire({
-				icon: 'success',
+			AdminSwalSuccess({
+				toast: true,
+				position: 'top-start',
 				titleText: "{{ __('admin.pages.users.two_factor.disabled') }}",
 			});
 		@endif
