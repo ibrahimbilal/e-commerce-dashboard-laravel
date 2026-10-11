@@ -108,11 +108,11 @@ async function main() {
         const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
         await context.clearCookies();
         const page = await context.newPage();
+        await login(page, account);
         await page.evaluate(() => {
             localStorage.clear();
             sessionStorage.clear();
         });
-        await login(page, account);
         await assertDocumentDir(page, account.expectDir, account);
         captured.push(await capturePage(page, name, route, mode, dir));
         await context.close();

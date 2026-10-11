@@ -313,10 +313,20 @@ html[dir="rtl"] .table-holder div.dt-paging .page-item + .page-item {
 }
 
 .table-holder div.dt-paging .page-item.disabled .page-link,
-.table-holder div.dt-paging .page-item.disabled button.page-link {
+.table-holder div.dt-paging .page-item.disabled button.page-link,
+.table-holder div.dt-paging .page-link.previous,
+.table-holder div.dt-paging .page-link.next,
+.table-holder div.dt-paging button.page-link.previous,
+.table-holder div.dt-paging button.page-link.next {
   background: transparent !important;
-  color: var(--disable-text-color);
+  background-image: none !important;
+  color: var(--text-color);
   opacity: 1;
+}
+
+.table-holder div.dt-paging .page-item.disabled .page-link,
+.table-holder div.dt-paging .page-item.disabled button.page-link {
+  color: var(--disable-text-color);
 }
 
 .table-holder div.dt-paging .page-link:focus,
@@ -695,12 +705,28 @@ html[dir="rtl"] .table-holder div.dt-buttons .btn-group > .dt-button + .dt-butto
   --bs-table-accent-bg: transparent;
 }
 
+html.dark .table-holder table.table.dataTable.table-striped > tbody > tr:nth-of-type(odd),
+html.dark .table-holder table.table.dataTable.table-dark.table-striped > tbody > tr:nth-of-type(odd),
+html.dark .table-holder .table.table-striped > tbody > tr:nth-of-type(odd) {
+  --bs-table-bg: var(--box-bg-color);
+  --bs-table-accent-bg: var(--box-bg-color);
+}
+
+html.dark .table-holder table.table.dataTable.table-striped > tbody > tr:nth-of-type(even),
+html.dark .table-holder table.table.dataTable.table-dark.table-striped > tbody > tr:nth-of-type(even),
+html.dark .table-holder .table.table-striped > tbody > tr:nth-of-type(even) {
+  --bs-table-bg: var(--body-background);
+  --bs-table-accent-bg: var(--body-background);
+}
+
 html.dark .table-holder table.table.dataTable.table-striped > tbody > tr:nth-of-type(odd) > *,
 html.dark .table-holder table.table.dataTable.table-dark.table-striped > tbody > tr:nth-of-type(odd) > *,
 html.dark .table-holder .table.table-striped > tbody > tr:nth-of-type(odd) > * {
   box-shadow: inset 0 0 0 9999px var(--box-bg-color) !important;
   --bs-table-accent-bg: var(--box-bg-color);
-  background-color: transparent !important;
+  --bs-table-bg: var(--box-bg-color);
+  background-color: var(--box-bg-color) !important;
+  color: var(--text-color);
 }
 
 html.dark .table-holder table.table.dataTable.table-striped > tbody > tr:nth-of-type(even) > *,
@@ -708,7 +734,9 @@ html.dark .table-holder table.table.dataTable.table-dark.table-striped > tbody >
 html.dark .table-holder .table.table-striped > tbody > tr:nth-of-type(even) > * {
   box-shadow: inset 0 0 0 9999px var(--body-background) !important;
   --bs-table-accent-bg: var(--body-background);
-  background-color: transparent !important;
+  --bs-table-bg: var(--body-background);
+  background-color: var(--body-background) !important;
+  color: var(--text-color);
 }
 
 /* —— Sort icons: legacy left arrows (DT 1.x look on DT 2.x classes) —— */
@@ -739,6 +767,19 @@ html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-ordering-desc {
 
 .table-holder table.dataTable thead span.dt-column-order {
   display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  position: absolute !important;
+  pointer-events: none !important;
+}
+
+.table-holder table.dataTable thead > tr > th.dt-orderable-asc,
+.table-holder table.dataTable thead > tr > th.dt-orderable-desc,
+.table-holder table.dataTable thead > tr > th.dt-ordering-asc,
+.table-holder table.dataTable thead > tr > th.dt-ordering-desc {
+  padding-right: 0.5rem !important;
+  padding-left: 1.75rem !important;
 }
 
 .table-holder table.dataTable thead > tr > th.dt-orderable-asc::before,
@@ -858,18 +899,22 @@ html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-ordering-desc::
   margin-bottom: 0;
 }
 
+html[dir="ltr"] .table-holder div.dt-container div.dt-layout-row:not(.dt-layout-table) {
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
 html[dir="rtl"] .table-holder div.dt-container div.dt-layout-row:not(.dt-layout-table) {
   flex-direction: row;
+  justify-content: flex-end;
+  gap: 1rem;
 }
 
-html[dir="rtl"] .table-holder div.dt-container div.dt-layout-start {
-  margin-left: auto;
-  margin-right: 0;
-}
-
+html[dir="rtl"] .table-holder div.dt-container div.dt-layout-start,
 html[dir="rtl"] .table-holder div.dt-container div.dt-layout-end {
-  margin-right: auto;
-  margin-left: 0;
+  flex: 0 0 auto;
+  width: auto;
+  margin: 0;
 }
 
 html[dir="rtl"] .table-holder div.dt-container div.dt-search {
