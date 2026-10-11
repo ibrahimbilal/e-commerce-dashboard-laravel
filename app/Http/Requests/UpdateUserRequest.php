@@ -33,7 +33,7 @@ class UpdateUserRequest extends FormRequest
 			'last_name'	=> ['required', 'string', 'max:255'],
 			'email' => [
 				'required', 'string', 'email', 'max:255',
-				Rule::unique(User::class, 'id')->ignore($this->user()->id),
+				Rule::unique(User::class, 'email')->ignore($this->route('user')),
 			],
 			'password' => [
 				'nullable', 'string', 'confirmed', Password::min(8)

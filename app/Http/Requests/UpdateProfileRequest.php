@@ -32,7 +32,7 @@ class UpdateProfileRequest extends FormRequest
 			'last_name'	=> ['required', 'string', 'max:255'],
 			'email' => [
 				'required', 'string', 'email', 'max:255',
-				Rule::unique(User::class, 'id')->ignore($this->user()->id),
+				Rule::unique(User::class, 'email')->ignore($this->user()->id),
 			],
 			'current_password' 	=> ['nullable', 'current_password:web', 'required_with:password'],
 			'password' => [
