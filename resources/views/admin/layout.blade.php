@@ -18,9 +18,10 @@
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="{{ asset('css/bs'.$rtl_ext.'.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/bs-theme-compat.css') }}">
     <!-- Main Css File -->
     <link rel="stylesheet" href="{{ asset('css/style'.$rtl_ext.'.min.css') }}">
+    {{-- After style*.min.css so DT/toolbar overrides beat legacy style.css rules --}}
+    <link rel="stylesheet" href="{{ asset('css/bs-theme-compat.css') }}">
     @include('admin.inc.theme-css-variables')
 
     <!-- Fonts -->

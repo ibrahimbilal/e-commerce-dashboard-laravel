@@ -33,10 +33,10 @@
             window.getAdminDataTableLayout = function () {
                 var rtl = document.documentElement.getAttribute('dir') === 'rtl';
                 if (rtl) {
-                    /* Both controls on the "start" side (physical right in RTL), search outermost */
+                    /* Toolbar cluster on the physical right: buttons then search (see compat CSS) */
                     return {
-                        topStart: ['search', 'buttons'],
-                        topEnd: null,
+                        topStart: 'buttons',
+                        topEnd: 'search',
                         bottomStart: 'paging',
                         bottomEnd: 'info',
                     };
