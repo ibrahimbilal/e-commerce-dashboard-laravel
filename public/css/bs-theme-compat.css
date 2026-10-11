@@ -334,3 +334,63 @@ html.dark .table-holder .dataTables_paginate .paginate_button.active a {
   --bs-table-bg: var(--box-bg-color);
   --bs-table-color: var(--text-color);
 }
+
+/* —— Dark index pages: DataTables toolbar + striped rows —— */
+html.dark .table-holder .dt-buttons .btn-secondary {
+  --bs-btn-bg: var(--body-background);
+  --bs-btn-border-color: var(--border-color);
+  --bs-btn-color: var(--text-color);
+  --bs-btn-hover-bg: var(--box-bg-color);
+  --bs-btn-hover-border-color: var(--border-color);
+  --bs-btn-hover-color: var(--text-color);
+  background-color: var(--body-background);
+  border-color: var(--border-color);
+  color: var(--text-color);
+}
+
+html.dark .table-holder .dataTables_filter input,
+html.dark .table-holder .dataTables_filter input.form-control,
+html.dark .table-holder .dataTables_filter input.form-control-sm {
+  background-color: transparent;
+  color: var(--text-color);
+  border-color: var(--text-color);
+  box-shadow: none;
+}
+
+html.dark .table-holder .dataTables_length select,
+html.dark .table-holder .dataTables_length .form-select,
+html.dark .table-holder .dataTables_length .custom-select,
+html.dark .table-holder .dataTables_length .form-control-sm {
+  background-color: var(--body-background);
+  color: var(--text-color);
+  border-color: var(--border-color);
+}
+
+html.dark .table-holder .table.table-striped > tbody > tr:nth-of-type(odd) > * {
+  --bs-table-color-type: var(--text-color);
+  --bs-table-bg-type: var(--box-bg-color);
+  --bs-table-accent-bg: var(--box-bg-color);
+  box-shadow: inset 0 0 0 9999px var(--box-bg-color);
+}
+
+html.dark .table-holder .table.table-striped > tbody > tr:nth-of-type(even) > * {
+  --bs-table-accent-bg: transparent;
+  box-shadow: none;
+}
+
+html.dark .table-holder .dataTables_paginate .page-item:not(.active) .page-link,
+html.dark .table-holder .dataTables_paginate .paginate_button:not(.active) {
+  background-color: transparent !important;
+  background-image: none !important;
+  color: var(--text-color);
+  border: 0;
+}
+
+html.dark .table-holder table {
+  border-top-color: var(--body-background);
+}
+
+html.dark .table-holder table thead th {
+  color: var(--text-color);
+  border-bottom-color: var(--border-color);
+}
