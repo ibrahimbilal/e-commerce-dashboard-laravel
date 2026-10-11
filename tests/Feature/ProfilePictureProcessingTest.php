@@ -12,7 +12,10 @@ use Database\Seeders\RoleSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Laravel\Fortify\Contracts\CreatesNewUsers;
+use Mockery;
 use Spatie\Permission\PermissionRegistrar;
 use Tests\TestCase;
 
@@ -31,6 +34,13 @@ class ProfilePictureProcessingTest extends TestCase
         $this->seed([PermissionsSeeder::class, LangSeeder::class, RoleSeeder::class, UserSeeder::class]);
         app(PermissionRegistrar::class)->forgetCachedPermissions();
         $this->admin = User::query()->where('email', 'admin@example.com')->firstOrFail();
+    }
+
+    protected function tearDown(): void
+    {
+        ProfilePictureProcessor::resetTestingState();
+
+        parent::tearDown();
     }
 
     /**
@@ -213,6 +223,48 @@ class ProfilePictureProcessingTest extends TestCase
         $this->assertStoredProfilePictureIs256($customer->profile_picture);
     }
 
+    public function test_customer_update_with_empty_remove_pp_and_picture_succeeds(): void
+    {
+        $customer = Customer::query()->create([
+            'email' => 'emptyremove@example.com',
+            'password' => bcrypt('password123'),
+        ]);
+        $file = UploadedFile::fake()->image('pp.jpg', 256, 256);
+
+        $this->actingAs($this->admin)->post(route('admin.customers.update', $customer), array_merge(
+            $this->customerPayload(['email' => 'emptyremove@example.com']),
+            ['_method' => 'PUT', 'remove_pp' => '', 'profile_picture' => $file]
+        ), [
+            'Accept' => 'application/json',
+        ])->assertOk();
+
+        $customer->refresh();
+        $this->assertNotNull($customer->profile_picture);
+        $this->assertStoredProfilePictureIs256($customer->profile_picture);
+    }
+
+    public function test_customer_update_remove_pp_one_clears_picture(): void
+    {
+        $customer = Customer::query()->create([
+            'email' => 'clearpp@example.com',
+            'password' => bcrypt('password123'),
+            'profile_picture' => StoredMedia::databasePath(
+                ProfilePictureProcessor::store(
+                    UploadedFile::fake()->image('seed.jpg', 256, 256),
+                    'customers'
+                )
+            ),
+        ]);
+
+        $this->actingAs($this->admin)->putJson(route('admin.customers.update', $customer), array_merge(
+            $this->customerPayload(['email' => 'clearpp@example.com']),
+            ['remove_pp' => '1']
+        ))->assertOk();
+
+        $customer->refresh();
+        $this->assertNull($customer->profile_picture);
+    }
+
     public function test_customer_update_uploads_png_and_remove_pp_clears_picture(): void
     {
         $customer = Customer::query()->create([
@@ -275,6 +327,97 @@ class ProfilePictureProcessingTest extends TestCase
 
         $customer->refresh();
         $this->assertSame($path, $customer->profile_picture);
+    }
+
+    public function test_store_succeeds_and_keeps_original_when_gd_unavailable(): void
+    {
+        ProfilePictureProcessor::$forceGdUnavailable = true;
+
+        Log::spy();
+
+        $file = UploadedFile::fake()->image('large.jpg', 400, 400);
+
+        $this->actingAs($this->admin)->post(route('users.store'), array_merge(
+            $this->userStorePayload(['email' => 'nogd@example.com']),
+            ['profile_picture' => $file]
+        ), [
+            'Accept' => 'application/json',
+        ])->assertOk();
+
+        Log::shouldHaveReceived('warning')
+            ->once()
+            ->with('Profile picture stored without GD processing', Mockery::type('array'));
+
+        $user = User::query()->where('email', 'nogd@example.com')->firstOrFail();
+        $this->assertMatchesRegularExpression('#^storage/users/.+\.jpg$#', (string) $user->profile_picture);
+
+        $relative = StoredMedia::publicDiskRelativePath($user->profile_picture);
+        Storage::disk('public')->assertExists($relative);
+        [$width] = getimagesize(Storage::disk('public')->path($relative));
+        $this->assertSame(400, $width);
+    }
+
+    public function test_profile_update_accepts_canvas_blob_png_filename(): void
+    {
+        $file = $this->canvasBlobPngUpload(256, 256);
+
+        $this->actingAs($this->admin)->post(route('users.update_profile'), array_merge(
+            $this->userUpdatePayload($this->admin),
+            ['profile_picture' => $file]
+        ), [
+            'Accept' => 'application/json',
+        ])->assertOk();
+
+        $this->admin->refresh();
+        $this->assertStoredProfilePictureIs256($this->admin->profile_picture);
+        $this->assertStringEndsWith('.png', $this->admin->profile_picture);
+    }
+
+    public function test_admin_user_update_accepts_canvas_blob_png_filename(): void
+    {
+        $target = User::factory()->create([
+            'email' => 'blobtarget@example.com',
+            'role_name' => 'viewer',
+        ]);
+        $target->assignRole('viewer');
+
+        $file = $this->canvasBlobPngUpload(256, 256);
+
+        $this->actingAs($this->admin)->post(route('users.update', $target->getKey()), array_merge(
+            $this->userUpdatePayload($target),
+            ['_method' => 'PATCH', 'profile_picture' => $file]
+        ), [
+            'Accept' => 'application/json',
+        ])->assertOk();
+
+        $target->refresh();
+        $this->assertStoredProfilePictureIs256($target->profile_picture);
+    }
+
+    public function test_user_store_catch_reports_unexpected_exception(): void
+    {
+        $this->mock(CreatesNewUsers::class, function ($mock) {
+            $mock->shouldReceive('create')->andThrow(new \RuntimeException('Fortify create failed'));
+        });
+
+        $handler = Mockery::mock(\App\Exceptions\Handler::class)->makePartial();
+        $handler->shouldReceive('report')->once()->with(Mockery::type(\RuntimeException::class));
+        $this->app->instance(\Illuminate\Contracts\Debug\ExceptionHandler::class, $handler);
+
+        $this->actingAs($this->admin)->post(route('users.store'), $this->userStorePayload([
+            'email' => 'failstore@example.com',
+        ]), [
+            'Accept' => 'application/json',
+        ])->assertOk()
+            ->assertJsonPath('errors.0', __('alerts.errors.unknown'));
+    }
+
+    private function canvasBlobPngUpload(int $width, int $height): UploadedFile
+    {
+        $tmp = tempnam(sys_get_temp_dir(), 'ppblob');
+        file_put_contents($tmp, $this->minimalPng($width, $height));
+
+        return new UploadedFile($tmp, 'blob', 'image/png', UPLOAD_ERR_OK, true);
     }
 
     private function minimalPng(int $width, int $height): string

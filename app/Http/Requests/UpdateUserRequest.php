@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Models\User;
 use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Role;
-use Illuminate\Validation\Rules\File;
+use App\Rules\AcceptableProfilePicture;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -46,15 +46,12 @@ class UpdateUserRequest extends FormRequest
 			'is_active' => ['sometimes', 'boolean'],
 			'language' => ['required', 'string'],
 			'profile_picture' => [
-				File::image()
-					->types(['jpeg', 'jpg', 'png'])
-					->max(1024)
-					->dimensions(
-						Rule::dimensions()
-						->maxWidth(500)
-						->maxHeight(500)
-						->ratio(1)
-					),
+				'nullable',
+				new AcceptableProfilePicture(),
+				Rule::dimensions()
+					->maxWidth(500)
+					->maxHeight(500)
+					->ratio(1),
 			],
 		];
 	}

@@ -75,7 +75,7 @@ class CustomerController extends Controller
             'birth_date' => ['nullable', 'date'],
             'mobile' => ['nullable', 'string', 'max:20'],
             'profile_picture' => $this->profilePictureValidationRules($request),
-            'remove_pp' => ['sometimes', 'boolean'],
+            'remove_pp' => ['nullable', 'boolean'],
             'ip_address' => ['nullable', 'string', 'max:50'],
         ], CustomerAddressSync::customerRules()), [], CustomerAddressSync::validationAttributeNames());
 
@@ -123,7 +123,7 @@ class CustomerController extends Controller
             'birth_date' => ['nullable', 'date'],
             'mobile' => ['nullable', 'string', 'max:20'],
             'profile_picture' => $this->profilePictureValidationRules($request),
-            'remove_pp' => ['sometimes', 'boolean'],
+            'remove_pp' => ['nullable', 'boolean'],
             'ip_address' => ['nullable', 'string', 'max:50'],
             'deleted' => ['sometimes', 'boolean'],
         ], CustomerAddressSync::customerRules()), [], CustomerAddressSync::validationAttributeNames());
@@ -217,7 +217,7 @@ class CustomerController extends Controller
 
     private function resolveProfilePicture(Request $request, ?string $existing): ?string
     {
-        if ($request->has('remove_pp') && $request->boolean('remove_pp')) {
+        if ($this->shouldRemoveProfilePicture($request)) {
             return null;
         }
 
@@ -234,5 +234,19 @@ class CustomerController extends Controller
         }
 
         return $existing;
+    }
+
+    private function shouldRemoveProfilePicture(Request $request): bool
+    {
+        if (! $request->has('remove_pp')) {
+            return false;
+        }
+
+        $raw = $request->input('remove_pp');
+        if ($raw === null || $raw === '') {
+            return false;
+        }
+
+        return $request->boolean('remove_pp');
     }
 }

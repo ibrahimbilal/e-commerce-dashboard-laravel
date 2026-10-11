@@ -121,6 +121,8 @@ class UserController extends Controller
 				'redirect' => route('users.index')
 			]);
 		} catch (\Exception $ex) {
+			report($ex);
+
 			return response()->json(['errors' => [__('alerts.errors.unknown')]]);
 		}
 	}
@@ -279,6 +281,8 @@ class UserController extends Controller
 			]);
 
 		} catch (\Exception $ex) {
+			report($ex);
+
 			if ($ex instanceof ValidationException || $ex instanceof HttpResponseException) {
 				throw $ex;
 			}
@@ -370,6 +374,8 @@ class UserController extends Controller
 			]);
 
 		} catch (\Exception $ex) {
+			report($ex);
+
 			return response()->json(['errors' => [__('alerts.errors.unknown')]]);
 		}
 	}
