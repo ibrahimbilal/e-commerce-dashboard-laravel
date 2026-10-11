@@ -13,7 +13,8 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\NewUserRequest;
-use App\Http\Traits\UploadFilesTraits;
+use App\Support\ProfilePictureProcessor;
+use App\Support\StoredMedia;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\ValidationException;
@@ -29,7 +30,6 @@ use Laravel\Fortify\Actions\GenerateNewRecoveryCodes;
 
 class UserController extends Controller
 {
-	use UploadFilesTraits;
 
 	/**
 	 * protect controllers, by setting desired middleware in the constructor
@@ -95,9 +95,11 @@ class UserController extends Controller
 
 			// upload image and return path if upload success
 			if ( $request->hasFile('profile_picture') ) {
-				$file_path = $this->uploadFile($request, 'profile_picture', 'users', 'public');
+				$storedPath = ProfilePictureProcessor::store($request->file('profile_picture'), 'users');
 				$request->request->remove('profile_picture');
-				$request->merge(['profile_picture' => 'storage/' . $file_path->getData()->path]);
+				$request->merge([
+					'profile_picture' => StoredMedia::databasePath($storedPath),
+				]);
 			} else {
 				$request->merge(['profile_picture' => null]);
 			}
@@ -229,8 +231,9 @@ class UserController extends Controller
 			// upload profile picture
 			// store file path to database
 			if ( $request->hasFile('profile_picture') ) {
-				$file_path = $this->uploadFile($request, 'profile_picture', 'users', 'public');
-				$user->profile_picture = 'storage/' . $file_path;
+				$user->profile_picture = StoredMedia::databasePath(
+					ProfilePictureProcessor::store($request->file('profile_picture'), 'users')
+				);
 				$user->save();
 			}
 
@@ -321,8 +324,9 @@ class UserController extends Controller
 			// upload profile picture
 			// store file path to database
 			if ( $request->hasFile('profile_picture') ) {
-				$file_path = $this->uploadFile($request, 'profile_picture', 'users', 'public');
-				$user->profile_picture = 'storage/' . $file_path->getData()->path;
+				$user->profile_picture = StoredMedia::databasePath(
+					ProfilePictureProcessor::store($request->file('profile_picture'), 'users')
+				);
 				$user->save();
 			}
 
