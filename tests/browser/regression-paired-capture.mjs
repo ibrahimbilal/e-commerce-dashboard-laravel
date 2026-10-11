@@ -19,7 +19,7 @@ const scenarios = [
 ];
 
 const localeAccounts = {
-    ltr: { email: 'manager@example.com', password: 'password', language: 'en', expectDir: 'ltr' },
+    ltr: { email: 'admin@example.com', password: 'password', language: 'en', expectDir: 'ltr' },
     rtl: { email: 'admin@example.com', password: 'password', language: 'ar', expectDir: 'rtl' },
 };
 
@@ -27,9 +27,8 @@ function sqlExec(statement) {
     execSync(`sqlite3 ${sharedDb} ${JSON.stringify(statement)}`, { stdio: 'pipe' });
 }
 
-function prepareLocaleAccounts() {
-    sqlExec("UPDATE users SET language='en' WHERE email='manager@example.com';");
-    sqlExec("UPDATE users SET language='ar' WHERE email='admin@example.com';");
+function prepareLocaleAccount(language) {
+    sqlExec(`UPDATE users SET language='${language}' WHERE email='admin@example.com';`);
     sqlExec('DELETE FROM sessions;');
 }
 
@@ -80,13 +79,14 @@ function shotPath(name, mode, dir) {
     return path.join(outRoot, `${name}-${mode}-${dir}-${tag}.png`);
 }
 
-async function capturePage(page, name, route, mode, dir) {
+async function capturePage(page, name, route, mode, dir, account) {
     await setDark(page, mode === 'dark');
     await page.goto(`${base}${route}`, { waitUntil: 'networkidle' });
     await setDark(page, mode === 'dark');
     await clearDataTableState(page);
     await page.reload({ waitUntil: 'networkidle' });
     await setDark(page, mode === 'dark');
+    await assertDocumentDir(page, account.expectDir, account);
     await page.waitForTimeout(400);
     const file = shotPath(name, mode, dir);
     fs.mkdirSync(path.dirname(file), { recursive: true });
@@ -99,12 +99,12 @@ function md5File(file) {
 }
 
 async function main() {
-    prepareLocaleAccounts();
     const browser = await chromium.launch({ headless: true });
     const captured = [];
 
     for (const [name, route, mode, dir] of scenarios) {
         const account = localeAccounts[dir];
+        prepareLocaleAccount(account.language);
         const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
         await context.clearCookies();
         const page = await context.newPage();
@@ -113,8 +113,7 @@ async function main() {
             localStorage.clear();
             sessionStorage.clear();
         });
-        await assertDocumentDir(page, account.expectDir, account);
-        captured.push(await capturePage(page, name, route, mode, dir));
+        captured.push(await capturePage(page, name, route, mode, dir, account));
         await context.close();
     }
 
