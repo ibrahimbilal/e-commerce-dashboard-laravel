@@ -88,14 +88,13 @@
         suppressChange = false;
     }
 
-    function setCroppedFile(input, blob, originalName) {
-        var mime = blob.type || 'image/jpeg';
-        var ext = mime === 'image/png' ? 'png' : 'jpg';
-        var base = 'profile-picture-256';
-        if (originalName) {
-            base = String(originalName).replace(/\.[^.]+$/, '') + '-256';
-        }
-        var file = new File([blob], base + '.' + ext, { type: mime });
+    function setCroppedFile(input, blob, sourceFile) {
+        var mime = isPngFile(sourceFile) ? 'image/png' : 'image/jpeg';
+        var fileName = mime === 'image/png' ? 'profile.png' : 'profile.jpg';
+        var file = new File([blob], fileName, {
+            type: mime,
+            lastModified: Date.now(),
+        });
         var dt = new DataTransfer();
         dt.items.add(file);
         suppressChange = true;
@@ -119,8 +118,16 @@
         }
         var removeField = input.form.querySelector('#remove_pp, [name="remove_pp"]');
         if (removeField) {
-            removeField.value = '';
+            removeField.value = '0';
         }
+    }
+
+    function bootstrapModalApiReady() {
+        return (
+            window.bootstrap &&
+            window.bootstrap.Modal &&
+            typeof window.bootstrap.Modal.getOrCreateInstance === 'function'
+        );
     }
 
     function showSelectedBlock(block) {
@@ -151,7 +158,7 @@
         if (!modalEl) {
             return null;
         }
-        if (window.bootstrap && window.bootstrap.Modal) {
+        if (bootstrapModalApiReady()) {
             return window.bootstrap.Modal.getOrCreateInstance(modalEl);
         }
         if (window.jQuery && window.jQuery.fn && typeof window.jQuery.fn.modal === 'function') {
@@ -176,7 +183,7 @@
     }
 
     function hideCropModal() {
-        if (modalEl && window.bootstrap && window.bootstrap.Modal) {
+        if (modalEl && bootstrapModalApiReady()) {
             var instance = window.bootstrap.Modal.getInstance(modalEl);
             if (instance) {
                 instance.hide();
@@ -244,7 +251,7 @@
                 if (!blob || !currentInput) {
                     return;
                 }
-                setCroppedFile(currentInput, blob, pendingFile.name);
+                setCroppedFile(currentInput, blob, pendingFile);
                 clearLegacyHiddenPicture(currentInput);
                 markRemoveCleared(currentInput);
                 var preview = previewFor(currentInput);
