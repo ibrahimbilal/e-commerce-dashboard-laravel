@@ -317,3 +317,8 @@ html.dark .modal .form-select:focus {
   --admin-table-stripe-bg: #2a2d33;
 }
 
+/* BS5 .text-muted is illegible on html.dark without a theme token */
+html.dark .text-muted {
+  color: var(--disable-text-color) !important;
+}
+
