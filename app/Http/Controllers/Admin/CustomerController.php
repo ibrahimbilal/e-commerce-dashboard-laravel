@@ -10,7 +10,9 @@ use App\Support\AdminFormResponse;
 use App\Support\AdminResourceCounts;
 use App\Support\CustomerAddressSync;
 use App\Support\IndexListing;
+use App\Support\ProfilePictureProcessor;
 use App\Support\ReferentialDeleteGuard;
+use App\Support\StoredMedia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -72,14 +74,16 @@ class CustomerController extends Controller
             'last_name' => ['nullable', 'string', 'max:50'],
             'birth_date' => ['nullable', 'date'],
             'mobile' => ['nullable', 'string', 'max:20'],
-            'profile_picture' => ['nullable', 'string', 'max:191'],
+            'profile_picture' => $this->profilePictureValidationRules($request),
+            'remove_pp' => ['sometimes', 'boolean'],
             'ip_address' => ['nullable', 'string', 'max:50'],
         ], CustomerAddressSync::customerRules()), [], CustomerAddressSync::validationAttributeNames());
 
         $data['password'] = Hash::make($data['password']);
+        $data['profile_picture'] = $this->resolveProfilePicture($request, null);
 
         $customer = DB::transaction(function () use ($request, $data) {
-            $customer = Customer::create(collect($data)->except(['addresses', 'addresses_sync'])->all());
+            $customer = Customer::create(collect($data)->except(['addresses', 'addresses_sync', 'remove_pp'])->all());
             CustomerAddressSync::createForCustomer($customer, $request);
 
             return $customer;
@@ -118,7 +122,8 @@ class CustomerController extends Controller
             'last_name' => ['nullable', 'string', 'max:50'],
             'birth_date' => ['nullable', 'date'],
             'mobile' => ['nullable', 'string', 'max:20'],
-            'profile_picture' => ['nullable', 'string', 'max:191'],
+            'profile_picture' => $this->profilePictureValidationRules($request),
+            'remove_pp' => ['sometimes', 'boolean'],
             'ip_address' => ['nullable', 'string', 'max:50'],
             'deleted' => ['sometimes', 'boolean'],
         ], CustomerAddressSync::customerRules()), [], CustomerAddressSync::validationAttributeNames());
@@ -129,8 +134,10 @@ class CustomerController extends Controller
             unset($data['password']);
         }
 
+        $data['profile_picture'] = $this->resolveProfilePicture($request, $customer->profile_picture);
+
         DB::transaction(function () use ($request, $customer, $data) {
-            $customer->update(collect($data)->except(['addresses', 'addresses_sync'])->all());
+            $customer->update(collect($data)->except(['addresses', 'addresses_sync', 'remove_pp'])->all());
             CustomerAddressSync::syncForCustomer($customer, $request);
         });
 
@@ -194,5 +201,38 @@ class CustomerController extends Controller
             'Customer permanently deleted.',
             AdminResourceCounts::customers()
         );
+    }
+
+    /**
+     * @return array<int, mixed>
+     */
+    private function profilePictureValidationRules(Request $request): array
+    {
+        if ($request->hasFile('profile_picture')) {
+            return ProfilePictureProcessor::validationRules();
+        }
+
+        return ['nullable', 'string', 'max:191'];
+    }
+
+    private function resolveProfilePicture(Request $request, ?string $existing): ?string
+    {
+        if ($request->has('remove_pp') && $request->boolean('remove_pp')) {
+            return null;
+        }
+
+        if ($request->hasFile('profile_picture')) {
+            return StoredMedia::databasePath(
+                ProfilePictureProcessor::store($request->file('profile_picture'), 'customers')
+            );
+        }
+
+        if ($request->has('profile_picture')) {
+            $value = $request->input('profile_picture');
+
+            return is_string($value) && trim($value) !== '' ? trim($value) : null;
+        }
+
+        return $existing;
     }
 }
