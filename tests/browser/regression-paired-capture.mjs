@@ -15,7 +15,7 @@ const tag = process.env.VIS_TAG || 'after';
 const base = process.env.VIS_BASE || 'http://127.0.0.1:8000';
 const sharedDb = process.env.REGRESSION_DB || '/workspace/database/regression-shared.sqlite';
 
-const scenarios = [
+const allScenarios = [
     ['products-index', '/admin/products', 'light', 'ltr'],
     ['products-index', '/admin/products', 'dark', 'ltr'],
     ['products-index', '/admin/products', 'light', 'rtl'],
@@ -23,6 +23,14 @@ const scenarios = [
     ['orders-index', '/admin/orders', 'dark', 'ltr'],
     ['customers-index', '/admin/customers', 'dark', 'ltr'],
 ];
+
+const scenarios = (() => {
+    const only = process.env.VIS_ONLY?.split(',').map((s) => s.trim()).filter(Boolean);
+    if (!only?.length) {
+        return allScenarios;
+    }
+    return allScenarios.filter(([name, , mode, dir]) => only.includes(`${name}-${mode}-${dir}`));
+})();
 
 const localeAccounts = {
     ltr: {
