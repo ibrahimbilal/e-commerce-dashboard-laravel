@@ -107,7 +107,7 @@
                         </div>
                     @endforeach
                     @if ($topProducts->isEmpty())
-                        <p class="text-muted mb-0 py-3">No sales data yet.</p>
+                        <p class="dashboard-empty-hint mb-0 py-3">No sales data yet.</p>
                     @endif
                 </div>
             </div>
@@ -118,7 +118,7 @@
                     <h2 class="box-title text-capitalize mb-0 text-start">Visitors Referrals</h2>
                 </div>
                 <div class="list-holder">
-                    <p class="text-muted text-center py-4 mb-0">No visitor tracking yet.</p>
+                    <p class="dashboard-empty-hint text-center py-4 mb-0">No visitor tracking yet.</p>
                 </div>
             </div>
         </div>

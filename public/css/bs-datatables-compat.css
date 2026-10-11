@@ -903,7 +903,9 @@ html.dark .table-holder table.dataTable tbody td.prod-img .img-holder img:not([s
   pointer-events: auto !important;
 }
 
-/* BS5 .text-muted after style*.min.css (empty states on dashboard cards) */
-html.dark .text-muted {
-  color: var(--disable-text-color) !important;
+html.dark .dashboard-empty-hint {
+  color: var(--text-color);
+  opacity: 0.85;
+  font-size: 1rem;
 }
+

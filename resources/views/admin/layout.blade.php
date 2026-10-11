@@ -21,9 +21,9 @@
     <link rel="stylesheet" href="{{ asset('css/bs-theme-compat.css') }}">
     <!-- Main Css File -->
     <link rel="stylesheet" href="{{ asset('css/style'.$rtl_ext.'.min.css') }}">
-    {{-- DataTables / .table-holder only — after style*.min.css --}}
-    <link rel="stylesheet" href="{{ asset('css/bs-datatables-compat.css') }}">
     @include('admin.inc.theme-css-variables')
+    {{-- DataTables / .table-holder — after style + theme variables --}}
+    <link rel="stylesheet" href="{{ asset('css/bs-datatables-compat.css') }}">
 
     <!-- Fonts -->
 	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
