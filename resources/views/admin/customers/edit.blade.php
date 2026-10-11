@@ -94,7 +94,7 @@
                             <label for="pp" class="btn regular-btn" style="width: 150px">
                                 {{ __('buttons.change_image') }}
                                 <input type="file" name="profile_picture" id="pp" accept=".jpg, .jpeg, .png" data-pp-cropper style="display: none">
-                                <input type="hidden" name="remove_pp" id="remove_pp" value="">
+                                <input type="hidden" name="remove_pp" id="remove_pp" value="0">
                             </label>
                             <div class="selected-img">
                                 <div class="img-holder mt-3">
@@ -108,7 +108,7 @@
                             <label for="pp" class="btn regular-btn" style="width: 150px">
                                 {{ __('buttons.upload_image') }}
                                 <input type="file" name="profile_picture" id="pp" accept=".jpg, .jpeg, .png" data-pp-cropper style="display: none">
-                                <input type="hidden" name="remove_pp" id="remove_pp" value="">
+                                <input type="hidden" name="remove_pp" id="remove_pp" value="0">
                             </label>
                             <div class="selected-img" style="display: none">
                                 <div class="img-holder mt-3">
