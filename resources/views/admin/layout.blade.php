@@ -18,6 +18,7 @@
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="{{ asset('css/bs'.$rtl_ext.'.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/bs-theme-compat.css') }}">
     <!-- Main Css File -->
     <link rel="stylesheet" href="{{ asset('css/style'.$rtl_ext.'.min.css') }}">
     @include('admin.inc.theme-css-variables')

@@ -1,0 +1,336 @@
+/**
+ * Bootstrap 5.3 component variables → Ibrahim theme (pre-5.3 appearance).
+ * Loaded after bs*.min.css and before style*.min.css.
+ */
+
+/* —— Buttons: outline-style primary / warning / danger —— */
+.btn-primary {
+  --bs-btn-color: var(--main-color);
+  --bs-btn-bg: transparent;
+  --bs-btn-border-color: var(--main-color);
+  background-color: transparent;
+  background-image: none;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--main-color);
+  --bs-btn-hover-border-color: var(--main-color);
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--main-color);
+  --bs-btn-active-border-color: var(--main-color);
+  --bs-btn-disabled-color: var(--main-color);
+  --bs-btn-disabled-bg: transparent;
+  --bs-btn-disabled-border-color: var(--main-color);
+  --bs-btn-focus-shadow-rgb: 44, 44, 204;
+}
+
+.btn-warning {
+  --bs-btn-color: var(--warning-color);
+  --bs-btn-bg: transparent;
+  --bs-btn-border-color: var(--warning-color);
+  background-color: transparent;
+  background-image: none;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--warning-color);
+  --bs-btn-hover-border-color: var(--warning-color);
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--warning-color);
+  --bs-btn-active-border-color: var(--warning-color);
+  --bs-btn-disabled-color: var(--warning-color);
+  --bs-btn-disabled-bg: transparent;
+  --bs-btn-disabled-border-color: var(--warning-color);
+}
+
+.btn-danger {
+  --bs-btn-color: var(--danger-color);
+  --bs-btn-bg: transparent;
+  --bs-btn-border-color: var(--danger-color);
+  background-color: transparent;
+  background-image: none;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--danger-color);
+  --bs-btn-hover-border-color: var(--danger-color);
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--danger-color);
+  --bs-btn-active-border-color: var(--danger-color);
+  --bs-btn-disabled-color: var(--danger-color);
+  --bs-btn-disabled-bg: transparent;
+  --bs-btn-disabled-border-color: var(--danger-color);
+}
+
+.btn-success {
+  --bs-btn-color: var(--success-color);
+  --bs-btn-bg: transparent;
+  --bs-btn-border-color: var(--success-color);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--success-color);
+  --bs-btn-hover-border-color: var(--success-color);
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--success-color);
+  --bs-btn-active-border-color: var(--success-color);
+}
+
+.btn-secondary,
+.btn-light {
+  --bs-btn-color: var(--text-color);
+  --bs-btn-bg: transparent;
+  --bs-btn-border-color: var(--border-color);
+  --bs-btn-hover-color: var(--text-color);
+  --bs-btn-hover-bg: var(--body-background);
+  --bs-btn-hover-border-color: var(--border-color);
+}
+
+.btn-outline-primary {
+  --bs-btn-color: var(--main-color);
+  --bs-btn-bg: transparent;
+  --bs-btn-border-color: var(--main-color);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--main-color);
+  --bs-btn-hover-border-color: var(--main-color);
+}
+
+.btn-outline-warning {
+  --bs-btn-color: var(--warning-color);
+  --bs-btn-bg: transparent;
+  --bs-btn-border-color: var(--warning-color);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--warning-color);
+  --bs-btn-hover-border-color: var(--warning-color);
+}
+
+.btn-outline-danger {
+  --bs-btn-color: var(--danger-color);
+  --bs-btn-bg: transparent;
+  --bs-btn-border-color: var(--danger-color);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--danger-color);
+  --bs-btn-hover-border-color: var(--danger-color);
+}
+
+.btn.bg-transparent {
+  --bs-btn-bg: transparent;
+  --bs-btn-hover-bg: var(--danger-color);
+}
+
+/* —— Pagination (BS5 + DataTables BS4 markup) —— */
+.table-holder .dataTables_paginate {
+  --bs-pagination-color: var(--text-color);
+  --bs-pagination-bg: transparent;
+  --bs-pagination-border-width: 0;
+  --bs-pagination-border-color: transparent;
+  --bs-pagination-hover-color: var(--box-bg-color);
+  --bs-pagination-hover-bg: var(--text-color);
+  --bs-pagination-hover-border-color: transparent;
+  --bs-pagination-focus-color: var(--text-color);
+  --bs-pagination-focus-bg: transparent;
+  --bs-pagination-focus-box-shadow: none;
+  --bs-pagination-active-color: var(--box-bg-color);
+  --bs-pagination-active-bg: var(--text-color);
+  --bs-pagination-active-border-color: transparent;
+  --bs-pagination-disabled-color: var(--disable-text-color);
+  --bs-pagination-disabled-bg: transparent;
+  --bs-pagination-disabled-border-color: transparent;
+}
+
+.table-holder .dataTables_paginate .pagination {
+  --bs-pagination-border-radius: 0;
+}
+
+.table-holder .dataTables_paginate .page-link {
+  background-color: transparent;
+  border: 0;
+  color: var(--text-color);
+  box-shadow: none;
+}
+
+html.dark .table-holder .dataTables_paginate .page-link,
+html.dark .table-holder .dataTables_paginate .paginate_button a {
+  color: var(--text-color);
+}
+
+html.dark .table-holder .dataTables_paginate .page-item.active .page-link,
+html.dark .table-holder .dataTables_paginate .page-item.active > .page-link,
+html.dark .table-holder .dataTables_paginate .paginate_button.active,
+html.dark .table-holder .dataTables_paginate .paginate_button.active a {
+  background-color: var(--text-color) !important;
+  color: var(--box-bg-color) !important;
+  border-color: transparent !important;
+}
+
+.table-holder .dataTables_paginate .page-item.active .page-link {
+  background-color: var(--text-color);
+  border-color: transparent;
+  color: var(--box-bg-color);
+}
+
+.table-holder .dataTables_paginate .page-item:not(.active) .page-link:hover,
+.table-holder .dataTables_paginate .paginate_button:not(.disabled):not(.active):hover {
+  background-color: var(--text-color);
+  background-image: none;
+  color: var(--box-bg-color);
+}
+
+.table-holder .dataTables_paginate .paginate_button:not(.disabled):not(.active):hover a {
+  color: var(--box-bg-color);
+}
+
+.table-holder .dataTables_paginate .paginate_button.active,
+.table-holder .dataTables_paginate .paginate_button.active a {
+  background-color: var(--text-color);
+  background-image: none;
+  color: var(--box-bg-color);
+  border: 0;
+}
+
+.table-holder .dataTables_paginate .paginate_button a {
+  color: var(--text-color);
+  background: transparent;
+  border: 0;
+}
+
+.pagination {
+  --bs-pagination-color: var(--text-color);
+  --bs-pagination-bg: transparent;
+  --bs-pagination-border-color: transparent;
+  --bs-pagination-hover-color: var(--box-bg-color);
+  --bs-pagination-hover-bg: var(--text-color);
+  --bs-pagination-active-color: var(--box-bg-color);
+  --bs-pagination-active-bg: var(--text-color);
+}
+
+/* —— Badges —— */
+.badge.bg-primary,
+.badge.text-bg-primary {
+  --bs-badge-color: #fff;
+  background-color: var(--main-color) !important;
+}
+
+.badge.bg-warning,
+.badge.text-bg-warning {
+  background-color: var(--warning-color) !important;
+}
+
+.badge.bg-danger,
+.badge.text-bg-danger {
+  background-color: var(--danger-color) !important;
+}
+
+.badge.bg-success,
+.badge.text-bg-success {
+  background-color: var(--success-color) !important;
+}
+
+/* —— Forms —— */
+.form-control,
+.form-select {
+  --bs-body-bg: var(--box-bg-color);
+  --bs-body-color: var(--text-color);
+  background-color: var(--box-bg-color);
+  color: var(--text-color);
+  border-color: var(--border-color);
+}
+
+.form-control:focus,
+.form-select:focus {
+  background-color: var(--box-bg-color);
+  color: var(--text-color);
+  border-color: var(--main-color);
+  box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--main-color) 25%, transparent);
+}
+
+.form-check-input {
+  background-color: var(--box-bg-color);
+  border-color: var(--border-color);
+}
+
+.form-check-input:checked {
+  background-color: var(--main-color);
+  border-color: var(--main-color);
+}
+
+/* —— Dropdowns —— */
+.dropdown-menu {
+  --bs-dropdown-bg: var(--box-bg-color);
+  --bs-dropdown-color: var(--text-color);
+  --bs-dropdown-border-color: var(--border-color);
+  --bs-dropdown-link-color: var(--text-color);
+  --bs-dropdown-link-hover-color: var(--text-color);
+  --bs-dropdown-link-hover-bg: var(--body-background);
+  --bs-dropdown-link-active-color: #fff;
+  --bs-dropdown-link-active-bg: var(--main-color);
+}
+
+/* —— Modals —— */
+.modal-content {
+  --bs-modal-bg: var(--box-bg-color);
+  --bs-modal-color: var(--text-color);
+  --bs-modal-border-color: var(--border-color);
+  background-color: var(--box-bg-color);
+  color: var(--text-color);
+}
+
+.modal-header,
+.modal-footer {
+  border-color: var(--border-color);
+}
+
+/* —— Alerts (Bootstrap .alert; theme also uses .alerts) —— */
+.alert-primary {
+  --bs-alert-color: var(--main-color);
+  --bs-alert-bg: color-mix(in srgb, var(--main-color) 12%, var(--box-bg-color));
+  --bs-alert-border-color: var(--main-color);
+}
+
+.alert-warning {
+  --bs-alert-color: var(--warning-color);
+  --bs-alert-bg: color-mix(in srgb, var(--warning-color) 12%, var(--box-bg-color));
+  --bs-alert-border-color: var(--warning-color);
+}
+
+.alert-danger {
+  --bs-alert-color: var(--danger-color);
+  --bs-alert-bg: color-mix(in srgb, var(--danger-color) 12%, var(--box-bg-color));
+  --bs-alert-border-color: var(--danger-color);
+}
+
+.alert-success {
+  --bs-alert-color: var(--success-color);
+  --bs-alert-bg: color-mix(in srgb, var(--success-color) 12%, var(--box-bg-color));
+  --bs-alert-border-color: var(--success-color);
+}
+
+/* —— Nav tabs —— */
+.nav-tabs {
+  --bs-nav-tabs-border-color: var(--border-color);
+  --bs-nav-tabs-link-active-color: var(--main-color);
+  --bs-nav-tabs-link-active-bg: var(--box-bg-color);
+  --bs-nav-tabs-link-active-border-color: var(--border-color) var(--border-color) var(--box-bg-color);
+}
+
+.nav-tabs .nav-link {
+  color: var(--text-color);
+}
+
+.nav-tabs .nav-link:hover {
+  border-color: var(--border-color);
+  color: var(--main-color);
+}
+
+/* —— Cards —— */
+.card {
+  --bs-card-bg: var(--box-bg-color);
+  --bs-card-color: var(--text-color);
+  --bs-card-border-color: var(--border-color);
+}
+
+/* —— Tables —— */
+.table {
+  --bs-table-bg: transparent;
+  --bs-table-color: var(--text-color);
+  --bs-table-border-color: var(--border-color);
+  --bs-table-striped-bg: var(--body-background);
+  --bs-table-hover-bg: var(--body-background);
+}
+
+.table-dark {
+  --bs-table-bg: var(--box-bg-color);
+  --bs-table-color: var(--text-color);
+}
