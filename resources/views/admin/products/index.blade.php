@@ -94,7 +94,7 @@
 <span class="slider"></span>
 </label>
 </td>
-<td data-order="{{ $product->created_at?->getTimestamp() ?? 0 }}">{{ $product->created_at?->format('H:i d/m/Y') ?? '—' }}</td>
+<td data-order="{{ ($product->created_at?->getTimestamp() ?? 0) * 100000 + (int) $product->id }}">{{ $product->created_at?->format('H:i d/m/Y') ?? '—' }}</td>
 <td>
 <x-resource-actions :model="$product" resource="products" destroy-label="product" :show="false" />
 </td>
@@ -133,6 +133,10 @@ if ($.fn.DataTable && $('#products').length) {
       		{ 
       			searchable: false, 
       			targets: [0, 1, 5, 6, 7, 9 ] 
+      		},
+      		{
+      			targets: 8,
+      			type: 'num',
       		}
       	],
       	select: {

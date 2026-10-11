@@ -256,26 +256,69 @@ html.dark .table-holder .dataTables_paginate .paginate_button.active a {
   text-decoration: none !important;
 }
 
-.table-holder div.dt-paging .dt-paging-button {
+.table-holder div.dt-paging .pagination {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: flex;
+  overflow: hidden;
+  justify-content: space-around;
+  border-radius: 5px;
+}
+
+.table-holder div.dt-paging .page-item {
+  margin: 0;
+  border: 0;
+}
+
+.table-holder div.dt-paging .page-link,
+.table-holder div.dt-paging button.page-link {
   padding: 5px 10px;
   margin: 0;
   font-size: 14px;
   border: 0 !important;
   border-radius: 0;
-  background: transparent;
+  background: transparent !important;
+  background-image: none !important;
   color: var(--text-color);
-  box-shadow: none;
+  box-shadow: none !important;
 }
 
-.table-holder div.dt-paging .dt-paging-button.current,
-.table-holder div.dt-paging .dt-paging-button.current:hover {
+.table-holder div.dt-paging .page-item.active .page-link,
+.table-holder div.dt-paging .page-item.active button.page-link {
   background-color: var(--text-color) !important;
   color: var(--box-bg-color) !important;
 }
 
-.table-holder div.dt-paging .dt-paging-button:not(.disabled):not(.current):hover {
-  background-color: var(--text-color);
-  color: var(--box-bg-color);
+.table-holder div.dt-paging .page-item:not(.active):not(.disabled) .page-link:hover,
+.table-holder div.dt-paging .page-item:not(.active):not(.disabled) button.page-link:hover {
+  background-color: var(--text-color) !important;
+  color: var(--box-bg-color) !important;
+}
+
+.table-holder div.dt-paging .page-item.disabled .page-link,
+.table-holder div.dt-paging .page-item.disabled button.page-link {
+  background: transparent !important;
+  color: var(--disable-text-color);
+  opacity: 1;
+}
+
+.table-holder div.dt-paging .page-link:focus,
+.table-holder div.dt-paging button.page-link:focus,
+.table-holder div.dt-paging .page-link:focus-visible,
+.table-holder div.dt-paging button.page-link:focus-visible {
+  box-shadow: none !important;
+  outline: none !important;
+  z-index: 0;
+}
+
+.table-holder div.dt-paging .dt-paging-button {
+  padding: 0;
+  margin: 0;
+  border: 0 !important;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 html.dark .table-holder div.dt-paging .dt-paging-button {

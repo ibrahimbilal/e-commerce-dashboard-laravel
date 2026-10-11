@@ -89,6 +89,10 @@ if ($.fn.DataTable && $('#customers').length) {
       		{ 
       			searchable: false, 
       			targets: [0, 1, 6] 
+      		},
+      		{
+      			targets: 5,
+      			type: 'num',
       		}
       	],
       	select: {

@@ -109,6 +109,10 @@ if ($.fn.DataTable && $('#orders').length) {
       		{ 
       			searchable: false, 
       			targets: [ 0, 7] 
+      		},
+      		{
+      			targets: [1, 6],
+      			type: 'num',
       		}
       	],
       	select: {
