@@ -90,7 +90,7 @@
 <span class="slider"></span>
 </label>
 </td>
-<td class="text-uppercase">{{ $subscriber->created_at?->format('H:i d/m/Y') ?? '—' }}</td>
+<td class="text-uppercase" data-order="{{ $subscriber->created_at?->getTimestamp() ?? 0 }}">{{ $subscriber->created_at?->format('H:i d/m/Y') ?? '—' }}</td>
 @if ($showActions)
 <td>
 <div class="btn-group">

@@ -55,8 +55,8 @@
 <td></td>
 <td class="prod-title">{{ $discount->title }}</td>
 <td class="text-capitalize">{{ $discount->discount }}{{ $discount->type === 'percent' ? '%' : '' }}</td>
-<td>{{ $discount->start_date?->format('H:i d/m/Y') ?? '—' }}</td>
-<td>{{ $discount->end_date?->format('H:i d/m/Y') ?? '—' }}</td>
+<td data-order="{{ $discount->start_date?->getTimestamp() ?? 0 }}">{{ $discount->start_date?->format('H:i d/m/Y') ?? '—' }}</td>
+<td data-order="{{ $discount->end_date?->getTimestamp() ?? 0 }}">{{ $discount->end_date?->format('H:i d/m/Y') ?? '—' }}</td>
 <td class="text-center">
 <label class="switch">
 @can('edit discounts')

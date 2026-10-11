@@ -54,7 +54,7 @@
 <td>#{{ $invoice->invoice_no }}</td>
 <td class="prod-title">{{ $custLabel ?: '—' }}</td>
 <td class="text-center">@if($total !== null)${{ number_format($total) }}@else—@endif</td>
-<td>{{ $invoice->created_at?->format('H:i d/m/Y') ?? '—' }}</td>
+<td data-order="{{ $invoice->created_at?->getTimestamp() ?? 0 }}">{{ $invoice->created_at?->format('H:i d/m/Y') ?? '—' }}</td>
 <td>
 <x-resource-actions :model="$invoice" resource="invoices" destroy-label="invoice" />
 </td>

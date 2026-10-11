@@ -87,7 +87,7 @@
 </td>
 <td class="text-capitalize comment">{{ \Illuminate\Support\Str::limit($review->comment ?? '—', 80) }}</td>
 <td class="text-capitalize">{{ $productName }}</td>
-<td class="text-uppercase">{{ $review->created_at?->format('H:i d/m/Y') ?? '—' }}</td>
+<td class="text-uppercase" data-order="{{ $review->created_at?->getTimestamp() ?? 0 }}">{{ $review->created_at?->format('H:i d/m/Y') ?? '—' }}</td>
 <td>
 <x-resource-actions :model="$review" resource="reviews" destroy-label="review" />
 </td>
