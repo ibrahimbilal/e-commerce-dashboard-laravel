@@ -89,18 +89,35 @@
                         <label class="item-title mb-2" for="profile-picture">{{ __('forms.profile_picture.title') }}</label>
                         <small>{{ __("forms.profile_picture.sub") }}</small>
                     </div>
-                    <div class="item-content"><a class="btn regular-btn gallery-btn" href="javascript:void(0)"
-                            style="width: 150px">Change Image</a>
-                        <div class="selected-img">
-                            <div class="img-holder mt-3"><img class="preview"
-                                    src="{{ asset('assets/images/avatar-placeholder.svg') }}" width="70" /><span
-                                    class="overlay"><i class="fi-rr-trash"> </i><span>remove</span></span></div>
+                    @if ($customer->profile_picture)
+                        <div class="item-content">
+                            <label for="pp" class="btn regular-btn" style="width: 150px">
+                                {{ __('buttons.change_image') }}
+                                <input type="file" name="profile_picture" id="pp" accept=".jpg, .jpeg, .png" data-pp-cropper style="display: none">
+                            </label>
+                            <div class="selected-img">
+                                <div class="img-holder mt-3">
+                                    <img class="preview" src="{{ asset($customer->profile_picture) }}" width="70" />
+                                    <span class="overlay"><i class="fi-rr-trash"> </i><span>{{ __('buttons.remove') }}</span></span>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    @else
+                        <div class="item-content">
+                            <label for="pp" class="btn regular-btn" style="width: 150px">
+                                {{ __('buttons.upload_image') }}
+                                <input type="file" name="profile_picture" id="pp" accept=".jpg, .jpeg, .png" data-pp-cropper style="display: none">
+                            </label>
+                            <div class="selected-img" style="display: none">
+                                <div class="img-holder mt-3">
+                                    <img class="preview" width="70" />
+                                    <span class="overlay"><i class="fi-rr-trash"> </i><span>{{ __('buttons.remove') }}</span></span>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
-            <input type="hidden" name="profile_picture"
-                value="{{ old('profile_picture', $customer->profile_picture ?? '') }}" />
             <input type="hidden" name="ip_address" value="{{ old('ip_address', $customer->ip_address ?? '') }}" />
         </div>
         <div class="col-sm-12 post-box order-sm-3">
@@ -127,9 +144,11 @@
         class="destroy-resource-form d-none" data-confirm-delete="soft">@csrf @method('DELETE')</form>
     @include('components.ajax-form-assets')
     @include('components.repeater-assets')
+    @include('components.admin.pp-cropper')
 @endsection
 
 @push('scripts')
+    @include('components.admin.pp-cropper-assets')
     <script async="" src="{{ asset('js/async.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/pickadate/picker.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/pickadate/picker.date.js') }}" type="text/javascript"></script>

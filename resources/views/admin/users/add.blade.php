@@ -107,7 +107,7 @@
                     <div class="item-content">
 						<label for="pp" class="btn regular-btn" style="width: 150px">
 							{{ __('buttons.upload_image') }}
-							<input type="file" name="profile_picture" id="pp" accept=".jpg, .jpeg, .png" style="display: none">
+							<input type="file" name="profile_picture" id="pp" accept=".jpg, .jpeg, .png" data-pp-cropper style="display: none">
 							<input id="remove_pp" type="hidden" name="remove_pp">
 						</label>
 						<div class="selected-img" style="display: none">
@@ -128,41 +128,17 @@
             </div>
         </div>
     </form>
+    @include('components.admin.pp-cropper')
 @endsection
 
 @push('scripts')
+    @include('components.admin.pp-cropper-assets')
     <!-- Sweet Alert -->
     <script src="{{ asset('js/sweetalert2.min.js') }}" type="text/javascript"></script>
     <!-- Date Picker-->
     <script src="{{ asset('js/pickadate/picker.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/pickadate/picker.date.js') }}" type="text/javascript"></script>
     <script>
-
-		// upload image
-		$('#pp').on('change', function () {
-			var output = $('.selected-img'),
-				file = this.files[0],
-				src = URL.createObjectURL(file);
-
-			output.find('.preview').attr('src', src);
-			output.find('.img-holder').append('<span class="overlay added" style="opacity:1;padding-top:0;color:#FFF;display: flex;justify-content: center;align-items: center;"><i class="rotate fi-rr-spinner" style="color:#FFF;margin: 0;width: 20px;height: 20px;transform-origin: center;text-align: center;line-height: 26px;"></i></span>');
-			output.show(500);
-			$('#remove_pp').val('');
-			setTimeout(() => {
-				output.find('.img-holder').find('.added').fadeOut('100');
-			}, 1500);
-		});
-
-		// remove image
-		$('.overlay').on('click', function() {
-			var output = $('.selected-img');
-			$('#pp').val('');
-			$('#remove_pp').val(true);
-			output.hide(500);
-			output.find('.added').remove();
-			output.find('.preview').removeAttr('src');
-
-		});
 
         // form Ajax Request
         $('form#add-user').on('submit', function(e) {
