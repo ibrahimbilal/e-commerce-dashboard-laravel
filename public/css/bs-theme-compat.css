@@ -284,10 +284,26 @@ html.dark .table-holder .dataTables_paginate .paginate_button.active a {
   box-shadow: none !important;
 }
 
+.table-holder div.dt-paging .page-item + .page-item {
+  border-left: 0 !important;
+}
+
+html[dir="rtl"] .table-holder div.dt-paging .page-item + .page-item {
+  border-right: 0 !important;
+  border-left: 0 !important;
+}
+
+.table-holder div.dt-paging .pagination {
+  gap: 0;
+}
+
 .table-holder div.dt-paging .page-item.active .page-link,
 .table-holder div.dt-paging .page-item.active button.page-link {
   background-color: var(--text-color) !important;
   color: var(--box-bg-color) !important;
+  --bs-pagination-active-bg: var(--text-color);
+  --bs-pagination-active-color: var(--box-bg-color);
+  --bs-pagination-active-border-color: transparent;
 }
 
 .table-holder div.dt-paging .page-item:not(.active):not(.disabled) .page-link:hover,
@@ -605,6 +621,30 @@ html.dark .table-holder table {
 html.dark .table-holder table thead th {
   color: var(--text-color);
   border-bottom-color: var(--border-color);
+}
+
+/* Row action buttons: keep theme outline (BS 5.3 solid defaults load before style.css) */
+.table-holder .btn-group .btn.btn-warning,
+.table-holder .btn-group .btn.btn-danger,
+.table-holder .btn-group .btn.btn-primary {
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+.table-holder .btn-group .btn.btn-warning {
+  border-color: var(--warning-color) !important;
+  color: var(--warning-color) !important;
+}
+
+.table-holder .btn-group .btn.btn-danger {
+  border-color: var(--danger-color) !important;
+  color: var(--danger-color) !important;
+}
+
+.table-holder .btn-group .btn.btn-primary {
+  border-color: var(--main-color) !important;
+  color: var(--main-color) !important;
 }
 
 /* —— DataTables 2: toolbar (single rounded group, one chevron) —— */
