@@ -203,10 +203,12 @@
             autoCropArea: 1,
             responsive: true,
             background: false,
+            ready: function () {
+                if (applyBtn) {
+                    applyBtn.disabled = false;
+                }
+            },
         });
-        if (applyBtn) {
-            applyBtn.disabled = false;
-        }
     }
 
     function onApplyClick() {

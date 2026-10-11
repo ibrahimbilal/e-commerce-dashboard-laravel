@@ -49,9 +49,9 @@
 <div class="row">
 <div class="col-12 d-flex align-items-sm-center flex-column flex-sm-row mb-2">
 <div class="dash-filters">
-<a class="item text-capitalize @if($activeRating === null || $activeRating === '') active @endif" href="{{ route('admin.reviews.index', $reviewQueryBase(['rating' => null])) }}">All{{ array_key_exists('all', $reviewCounts) ? ' ('.$reviewCounts['all'].')' : '' }}</a>
+<a class="item text-capitalize @if($activeRating === null || $activeRating === '') active @endif" href="{{ route('admin.reviews.index', $reviewQueryBase(['rating' => null])) }}" data-count-key="all" data-count-label="All">All{{ array_key_exists('all', $reviewCounts) ? ' ('.$reviewCounts['all'].')' : '' }}</a>
 @for ($star = 1; $star <= 5; $star++)
-<a class="item text-capitalize @if((string) $activeRating === (string) $star) active @endif" href="{{ route('admin.reviews.index', $reviewQueryBase(['rating' => (string) $star])) }}">{{ $star }} Star{{ array_key_exists('star_'.$star, $reviewCounts) ? ' ('.$reviewCounts['star_'.$star].')' : '' }}</a>
+<a class="item text-capitalize @if((string) $activeRating === (string) $star) active @endif" href="{{ route('admin.reviews.index', $reviewQueryBase(['rating' => (string) $star])) }}" data-count-key="star_{{ $star }}" data-count-label="{{ $star }} Star">{{ $star }} Star{{ array_key_exists('star_'.$star, $reviewCounts) ? ' ('.$reviewCounts['star_'.$star].')' : '' }}</a>
 @endfor
 </div>
 </div>

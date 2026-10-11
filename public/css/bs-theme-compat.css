@@ -360,6 +360,14 @@ html.dark .table-holder div.dt-paging .dt-paging-button.current {
 }
 
 /* —— Modals —— */
+.modal {
+  --bs-modal-bg: var(--box-bg-color);
+  --bs-modal-color: var(--text-color);
+  --bs-modal-border-color: var(--border-color);
+  --bs-modal-header-border-color: var(--border-color);
+  --bs-modal-footer-border-color: var(--border-color);
+}
+
 .modal-content {
   --bs-modal-bg: var(--box-bg-color);
   --bs-modal-color: var(--text-color);
@@ -368,9 +376,67 @@ html.dark .table-holder div.dt-paging .dt-paging-button.current {
   color: var(--text-color);
 }
 
-.modal-header,
+.modal-header {
+  border-bottom-color: var(--border-color);
+}
+
 .modal-footer {
+  border-top-color: var(--border-color);
+}
+
+.modal .btn-close {
+  --bs-btn-close-color: var(--text-color);
+  opacity: 1;
+}
+
+.modal .form-control,
+.modal .form-select,
+.modal textarea.form-control {
+  --bs-body-bg: var(--box-bg-color);
+  --bs-body-color: var(--text-color);
+  background-color: var(--box-bg-color);
+  color: var(--text-color);
   border-color: var(--border-color);
+}
+
+html.dark .modal,
+html.dark .modal.show,
+html.dark .modal.fade {
+  --bs-modal-bg: var(--box-bg-color);
+  --bs-modal-color: var(--text-color);
+  --bs-modal-header-border-color: var(--border-color);
+  --bs-modal-footer-border-color: var(--border-color);
+}
+
+html.dark .modal-content {
+  background-color: var(--box-bg-color);
+  color: var(--text-color);
+}
+
+html.dark .modal .btn-close {
+  --bs-btn-close-color: var(--text-color);
+  filter: invert(1) grayscale(100%) brightness(200%);
+  opacity: 1;
+}
+
+html.dark .modal .form-control,
+html.dark .modal .form-select,
+html.dark .modal textarea.form-control {
+  background-color: var(--box-bg-color);
+  color: var(--text-color);
+  border-color: var(--border-color);
+}
+
+html.dark .modal .form-control:focus,
+html.dark .modal .form-select:focus {
+  background-color: var(--box-bg-color);
+  color: var(--text-color);
+  border-color: var(--main-color);
+}
+
+/* —— Tooltips (sidebar menu) —— */
+.tooltip {
+  --bs-tooltip-opacity: 1;
 }
 
 /* —— Alerts (Bootstrap .alert; theme also uses .alerts) —— */
