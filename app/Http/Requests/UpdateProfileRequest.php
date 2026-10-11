@@ -49,8 +49,8 @@ class UpdateProfileRequest extends FormRequest
 					->max(1024)
 					->dimensions(
 						Rule::dimensions()
-						->maxWidth(800)
-						->maxHeight(800)
+						->maxWidth(256)
+						->maxHeight(256)
 						->ratio(1)
 					),
 			],

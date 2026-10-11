@@ -31,7 +31,7 @@ return [
 	'lang' => 'Language:',
 	'profile_picture' => [
 		'title' => 'Profile Picture:',
-		'sub' => "The Recommended Dimensions Is: 500x500",
+		'sub' => "The Recommended Dimensions Is: 256x256",
 	],
 	'remember' => 'Remember Me',
 	'code' => 'Authentication Code',

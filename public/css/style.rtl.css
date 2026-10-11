@@ -1873,8 +1873,7 @@ table.dataTable.table-dark tr.selected th.select-checkbox:after {
 
 .user-holder .profile-image img {
   border-radius: 1rem;
-  max-width: 300px;
-  width: 100%;
+  max-width: 256px;
 }
 
 .order-holder .order {

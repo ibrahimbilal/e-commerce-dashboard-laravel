@@ -81,8 +81,9 @@
                     </label>
                 </div>
                 <div class="form-item second d-flex mt-3 flex-wrap flex-sm-nowrap">
-                    <div class="item-title">
-                        <label class="item-title mb-2" for="profile-picture">Profile Picture:</label>
+                    <div class="item-title d-block mb-2">
+                        <label class="item-title mb-2" for="profile-picture">{{ __('forms.profile_picture.title') }}</label>
+                        <small>{{ __("forms.profile_picture.sub") }}</small>
                     </div>
                     <div class="item-content"><a class="btn regular-btn gallery-btn" href="javascript:void(0)"
                             style="width: 150px">Change Image</a>
