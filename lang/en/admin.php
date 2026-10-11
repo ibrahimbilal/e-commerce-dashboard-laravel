@@ -94,6 +94,7 @@ return [
 				'2fa_recovery' => '2fa recovery',
 			]
 		],
+		'overview' => 'Overview',
 		'collapse' => 'Collapse',
 		'imports' => [
 			'title' => 'Imports'

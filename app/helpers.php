@@ -31,7 +31,7 @@ if (!function_exists('get_dashboard_menu')) {
 				'allow_to' => ['view products', 'view attributes', 'view reviews', 'view categories', 'view tags', 'view discounts'],
 				'group_items' => [
 					[
-						"route_name" => 'admin.products.index',
+						"route_name" => '',
 						"active_if" => ['admin.products.index', 'admin.products.create', 'admin.products.edit', 'admin.attributes.index', 'admin.attributes.create', 'admin.attributes.edit', 'admin.reviews.index', 'admin.reviews.create', 'admin.reviews.edit', 'admin.reviews.show'],
 						"icon" => 'shopping-bag',
 						"title" => __('admin.menu.products.title'),
@@ -39,6 +39,12 @@ if (!function_exists('get_dashboard_menu')) {
 						"badge" => '',
 						'permission' => ['view products'],
 						"submenu_items" => [
+							[
+								"route_name" => 'admin.products.index',
+								"active_if" => ['admin.products.index', 'admin.products.create', 'admin.products.edit'],
+								"title" => __('admin.menu.overview'),
+								'permission' => ['view products'],
+							],
 							[
 								"route_name" => 'admin.attributes.index',
 								"active_if" => ['admin.attributes.index', 'admin.attributes.create', 'admin.attributes.edit'],
@@ -104,7 +110,7 @@ if (!function_exists('get_dashboard_menu')) {
 						'permission' => ['view customers'],
 					],
 					[
-						"route_name" => 'admin.orders.index',
+						"route_name" => '',
 						"active_if" => ['admin.orders.index', 'admin.orders.create', 'admin.orders.edit', 'admin.orders.show', 'admin.order-statuses.index', 'admin.order-statuses.create', 'admin.order-statuses.edit'],
 						"icon" => 'box',
 						"title" => __('admin.menu.orders.title'),
@@ -112,6 +118,12 @@ if (!function_exists('get_dashboard_menu')) {
 						"badge" => '35',
 						'permission' => ['view orders'],
 						"submenu_items" => [
+							[
+								"route_name" => 'admin.orders.index',
+								"active_if" => ['admin.orders.index', 'admin.orders.create', 'admin.orders.edit', 'admin.orders.show', 'admin.order-statuses.index', 'admin.order-statuses.create', 'admin.order-statuses.edit'],
+								"title" => __('admin.menu.overview'),
+								'permission' => ['view orders'],
+							],
 							[
 								"route_name" => 'admin.order-statuses.index',
 								"active_if" => ['admin.order-statuses.index', 'admin.order-statuses.create', 'admin.order-statuses.edit'],

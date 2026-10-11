@@ -94,6 +94,7 @@ return [
 				'2fa_recovery' => 'المصادقة الثنائية',
 			]
 		],
+		'overview' => 'نظرة عامة',
 		'collapse' => 'ت. القائمة',
 		'imports' => [
 			'title' => 'الاستيراد'
