@@ -969,3 +969,59 @@ html[dir="rtl"] .table-holder div.dt-container div.dt-search input {
   visibility: visible !important;
   opacity: 1 !important;
 }
+
+html.dark .table-holder table.dataTable tbody td.prod-img .img-holder,
+html.dark .table-holder table.dataTable tbody td.customer-img .img-holder {
+  background-color: var(--box-bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 4px;
+  box-sizing: border-box;
+}
+
+/* DT2 bootstrap5 stripe uses light --dt-row-stripe; override for dark admin tables */
+html.dark .table-holder table.table.dataTable.table-striped.table-dark > tbody > tr:nth-of-type(2n + 1) > *,
+html.dark .table-holder table.table.dataTable.table-striped > tbody > tr:nth-of-type(2n + 1) > * {
+  box-shadow: inset 0 0 0 9999px var(--box-bg-color) !important;
+  background-color: var(--box-bg-color) !important;
+  --bs-table-accent-bg: var(--box-bg-color) !important;
+  --bs-table-bg-type: var(--box-bg-color) !important;
+  color: var(--text-color);
+}
+
+html.dark .table-holder table.table.dataTable.table-striped.table-dark > tbody > tr:nth-of-type(2n) > *,
+html.dark .table-holder table.table.dataTable.table-striped > tbody > tr:nth-of-type(2n) > * {
+  box-shadow: inset 0 0 0 9999px var(--body-background) !important;
+  background-color: var(--body-background) !important;
+  --bs-table-accent-bg: var(--body-background) !important;
+  --bs-table-bg-type: var(--body-background) !important;
+  color: var(--text-color);
+}
+
+html[dir="rtl"] .table-holder div.dt-container div.dt-layout-row:not(.dt-layout-table) {
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+html[dir="rtl"] .table-holder div.dt-container div.dt-layout-start,
+html[dir="rtl"] .table-holder div.dt-container div.dt-layout-end {
+  flex: 0 0 auto;
+  width: auto;
+}
+
+.table-holder table.dataTable thead > tr > th .dt-column-order,
+.table-holder table.dataTable thead > tr > td .dt-column-order {
+  display: none !important;
+}
+
+.table-holder table.dataTable thead > tr > th.dt-orderable-asc,
+.table-holder table.dataTable thead > tr > th.dt-orderable-desc,
+.table-holder table.dataTable thead > tr > th.dt-ordering-asc,
+.table-holder table.dataTable thead > tr > th.dt-ordering-desc,
+.table-holder table.dataTable thead > tr > td.dt-orderable-asc,
+.table-holder table.dataTable thead > tr > td.dt-orderable-desc,
+.table-holder table.dataTable thead > tr > td.dt-ordering-asc,
+.table-holder table.dataTable thead > tr > td.dt-ordering-desc {
+  padding-left: 1.75rem !important;
+  padding-right: 0.5rem !important;
+}

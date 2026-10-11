@@ -69,6 +69,9 @@
                         firstLast: false,
                     },
                     language: {
+                        info: 'Show _START_ To _END_ Of _TOTAL_',
+                        infoEmpty: 'Show 0 To 0 Of 0',
+                        infoFiltered: '(filtered from _MAX_ total)',
                         paginate: {
                             first: @json(__('tables.buttons.first')),
                             last: @json(__('tables.buttons.last')),

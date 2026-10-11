@@ -4,6 +4,12 @@ import path from 'path';
 import { execSync } from 'child_process';
 import crypto from 'crypto';
 
+/**
+ * Paired regression screenshots.
+ * BEFORE: /workspace/bs-before @ 26c4055^ (33f7b8e) on http://127.0.0.1:8001
+ * AFTER:  /workspace @ feature/ecommerce-build tip on http://127.0.0.1:8000
+ * Both must use REGRESSION_DB=/workspace/database/regression-shared.sqlite
+ */
 const outRoot = process.env.VIS_OUT || '/opt/cursor/artifacts/screenshots/bs-regression';
 const tag = process.env.VIS_TAG || 'after';
 const base = process.env.VIS_BASE || 'http://127.0.0.1:8000';
@@ -98,6 +104,9 @@ async function setDark(page, on) {
             document.querySelectorAll('table.table').forEach((table) => table.classList.remove('table-dark'));
         }
     }, on);
+    if (on) {
+        await page.waitForFunction(() => document.documentElement.classList.contains('dark'));
+    }
 }
 
 function shotPath(name, mode, dir) {
