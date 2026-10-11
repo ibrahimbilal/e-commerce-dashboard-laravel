@@ -33,10 +33,10 @@
             window.getAdminDataTableLayout = function () {
                 var rtl = document.documentElement.getAttribute('dir') === 'rtl';
                 if (rtl) {
-                    /* Toolbar cluster on the physical right: buttons then search (see compat CSS) */
+                    /* Search first in DOM; RTL flex-start clusters on physical right (see datatables compat CSS) */
                     return {
-                        topStart: 'buttons',
-                        topEnd: 'search',
+                        topStart: 'search',
+                        topEnd: 'buttons',
                         bottomStart: 'paging',
                         bottomEnd: 'info',
                     };

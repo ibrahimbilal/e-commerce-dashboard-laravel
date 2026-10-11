@@ -1,0 +1,884 @@
+/**
+ * DataTables 2.x / .table-holder overrides (load after style*.min.css).
+ * Beats legacy style.css DT rules without affecting global theme components.
+ */
+
+/* —— DataTables 2.x DOM aliases (style.css targets legacy class names) —— */
+.table-holder .dataTables_filter,
+.table-holder div.dt-search {
+  color: var(--text-color);
+  font-size: 1rem;
+}
+
+.table-holder .dataTables_filter input,
+.table-holder div.dt-search input {
+  border: 1px solid var(--text-color);
+  color: var(--text-color);
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 14px;
+  margin-left: 5px;
+  display: inline-block;
+  width: unset;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.table-holder .dataTables_length,
+.table-holder div.dt-length {
+  text-align: left;
+  margin-right: 10px;
+  font-size: 14px;
+  color: var(--text-color);
+}
+
+.table-holder .dataTables_length select,
+.table-holder div.dt-length select {
+  padding: 2px;
+}
+
+.table-holder .dataTables_info,
+.table-holder div.dt-info {
+  font-size: 14px;
+  padding-top: 0 !important;
+  display: flex;
+  align-items: center;
+  color: var(--text-color);
+}
+
+.table-holder .dataTables_wrapper,
+.table-holder div.dt-container {
+  color: var(--text-color);
+}
+
+/* —— Pagination (BS5 + DataTables 1.x / 2.x markup) —— */
+.table-holder .dataTables_paginate,
+.table-holder div.dt-paging {
+  --bs-pagination-color: var(--text-color);
+  --bs-pagination-bg: transparent;
+  --bs-pagination-border-width: 0;
+  --bs-pagination-border-color: transparent;
+  --bs-pagination-hover-color: var(--box-bg-color);
+  --bs-pagination-hover-bg: var(--text-color);
+  --bs-pagination-hover-border-color: transparent;
+  --bs-pagination-focus-color: var(--text-color);
+  --bs-pagination-focus-bg: transparent;
+  --bs-pagination-focus-box-shadow: none;
+  --bs-pagination-active-color: var(--box-bg-color);
+  --bs-pagination-active-bg: var(--text-color);
+  --bs-pagination-active-border-color: transparent;
+  --bs-pagination-disabled-color: var(--disable-text-color);
+  --bs-pagination-disabled-bg: transparent;
+  --bs-pagination-disabled-border-color: transparent;
+}
+
+.table-holder .dataTables_paginate .pagination {
+  --bs-pagination-border-radius: 0;
+}
+
+.table-holder .dataTables_paginate .page-link {
+  background-color: transparent;
+  border: 0;
+  color: var(--text-color);
+  box-shadow: none;
+}
+
+html.dark .table-holder .dataTables_paginate .page-link,
+html.dark .table-holder .dataTables_paginate .paginate_button a {
+  color: var(--text-color);
+}
+
+html.dark .table-holder .dataTables_paginate .page-item.active .page-link,
+html.dark .table-holder .dataTables_paginate .page-item.active > .page-link,
+html.dark .table-holder .dataTables_paginate .paginate_button.active,
+html.dark .table-holder .dataTables_paginate .paginate_button.active a {
+  background-color: var(--text-color) !important;
+  color: var(--box-bg-color) !important;
+  border-color: transparent !important;
+}
+
+.table-holder .dataTables_paginate .page-item.active .page-link {
+  background-color: var(--text-color);
+  border-color: transparent;
+  color: var(--box-bg-color);
+}
+
+.table-holder .dataTables_paginate .page-item:not(.active) .page-link:hover,
+.table-holder .dataTables_paginate .paginate_button:not(.disabled):not(.active):hover {
+  background-color: var(--text-color);
+  background-image: none;
+  color: var(--box-bg-color);
+}
+
+.table-holder .dataTables_paginate .paginate_button:not(.disabled):not(.active):hover a {
+  color: var(--box-bg-color);
+}
+
+.table-holder .dataTables_paginate .paginate_button.active,
+.table-holder .dataTables_paginate .paginate_button.active a {
+  background-color: var(--text-color);
+  background-image: none;
+  color: var(--box-bg-color);
+  border: 0;
+}
+
+.table-holder .dataTables_paginate .paginate_button a {
+  color: var(--text-color);
+  background: transparent;
+  border: 0;
+}
+
+.table-holder div.dt-paging {
+  border: 1px solid var(--text-color);
+  border-radius: 5px;
+  padding-top: 0;
+}
+
+.table-holder div.dt-paging nav {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  justify-content: space-around;
+  align-items: stretch;
+  list-style: none;
+}
+
+.table-holder div.dt-paging .dt-paging-button,
+.table-holder div.dt-paging .page-link {
+  text-decoration: none !important;
+}
+
+.table-holder div.dt-paging .pagination {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: flex;
+  overflow: hidden;
+  justify-content: space-around;
+  border-radius: 5px;
+}
+
+.table-holder div.dt-paging .page-item {
+  margin: 0;
+  border: 0;
+}
+
+.table-holder div.dt-paging .page-link,
+.table-holder div.dt-paging button.page-link {
+  padding: 5px 10px;
+  margin: 0;
+  font-size: 14px;
+  border: 0 !important;
+  border-radius: 0;
+  background: transparent !important;
+  background-image: none !important;
+  color: var(--text-color);
+  box-shadow: none !important;
+}
+
+.table-holder div.dt-paging .page-item + .page-item {
+  border-left: 0 !important;
+}
+
+html[dir="rtl"] .table-holder div.dt-paging .page-item + .page-item {
+  border-right: 0 !important;
+  border-left: 0 !important;
+}
+
+.table-holder div.dt-paging .pagination {
+  gap: 0;
+}
+
+.table-holder div.dt-paging .page-item.active .page-link,
+.table-holder div.dt-paging .page-item.active button.page-link {
+  background-color: var(--text-color) !important;
+  color: var(--box-bg-color) !important;
+  --bs-pagination-active-bg: var(--text-color);
+  --bs-pagination-active-color: var(--box-bg-color);
+  --bs-pagination-active-border-color: transparent;
+}
+
+.table-holder div.dt-paging .page-item:not(.active):not(.disabled) .page-link:hover,
+.table-holder div.dt-paging .page-item:not(.active):not(.disabled) button.page-link:hover {
+  background-color: var(--text-color) !important;
+  color: var(--box-bg-color) !important;
+}
+
+.table-holder div.dt-paging .page-item.disabled .page-link,
+.table-holder div.dt-paging .page-item.disabled button.page-link,
+.table-holder div.dt-paging .page-link.previous,
+.table-holder div.dt-paging .page-link.next,
+.table-holder div.dt-paging button.page-link.previous,
+.table-holder div.dt-paging button.page-link.next {
+  background: transparent !important;
+  background-image: none !important;
+  color: var(--text-color);
+  opacity: 1;
+}
+
+.table-holder div.dt-paging .page-item.disabled .page-link,
+.table-holder div.dt-paging .page-item.disabled button.page-link {
+  color: var(--disable-text-color);
+}
+
+.table-holder div.dt-paging .page-link:focus,
+.table-holder div.dt-paging button.page-link:focus,
+.table-holder div.dt-paging .page-link:focus-visible,
+.table-holder div.dt-paging button.page-link:focus-visible {
+  box-shadow: none !important;
+  outline: none !important;
+  z-index: 0;
+}
+
+.table-holder div.dt-paging .dt-paging-button {
+  padding: 0;
+  margin: 0;
+  border: 0 !important;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+html.dark .table-holder div.dt-paging .dt-paging-button {
+  color: var(--text-color);
+}
+
+html.dark .table-holder div.dt-paging .dt-paging-button.current {
+  background-color: var(--text-color) !important;
+  color: var(--box-bg-color) !important;
+}
+
+.table-holder .pagination {
+  --bs-pagination-color: var(--text-color);
+  --bs-pagination-bg: transparent;
+  --bs-pagination-border-color: transparent;
+  --bs-pagination-hover-color: var(--box-bg-color);
+  --bs-pagination-hover-bg: var(--text-color);
+  --bs-pagination-active-color: var(--box-bg-color);
+  --bs-pagination-active-bg: var(--text-color);
+}
+
+/* —— Dark index pages: DataTables toolbar + striped rows —— */
+html.dark .table-holder .dt-buttons .btn-secondary {
+  --bs-btn-bg: var(--body-background);
+  --bs-btn-border-color: var(--border-color);
+  --bs-btn-color: var(--text-color);
+  --bs-btn-hover-bg: var(--box-bg-color);
+  --bs-btn-hover-border-color: var(--border-color);
+  --bs-btn-hover-color: var(--text-color);
+  background-color: var(--body-background);
+  border-color: var(--border-color);
+  color: var(--text-color);
+}
+
+html.dark .table-holder .dataTables_filter input,
+html.dark .table-holder div.dt-search input,
+html.dark .table-holder .dataTables_filter input.form-control,
+html.dark .table-holder .dataTables_filter input.form-control-sm {
+  background-color: transparent;
+  color: var(--text-color);
+  border-color: var(--text-color);
+  box-shadow: none;
+}
+
+html.dark .table-holder .dataTables_length select,
+html.dark .table-holder div.dt-length select,
+html.dark .table-holder .dataTables_length .form-select,
+html.dark .table-holder .dataTables_length .custom-select,
+html.dark .table-holder .dataTables_length .form-control-sm {
+  background-color: var(--body-background);
+  color: var(--text-color);
+  border-color: var(--border-color);
+}
+
+html.dark {
+  --admin-table-stripe-bg: #2a2d33;
+}
+
+html.dark .table-holder .table.table-striped > tbody > tr:nth-of-type(odd) > * {
+  --bs-table-color-type: var(--text-color);
+  --bs-table-bg-type: var(--admin-table-stripe-bg);
+  --bs-table-accent-bg: var(--admin-table-stripe-bg);
+  box-shadow: inset 0 0 0 9999px var(--admin-table-stripe-bg);
+}
+
+html.dark .table-holder .table.table-striped > tbody > tr:nth-of-type(even) > * {
+  --bs-table-accent-bg: var(--box-bg-color);
+  box-shadow: none;
+  background-color: var(--box-bg-color);
+}
+
+html.dark .table-holder .dataTables_paginate .page-item:not(.active) .page-link,
+html.dark .table-holder .dataTables_paginate .paginate_button:not(.active) {
+  background-color: transparent !important;
+  background-image: none !important;
+  color: var(--text-color);
+  border: 0;
+}
+
+html.dark .table-holder table {
+  border-top-color: var(--body-background);
+}
+
+html.dark .table-holder table thead th {
+  color: var(--text-color);
+  border-bottom-color: var(--border-color);
+}
+
+/* Row action buttons: keep theme outline (BS 5.3 solid defaults load before style.css) */
+.table-holder .btn-group .btn.btn-warning,
+.table-holder .btn-group .btn.btn-danger,
+.table-holder .btn-group .btn.btn-primary {
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+.table-holder .btn-group .btn.btn-warning {
+  border-color: var(--warning-color) !important;
+  color: var(--warning-color) !important;
+}
+
+.table-holder .btn-group .btn.btn-danger {
+  border-color: var(--danger-color) !important;
+  color: var(--danger-color) !important;
+}
+
+.table-holder .btn-group .btn.btn-primary {
+  border-color: var(--main-color) !important;
+  color: var(--main-color) !important;
+}
+
+/* —— DataTables 2: toolbar (single rounded group, one chevron) —— */
+.table-holder div.dt-buttons.btn-group,
+.table-holder div.dt-buttons .btn-group {
+  border: 0;
+  box-shadow: none;
+  gap: 0;
+}
+
+.table-holder div.dt-buttons .btn-secondary,
+.table-holder div.dt-buttons .dt-button.btn-secondary {
+  border-color: var(--body-background) !important;
+  box-shadow: none !important;
+}
+
+.table-holder div.dt-buttons .btn-group > .btn + .btn,
+.table-holder div.dt-buttons .btn-group > .dt-button + .dt-button {
+  border-left: 0 !important;
+  margin-left: 0;
+}
+
+html[dir="rtl"] .table-holder div.dt-buttons .btn-group > .btn + .btn,
+html[dir="rtl"] .table-holder div.dt-buttons .btn-group > .dt-button + .dt-button {
+  border-left: var(--bs-border-width) solid var(--body-background) !important;
+  border-right: 0 !important;
+}
+
+/* Dropdown carets: one small inline chevron after the label (not BS5 border triangle) */
+.table-holder div.dt-buttons .dt-button-down-arrow,
+.table-holder div.dt-buttons span.dt-button-down-arrow {
+  display: none !important;
+}
+
+.table-holder div.dt-buttons .btn::after,
+.table-holder div.dt-buttons .dt-button::after,
+.table-holder div.dt-buttons .dropdown-toggle::after,
+.table-holder div.dt-buttons .btn.dropdown-toggle::after,
+.table-holder .dt-buttons .btn-group .btn-secondary::after,
+.table-holder .dt-buttons .btn-group > .btn-secondary::after {
+  display: none !important;
+  content: none !important;
+  border: 0 !important;
+  margin: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  font-family: inherit !important;
+}
+
+.table-holder div.dt-buttons .btn-secondary > span,
+.table-holder div.dt-buttons .btn-secondary span {
+  display: inline !important;
+  font-size: 14px;
+}
+
+.table-holder div.dt-buttons {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+}
+
+.table-holder div.dt-buttons > .btn-group,
+.table-holder div.dt-buttons .btn-group {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+}
+
+.table-holder div.dt-buttons .btn,
+.table-holder div.dt-buttons .dt-button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center;
+  vertical-align: middle !important;
+  line-height: 1.25;
+  min-height: 31.5px;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+}
+
+.table-holder div.dt-buttons .btn.btn-group {
+  display: inline-flex !important;
+}
+
+.table-holder div.dt-buttons .buttons-page-length > span:first-child::after,
+.table-holder div.dt-buttons .buttons-collection > span:first-child::after,
+.table-holder div.dt-buttons .buttons-colvis > span:first-child::after,
+.table-holder div.dt-buttons button.dropdown-toggle.buttons-page-length > span:first-child::after,
+.table-holder div.dt-buttons button.dropdown-toggle.buttons-collection > span:first-child::after,
+.table-holder div.dt-buttons button.dropdown-toggle.buttons-colvis > span:first-child::after {
+  content: "\f11e"; /* uicons-regular-rounded — same glyph as legacy style.css caret */
+  font-family: uicons-regular-rounded !important;
+  font-size: 10px;
+  line-height: 1;
+  color: var(--text-color);
+  opacity: 1;
+  margin-inline-start: 0.35em;
+  vertical-align: middle;
+  display: inline;
+  border: none;
+  position: static;
+  font-weight: normal;
+}
+
+.table-holder div.dt-buttons .buttons-print::after,
+.table-holder div.dt-buttons .buttons-print > span::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* —— Striped rows (override DT2 BS5 integration clearing stripes) —— */
+html:not(.dark) .table-holder table.table.dataTable.table-striped > tbody > tr:nth-of-type(odd) > *,
+html:not(.dark) .table-holder table.table.dataTable.table-striped > tbody > tr:nth-of-type(2n + 1) > * {
+  box-shadow: inset 0 0 0 9999px var(--body-background) !important;
+  --bs-table-accent-bg: var(--body-background);
+}
+
+html:not(.dark) .table-holder table.table.dataTable.table-striped > tbody > tr:nth-of-type(even) > * {
+  box-shadow: none !important;
+  --bs-table-accent-bg: transparent;
+}
+
+.table-holder table.table.dataTable.table-striped.table-dark > tbody > tr:nth-of-type(odd) > *,
+.table-holder table.table.dataTable.table-striped.table-dark > tbody > tr:nth-of-type(2n + 1) > *,
+html.dark .table-holder table.table.dataTable.table-striped > tbody > tr:nth-of-type(odd) > *,
+html.dark .table-holder table.table.dataTable.table-striped > tbody > tr:nth-of-type(2n + 1) > *,
+html.dark .table-holder table.table.dataTable.table-dark.table-striped > tbody > tr:nth-of-type(odd) > *,
+html.dark .table-holder table.table.dataTable.table-dark.table-striped > tbody > tr:nth-of-type(2n + 1) > *,
+html.dark .table-holder .table.table-striped > tbody > tr:nth-of-type(odd) > * {
+  box-shadow: inset 0 0 0 9999px var(--admin-table-stripe-bg, #2a2d33) !important;
+  --bs-table-accent-bg: var(--admin-table-stripe-bg, #2a2d33);
+  --bs-table-bg: var(--admin-table-stripe-bg, #2a2d33);
+  background-color: var(--admin-table-stripe-bg, #2a2d33) !important;
+  color: var(--text-color);
+}
+
+.table-holder table.table.dataTable.table-striped.table-dark > tbody > tr:nth-of-type(even) > *,
+.table-holder table.table.dataTable.table-striped.table-dark > tbody > tr:nth-of-type(2n) > *,
+html.dark .table-holder table.table.dataTable.table-striped > tbody > tr:nth-of-type(even) > *,
+html.dark .table-holder table.table.dataTable.table-striped > tbody > tr:nth-of-type(2n) > *,
+html.dark .table-holder table.table.dataTable.table-dark.table-striped > tbody > tr:nth-of-type(even) > *,
+html.dark .table-holder table.table.dataTable.table-dark.table-striped > tbody > tr:nth-of-type(2n) > *,
+html.dark .table-holder .table.table-striped > tbody > tr:nth-of-type(even) > * {
+  box-shadow: none !important;
+  --bs-table-accent-bg: var(--box-bg-color);
+  --bs-table-bg: var(--box-bg-color);
+  background-color: var(--box-bg-color) !important;
+  color: var(--text-color);
+}
+
+/* —— Sort icons: legacy left arrows (DT 1.x look on DT 2.x classes) —— */
+.table-holder table.dataTable thead > tr > th.dt-orderable:not(.dt-orderable-none),
+.table-holder table.dataTable thead > tr > th.dt-orderable-asc,
+.table-holder table.dataTable thead > tr > th.dt-orderable-desc,
+.table-holder table.dataTable thead > tr > th.dt-ordering-asc,
+.table-holder table.dataTable thead > tr > th.dt-ordering-desc,
+.table-holder table.dataTable thead > tr > td.dt-orderable-asc,
+.table-holder table.dataTable thead > tr > td.dt-orderable-desc,
+.table-holder table.dataTable thead > tr > td.dt-ordering-asc,
+.table-holder table.dataTable thead > tr > td.dt-ordering-desc {
+  position: relative;
+  padding-right: 0.5rem !important;
+  padding-left: 1.75rem !important;
+}
+
+html[dir="rtl"] .table-holder table.dataTable thead > tr > th.dt-orderable-asc,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > th.dt-orderable-desc,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > th.dt-ordering-asc,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > th.dt-ordering-desc,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-orderable-asc,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-orderable-desc,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-ordering-asc,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-ordering-desc {
+  padding-left: 1.75rem !important;
+  padding-right: 0.5rem !important;
+}
+
+.table-holder table.dataTable thead span.dt-column-order {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  position: absolute !important;
+  pointer-events: none !important;
+}
+
+.table-holder table.dataTable thead > tr > th.dt-orderable-asc,
+.table-holder table.dataTable thead > tr > th.dt-orderable-desc,
+.table-holder table.dataTable thead > tr > th.dt-ordering-asc,
+.table-holder table.dataTable thead > tr > th.dt-ordering-desc {
+  padding-right: 0.5rem !important;
+  padding-left: 1.75rem !important;
+}
+
+.table-holder table.dataTable thead > tr > th.dt-orderable:not(.dt-orderable-none)::before,
+.table-holder table.dataTable thead > tr > th.dt-orderable:not(.dt-orderable-none)::after,
+.table-holder table.dataTable thead > tr > th.sorting::before,
+.table-holder table.dataTable thead > tr > th.sorting::after,
+.table-holder table.dataTable thead > tr > th.sorting_asc::before,
+.table-holder table.dataTable thead > tr > th.sorting_asc::after,
+.table-holder table.dataTable thead > tr > th.sorting_desc::before,
+.table-holder table.dataTable thead > tr > th.sorting_desc::after,
+.table-holder table.dataTable thead > tr > th.dt-orderable-asc::before,
+.table-holder table.dataTable thead > tr > th.dt-orderable-desc::before,
+.table-holder table.dataTable thead > tr > th.dt-ordering-asc::before,
+.table-holder table.dataTable thead > tr > th.dt-ordering-desc::before,
+.table-holder table.dataTable thead > tr > td.dt-orderable-asc::before,
+.table-holder table.dataTable thead > tr > td.dt-orderable-desc::before,
+.table-holder table.dataTable thead > tr > td.dt-ordering-asc::before,
+.table-holder table.dataTable thead > tr > td.dt-ordering-desc::before,
+.table-holder table.dataTable thead > tr > th.dt-orderable-asc::after,
+.table-holder table.dataTable thead > tr > th.dt-orderable-desc::after,
+.table-holder table.dataTable thead > tr > th.dt-ordering-asc::after,
+.table-holder table.dataTable thead > tr > th.dt-ordering-desc::after,
+.table-holder table.dataTable thead > tr > td.dt-orderable-asc::after,
+.table-holder table.dataTable thead > tr > td.dt-orderable-desc::after,
+.table-holder table.dataTable thead > tr > td.dt-ordering-asc::after,
+.table-holder table.dataTable thead > tr > td.dt-ordering-desc::after {
+  position: absolute;
+  top: 50%;
+  bottom: auto;
+  display: block;
+  transform: translateY(-50%);
+  opacity: 1;
+  line-height: 1;
+  font-size: 0.75rem;
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+.table-holder table.dataTable thead > tr > th.dt-orderable:not(.dt-orderable-none)::before,
+.table-holder table.dataTable thead > tr > th.dt-orderable:not(.dt-orderable-none)::after {
+  opacity: 0.55 !important;
+  color: var(--text-color) !important;
+}
+
+html.dark .table-holder table.dataTable thead > tr > th.dt-orderable:not(.dt-orderable-none)::before,
+html.dark .table-holder table.dataTable thead > tr > th.dt-orderable:not(.dt-orderable-none)::after,
+html.dark .table-holder table.dataTable thead > tr > th.dt-orderable-asc::before,
+html.dark .table-holder table.dataTable thead > tr > th.dt-orderable-asc::after,
+html.dark .table-holder table.dataTable thead > tr > th.dt-orderable-desc::before,
+html.dark .table-holder table.dataTable thead > tr > th.dt-orderable-desc::after,
+html.dark .table-holder table.dataTable thead > tr > th.dt-ordering-asc::before,
+html.dark .table-holder table.dataTable thead > tr > th.dt-ordering-desc::after,
+html.dark .table-holder table.dataTable thead > tr > th.sorting::before,
+html.dark .table-holder table.dataTable thead > tr > th.sorting::after,
+html.dark .table-holder table.dataTable thead > tr > th.sorting_asc::before,
+html.dark .table-holder table.dataTable thead > tr > th.sorting_asc::after,
+html.dark .table-holder table.dataTable thead > tr > th.sorting_desc::before,
+html.dark .table-holder table.dataTable thead > tr > th.sorting_desc::after {
+  opacity: 1 !important;
+  color: var(--text-color) !important;
+}
+
+html[dir="ltr"] .table-holder table.dataTable thead > tr > th.dt-orderable:not(.dt-orderable-none)::before,
+html[dir="ltr"] .table-holder table.dataTable thead > tr > th.sorting::before,
+html[dir="ltr"] .table-holder table.dataTable thead > tr > th.sorting_asc::before,
+html[dir="ltr"] .table-holder table.dataTable thead > tr > th.sorting_desc::before,
+html[dir="ltr"] .table-holder table.dataTable thead > tr > th.dt-orderable-asc::before,
+html[dir="ltr"] .table-holder table.dataTable thead > tr > th.dt-orderable-desc::before,
+html[dir="ltr"] .table-holder table.dataTable thead > tr > th.dt-ordering-asc::before,
+html[dir="ltr"] .table-holder table.dataTable thead > tr > th.dt-ordering-desc::before,
+html[dir="ltr"] .table-holder table.dataTable thead > tr > td.dt-orderable-asc::before,
+html[dir="ltr"] .table-holder table.dataTable thead > tr > td.dt-orderable-desc::before,
+html[dir="ltr"] .table-holder table.dataTable thead > tr > td.dt-ordering-asc::before,
+html[dir="ltr"] .table-holder table.dataTable thead > tr > td.dt-ordering-desc::before {
+  left: 0.5em;
+  right: auto;
+  content: "↑";
+}
+
+html[dir="ltr"] .table-holder table.dataTable thead > tr > th.dt-orderable:not(.dt-orderable-none)::after,
+html[dir="ltr"] .table-holder table.dataTable thead > tr > th.sorting::after,
+html[dir="ltr"] .table-holder table.dataTable thead > tr > th.sorting_asc::after,
+html[dir="ltr"] .table-holder table.dataTable thead > tr > th.sorting_desc::after,
+html[dir="ltr"] .table-holder table.dataTable thead > tr > th.dt-orderable-asc::after,
+html[dir="ltr"] .table-holder table.dataTable thead > tr > th.dt-orderable-desc::after,
+html[dir="ltr"] .table-holder table.dataTable thead > tr > th.dt-ordering-asc::after,
+html[dir="ltr"] .table-holder table.dataTable thead > tr > th.dt-ordering-desc::after,
+html[dir="ltr"] .table-holder table.dataTable thead > tr > td.dt-orderable-asc::after,
+html[dir="ltr"] .table-holder table.dataTable thead > tr > td.dt-orderable-desc::after,
+html[dir="ltr"] .table-holder table.dataTable thead > tr > td.dt-ordering-asc::after,
+html[dir="ltr"] .table-holder table.dataTable thead > tr > td.dt-ordering-desc::after {
+  left: 0.15em;
+  right: auto;
+  content: "↓";
+}
+
+html[dir="rtl"] .table-holder table.dataTable thead > tr > th.dt-orderable-asc::before,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > th.dt-orderable-desc::before,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > th.dt-ordering-asc::before,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > th.dt-ordering-desc::before,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-orderable-asc::before,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-orderable-desc::before,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-ordering-asc::before,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-ordering-desc::before {
+  left: 0.5em;
+  right: auto;
+  content: "↑";
+}
+
+html[dir="rtl"] .table-holder table.dataTable thead > tr > th.dt-orderable-asc::after,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > th.dt-orderable-desc::after,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > th.dt-ordering-asc::after,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > th.dt-ordering-desc::after,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-orderable-asc::after,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-orderable-desc::after,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-ordering-asc::after,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-ordering-desc::after {
+  left: 0.15em;
+  right: auto;
+  content: "↓";
+}
+
+.table-holder table.dataTable thead > tr > th[class*="dt-orderable"]:not(.dt-orderable-none),
+.table-holder table.dataTable thead > tr > th.dt-ordering-asc,
+.table-holder table.dataTable thead > tr > th.dt-ordering-desc {
+  padding-right: 0.5rem !important;
+}
+
+.table-holder table.dataTable thead > tr > th.dt-ordering-asc::before,
+.table-holder table.dataTable thead > tr > td.dt-ordering-asc::before {
+  opacity: 1 !important;
+  color: var(--text-color) !important;
+}
+
+.table-holder table.dataTable thead > tr > th.dt-ordering-desc::after,
+.table-holder table.dataTable thead > tr > td.dt-ordering-desc::after {
+  opacity: 1 !important;
+  color: var(--text-color) !important;
+}
+
+.table-holder table.dataTable thead > tr > th.dt-ordering-asc::after,
+.table-holder table.dataTable thead > tr > td.dt-ordering-asc::after {
+  opacity: 0.45 !important;
+}
+
+.table-holder table.dataTable thead > tr > th.dt-ordering-desc::before,
+.table-holder table.dataTable thead > tr > td.dt-ordering-desc::before {
+  opacity: 0.45 !important;
+}
+
+.table-holder table.dataTable thead th.sorting::after,
+.table-holder table.dataTable thead th.sorting::before,
+.table-holder table.dataTable thead th.sorting_asc::after,
+.table-holder table.dataTable thead th.sorting_asc::before,
+.table-holder table.dataTable thead th.sorting_desc::after,
+.table-holder table.dataTable thead th.sorting_desc::before,
+.table-holder table.dataTable thead th.dt-orderable-asc::after,
+.table-holder table.dataTable thead th.dt-orderable-asc::before,
+.table-holder table.dataTable thead th.dt-orderable-desc::after,
+.table-holder table.dataTable thead th.dt-orderable-desc::before,
+.table-holder table.dataTable thead th.dt-ordering-asc::after,
+.table-holder table.dataTable thead th.dt-ordering-asc::before,
+.table-holder table.dataTable thead th.dt-ordering-desc::after,
+.table-holder table.dataTable thead th.dt-ordering-desc::before {
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
+}
+
+/* —— Layout spacing (match legacy Bfrtip wrapper) —— */
+.table-holder div.dt-container {
+  padding-top: 0;
+  margin-top: 0;
+}
+
+.table-holder div.dt-container div.dt-layout-row:not(.dt-layout-table) {
+  margin: 0 0 0.25rem;
+  align-items: center;
+}
+
+.table-holder div.dt-container > div.dt-layout-row:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.table-holder div.dt-container div.dt-layout-row.dt-layout-table {
+  margin-bottom: 0;
+}
+
+.table-holder table.table.dataTable {
+  margin-top: 0.35rem !important;
+  margin-bottom: 0 !important;
+  padding-top: 0 !important;
+  border-top-width: 1px;
+}
+
+.table-holder div.dt-container div.dt-layout-start > *:not(:last-child),
+.table-holder div.dt-container div.dt-layout-end > *:not(:first-child) {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.table-holder div.dt-container div.dt-search {
+  text-align: right;
+  margin-bottom: 0;
+}
+
+html[dir="ltr"] .table-holder div.dt-container > .row.justify-content-between:first-child,
+html[dir="ltr"] .table-holder div.dt-container div.dt-layout-row:not(.dt-layout-table) {
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+/* DT2 BS5 layout uses Bootstrap rows, not dt-layout-row */
+html[dir="rtl"] .table-holder div.dt-container > .row.justify-content-between:first-child {
+  justify-content: flex-start !important;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: nowrap;
+}
+
+html[dir="rtl"] .table-holder div.dt-container > .row.justify-content-between:first-child .dt-layout-start,
+html[dir="rtl"] .table-holder div.dt-container > .row.justify-content-between:first-child .dt-layout-end {
+  flex: 0 0 auto !important;
+  width: auto !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+html[dir="rtl"] .table-holder div.dt-container > .row.justify-content-between:first-child .me-auto,
+html[dir="rtl"] .table-holder div.dt-container > .row.justify-content-between:first-child .ms-auto {
+  margin-inline: 0 !important;
+}
+
+html[dir="rtl"] .table-holder div.dt-buttons {
+  direction: ltr;
+  flex-direction: row-reverse;
+}
+
+html[dir="rtl"] .table-holder div.dt-search {
+  display: inline-flex;
+  flex-direction: row-reverse;
+  direction: ltr;
+  align-items: center;
+  gap: 5px;
+  text-align: right;
+}
+
+html[dir="rtl"] .table-holder div.dt-search label {
+  margin: 0;
+  direction: rtl;
+  unicode-bidi: embed;
+}
+
+html[dir="ltr"] .table-holder div.dt-container div.dt-layout-row:not(.dt-layout-table):last-child .dt-layout-start {
+  justify-content: flex-start;
+}
+
+html[dir="ltr"] .table-holder div.dt-container div.dt-layout-row:not(.dt-layout-table):last-child .dt-layout-end {
+  justify-content: flex-end;
+}
+
+html[dir="rtl"] .table-holder div.dt-container div.dt-layout-row:not(.dt-layout-table):last-child .dt-layout-start {
+  justify-content: flex-end;
+}
+
+html[dir="rtl"] .table-holder div.dt-container div.dt-layout-row:not(.dt-layout-table):last-child .dt-layout-end {
+  justify-content: flex-start;
+}
+
+.table-holder div.dt-container div.dt-search input {
+  margin-left: 5px;
+  margin-right: 0;
+}
+
+html[dir="rtl"] .table-holder div.dt-container div.dt-search input {
+  margin-right: 5px;
+  margin-left: 0;
+}
+
+.table-holder div.dt-container div.dt-length {
+  margin-right: 10px;
+}
+
+/* Product image cells — match legacy style.css (no DT2/BS5 inflated row height) */
+.table-holder table.dataTable tbody td.prod-img,
+.table-holder table.dataTable tbody td.prod-img .img-holder {
+  width: 100px;
+  min-height: 0;
+  max-height: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  line-height: normal;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.table-holder table.dataTable tbody td.prod-img {
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
+}
+
+.table-holder table.dataTable tbody td.prod-img .img-holder img,
+.table-holder table.dataTable tbody td.customer-img .img-holder img {
+  width: 70px !important;
+  max-width: 70px !important;
+  height: auto !important;
+  max-height: 22px !important;
+  object-fit: contain;
+  display: inline-block !important;
+  vertical-align: middle;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.table-holder table.table.dataTable tbody td.prod-img img[src*="product-placeholder"] {
+  visibility: hidden;
+  max-height: 0 !important;
+  height: 0 !important;
+  width: 0 !important;
+  margin: 0;
+  padding: 0;
+}
+
+html.dark .table-holder table.dataTable tbody td.prod-img .img-holder img:not([src*="product-placeholder"]) {
+  background-color: #2a2d33;
+  max-height: 22px !important;
+}
+
+.table-holder table.dataTable tbody td.customer-img .img-holder {
+  width: 56px;
+  min-height: 0;
+  text-align: center;
+}
+
+.table-holder table.dataTable thead > tr > th .dt-column-order,
+.table-holder table.dataTable thead > tr > td .dt-column-order {
+  display: none !important;
+}
