@@ -30,12 +30,26 @@
         <script src="{{ asset('vendor/datatables/js/dataTables.select.min.js') }}" type="text/javascript"></script>
         <script src="{{ asset('vendor/datatables/js/select.bootstrap5.min.js') }}" type="text/javascript"></script>
         <script type="text/javascript">
-            window.AdminDataTableLayout = {
-                topStart: 'buttons',
-                topEnd: 'search',
-                bottomStart: 'info',
-                bottomEnd: 'paging',
+            window.getAdminDataTableLayout = function () {
+                var rtl = document.documentElement.getAttribute('dir') === 'rtl';
+                if (rtl) {
+                    return {
+                        topStart: 'search',
+                        topEnd: 'buttons',
+                        bottomStart: 'paging',
+                        bottomEnd: 'info',
+                    };
+                }
+
+                return {
+                    topStart: 'buttons',
+                    topEnd: 'search',
+                    bottomStart: 'info',
+                    bottomEnd: 'paging',
+                };
             };
+
+            window.AdminDataTableLayout = window.getAdminDataTableLayout();
 
             (function () {
                 if (typeof DataTable === 'undefined') {

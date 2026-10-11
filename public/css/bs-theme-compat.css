@@ -695,14 +695,20 @@ html[dir="rtl"] .table-holder div.dt-buttons .btn-group > .dt-button + .dt-butto
   --bs-table-accent-bg: transparent;
 }
 
+html.dark .table-holder table.table.dataTable.table-striped > tbody > tr:nth-of-type(odd) > *,
+html.dark .table-holder table.table.dataTable.table-dark.table-striped > tbody > tr:nth-of-type(odd) > *,
 html.dark .table-holder .table.table-striped > tbody > tr:nth-of-type(odd) > * {
   box-shadow: inset 0 0 0 9999px var(--box-bg-color) !important;
   --bs-table-accent-bg: var(--box-bg-color);
+  background-color: transparent !important;
 }
 
+html.dark .table-holder table.table.dataTable.table-striped > tbody > tr:nth-of-type(even) > *,
+html.dark .table-holder table.table.dataTable.table-dark.table-striped > tbody > tr:nth-of-type(even) > *,
 html.dark .table-holder .table.table-striped > tbody > tr:nth-of-type(even) > * {
-  box-shadow: none !important;
-  --bs-table-accent-bg: transparent;
+  box-shadow: inset 0 0 0 9999px var(--body-background) !important;
+  --bs-table-accent-bg: var(--body-background);
+  background-color: transparent !important;
 }
 
 /* —— Sort icons: legacy left arrows (DT 1.x look on DT 2.x classes) —— */
@@ -727,8 +733,8 @@ html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-orderable-asc,
 html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-orderable-desc,
 html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-ordering-asc,
 html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-ordering-desc {
-  padding-left: 0.5rem !important;
-  padding-right: 1.75rem !important;
+  padding-left: 1.75rem !important;
+  padding-right: 0.5rem !important;
 }
 
 .table-holder table.dataTable thead span.dt-column-order {
@@ -790,7 +796,8 @@ html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-orderable-asc::
 html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-orderable-desc::before,
 html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-ordering-asc::before,
 html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-ordering-desc::before {
-  right: 0.5em;
+  left: 0.5em;
+  right: auto;
   content: "↑";
 }
 
@@ -802,8 +809,15 @@ html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-orderable-asc::
 html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-orderable-desc::after,
 html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-ordering-asc::after,
 html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-ordering-desc::after {
-  right: 0.15em;
+  left: 0.15em;
+  right: auto;
   content: "↓";
+}
+
+.table-holder table.dataTable thead > tr > th[class*="dt-orderable"]:not(.dt-orderable-none),
+.table-holder table.dataTable thead > tr > th.dt-ordering-asc,
+.table-holder table.dataTable thead > tr > th.dt-ordering-desc {
+  padding-right: 0.5rem !important;
 }
 
 .table-holder table.dataTable thead > tr > th.dt-ordering-asc::before,
@@ -844,8 +858,38 @@ html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-ordering-desc::
   margin-bottom: 0;
 }
 
+html[dir="rtl"] .table-holder div.dt-container div.dt-layout-row:not(.dt-layout-table) {
+  flex-direction: row;
+}
+
+html[dir="rtl"] .table-holder div.dt-container div.dt-layout-start {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+html[dir="rtl"] .table-holder div.dt-container div.dt-layout-end {
+  margin-right: auto;
+  margin-left: 0;
+}
+
 html[dir="rtl"] .table-holder div.dt-container div.dt-search {
-  text-align: left;
+  text-align: right;
+}
+
+html[dir="ltr"] .table-holder div.dt-container div.dt-layout-row:not(.dt-layout-table):last-child .dt-layout-start {
+  justify-content: flex-start;
+}
+
+html[dir="ltr"] .table-holder div.dt-container div.dt-layout-row:not(.dt-layout-table):last-child .dt-layout-end {
+  justify-content: flex-end;
+}
+
+html[dir="rtl"] .table-holder div.dt-container div.dt-layout-row:not(.dt-layout-table):last-child .dt-layout-start {
+  justify-content: flex-end;
+}
+
+html[dir="rtl"] .table-holder div.dt-container div.dt-layout-row:not(.dt-layout-table):last-child .dt-layout-end {
+  justify-content: flex-start;
 }
 
 .table-holder div.dt-container div.dt-search input {
@@ -860,4 +904,23 @@ html[dir="rtl"] .table-holder div.dt-container div.dt-search input {
 
 .table-holder div.dt-container div.dt-length {
   margin-right: 10px;
+}
+
+/* Product/customer image cells (DT2 must not collapse placeholders) */
+.table-holder table.dataTable tbody td.prod-img .img-holder,
+.table-holder table.dataTable tbody td.customer-img .img-holder {
+  width: 100px;
+  min-height: 70px;
+  display: inline-block;
+  text-align: center;
+}
+
+.table-holder table.dataTable tbody td.prod-img .img-holder img,
+.table-holder table.dataTable tbody td.customer-img .img-holder img {
+  width: 70px !important;
+  max-width: 70px !important;
+  height: auto !important;
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
