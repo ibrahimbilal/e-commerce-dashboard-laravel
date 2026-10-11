@@ -48,7 +48,13 @@ class UpdateUserRequest extends FormRequest
 			'profile_picture' => [
 				File::image()
 					->types(['jpeg', 'jpg', 'png'])
-					->max(1024),
+					->max(1024)
+					->dimensions(
+						Rule::dimensions()
+						->maxWidth(500)
+						->maxHeight(500)
+						->ratio(1)
+					),
 			],
 		];
 	}

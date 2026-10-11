@@ -102,7 +102,7 @@ class ProfilePictureProcessingTest extends TestCase
         ]);
         $target->assignRole('viewer');
 
-        $file = UploadedFile::fake()->image('avatar.jpg', 800, 600);
+        $file = UploadedFile::fake()->image('avatar.jpg', 400, 400);
 
         $this->actingAs($this->admin)
             ->post(route('users.update', $target->getKey()), array_merge(
@@ -122,7 +122,7 @@ class ProfilePictureProcessingTest extends TestCase
 
     public function test_user_store_processes_jpeg_to_256_square(): void
     {
-        $file = UploadedFile::fake()->image('new.jpg', 800, 600);
+        $file = UploadedFile::fake()->image('new.jpg', 400, 400);
 
         $this->actingAs($this->admin)->post(route('users.store'), array_merge(
             $this->userStorePayload(),
@@ -137,7 +137,7 @@ class ProfilePictureProcessingTest extends TestCase
 
     public function test_user_store_processes_png_to_256_square(): void
     {
-        $file = UploadedFile::fake()->createWithContent('photo.png', $this->minimalPng(640, 480));
+        $file = UploadedFile::fake()->createWithContent('photo.png', $this->minimalPng(300, 300));
 
         $this->actingAs($this->admin)->post(route('users.store'), array_merge(
             $this->userStorePayload(['email' => 'pnguser@example.com']),
@@ -164,6 +164,16 @@ class ProfilePictureProcessingTest extends TestCase
 
         $this->admin->refresh();
         $this->assertStoredProfilePictureIs256($this->admin->profile_picture);
+    }
+
+    public function test_user_store_rejects_non_square_profile_picture(): void
+    {
+        $file = UploadedFile::fake()->image('wide.jpg', 800, 600);
+
+        $this->actingAs($this->admin)->postJson(route('users.store'), array_merge(
+            $this->userStorePayload(['email' => 'nonsquare@example.com']),
+            ['profile_picture' => $file]
+        ))->assertUnprocessable()->assertJsonValidationErrors(['profile_picture']);
     }
 
     public function test_user_store_rejects_non_image_profile_picture(): void
