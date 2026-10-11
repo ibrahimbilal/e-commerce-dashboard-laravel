@@ -906,7 +906,7 @@ html[dir="ltr"] .table-holder div.dt-container div.dt-layout-row:not(.dt-layout-
 
 html[dir="rtl"] .table-holder div.dt-container div.dt-layout-row:not(.dt-layout-table) {
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: flex-start;
   gap: 1rem;
 }
 
