@@ -3,7 +3,6 @@
 @section('title', 'Marketing')
 
 @push('stylesheet')
-<link href="{{ asset('css/datatables.min.css') }}" rel="stylesheet"/>
 @endpush
 
 @section('content')
@@ -147,12 +146,12 @@
 @endsection
 
 @push('scripts')
+    @include('components.admin.datatables-assets')
 <script async="" src="{{ asset('js/async.js') }}" type="text/javascript"></script>
-<script src="{{ asset('js/datatables.min.js') }}" type="text/javascript"></script>
 <script>
 if ($.fn.DataTable && $('#subscribers').length) {
       let product_table = $('#subscribers').DataTable({
-      	dom: 'Bfrtip',
+      	layout: window.AdminDataTableLayout || { topStart: 'buttons', topEnd: 'search', bottomStart: 'info', bottomEnd: 'paging' },
       	columnDefs: [
       		{
       			orderable: false,
@@ -160,12 +159,12 @@ if ($.fn.DataTable && $('#subscribers').length) {
       			targets: 0
       		},
       		{
-      			bSortable: false,
-      			aTargets: [0{{ $showActions ? ', 6' : ', 5' }}]
+      			orderable: false,
+      			targets: [0{{ $showActions ? ', 6' : ', 5' }}]
       		},
       		{
-      			bSearchable: false,
-      			aTargets: [0{{ $showActions ? ', 6' : ', 5' }}]
+      			searchable: false,
+      			targets: [0{{ $showActions ? ', 6' : ', 5' }}]
       		}
       	],
       	select: {

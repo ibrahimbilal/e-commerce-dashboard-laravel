@@ -4,7 +4,8 @@
 
 @push('stylesheet')
     <!-- Data Tables -->
-    {{-- <link href="{{ asset('css/datatables.min.css') }}" rel="stylesheet"> --}}
+    {{--
+--}}
     <!-- Date Picker-->
     <link href="{{ asset('css/pickadate.css') }}" rel="stylesheet">
 	<!-- Sweet Alert 2 -->
@@ -323,25 +324,27 @@
 @endsection
 
 @push('scripts')
+    @include('components.admin.datatables-assets')
     @include('components.admin.pp-cropper-assets')
     <!-- Sweet Alert -->
     <script src="{{ asset('js/sweetalert2.min.js') }}" type="text/javascript"></script>
     <!-- Data Table-->
-    {{-- <script src="{{ asset('js/datatables.min.js') }}" type="text/javascript"></script> --}}
+    {{--
+--}}
     <!-- Date Picker-->
     <script src="{{ asset('js/pickadate/picker.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/pickadate/picker.date.js') }}" type="text/javascript"></script>
     <script>
         // Data Tables
         // let product_table = $('#activities').DataTable({
-        //     dom: 'Bfrtip',
+        //     layout: window.AdminDataTableLayout || { topStart: 'buttons', topEnd: 'search', bottomStart: 'info', bottomEnd: 'paging' },
         //     columnDefs: [{
-        //             bSortable: false,
-        //             aTargets: [4]
+        //             orderable: false,
+        //             targets: [4]
         //         },
         //         {
-        //             bSearchable: false,
-        //             aTargets: [0, 1, 2, 3]
+        //             searchable: false,
+        //             targets: [0, 1, 2, 3]
         //         }
         //     ],
         //     order: [

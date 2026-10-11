@@ -70,17 +70,16 @@
 @endsection
 
 @push('stylesheet')
-<link href="{{ asset('css/datatables.min.css') }}" rel="stylesheet"/>
 @endpush
 
 @push('scripts')
+    @include('components.admin.datatables-assets')
 <script async="" src="{{ asset('js/async.js') }}" type="text/javascript"></script>
-<script src="{{ asset('js/datatables.min.js') }}" type="text/javascript"></script>
 <script>
 if ($.fn.DataTable && $('#invoices').length) {
       // Data Tables
       let product_table = $('#invoices').DataTable({
-      	dom: 'Bfrtip',
+      	layout: window.AdminDataTableLayout || { topStart: 'buttons', topEnd: 'search', bottomStart: 'info', bottomEnd: 'paging' },
       	columnDefs: [
       		{
       			orderable: false,
@@ -88,12 +87,12 @@ if ($.fn.DataTable && $('#invoices').length) {
       			targets: 0
       		},
       		{ 
-      			bSortable: false, 
-      			aTargets: [ 0, 5] 
+      			orderable: false, 
+      			targets: [ 0, 5] 
       		},
       		{ 
-      			bSearchable: false, 
-      			aTargets: [ 0, 5] 
+      			searchable: false, 
+      			targets: [ 0, 5] 
       		}
       	],
       	select: {

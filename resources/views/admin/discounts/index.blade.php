@@ -82,17 +82,16 @@
 @endsection
 
 @push('stylesheet')
-<link href="{{ asset('css/datatables.min.css') }}" rel="stylesheet"/>
 @endpush
 
 @push('scripts')
+    @include('components.admin.datatables-assets')
 <script async="" src="{{ asset('js/async.js') }}" type="text/javascript"></script>
-<script src="{{ asset('js/datatables.min.js') }}" type="text/javascript"></script>
 <script>
 if ($.fn.DataTable && $('#discounts').length) {
       // Data Tables
       let product_table = $('#discounts').DataTable({
-      	dom: 'Bfrtip',
+      	layout: window.AdminDataTableLayout || { topStart: 'buttons', topEnd: 'search', bottomStart: 'info', bottomEnd: 'paging' },
       	columnDefs: [
       		{
       			orderable: false,
@@ -100,12 +99,12 @@ if ($.fn.DataTable && $('#discounts').length) {
       			targets: 0
       		},
       		{ 
-      			bSortable: false, 
-      			aTargets: [ 0, 5, 6] 
+      			orderable: false, 
+      			targets: [ 0, 5, 6] 
       		},
       		{ 
-      			bSearchable: false, 
-      			aTargets: [ 0, 5, 6] 
+      			searchable: false, 
+      			targets: [ 0, 5, 6] 
       		}
       	],
       	select: {

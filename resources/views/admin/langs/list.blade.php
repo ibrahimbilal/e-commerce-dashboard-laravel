@@ -4,7 +4,6 @@
 
 @push('stylesheet')
     <!-- Data Tables -->
-    <link href="{{ asset('css/datatables' . $rtl_ext . '.min.css') }}" rel="stylesheet">
 @endpush
 
 @section('content')
@@ -69,21 +68,21 @@
 
 
 @push('scripts')
+    @include('components.admin.datatables-assets')
     <!-- Sweet Alert -->
     <script src="{{ asset('js/sweetalert2.min.js') }}" type="text/javascript"></script>
     <!-- Data Tables -->
-    <script src="{{ asset('js/datatables.min.js') }}" type="text/javascript"></script>
-    <script>
+<script>
         // Data Tables
         $('#roles').DataTable({
-            dom: 'Bfrtip',
+            layout: window.AdminDataTableLayout || { topStart: 'buttons', topEnd: 'search', bottomStart: 'info', bottomEnd: 'paging' },
             columnDefs: [{
-                    bSortable: false,
-                    aTargets: [1]
+                    orderable: false,
+                    targets: [1]
                 },
                 {
-                    bSearchable: false,
-                    aTargets: [1]
+                    searchable: false,
+                    targets: [1]
                 }
             ],
             order: [

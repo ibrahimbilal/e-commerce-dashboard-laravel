@@ -104,17 +104,16 @@
 
 @push('stylesheet')
 <link href="{{ asset('css/uicons-solid-rounded.css') }}" rel="stylesheet"/>
-<link href="{{ asset('css/datatables.min.css') }}" rel="stylesheet"/>
 @endpush
 
 @push('scripts')
+    @include('components.admin.datatables-assets')
 <script async="" src="{{ asset('js/async.js') }}" type="text/javascript"></script>
-<script src="{{ asset('js/datatables.min.js') }}" type="text/javascript"></script>
 <script>
 if ($.fn.DataTable && $('#reviews').length) {
       // Data Tables
       let product_table = $('#reviews').DataTable({
-      	dom: 'Bfrtip',
+      	layout: window.AdminDataTableLayout || { topStart: 'buttons', topEnd: 'search', bottomStart: 'info', bottomEnd: 'paging' },
       	columnDefs: [
       		{
       			orderable: false,
@@ -122,12 +121,12 @@ if ($.fn.DataTable && $('#reviews').length) {
       			targets: 0
       		},
       		{ 
-      			bSortable: false, 
-      			aTargets: [0, 2, 6] 
+      			orderable: false, 
+      			targets: [0, 2, 6] 
       		},
       		{ 
-      			bSearchable: false, 
-      			aTargets: [0, 2, 6] 
+      			searchable: false, 
+      			targets: [0, 2, 6] 
       		}
       	],
       	select: {

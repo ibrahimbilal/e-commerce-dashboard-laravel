@@ -3,7 +3,6 @@
 @section('title', 'E-Commerce Project')
 
 @push('stylesheet')
-<link href="{{ asset('css/datatables.min.css') }}" rel="stylesheet"/>
 @endpush
 
 @section('content')
@@ -83,15 +82,15 @@
 @endsection
 
 @push('scripts')
+    @include('components.admin.datatables-assets')
 <script async="" src="{{ asset('js/async.js') }}" type="text/javascript"></script>
-<script src="{{ asset('js/datatables.min.js') }}" type="text/javascript"></script>
 <script>
 if ($.fn.DataTable && $('#coupons').length) {
       $('#coupons').DataTable({
-      	dom: 'Bfrtip',
+      	layout: window.AdminDataTableLayout || { topStart: 'buttons', topEnd: 'search', bottomStart: 'info', bottomEnd: 'paging' },
       	columnDefs: [
-      		{ bSortable: false, aTargets: [5, 6] },
-      		{ bSearchable: false, aTargets: [5, 6] }
+      		{ orderable: false, targets: [5, 6] },
+      		{ searchable: false, targets: [5, 6] }
       	],
       	order: [[0, 'asc']],
       	language: {

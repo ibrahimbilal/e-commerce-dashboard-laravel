@@ -6,8 +6,7 @@
     <!-- Icons -->
     <link href="{{ asset('css/uicons-solid-rounded.css') }}" rel="stylesheet">
     <!-- Data Tables -->
-    <link href="{{ asset('css/datatables' . $rtl_ext . '.min.css') }}" rel="stylesheet">
-    <!-- Sweet Alert 2 -->
+<!-- Sweet Alert 2 -->
     <link href="{{ asset('css/sweetalert2.min.css') }}" rel="stylesheet">
 @endpush
 
@@ -184,26 +183,26 @@
 @endsection
 
 @push('scripts')
+    @include('components.admin.datatables-assets')
     <!-- Sweet Alert 2 -->
     <script src="{{ asset('js/sweetalert2.min.js') }}" type="text/javascript"></script>
     <!-- Data Tables -->
-    <script src="{{ asset('js/datatables.min.js') }}" type="text/javascript"></script>
-    <script>
+<script>
         // Data Tables
         let tabel = $('#users-table').DataTable({
-            dom: 'Bfrtip',
+            layout: window.AdminDataTableLayout || { topStart: 'buttons', topEnd: 'search', bottomStart: 'info', bottomEnd: 'paging' },
             columnDefs: [{
                     orderable: false,
                     className: 'select-checkbox',
                     targets: 0
                 },
                 {
-                    bSortable: false,
-                    aTargets: [0, 1, 3, 6, 7]
+                    orderable: false,
+                    targets: [0, 1, 3, 6, 7]
                 },
                 {
-                    bSearchable: false,
-                    aTargets: [0, 1, 6, 7]
+                    searchable: false,
+                    targets: [0, 1, 6, 7]
                 }
             ],
             select: {

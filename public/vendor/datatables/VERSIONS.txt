@@ -1,0 +1,13 @@
+DataTables stack (local CDN copies, no embedded Bootstrap JS)
+
+Core: DataTables 2.1.8 + dataTables.bootstrap5 2.1.8
+Buttons 3.2.0 (+ bootstrap5, html5, print, colVis)
+AutoFill 2.7.0 (+ bootstrap5)
+ColReorder 2.0.4
+DateTime 1.5.4
+SearchBuilder 1.8.1 (+ bootstrap5)
+SearchPanes 2.3.3 (+ bootstrap5)
+Select 3.0.0 (+ bootstrap5)
+JSZip 3.10.1, pdfmake 0.2.7 + vfs_fonts
+
+Legacy bundle replaced: public/js/datatables.min.js.bak (BS 4.1.1 + DT 1.10.24)

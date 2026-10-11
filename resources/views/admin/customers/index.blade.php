@@ -66,17 +66,16 @@
 @endsection
 
 @push('stylesheet')
-<link href="{{ asset('css/datatables.min.css') }}" rel="stylesheet"/>
 @endpush
 
 @push('scripts')
+    @include('components.admin.datatables-assets')
 <script async="" src="{{ asset('js/async.js') }}" type="text/javascript"></script>
-<script src="{{ asset('js/datatables.min.js') }}" type="text/javascript"></script>
 <script>
 if ($.fn.DataTable && $('#customers').length) {
       // Data Tables
       let customer_table = $('#customers').DataTable({
-      	dom: 'Bfrtip',
+      	layout: window.AdminDataTableLayout || { topStart: 'buttons', topEnd: 'search', bottomStart: 'info', bottomEnd: 'paging' },
       	columnDefs: [
       		{
       			orderable: false,
@@ -84,12 +83,12 @@ if ($.fn.DataTable && $('#customers').length) {
       			targets: 0
       		},
       		{ 
-      			bSortable: false, 
-      			aTargets: [0, 1, 3, 4, 6] 
+      			orderable: false, 
+      			targets: [0, 1, 3, 4, 6] 
       		},
       		{ 
-      			bSearchable: false, 
-      			aTargets: [0, 1, 6] 
+      			searchable: false, 
+      			targets: [0, 1, 6] 
       		}
       	],
       	select: {

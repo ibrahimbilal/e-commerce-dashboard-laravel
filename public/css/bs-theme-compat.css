@@ -110,8 +110,57 @@
   --bs-btn-hover-bg: var(--danger-color);
 }
 
-/* —— Pagination (BS5 + DataTables BS4 markup) —— */
-.table-holder .dataTables_paginate {
+/* —— DataTables 2.x DOM aliases (style.css targets legacy class names) —— */
+.table-holder .dataTables_filter,
+.table-holder div.dt-search {
+  color: var(--text-color);
+  font-size: 1rem;
+}
+
+.table-holder .dataTables_filter input,
+.table-holder div.dt-search input {
+  border: 1px solid var(--text-color);
+  color: var(--text-color);
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 14px;
+  margin-left: 5px;
+  display: inline-block;
+  width: unset;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.table-holder .dataTables_length,
+.table-holder div.dt-length {
+  text-align: left;
+  margin-right: 10px;
+  font-size: 14px;
+  color: var(--text-color);
+}
+
+.table-holder .dataTables_length select,
+.table-holder div.dt-length select {
+  padding: 2px;
+}
+
+.table-holder .dataTables_info,
+.table-holder div.dt-info {
+  font-size: 14px;
+  padding-top: 0 !important;
+  display: flex;
+  align-items: center;
+  color: var(--text-color);
+}
+
+.table-holder .dataTables_wrapper,
+.table-holder div.dt-container {
+  color: var(--text-color);
+}
+
+/* —— Pagination (BS5 + DataTables 1.x / 2.x markup) —— */
+.table-holder .dataTables_paginate,
+.table-holder div.dt-paging {
   --bs-pagination-color: var(--text-color);
   --bs-pagination-bg: transparent;
   --bs-pagination-border-width: 0;
@@ -184,6 +233,46 @@ html.dark .table-holder .dataTables_paginate .paginate_button.active a {
   color: var(--text-color);
   background: transparent;
   border: 0;
+}
+
+.table-holder div.dt-paging nav {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  justify-content: space-around;
+  align-items: stretch;
+}
+
+.table-holder div.dt-paging .dt-paging-button {
+  padding: 5px 10px;
+  margin: 0;
+  font-size: 14px;
+  border: 0 !important;
+  border-radius: 0;
+  background: transparent;
+  color: var(--text-color);
+  box-shadow: none;
+}
+
+.table-holder div.dt-paging .dt-paging-button.current,
+.table-holder div.dt-paging .dt-paging-button.current:hover {
+  background-color: var(--text-color) !important;
+  color: var(--box-bg-color) !important;
+}
+
+.table-holder div.dt-paging .dt-paging-button:not(.disabled):not(.current):hover {
+  background-color: var(--text-color);
+  color: var(--box-bg-color);
+}
+
+html.dark .table-holder div.dt-paging .dt-paging-button {
+  color: var(--text-color);
+}
+
+html.dark .table-holder div.dt-paging .dt-paging-button.current {
+  background-color: var(--text-color) !important;
+  color: var(--box-bg-color) !important;
 }
 
 .pagination {
@@ -349,6 +438,7 @@ html.dark .table-holder .dt-buttons .btn-secondary {
 }
 
 html.dark .table-holder .dataTables_filter input,
+html.dark .table-holder div.dt-search input,
 html.dark .table-holder .dataTables_filter input.form-control,
 html.dark .table-holder .dataTables_filter input.form-control-sm {
   background-color: transparent;
@@ -358,6 +448,7 @@ html.dark .table-holder .dataTables_filter input.form-control-sm {
 }
 
 html.dark .table-holder .dataTables_length select,
+html.dark .table-holder div.dt-length select,
 html.dark .table-holder .dataTables_length .form-select,
 html.dark .table-holder .dataTables_length .custom-select,
 html.dark .table-holder .dataTables_length .form-control-sm {

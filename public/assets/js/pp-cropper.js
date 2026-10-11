@@ -122,14 +122,6 @@
         }
     }
 
-    function bootstrapModalApiReady() {
-        return (
-            window.bootstrap &&
-            window.bootstrap.Modal &&
-            typeof window.bootstrap.Modal.getOrCreateInstance === 'function'
-        );
-    }
-
     function showSelectedBlock(block) {
         if (!block) {
             return;
@@ -158,19 +150,8 @@
         if (!modalEl) {
             return null;
         }
-        if (bootstrapModalApiReady()) {
+        if (window.bootstrap && window.bootstrap.Modal && typeof window.bootstrap.Modal.getOrCreateInstance === 'function') {
             return window.bootstrap.Modal.getOrCreateInstance(modalEl);
-        }
-        if (window.jQuery && window.jQuery.fn && typeof window.jQuery.fn.modal === 'function') {
-            var $modal = window.jQuery(modalEl);
-            return {
-                show: function () {
-                    $modal.modal('show');
-                },
-                hide: function () {
-                    $modal.modal('hide');
-                },
-            };
         }
         return null;
     }
@@ -183,15 +164,11 @@
     }
 
     function hideCropModal() {
-        if (modalEl && bootstrapModalApiReady()) {
+        if (modalEl && window.bootstrap && window.bootstrap.Modal) {
             var instance = window.bootstrap.Modal.getInstance(modalEl);
             if (instance) {
                 instance.hide();
-                return;
             }
-        }
-        if (window.jQuery && window.jQuery.fn && typeof window.jQuery.fn.modal === 'function') {
-            window.jQuery(modalEl).modal('hide');
         }
     }
 

@@ -5,8 +5,7 @@
 @push('stylesheet')
     <link href="{{ asset('css/swiper-bundle.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/apexcharts.css') }}" rel="stylesheet" />
-    <link href="{{ asset('css/datatables.min.css') }}" rel="stylesheet" />
-    <style>
+<style>
         .dashboard-top-selling .list-item .img {
             max-width: 60px;
             flex: 0 0 60px;
@@ -169,6 +168,7 @@
 @endsection
 
 @push('scripts')
+    @include('components.admin.datatables-assets')
     <script async="" src="{{ asset('js/async.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/apexcharts.min.js') }}" type="text/javascript"></script>
     <script>
@@ -176,16 +176,15 @@
     </script>
     <script src="{{ asset('js/charts.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/swiper-bundle.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('js/datatables.min.js') }}" type="text/javascript"></script>
-    <script>
+<script>
         if ($.fn.DataTable && $('#dashboard-recent-orders').length && !$.fn.dataTable.isDataTable('#dashboard-recent-orders')) {
             $('#dashboard-recent-orders').DataTable({
-                dom: 'Bfrtip',
+                layout: window.AdminDataTableLayout || { topStart: 'buttons', topEnd: 'search', bottomStart: 'info', bottomEnd: 'paging' },
                 columnDefs: [
                     {
-                        bSortable: false,
-                        bSearchable: false,
-                        aTargets: [5]
+                        orderable: false,
+                        searchable: false,
+                        targets: [5]
                     }
                 ],
                 order: [
