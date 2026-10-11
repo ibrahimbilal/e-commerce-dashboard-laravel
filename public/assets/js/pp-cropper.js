@@ -4,7 +4,6 @@
     var modalEl;
     var imageEl;
     var applyBtn;
-    var modalInstance;
     var cropper;
     var currentInput;
     var pendingFile;
@@ -148,8 +147,49 @@
         cancelled = false;
     }
 
+    function getBootstrapModal() {
+        if (!modalEl) {
+            return null;
+        }
+        if (window.bootstrap && window.bootstrap.Modal) {
+            return window.bootstrap.Modal.getOrCreateInstance(modalEl);
+        }
+        if (window.jQuery && window.jQuery.fn && typeof window.jQuery.fn.modal === 'function') {
+            var $modal = window.jQuery(modalEl);
+            return {
+                show: function () {
+                    $modal.modal('show');
+                },
+                hide: function () {
+                    $modal.modal('hide');
+                },
+            };
+        }
+        return null;
+    }
+
+    function showCropModal() {
+        var instance = getBootstrapModal();
+        if (instance && typeof instance.show === 'function') {
+            instance.show();
+        }
+    }
+
+    function hideCropModal() {
+        if (modalEl && window.bootstrap && window.bootstrap.Modal) {
+            var instance = window.bootstrap.Modal.getInstance(modalEl);
+            if (instance) {
+                instance.hide();
+                return;
+            }
+        }
+        if (window.jQuery && window.jQuery.fn && typeof window.jQuery.fn.modal === 'function') {
+            window.jQuery(modalEl).modal('hide');
+        }
+    }
+
     function openCropModal(input, file) {
-        if (!modalEl || !imageEl || !window.bootstrap) {
+        if (!modalEl || !imageEl) {
             return;
         }
         currentInput = input;
@@ -159,14 +199,17 @@
         clearObjectUrl();
         objectUrl = URL.createObjectURL(file);
         imageEl.src = objectUrl;
-        if (!modalInstance) {
-            modalInstance = window.bootstrap.Modal.getOrCreateInstance(modalEl);
+        if (!getBootstrapModal()) {
+            return;
         }
-        modalInstance.show();
+        showCropModal();
     }
 
     function onModalShown() {
         destroyCropper();
+        if (applyBtn) {
+            applyBtn.disabled = true;
+        }
         if (!imageEl || typeof Cropper === 'undefined') {
             return;
         }
@@ -177,6 +220,9 @@
             responsive: true,
             background: false,
         });
+        if (applyBtn) {
+            applyBtn.disabled = false;
+        }
     }
 
     function onApplyClick() {
@@ -207,9 +253,7 @@
                 }
                 showSelectedBlock(selectedBlock(currentInput));
                 cancelled = false;
-                if (modalInstance) {
-                    modalInstance.hide();
-                }
+                hideCropModal();
             },
             mime,
             mime === 'image/png' ? undefined : 0.92
@@ -248,7 +292,13 @@
             });
         });
         if (applyBtn) {
-            applyBtn.addEventListener('click', onApplyClick);
+            applyBtn.disabled = true;
+            applyBtn.addEventListener('click', function () {
+                if (!cropper) {
+                    return;
+                }
+                onApplyClick();
+            });
         }
     }
 

@@ -324,8 +324,6 @@
 
 @push('scripts')
     @include('components.admin.pp-cropper-assets')
-    <!-- Bootstrap -->
-    <script src="{{ asset('js/bootstrap.min.js') }}" type="text/javascript"></script>
     <!-- Sweet Alert -->
     <script src="{{ asset('js/sweetalert2.min.js') }}" type="text/javascript"></script>
     <!-- Data Table-->
