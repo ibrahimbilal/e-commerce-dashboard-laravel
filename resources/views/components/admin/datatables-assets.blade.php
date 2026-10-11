@@ -51,6 +51,13 @@
 
             window.AdminDataTableLayout = window.getAdminDataTableLayout();
 
+            /** Prefer at init time so layout matches current document.dir (RTL/LTR). */
+            window.resolveAdminDataTableLayout = function () {
+                return typeof window.getAdminDataTableLayout === 'function'
+                    ? window.getAdminDataTableLayout()
+                    : window.AdminDataTableLayout;
+            };
+
             (function () {
                 if (typeof DataTable === 'undefined') {
                     return;

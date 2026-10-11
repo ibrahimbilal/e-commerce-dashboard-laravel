@@ -19,16 +19,39 @@ const scenarios = [
 ];
 
 const localeAccounts = {
-    ltr: { email: 'admin@example.com', password: 'password', language: 'en', expectDir: 'ltr' },
-    rtl: { email: 'admin@example.com', password: 'password', language: 'ar', expectDir: 'rtl' },
+    ltr: {
+        email: 'manager@example.com',
+        password: 'password',
+        language: 'en',
+        expectDir: 'ltr',
+    },
+    rtl: {
+        email: 'admin@example.com',
+        password: 'password',
+        language: 'ar',
+        expectDir: 'rtl',
+    },
 };
 
 function sqlExec(statement) {
     execSync(`sqlite3 ${sharedDb} ${JSON.stringify(statement)}`, { stdio: 'pipe' });
 }
 
-function prepareLocaleAccount(language) {
-    sqlExec(`UPDATE users SET language='${language}' WHERE email='admin@example.com';`);
+function assertRegressionDbReady() {
+    const count = execSync(
+        `sqlite3 ${sharedDb} "SELECT COUNT(*) FROM users WHERE email='admin@example.com';"`,
+        { encoding: 'utf8' }
+    ).trim();
+    if (count !== '1') {
+        throw new Error(
+            `Regression DB missing admin user at ${sharedDb} (count=${count}). ` +
+                `Copy a seeded sqlite file there before capture.`
+        );
+    }
+}
+
+function prepareLocaleAccount(account) {
+    sqlExec(`UPDATE users SET language='${account.language}' WHERE email='${account.email}';`);
     sqlExec('DELETE FROM sessions;');
 }
 
@@ -45,9 +68,11 @@ async function assertDocumentDir(page, expectDir, account) {
         dir: document.documentElement.getAttribute('dir'),
         lang: document.documentElement.getAttribute('lang'),
     }));
+    console.log(`assertDocumentDir: expect=${expectDir} actual dir=${meta.dir} lang=${meta.lang}`);
     if (meta.dir !== expectDir) {
         throw new Error(
-            `Expected document.dir=${expectDir} for ${account.email}, got dir=${meta.dir} lang=${meta.lang}`
+            `Expected document.dir=${expectDir} for ${account.email} (language=${account.language}), got dir=${meta.dir} lang=${meta.lang}. ` +
+                `Ensure both servers use REGRESSION_DB=${sharedDb} and SESSION_DRIVER=database.`
         );
     }
 }
@@ -86,6 +111,10 @@ async function capturePage(page, name, route, mode, dir, account) {
     await clearDataTableState(page);
     await page.reload({ waitUntil: 'networkidle' });
     await setDark(page, mode === 'dark');
+    if (page.url().includes('/admin/login')) {
+        throw new Error(`Session lost before capture; landed on login for ${route}`);
+    }
+    await page.waitForSelector('table.dataTable', { timeout: 30000 });
     await assertDocumentDir(page, account.expectDir, account);
     await page.waitForTimeout(400);
     const file = shotPath(name, mode, dir);
@@ -99,20 +128,17 @@ function md5File(file) {
 }
 
 async function main() {
+    assertRegressionDbReady();
     const browser = await chromium.launch({ headless: true });
     const captured = [];
 
     for (const [name, route, mode, dir] of scenarios) {
         const account = localeAccounts[dir];
-        prepareLocaleAccount(account.language);
+        prepareLocaleAccount(account);
         const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
         await context.clearCookies();
         const page = await context.newPage();
         await login(page, account);
-        await page.evaluate(() => {
-            localStorage.clear();
-            sessionStorage.clear();
-        });
         captured.push(await capturePage(page, name, route, mode, dir, account));
         await context.close();
     }

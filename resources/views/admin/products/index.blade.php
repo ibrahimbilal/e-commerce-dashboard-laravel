@@ -119,7 +119,7 @@
 if ($.fn.DataTable && $('#products').length) {
       // Data Tables
       let product_table = $('#products').DataTable({
-      	layout: window.AdminDataTableLayout || { topStart: 'buttons', topEnd: 'search', bottomStart: 'info', bottomEnd: 'paging' },
+      	layout: (window.resolveAdminDataTableLayout && window.resolveAdminDataTableLayout()) || { topStart: 'buttons', topEnd: 'search', bottomStart: 'info', bottomEnd: 'paging' },
       	columnDefs: [
       		{
       			orderable: false,

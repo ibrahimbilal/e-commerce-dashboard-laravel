@@ -75,7 +75,7 @@
 if ($.fn.DataTable && $('#customers').length) {
       // Data Tables
       let customer_table = $('#customers').DataTable({
-      	layout: window.AdminDataTableLayout || { topStart: 'buttons', topEnd: 'search', bottomStart: 'info', bottomEnd: 'paging' },
+      	layout: (window.resolveAdminDataTableLayout && window.resolveAdminDataTableLayout()) || { topStart: 'buttons', topEnd: 'search', bottomStart: 'info', bottomEnd: 'paging' },
       	columnDefs: [
       		{
       			orderable: false,
