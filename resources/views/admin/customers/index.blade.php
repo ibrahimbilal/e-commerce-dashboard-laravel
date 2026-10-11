@@ -50,7 +50,7 @@
 <td class="prod-title">{{ trim(($customer->first_name ?? '') . ' ' . ($customer->last_name ?? '')) ?: '—' }}</td>
 <td>{{ $customer->email }}</td>
 <td>{{ $customer->mobile ?? '—' }}</td>
-<td>{{ $customer->created_at?->format('H:i d/m/Y') ?? '—' }}</td>
+<td data-order="{{ $customer->created_at?->getTimestamp() ?? 0 }}">{{ $customer->created_at?->format('H:i d/m/Y') ?? '—' }}</td>
 <td>
 <x-resource-actions :model="$customer" resource="customers" destroy-label="customer" />
 </td>

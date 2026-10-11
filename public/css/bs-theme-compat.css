@@ -235,6 +235,12 @@ html.dark .table-holder .dataTables_paginate .paginate_button.active a {
   border: 0;
 }
 
+.table-holder div.dt-paging {
+  border: 1px solid var(--text-color);
+  border-radius: 5px;
+  padding-top: 0;
+}
+
 .table-holder div.dt-paging nav {
   display: flex;
   margin: 0;
@@ -242,6 +248,12 @@ html.dark .table-holder .dataTables_paginate .paginate_button.active a {
   overflow: hidden;
   justify-content: space-around;
   align-items: stretch;
+  list-style: none;
+}
+
+.table-holder div.dt-paging .dt-paging-button,
+.table-holder div.dt-paging .page-link {
+  text-decoration: none !important;
 }
 
 .table-holder div.dt-paging .dt-paging-button {
@@ -484,4 +496,219 @@ html.dark .table-holder table {
 html.dark .table-holder table thead th {
   color: var(--text-color);
   border-bottom-color: var(--border-color);
+}
+
+/* —— DataTables 2: toolbar (single rounded group, one chevron) —— */
+.table-holder div.dt-buttons.btn-group,
+.table-holder div.dt-buttons .btn-group {
+  border: 0;
+  box-shadow: none;
+  gap: 0;
+}
+
+.table-holder div.dt-buttons .btn-secondary,
+.table-holder div.dt-buttons .dt-button.btn-secondary {
+  border-color: var(--body-background) !important;
+  box-shadow: none !important;
+}
+
+.table-holder div.dt-buttons .btn-group > .btn + .btn,
+.table-holder div.dt-buttons .btn-group > .dt-button + .dt-button {
+  border-left: 0 !important;
+  margin-left: 0;
+}
+
+html[dir="rtl"] .table-holder div.dt-buttons .btn-group > .btn + .btn,
+html[dir="rtl"] .table-holder div.dt-buttons .btn-group > .dt-button + .dt-button {
+  border-left: var(--bs-border-width) solid var(--body-background) !important;
+  border-right: 0 !important;
+}
+
+.table-holder div.dt-buttons .dropdown-toggle::after,
+.table-holder div.dt-buttons .dt-button.dropdown-toggle::after {
+  display: none !important;
+}
+
+.table-holder div.dt-buttons .dt-button-down-arrow,
+.table-holder div.dt-buttons span.dt-button-down-arrow {
+  display: none !important;
+}
+
+/* —— Striped rows (override DT2 BS5 integration clearing stripes) —— */
+.table-holder table.table.dataTable.table-striped > tbody > tr:nth-of-type(odd) > *,
+.table-holder table.table.dataTable.table-striped > tbody > tr:nth-of-type(2n + 1) > * {
+  box-shadow: inset 0 0 0 9999px var(--body-background) !important;
+  --bs-table-accent-bg: var(--body-background);
+}
+
+.table-holder table.table.dataTable.table-striped > tbody > tr:nth-of-type(even) > * {
+  box-shadow: none !important;
+  --bs-table-accent-bg: transparent;
+}
+
+html.dark .table-holder .table.table-striped > tbody > tr:nth-of-type(odd) > * {
+  box-shadow: inset 0 0 0 9999px var(--box-bg-color) !important;
+  --bs-table-accent-bg: var(--box-bg-color);
+}
+
+html.dark .table-holder .table.table-striped > tbody > tr:nth-of-type(even) > * {
+  box-shadow: none !important;
+  --bs-table-accent-bg: transparent;
+}
+
+/* —— Sort icons: legacy left arrows (DT 1.x look on DT 2.x classes) —— */
+.table-holder table.dataTable thead > tr > th.dt-orderable-asc,
+.table-holder table.dataTable thead > tr > th.dt-orderable-desc,
+.table-holder table.dataTable thead > tr > th.dt-ordering-asc,
+.table-holder table.dataTable thead > tr > th.dt-ordering-desc,
+.table-holder table.dataTable thead > tr > td.dt-orderable-asc,
+.table-holder table.dataTable thead > tr > td.dt-orderable-desc,
+.table-holder table.dataTable thead > tr > td.dt-ordering-asc,
+.table-holder table.dataTable thead > tr > td.dt-ordering-desc {
+  position: relative;
+  padding-right: 0.5rem !important;
+  padding-left: 1.75rem !important;
+}
+
+html[dir="rtl"] .table-holder table.dataTable thead > tr > th.dt-orderable-asc,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > th.dt-orderable-desc,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > th.dt-ordering-asc,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > th.dt-ordering-desc,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-orderable-asc,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-orderable-desc,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-ordering-asc,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-ordering-desc {
+  padding-left: 0.5rem !important;
+  padding-right: 1.75rem !important;
+}
+
+.table-holder table.dataTable thead span.dt-column-order {
+  display: none !important;
+}
+
+.table-holder table.dataTable thead > tr > th.dt-orderable-asc::before,
+.table-holder table.dataTable thead > tr > th.dt-orderable-desc::before,
+.table-holder table.dataTable thead > tr > th.dt-ordering-asc::before,
+.table-holder table.dataTable thead > tr > th.dt-ordering-desc::before,
+.table-holder table.dataTable thead > tr > td.dt-orderable-asc::before,
+.table-holder table.dataTable thead > tr > td.dt-orderable-desc::before,
+.table-holder table.dataTable thead > tr > td.dt-ordering-asc::before,
+.table-holder table.dataTable thead > tr > td.dt-ordering-desc::before,
+.table-holder table.dataTable thead > tr > th.dt-orderable-asc::after,
+.table-holder table.dataTable thead > tr > th.dt-orderable-desc::after,
+.table-holder table.dataTable thead > tr > th.dt-ordering-asc::after,
+.table-holder table.dataTable thead > tr > th.dt-ordering-desc::after,
+.table-holder table.dataTable thead > tr > td.dt-orderable-asc::after,
+.table-holder table.dataTable thead > tr > td.dt-orderable-desc::after,
+.table-holder table.dataTable thead > tr > td.dt-ordering-asc::after,
+.table-holder table.dataTable thead > tr > td.dt-ordering-desc::after {
+  position: absolute;
+  bottom: 0.9em;
+  display: block;
+  opacity: 0.3;
+  line-height: 1;
+}
+
+html[dir="ltr"] .table-holder table.dataTable thead > tr > th.dt-orderable-asc::before,
+html[dir="ltr"] .table-holder table.dataTable thead > tr > th.dt-orderable-desc::before,
+html[dir="ltr"] .table-holder table.dataTable thead > tr > th.dt-ordering-asc::before,
+html[dir="ltr"] .table-holder table.dataTable thead > tr > th.dt-ordering-desc::before,
+html[dir="ltr"] .table-holder table.dataTable thead > tr > td.dt-orderable-asc::before,
+html[dir="ltr"] .table-holder table.dataTable thead > tr > td.dt-orderable-desc::before,
+html[dir="ltr"] .table-holder table.dataTable thead > tr > td.dt-ordering-asc::before,
+html[dir="ltr"] .table-holder table.dataTable thead > tr > td.dt-ordering-desc::before {
+  left: 0.5em;
+  content: "↑";
+}
+
+html[dir="ltr"] .table-holder table.dataTable thead > tr > th.dt-orderable-asc::after,
+html[dir="ltr"] .table-holder table.dataTable thead > tr > th.dt-orderable-desc::after,
+html[dir="ltr"] .table-holder table.dataTable thead > tr > th.dt-ordering-asc::after,
+html[dir="ltr"] .table-holder table.dataTable thead > tr > th.dt-ordering-desc::after,
+html[dir="ltr"] .table-holder table.dataTable thead > tr > td.dt-orderable-asc::after,
+html[dir="ltr"] .table-holder table.dataTable thead > tr > td.dt-orderable-desc::after,
+html[dir="ltr"] .table-holder table.dataTable thead > tr > td.dt-ordering-asc::after,
+html[dir="ltr"] .table-holder table.dataTable thead > tr > td.dt-ordering-desc::after {
+  left: 0.15em;
+  content: "↓";
+}
+
+html[dir="rtl"] .table-holder table.dataTable thead > tr > th.dt-orderable-asc::before,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > th.dt-orderable-desc::before,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > th.dt-ordering-asc::before,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > th.dt-ordering-desc::before,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-orderable-asc::before,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-orderable-desc::before,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-ordering-asc::before,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-ordering-desc::before {
+  right: 0.5em;
+  content: "↑";
+}
+
+html[dir="rtl"] .table-holder table.dataTable thead > tr > th.dt-orderable-asc::after,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > th.dt-orderable-desc::after,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > th.dt-ordering-asc::after,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > th.dt-ordering-desc::after,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-orderable-asc::after,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-orderable-desc::after,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-ordering-asc::after,
+html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-ordering-desc::after {
+  right: 0.15em;
+  content: "↓";
+}
+
+.table-holder table.dataTable thead > tr > th.dt-ordering-asc::before,
+.table-holder table.dataTable thead > tr > td.dt-ordering-asc::before {
+  opacity: 1;
+}
+
+.table-holder table.dataTable thead > tr > th.dt-ordering-desc::after,
+.table-holder table.dataTable thead > tr > td.dt-ordering-desc::after {
+  opacity: 1;
+}
+
+.table-holder table thead th.dt-orderable-asc::after,
+.table-holder table thead th.dt-orderable-asc::before,
+.table-holder table thead th.dt-orderable-desc::after,
+.table-holder table thead th.dt-orderable-desc::before,
+.table-holder table thead th.dt-ordering-asc::after,
+.table-holder table thead th.dt-ordering-asc::before,
+.table-holder table thead th.dt-ordering-desc::after,
+.table-holder table thead th.dt-ordering-desc::before {
+  bottom: 9px;
+}
+
+/* —— Layout spacing (match legacy Bfrtip wrapper) —— */
+.table-holder div.dt-container div.dt-layout-row:not(.dt-layout-table) {
+  margin: 0 0 0.5rem;
+  align-items: center;
+}
+
+.table-holder div.dt-container div.dt-layout-start > *:not(:last-child),
+.table-holder div.dt-container div.dt-layout-end > *:not(:first-child) {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.table-holder div.dt-container div.dt-search {
+  text-align: right;
+  margin-bottom: 0;
+}
+
+html[dir="rtl"] .table-holder div.dt-container div.dt-search {
+  text-align: left;
+}
+
+.table-holder div.dt-container div.dt-search input {
+  margin-left: 5px;
+  margin-right: 0;
+}
+
+html[dir="rtl"] .table-holder div.dt-container div.dt-search input {
+  margin-right: 5px;
+  margin-left: 0;
+}
+
+.table-holder div.dt-container div.dt-length {
+  margin-right: 10px;
 }

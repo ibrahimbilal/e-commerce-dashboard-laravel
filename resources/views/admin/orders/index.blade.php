@@ -65,12 +65,12 @@
 @endphp
 <tr>
 <td></td>
-<td class="text-uppercase">#{{ $order->id }}</td>
+<td class="text-uppercase" data-order="{{ $order->id }}">#{{ $order->id }}</td>
 <x-order-status :status="$order->orderStatus" />
 <td class="text-capitalize">{{ $customerName }}</td>
 <td class="text-uppercase text-center">${{ number_format($order->amount ?? 0) }}</td>
 <td class="text-capitalize">{{ $destination }}</td>
-<td class="text-uppercase">{{ $order->updated_at?->format('H:i d/m/Y') ?? '—' }}</td>
+<td class="text-uppercase" data-order="{{ $order->updated_at?->getTimestamp() ?? 0 }}">{{ $order->updated_at?->format('H:i d/m/Y') ?? '—' }}</td>
 <td>
 <x-resource-actions :model="$order" resource="orders" destroy-label="order" />
 </td>

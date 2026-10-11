@@ -36,6 +36,35 @@
                 bottomStart: 'info',
                 bottomEnd: 'paging',
             };
+
+            (function () {
+                if (typeof DataTable === 'undefined') {
+                    return;
+                }
+
+                Object.assign(DataTable.defaults, {
+                    pagingType: 'simple_numbers',
+                    paging: {
+                        firstLast: false,
+                    },
+                    language: {
+                        paginate: {
+                            first: @json(__('tables.buttons.first')),
+                            last: @json(__('tables.buttons.last')),
+                            previous: @json(__('tables.buttons.prev')),
+                            next: @json(__('tables.buttons.next')),
+                        },
+                    },
+                    stateSaveParams: function (settings, data) {
+                        data.adminStateVersion = 2;
+                    },
+                    stateLoadParams: function (settings, data) {
+                        if (!data || data.adminStateVersion !== 2) {
+                            return false;
+                        }
+                    },
+                });
+            })();
         </script>
     @endpush
 @endonce

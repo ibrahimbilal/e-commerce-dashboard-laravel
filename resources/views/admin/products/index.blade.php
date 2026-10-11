@@ -94,7 +94,7 @@
 <span class="slider"></span>
 </label>
 </td>
-<td>{{ $product->created_at?->format('H:i d/m/Y') ?? '—' }}</td>
+<td data-order="{{ $product->created_at?->getTimestamp() ?? 0 }}">{{ $product->created_at?->format('H:i d/m/Y') ?? '—' }}</td>
 <td>
 <x-resource-actions :model="$product" resource="products" destroy-label="product" :show="false" />
 </td>
