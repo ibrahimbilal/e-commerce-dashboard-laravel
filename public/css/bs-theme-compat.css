@@ -736,6 +736,13 @@ html[dir="rtl"] .table-holder div.dt-buttons .btn-group > .dt-button + .dt-butto
   justify-content: center;
   vertical-align: middle !important;
   line-height: 1.25;
+  min-height: 31.5px;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+}
+
+.table-holder div.dt-buttons .btn.btn-group {
+  display: inline-flex !important;
 }
 
 .table-holder div.dt-buttons .buttons-page-length > span:first-child::after,
@@ -744,16 +751,18 @@ html[dir="rtl"] .table-holder div.dt-buttons .btn-group > .dt-button + .dt-butto
 .table-holder div.dt-buttons button.dropdown-toggle.buttons-page-length > span:first-child::after,
 .table-holder div.dt-buttons button.dropdown-toggle.buttons-collection > span:first-child::after,
 .table-holder div.dt-buttons button.dropdown-toggle.buttons-colvis > span:first-child::after {
-  content: "▾";
-  font-size: 8px;
+  content: "\f11e"; /* uicons-regular-rounded — same glyph as legacy style.css caret */
+  font-family: uicons-regular-rounded !important;
+  font-size: 10px;
   line-height: 1;
   color: var(--text-color);
-  opacity: 0.9;
+  opacity: 1;
   margin-inline-start: 0.35em;
   vertical-align: middle;
   display: inline;
   border: none;
   position: static;
+  font-weight: normal;
 }
 
 .table-holder div.dt-buttons .buttons-print::after,
@@ -875,16 +884,16 @@ html[dir="rtl"] .table-holder table.dataTable thead > tr > td.dt-ordering-desc {
   bottom: auto;
   display: block;
   transform: translateY(-50%);
-  opacity: 0.85;
+  opacity: 1;
   line-height: 1;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   color: var(--text-color);
   font-weight: 600;
 }
 
 .table-holder table.dataTable thead > tr > th.dt-orderable:not(.dt-orderable-none)::before,
 .table-holder table.dataTable thead > tr > th.dt-orderable:not(.dt-orderable-none)::after {
-  opacity: 0.85 !important;
+  opacity: 0.55 !important;
   color: var(--text-color) !important;
 }
 
@@ -1049,6 +1058,7 @@ html[dir="ltr"] .table-holder div.dt-container div.dt-layout-row:not(.dt-layout-
 
 /* DT2 BS5 layout uses Bootstrap rows, not dt-layout-row */
 html[dir="rtl"] .table-holder div.dt-container > .row.justify-content-between:first-child {
+  direction: ltr;
   justify-content: flex-end !important;
   align-items: center;
   gap: 0.65rem;
