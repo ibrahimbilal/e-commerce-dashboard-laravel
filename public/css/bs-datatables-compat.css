@@ -840,8 +840,8 @@ html[dir="rtl"] .table-holder div.dt-container div.dt-search input {
 }
 
 .table-holder table.dataTable tbody td.prod-img {
-  padding-top: 4px !important;
-  padding-bottom: 4px !important;
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
 }
 
 .table-holder table.dataTable tbody td.prod-img .img-holder img,
@@ -849,7 +849,7 @@ html[dir="rtl"] .table-holder div.dt-container div.dt-search input {
   width: 70px !important;
   max-width: 70px !important;
   height: auto !important;
-  max-height: 22px !important;
+  max-height: none !important;
   object-fit: contain;
   display: inline-block !important;
   vertical-align: middle;
@@ -869,7 +869,7 @@ html[dir="rtl"] .table-holder div.dt-container div.dt-search input {
 
 html.dark .table-holder table.dataTable tbody td.prod-img .img-holder img:not([src*="product-placeholder"]) {
   background-color: #2a2d33;
-  max-height: 22px !important;
+  max-height: none !important;
 }
 
 .table-holder table.dataTable tbody td.customer-img .img-holder {
@@ -903,4 +903,11 @@ html[dir="rtl"] .table-holder div.dt-info .select-info,
 html[dir="rtl"] .table-holder div.dt-info .select-item {
   margin-left: 0;
   margin-right: .5em;
+}
+
+/* Avatar thumbnails (users/customers): legacy size = the 56px .img-holder */
+.table-holder table.dataTable tbody td.customer-img .img-holder img {
+  width: 56px !important;
+  max-width: 56px !important;
+  height: auto !important;
 }
