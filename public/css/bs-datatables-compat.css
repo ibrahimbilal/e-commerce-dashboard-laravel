@@ -952,3 +952,8 @@ html[dir] .table-holder table.dataTable thead > tr > th.dt-ordering-desc::after 
   left: 7px;
   right: auto;
 }
+
+/* RTL headers: legacy (BS4/DT 1.10) right-aligned th text; DT2 CSS forces left */
+html[dir="rtl"] .table-holder table.dataTable thead > tr > th:not(.text-center):not(.dt-center) {
+  text-align: right;
+}
