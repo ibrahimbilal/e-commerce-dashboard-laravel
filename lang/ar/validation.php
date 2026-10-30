@@ -196,6 +196,9 @@ return [
     |
     */
 
+    'profile_picture_max' => 'يجب ألا يتجاوز حجم :attribute :max.',
+    'profile_picture_upload' => 'يجب أن تكون :attribute صورة مرفوعة بصيغة jpg أو jpeg أو png.',
+
     'attributes' => [
 		'email' => 'البريد الالكتروني',
 		'password' => 'كلمة المرور',

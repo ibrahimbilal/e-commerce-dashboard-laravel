@@ -19,7 +19,7 @@ class UserFactory extends Factory
 			'email_verified_at' => now(),
 			'password' => Hash::make('password'),
 			'mobile' => fake()->numerify(str_repeat('#', fake()->numberBetween(10, 12))),
-            'birth_date' => fake()->optional()->date(),
+            'birth_date' => fake()->optional()->dateTimeBetween('-70 years', '-18 years')?->format('Y-m-d'),
             'gender' => fake()->randomElement(['male', 'female']),
             'role_name' => '',
             'status' => 'verified',

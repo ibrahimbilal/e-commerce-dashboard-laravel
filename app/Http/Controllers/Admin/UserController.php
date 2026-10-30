@@ -13,6 +13,7 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\NewUserRequest;
+use App\Support\OwnedProfilePicture;
 use App\Support\ProfilePictureProcessor;
 use App\Support\StoredMedia;
 use Illuminate\Auth\Events\Registered;
@@ -122,6 +123,7 @@ class UserController extends Controller
 			]);
 		} catch (\Exception $ex) {
 			report($ex);
+			OwnedProfilePicture::delete(isset($storedPath) ? StoredMedia::databasePath($storedPath) : null);
 
 			return response()->json(['errors' => [__('alerts.errors.unknown')]]);
 		}
@@ -233,14 +235,17 @@ class UserController extends Controller
 			// upload profile picture
 			// store file path to database
 			if ( $request->hasFile('profile_picture') ) {
+				$previousPicture = $user->profile_picture;
 				$user->profile_picture = StoredMedia::databasePath(
 					ProfilePictureProcessor::store($request->file('profile_picture'), 'users')
 				);
 				$user->save();
+				OwnedProfilePicture::delete($previousPicture);
 			}
 
 			// remove profile picture
 			if ( $request->has('remove_pp') && $request->get('remove_pp') ) {
+				OwnedProfilePicture::delete($user->profile_picture);
 				$user->profile_picture = null;
 				$user->save();
 			}
@@ -328,14 +333,17 @@ class UserController extends Controller
 			// upload profile picture
 			// store file path to database
 			if ( $request->hasFile('profile_picture') ) {
+				$previousPicture = $user->profile_picture;
 				$user->profile_picture = StoredMedia::databasePath(
 					ProfilePictureProcessor::store($request->file('profile_picture'), 'users')
 				);
 				$user->save();
+				OwnedProfilePicture::delete($previousPicture);
 			}
 
 			// remove profile picture
 			if ( $request->has('remove_pp') && $request->get('remove_pp') ) {
+				OwnedProfilePicture::delete($user->profile_picture);
 				$user->profile_picture = null;
 				$user->save();
 			}

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Concerns\ManagesTrashedRecords;
 use App\Http\Controllers\Concerns\TogglesAdminResourceFields;
 
 use App\Models\Subscriber;
@@ -12,6 +13,7 @@ use Illuminate\Http\Request;
 
 class MarketingController extends Controller
 {
+    use ManagesTrashedRecords;
     use TogglesAdminResourceFields;
 
     public function __construct()
@@ -92,11 +94,16 @@ class MarketingController extends Controller
         return redirect()->route('admin.marketing.index')->with('status', 'Subscriber updated.');
     }
 
-    public function destroy(Subscriber $subscriber)
+    public function destroy(Request $request, Subscriber $subscriber)
     {
         $subscriber->delete();
 
-        return redirect()->route('admin.marketing.index')->with('status', 'Subscriber removed.');
+        return $this->destroyActionResponse(
+            $request,
+            'admin.marketing.index',
+            'Subscriber removed.',
+            AdminResourceCounts::marketing()
+        );
     }
 
     public function toggleSubscriber(Request $request, Subscriber $subscriber)

@@ -10,6 +10,7 @@ use App\Support\AdminFormResponse;
 use App\Support\AdminResourceCounts;
 use App\Support\CustomerAddressSync;
 use App\Support\IndexListing;
+use App\Support\OwnedProfilePicture;
 use App\Support\ProfilePictureProcessor;
 use App\Support\ReferentialDeleteGuard;
 use App\Support\StoredMedia;
@@ -74,7 +75,7 @@ class CustomerController extends Controller
             'last_name' => ['nullable', 'string', 'max:50'],
             'birth_date' => ['nullable', 'date'],
             'mobile' => ['nullable', 'string', 'max:20'],
-            'profile_picture' => $this->profilePictureValidationRules($request),
+            'profile_picture' => $this->profilePictureValidationRules($request, null),
             'remove_pp' => ['nullable', 'boolean'],
             'ip_address' => ['nullable', 'string', 'max:50'],
         ], CustomerAddressSync::customerRules()), [], CustomerAddressSync::validationAttributeNames());
@@ -122,7 +123,7 @@ class CustomerController extends Controller
             'last_name' => ['nullable', 'string', 'max:50'],
             'birth_date' => ['nullable', 'date'],
             'mobile' => ['nullable', 'string', 'max:20'],
-            'profile_picture' => $this->profilePictureValidationRules($request),
+            'profile_picture' => $this->profilePictureValidationRules($request, $customer->profile_picture),
             'remove_pp' => ['nullable', 'boolean'],
             'ip_address' => ['nullable', 'string', 'max:50'],
             'deleted' => ['sometimes', 'boolean'],
@@ -134,12 +135,25 @@ class CustomerController extends Controller
             unset($data['password']);
         }
 
-        $data['profile_picture'] = $this->resolveProfilePicture($request, $customer->profile_picture);
+        $previousPicture = $customer->profile_picture;
+        $data['profile_picture'] = $this->resolveProfilePicture($request, $previousPicture);
 
-        DB::transaction(function () use ($request, $customer, $data) {
-            $customer->update(collect($data)->except(['addresses', 'addresses_sync', 'remove_pp'])->all());
-            CustomerAddressSync::syncForCustomer($customer, $request);
-        });
+        try {
+            DB::transaction(function () use ($request, $customer, $data) {
+                $customer->update(collect($data)->except(['addresses', 'addresses_sync', 'remove_pp'])->all());
+                CustomerAddressSync::syncForCustomer($customer, $request);
+            });
+        } catch (\Throwable $exception) {
+            if ($data['profile_picture'] !== $previousPicture) {
+                OwnedProfilePicture::delete($data['profile_picture']);
+            }
+
+            throw $exception;
+        }
+
+        if ($data['profile_picture'] !== $previousPicture) {
+            OwnedProfilePicture::delete($previousPicture);
+        }
 
         return AdminFormResponse::saved(
             $request,
@@ -206,13 +220,21 @@ class CustomerController extends Controller
     /**
      * @return array<int, mixed>
      */
-    private function profilePictureValidationRules(Request $request): array
+    private function profilePictureValidationRules(Request $request, ?string $currentStoredPath): array
     {
         if ($request->hasFile('profile_picture')) {
             return ProfilePictureProcessor::validationRules();
         }
 
-        return ['nullable', 'string', 'max:191'];
+        // Without an upload, only the customer's own current stored path may be sent back unchanged.
+        return [
+            'nullable',
+            function (string $attribute, mixed $value, \Closure $fail) use ($currentStoredPath) {
+                if (! is_string($value) || $currentStoredPath === null || $value !== $currentStoredPath) {
+                    $fail(__('validation.profile_picture_upload'));
+                }
+            },
+        ];
     }
 
     private function resolveProfilePicture(Request $request, ?string $existing): ?string

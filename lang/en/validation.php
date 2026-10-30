@@ -196,6 +196,9 @@ return [
     |
     */
 
+    'profile_picture_max' => 'The :attribute must not be larger than :max.',
+    'profile_picture_upload' => 'The :attribute must be an uploaded jpg, jpeg or png image.',
+
     'attributes' => [
         'product_name' => 'product name',
         'regular_price' => 'price',

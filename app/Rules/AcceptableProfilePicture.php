@@ -7,6 +7,8 @@ use Illuminate\Http\UploadedFile;
 
 class AcceptableProfilePicture implements Rule
 {
+    private bool $tooLarge = false;
+
     public function passes($attribute, $value): bool
     {
         if ($value === null) {
@@ -18,6 +20,8 @@ class AcceptableProfilePicture implements Rule
         }
 
         if ($value->getSize() > 1024 * 1024) {
+            $this->tooLarge = true;
+
             return false;
         }
 
@@ -29,6 +33,10 @@ class AcceptableProfilePicture implements Rule
 
     public function message(): string
     {
+        if ($this->tooLarge) {
+            return __('validation.profile_picture_max', ['attribute' => 'profile picture', 'max' => '1 MB']);
+        }
+
         return __('validation.mimes', ['attribute' => 'profile picture', 'values' => 'jpg, jpeg, png']);
     }
 }
