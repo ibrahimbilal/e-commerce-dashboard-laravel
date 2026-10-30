@@ -148,7 +148,7 @@
                                         <x-order-status :status="$order->orderStatus" />
                                         <td class="text-capitalize">{{ $customerName }}</td>
                                         <td>${{ number_format($order->amount ?? 0) }}</td>
-                                        <td>{{ $order->created_at?->format('H:i d/m/Y') ?? '—' }}</td>
+                                        <td data-order="{{ $order->created_at?->format('Y-m-d H:i:s') ?? '' }}">{{ $order->created_at?->format('H:i d/m/Y') ?? '—' }}</td>
                                         <td class="text-end">
                                             @if (auth()->user()?->can('view orders'))
                                                 <a class="btn btn-primary btn-rounded py-1"

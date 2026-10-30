@@ -45,7 +45,7 @@
 <tr>
 <td></td>
 <td class="customer-img">
-<div class="img-holder"><img src="{{ $customer->profile_picture ? asset($customer->profile_picture) : asset('assets/images/avatar-placeholder.svg') }}" width="70" alt=""/></div>
+<div class="img-holder"><img src="{{ $customer->profile_picture ? asset($customer->profile_picture) : asset('images/avatars/' . ($customer->gender === 'female' ? 'female' : 'male') . '-avatar.png') }}" width="70" alt=""/></div>
 </td>
 <td class="prod-title">{{ trim(($customer->first_name ?? '') . ' ' . ($customer->last_name ?? '')) ?: '—' }}</td>
 <td>{{ $customer->email }}</td>

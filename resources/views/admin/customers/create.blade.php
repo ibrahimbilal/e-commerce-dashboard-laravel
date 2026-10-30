@@ -92,7 +92,7 @@
                         </label>
                         <div class="selected-img" style="display: none">
                             <div class="img-holder mt-3">
-                                <img class="preview" src="{{ asset('assets/images/avatar-placeholder.svg') }}" width="70" />
+                                <img class="preview" src="{{ asset('images/avatars/male-avatar.png') }}" width="70" />
                                 <span class="overlay"><i class="fi-rr-trash"> </i><span>{{ __('buttons.remove') }}</span></span>
                             </div>
                         </div>

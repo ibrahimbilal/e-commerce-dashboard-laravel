@@ -44,7 +44,7 @@
                             <img
                                 width="256"
                                 height="256"
-                                src="{{ $customer->profile_picture ? asset($customer->profile_picture) : asset('assets/images/avatar-placeholder.svg') }}"
+                                src="{{ $customer->profile_picture ? asset($customer->profile_picture) : asset('images/avatars/' . ($customer->gender === 'female' ? 'female' : 'male') . '-avatar.png') }}"
                                 alt="{{ $customerName }}" />
                         </div>
                     </div>

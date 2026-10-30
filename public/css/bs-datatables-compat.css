@@ -893,3 +893,14 @@ html.dark .dashboard-empty-hint {
   font-size: 1rem;
 }
 
+
+/* DataTables Select: space between the info text and "N Item selected" */
+.table-holder div.dt-info .select-info,
+.table-holder div.dt-info .select-item {
+  margin-left: .5em;
+}
+html[dir="rtl"] .table-holder div.dt-info .select-info,
+html[dir="rtl"] .table-holder div.dt-info .select-item {
+  margin-left: 0;
+  margin-right: .5em;
+}
