@@ -957,3 +957,9 @@ html[dir] .table-holder table.dataTable thead > tr > th.dt-ordering-desc::after 
 html[dir="rtl"] .table-holder table.dataTable thead > tr > th:not(.text-center):not(.dt-center) {
   text-align: right;
 }
+
+/* LTR headers: DT2 right-aligns numeric/date column headers; legacy left-aligned all */
+html:not([dir="rtl"]) .table-holder table.dataTable thead > tr > th.dt-type-numeric:not(.text-center):not(.dt-center),
+html:not([dir="rtl"]) .table-holder table.dataTable thead > tr > th.dt-type-date:not(.text-center):not(.dt-center) {
+  text-align: left;
+}
