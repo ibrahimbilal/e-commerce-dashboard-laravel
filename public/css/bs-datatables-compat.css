@@ -911,3 +911,44 @@ html[dir="rtl"] .table-holder div.dt-info .select-item {
   max-width: 56px !important;
   height: auto !important;
 }
+
+/* RTL product thumbnails: legacy style.rtl.css frames the holder with 5px padding */
+html[dir="rtl"] .table-holder table.dataTable tbody td.prod-img .img-holder {
+  padding: 5px;
+  background-color: var(--box-bg-color);
+}
+
+/* Legacy DT 1.10 body cells: padding 8px 10px + content-box sizing. DT2/BS5 use
+   8px + border-box, so min-width columns (reviews .comment 250px) shrink and wrap */
+.table-holder table.dataTable > tbody > tr > td {
+  padding: 8px 10px;
+  box-sizing: content-box;
+}
+.table-holder table.dataTable > tbody > tr > td.prod-img {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+/* Sort arrows: legacy DT 1.10 offsets (↑ at 14px, ↓ at 7px, header padding-left 30px).
+   The tighter 6px/2px offsets pushed the first sortable column's arrows against the
+   select-checkbox header, so they read as an arrow on the checkbox column. */
+html[dir] .table-holder table.dataTable thead > tr > th.dt-orderable-asc,
+html[dir] .table-holder table.dataTable thead > tr > th.dt-orderable-desc,
+html[dir] .table-holder table.dataTable thead > tr > th.dt-ordering-asc,
+html[dir] .table-holder table.dataTable thead > tr > th.dt-ordering-desc {
+  padding-left: 30px !important;
+}
+html[dir] .table-holder table.dataTable thead > tr > th.dt-orderable-asc::before,
+html[dir] .table-holder table.dataTable thead > tr > th.dt-orderable-desc::before,
+html[dir] .table-holder table.dataTable thead > tr > th.dt-ordering-asc::before,
+html[dir] .table-holder table.dataTable thead > tr > th.dt-ordering-desc::before {
+  left: 14px;
+  right: auto;
+}
+html[dir] .table-holder table.dataTable thead > tr > th.dt-orderable-asc::after,
+html[dir] .table-holder table.dataTable thead > tr > th.dt-orderable-desc::after,
+html[dir] .table-holder table.dataTable thead > tr > th.dt-ordering-asc::after,
+html[dir] .table-holder table.dataTable thead > tr > th.dt-ordering-desc::after {
+  left: 7px;
+  right: auto;
+}
