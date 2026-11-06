@@ -1,6 +1,6 @@
 @extends('admin.layout')
 
-@section('title', 'E-Commerce Project')
+@section('title', __('admin.menu.orders.title'))
 
 
 @section('content')
@@ -10,13 +10,13 @@
 <div class="col-12 d-flex align-items-sm-center justify-content-sm-between flex-column flex-sm-row">
 
 <div class="text-capitalize mb-2 mb-sm-0 d-flex justify-content-between align-items-center">
-<h1 class="page-title">orders</h1>@can('add orders')
-<a class="add-btn btn text-capitalize" href="{{ route('admin.orders.create') }}"><span class="icon"><i class="fi-rr-add"> </i></span>add new</a>
+<h1 class="page-title">{{ __('admin.menu.orders.title') }}</h1>@can('add orders')
+<a class="add-btn btn text-capitalize" href="{{ route('admin.orders.create') }}"><span class="icon"><i class="fi-rr-add"> </i></span>{{ __('buttons.add_new') }}</a>
 @endcan
 </div>
 
 <div class="page-breadcrumbs d-flex align-items-sm-center justify-content-start justify-content-sm-end">
-<div class="breadcrumbs d-flex justify-content-between align-items-center"><a class="item text-capitalize d-flex justify-content-between align-items-center" href="{{ route('admin.dashboard') }}"><span class="icon"><i class="fi-rr-apps"> </i></span>dashboard</a><span class="angle"><span class="icon"><i class="fi-rr-angle-double-right"> </i></span></span><span class="item text-capitalize d-flex justify-content-between align-items-center">orders</span>
+<div class="breadcrumbs d-flex justify-content-between align-items-center"><a class="item text-capitalize d-flex justify-content-between align-items-center" href="{{ route('admin.dashboard') }}"><span class="icon"><i class="fi-rr-apps"> </i></span>{{ __('admin.menu.dashboard.title') }}</a><span class="angle"><span class="icon"><i class="fi-rr-angle-double-right"> </i></span></span><span class="item text-capitalize d-flex justify-content-between align-items-center">{{ __('admin.menu.orders.title') }}</span>
 </div>
 </div>
 </div>
@@ -24,8 +24,8 @@
 </div>
 @php
     $orderFilterTabs = [
-        ['label' => 'All', 'key' => 'all', 'params' => []],
-        ['label' => 'Trashed', 'key' => 'trashed', 'params' => ['trashed' => '1']],
+        ['label' => __('admin.filters.all'), 'key' => 'all', 'params' => []],
+        ['label' => __('admin.filters.trashed'), 'key' => 'trashed', 'params' => ['trashed' => '1']],
     ];
     foreach ($counts ?? [] as $slug => $number) {
         if (in_array($slug, ['all', 'trashed'], true)) {
@@ -48,13 +48,13 @@
 <thead>
 <tr>
 <th></th>
-<th class="text-uppercase">Order</th>
-<th class="text-uppercase">status</th>
-<th class="text-uppercase">customer</th>
-<th class="text-uppercase">total price</th>
-<th class="text-uppercase">destination</th>
-<th class="text-uppercase">updated date</th>
-<th class="text-uppercase">action</th>
+<th class="text-uppercase">{{ __('tables.columns.order') }}</th>
+<th class="text-uppercase">{{ __('tables.columns.status') }}</th>
+<th class="text-uppercase">{{ __('tables.columns.customer') }}</th>
+<th class="text-uppercase">{{ __('tables.columns.total_price') }}</th>
+<th class="text-uppercase">{{ __('tables.columns.destination') }}</th>
+<th class="text-uppercase">{{ __('tables.columns.updated_date') }}</th>
+<th class="text-uppercase">{{ __('tables.columns.action') }}</th>
 </tr>
 </thead>
 <tbody>
@@ -123,20 +123,34 @@ if ($.fn.DataTable && $('#orders').length) {
       		[1, 'desc']
       	],
       	language: {
-      		emptyTable: 'No orders found.',
-      		info: "Show _START_ To _END_ Of _TOTAL_ Orders",
+      		emptyTable: "{{ __('tables.empty.orders') }}",
+      		zeroRecords: "{{ __('tables.zeroRecords') }}",
+      		info: "{{ __('tables.words.show') }} _START_ {{ __('tables.words.to') }} _END_ {{ __('tables.words.of') }} _TOTAL_ {{ __('tables.words.orders') }}",
+      		search: "{{ __('tables.words.search') }}",
       		buttons: {
-      			pageLength: 'Show %d',
-      			colvis: 'Columns'
+      			pageLength: "{{ __('tables.words.show') }} %d {{ __('tables.words.orders') }}",
+      			colvis: "{{ __('tables.words.colvis') }}",
+      			print: "{{ __('tables.words.print') }}",
+      		},
+      		paginate: {
+      			first: "{{ __('tables.buttons.first') }}",
+      			previous: "{{ __('tables.buttons.prev') }}",
+      			next: "{{ __('tables.buttons.next') }}",
+      			last: "{{ __('tables.buttons.last') }}"
+      		},
+      		select: {
+      			rows: {
+      				_: "%d {{ __('tables.words.row_selected') }}"
+      			},
       		}
-      	},
+      	}
       	stateSave: true,
       	paging: true,
       	searching: true,
-      	lengthMenu: [[ 10, 15, 25, 50, 75, 100 ], ['10 Orders', '15 Orders', '25 Orders', '50 Orders', '75 Orders', '100 Orders']],
+      	lengthMenu: [[ 10, 15, 25, 50, 75, 100 ], ['10 {{ __('tables.words.orders') }}', '15 {{ __('tables.words.orders') }}', '25 {{ __('tables.words.orders') }}', '50 {{ __('tables.words.orders') }}', '75 {{ __('tables.words.orders') }}', '100 {{ __('tables.words.orders') }}']],
       	buttons: ($(window).width() > 578) ? ['pageLength', 'print', {
       		extend: 'collection',
-      		text: 'Export',
+      		text: "{{ __('tables.words.export') }}",
       		className: 'btn btn-group',
       		buttons: [
       			{
@@ -154,7 +168,7 @@ if ($.fn.DataTable && $('#orders').length) {
       		]
       	}, 'colvis'] : ['pageLength', {
       		extend: 'collection',
-      		text: 'Export',
+      		text: "{{ __('tables.words.export') }}",
       		className: 'btn btn-group',
       		buttons: [
       			{

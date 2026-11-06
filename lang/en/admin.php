@@ -218,7 +218,15 @@ return [
 
 	'filters' => [
 		'all' => 'All',
-		'trashed' => 'Trashed'
+		'trashed' => 'Trashed',
+		'published' => 'Published',
+		'featured' => 'Featured',
+		'new' => 'New',
+		'sale' => 'Sale',
+		'draft' => 'Draft',
+		'subscribers' => 'Subscribers',
+		'not_subscribers' => 'Not subscribers',
+		'star' => ':count Star',
 	],
 	'unknown' => 'Unknown',
 

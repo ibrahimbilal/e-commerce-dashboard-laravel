@@ -1,6 +1,6 @@
 @extends('admin.layout')
 
-@section('title', 'E-Commerce Project')
+@section('title', __('admin.menu.reviews.title'))
 
 @section('content')
 <x-flash-messages />
@@ -9,14 +9,14 @@
 <div class="col-12 d-flex align-items-sm-center justify-content-sm-between flex-column flex-sm-row">
 
 <div class="text-capitalize mb-2 mb-sm-0 d-flex justify-content-between align-items-center">
-<h1 class="page-title">Reviews</h1>
+<h1 class="page-title">{{ __('admin.menu.reviews.title') }}</h1>
 @can('add reviews')
-<a class="add-btn btn text-capitalize" href="{{ route('admin.reviews.create') }}"><span class="icon"><i class="fi-rr-plus"> </i></span>add review</a>
+<a class="add-btn btn text-capitalize" href="{{ route('admin.reviews.create') }}"><span class="icon"><i class="fi-rr-plus"> </i></span>{{ __('buttons.add_new') }}</a>
 @endcan
 </div>
 
 <div class="page-breadcrumbs d-flex align-items-sm-center justify-content-start justify-content-sm-end">
-<div class="breadcrumbs d-flex justify-content-between align-items-center"><a class="item text-capitalize d-flex justify-content-between align-items-center" href="{{ route('admin.dashboard') }}"><span class="icon"><i class="fi-rr-apps"> </i></span>dashboard</a><span class="angle"><span class="icon"><i class="fi-rr-angle-double-right"> </i></span></span><span class="item text-capitalize d-flex justify-content-between align-items-center">reviews</span>
+<div class="breadcrumbs d-flex justify-content-between align-items-center"><a class="item text-capitalize d-flex justify-content-between align-items-center" href="{{ route('admin.dashboard') }}"><span class="icon"><i class="fi-rr-apps"> </i></span>{{ __('admin.menu.dashboard.title') }}</a><span class="angle"><span class="icon"><i class="fi-rr-angle-double-right"> </i></span></span><span class="item text-capitalize d-flex justify-content-between align-items-center">{{ __('admin.menu.reviews.title') }}</span>
 </div>
 </div>
 </div>
@@ -49,9 +49,9 @@
 <div class="row">
 <div class="col-12 d-flex align-items-sm-center flex-column flex-sm-row mb-2">
 <div class="dash-filters">
-<a class="item text-capitalize @if($activeRating === null || $activeRating === '') active @endif" href="{{ route('admin.reviews.index', $reviewQueryBase(['rating' => null])) }}" data-count-key="all" data-count-label="All">All{{ array_key_exists('all', $reviewCounts) ? ' ('.$reviewCounts['all'].')' : '' }}</a>
+<a class="item text-capitalize @if($activeRating === null || $activeRating === '') active @endif" href="{{ route('admin.reviews.index', $reviewQueryBase(['rating' => null])) }}" data-count-key="all" data-count-label="{{ __('admin.filters.all') }}">{{ __('admin.filters.all') }}{{ array_key_exists('all', $reviewCounts) ? ' ('.$reviewCounts['all'].')' : '' }}</a>
 @for ($star = 1; $star <= 5; $star++)
-<a class="item text-capitalize @if((string) $activeRating === (string) $star) active @endif" href="{{ route('admin.reviews.index', $reviewQueryBase(['rating' => (string) $star])) }}" data-count-key="star_{{ $star }}" data-count-label="{{ $star }} Star">{{ $star }} Star{{ array_key_exists('star_'.$star, $reviewCounts) ? ' ('.$reviewCounts['star_'.$star].')' : '' }}</a>
+<a class="item text-capitalize @if((string) $activeRating === (string) $star) active @endif" href="{{ route('admin.reviews.index', $reviewQueryBase(['rating' => (string) $star])) }}" data-count-key="star_{{ $star }}" data-count-label="{{ __('admin.filters.star', ['count' => $star]) }}">{{ __('admin.filters.star', ['count' => $star]) }}{{ array_key_exists('star_'.$star, $reviewCounts) ? ' ('.$reviewCounts['star_'.$star].')' : '' }}</a>
 @endfor
 </div>
 </div>
@@ -64,12 +64,12 @@
 <thead>
 <tr>
 <th></th>
-<th class="text-uppercase">customer name</th>
-<th class="text-uppercase">rate stars</th>
-<th class="text-uppercase">comment</th>
-<th class="text-uppercase">product</th>
-<th class="text-uppercase">created date</th>
-<th class="text-uppercase">action</th>
+<th class="text-uppercase">{{ __('tables.columns.customer_name') }}</th>
+<th class="text-uppercase">{{ __('tables.columns.rate_stars') }}</th>
+<th class="text-uppercase">{{ __('tables.columns.comment') }}</th>
+<th class="text-uppercase">{{ __('tables.columns.product') }}</th>
+<th class="text-uppercase">{{ __('tables.columns.created_date') }}</th>
+<th class="text-uppercase">{{ __('tables.columns.action') }}</th>
 </tr>
 </thead>
 <tbody>
@@ -137,20 +137,34 @@ if ($.fn.DataTable && $('#reviews').length) {
       		[5, 'desc']
       	],
       	language: {
-      		emptyTable: 'No reviews found.',
-      		info: "Show _START_ To _END_ Of _TOTAL_ reviews",
+      		emptyTable: "{{ __('tables.empty.reviews') }}",
+      		zeroRecords: "{{ __('tables.zeroRecords') }}",
+      		info: "{{ __('tables.words.show') }} _START_ {{ __('tables.words.to') }} _END_ {{ __('tables.words.of') }} _TOTAL_ {{ __('tables.words.reviews') }}",
+      		search: "{{ __('tables.words.search') }}",
       		buttons: {
-      			pageLength: 'Show %d',
-      			colvis: 'Columns'
+      			pageLength: "{{ __('tables.words.show') }} %d {{ __('tables.words.reviews') }}",
+      			colvis: "{{ __('tables.words.colvis') }}",
+      			print: "{{ __('tables.words.print') }}",
+      		},
+      		paginate: {
+      			first: "{{ __('tables.buttons.first') }}",
+      			previous: "{{ __('tables.buttons.prev') }}",
+      			next: "{{ __('tables.buttons.next') }}",
+      			last: "{{ __('tables.buttons.last') }}"
+      		},
+      		select: {
+      			rows: {
+      				_: "%d {{ __('tables.words.row_selected') }}"
+      			},
       		}
-      	},
+      	}
       	stateSave: true,
       	paging: true,
       	searching: true,
-      	lengthMenu: [[ 10, 15, 25, 50, 75, 100 ], ['10 reviews', '15 reviews', '25 reviews', '50 reviews', '75 reviews', '100 reviews']],
+      	lengthMenu: [[ 10, 15, 25, 50, 75, 100 ], ['10 {{ __('tables.words.reviews') }}', '15 {{ __('tables.words.reviews') }}', '25 {{ __('tables.words.reviews') }}', '50 {{ __('tables.words.reviews') }}', '75 {{ __('tables.words.reviews') }}', '100 {{ __('tables.words.reviews') }}']],
       	buttons: ($(window).width() > 578) ? ['pageLength', 'print', {
       		extend: 'collection',
-      		text: 'Export',
+      		text: "{{ __('tables.words.export') }}",
       		className: 'btn btn-group',
       		buttons: [
       			{
@@ -168,7 +182,7 @@ if ($.fn.DataTable && $('#reviews').length) {
       		]
       	}, 'colvis'] : ['pageLength', {
       		extend: 'collection',
-      		text: 'Export',
+      		text: "{{ __('tables.words.export') }}",
       		className: 'btn btn-group',
       		buttons: [
       			{

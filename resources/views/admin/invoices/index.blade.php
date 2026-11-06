@@ -1,6 +1,6 @@
 @extends('admin.layout')
 
-@section('title', 'E-Commerce Project')
+@section('title', __('admin.menu.invoices.title'))
 
 
 @section('content')
@@ -10,16 +10,16 @@
 <div class="col-12 d-flex align-items-sm-center justify-content-sm-between flex-column flex-sm-row">
 
 <div class="text-capitalize mb-2 mb-sm-0 d-flex align-items-sm-center justify-content-between w-100">
-<h1 class="page-title">invoices</h1>
+<h1 class="page-title">{{ __('admin.menu.invoices.title') }}</h1>
 @if (Route::has('invoices.create'))
 @can('add invoices')
-<a class="add-btn btn text-capitalize" href="{{ route('admin.invoices.create') }}"><span class="icon"><i class="fi-rr-add"> </i></span>add new</a>
+<a class="add-btn btn text-capitalize" href="{{ route('admin.invoices.create') }}"><span class="icon"><i class="fi-rr-add"> </i></span>{{ __('buttons.add_new') }}</a>
 @endcan
 @endif
 </div>
 
 <div class="page-breadcrumbs d-flex align-items-sm-center justify-content-start justify-content-sm-end">
-<div class="breadcrumbs d-flex justify-content-between align-items-center"><a class="item text-capitalize d-flex justify-content-between align-items-center" href="{{ route('admin.dashboard') }}"><span class="icon"><i class="fi-rr-apps"> </i></span>dashboard</a><span class="angle"><span class="icon"><i class="fi-rr-angle-double-right"> </i></span></span><span class="item text-capitalize d-flex justify-content-between align-items-center">invoices</span>
+<div class="breadcrumbs d-flex justify-content-between align-items-center"><a class="item text-capitalize d-flex justify-content-between align-items-center" href="{{ route('admin.dashboard') }}"><span class="icon"><i class="fi-rr-apps"> </i></span>{{ __('admin.menu.dashboard.title') }}</a><span class="angle"><span class="icon"><i class="fi-rr-angle-double-right"> </i></span></span><span class="item text-capitalize d-flex justify-content-between align-items-center">{{ __('admin.menu.invoices.title') }}</span>
 </div>
 </div>
 </div>
@@ -35,11 +35,11 @@
 <thead>
 <tr>
 <th></th>
-<th class="text-uppercase">invoice no</th>
-<th class="text-uppercase">customer</th>
-<th class="text-uppercase">total Cost</th>
-<th class="text-uppercase">created date</th>
-<th class="text-uppercase">action</th>
+<th class="text-uppercase">{{ __('tables.columns.invoice_no') }}</th>
+<th class="text-uppercase">{{ __('tables.columns.customer') }}</th>
+<th class="text-uppercase">{{ __('tables.columns.total_cost') }}</th>
+<th class="text-uppercase">{{ __('tables.columns.created_date') }}</th>
+<th class="text-uppercase">{{ __('tables.columns.action') }}</th>
 </tr>
 </thead>
 <tbody>
@@ -103,20 +103,34 @@ if ($.fn.DataTable && $('#invoices').length) {
       		[4, 'desc']
       	],
       	language: {
-      		emptyTable: 'No invoices found.',
-      		info: "Show _START_ To _END_ Of _TOTAL_ invoices",
+      		emptyTable: "{{ __('tables.empty.invoices') }}",
+      		zeroRecords: "{{ __('tables.zeroRecords') }}",
+      		info: "{{ __('tables.words.show') }} _START_ {{ __('tables.words.to') }} _END_ {{ __('tables.words.of') }} _TOTAL_ {{ __('tables.words.invoices') }}",
+      		search: "{{ __('tables.words.search') }}",
       		buttons: {
-      			pageLength: 'Show %d',
-      			colvis: 'Columns'
+      			pageLength: "{{ __('tables.words.show') }} %d {{ __('tables.words.invoices') }}",
+      			colvis: "{{ __('tables.words.colvis') }}",
+      			print: "{{ __('tables.words.print') }}",
+      		},
+      		paginate: {
+      			first: "{{ __('tables.buttons.first') }}",
+      			previous: "{{ __('tables.buttons.prev') }}",
+      			next: "{{ __('tables.buttons.next') }}",
+      			last: "{{ __('tables.buttons.last') }}"
+      		},
+      		select: {
+      			rows: {
+      				_: "%d {{ __('tables.words.row_selected') }}"
+      			},
       		}
-      	},
+      	}
       	stateSave: true,
       	paging: true,
       	searching: true,
-      	lengthMenu: [[ 10, 15, 25, 50, 75, 100 ], ['10 invoices', '15 invoices', '25 invoices', '50 invoices', '75 invoices', '100 invoices']],
+      	lengthMenu: [[ 10, 15, 25, 50, 75, 100 ], ['10 {{ __('tables.words.invoices') }}', '15 {{ __('tables.words.invoices') }}', '25 {{ __('tables.words.invoices') }}', '50 {{ __('tables.words.invoices') }}', '75 {{ __('tables.words.invoices') }}', '100 {{ __('tables.words.invoices') }}']],
       	buttons: ($(window).width() > 578) ? ['pageLength', 'print', {
       		extend: 'collection',
-      		text: 'Export',
+      		text: "{{ __('tables.words.export') }}",
       		className: 'btn btn-group',
       		buttons: [
       			{
@@ -134,7 +148,7 @@ if ($.fn.DataTable && $('#invoices').length) {
       		]
       	}, 'colvis'] : ['pageLength', {
       		extend: 'collection',
-      		text: 'Export',
+      		text: "{{ __('tables.words.export') }}",
       		className: 'btn btn-group',
       		buttons: [
       			{

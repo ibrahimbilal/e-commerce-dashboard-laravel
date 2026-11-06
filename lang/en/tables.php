@@ -12,6 +12,27 @@ return [
 		'role_name' => 'Role name',
 		'lang_name' => 'Language name',
 		'lang_code' => 'Language Code',
+		'product_name' => 'Product name',
+		'sku' => 'SKU',
+		'price' => 'Price',
+		'featured' => 'Featured',
+		'new' => 'New',
+		'published_date' => 'Published date',
+		'customer_name' => 'Customer name',
+		'rate_stars' => 'Rate stars',
+		'comment' => 'Comment',
+		'product' => 'Product',
+		'created_date' => 'Created date',
+		'order' => 'Order',
+		'customer' => 'Customer',
+		'total_price' => 'Total price',
+		'destination' => 'Destination',
+		'updated_date' => 'Updated date',
+		'mobile' => 'Mobile',
+		'invoice_no' => 'Invoice no',
+		'total_cost' => 'Total cost',
+		'country' => 'Country',
+		'subscriber' => 'Subscriber',
 	],
 	'buttons' => [
 		'next' => 'Next',
@@ -31,9 +52,24 @@ return [
 		'print' => 'Print',
 		'colvis' => 'Columns',
 		'row_selected' => 'Item selected',
-		'langs' => 'Languages'
+		'langs' => 'Languages',
+		'products' => 'Products',
+		'reviews' => 'reviews',
+		'orders' => 'Orders',
+		'customers' => 'customers',
+		'invoices' => 'invoices',
+		'subscribers' => 'subscribers',
 	],
 
+
+	'empty' => [
+		'products' => 'No products found.',
+		'reviews' => 'No reviews found.',
+		'orders' => 'No orders found.',
+		'customers' => 'No customers found.',
+		'invoices' => 'No invoices found.',
+		'subscribers' => 'No subscribers found.',
+	],
 
 	'zeroRecords' => 'No data available in table!'
 ];

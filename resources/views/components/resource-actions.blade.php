@@ -31,12 +31,12 @@
 <div class="btn-group">
     @if ($canShow)
         <a class="btn btn-primary btn-rounded me-2 py-1" href="{{ route($showRoute, $model) }}">
-            <span class="icon"><i class="fi-rr-eye"> </i></span>view
+            <span class="icon"><i class="fi-rr-eye"> </i></span>{{ __('buttons.view') }}
         </a>
     @endif
     @if ($canEdit)
         <a class="btn btn-warning btn-rounded me-2 py-1" href="{{ route($editRoute, $model) }}">
-            <span class="icon"><i class="fi-rr-edit"> </i></span>edit
+            <span class="icon"><i class="fi-rr-edit"> </i></span>{{ __('buttons.edit') }}
         </a>
     @endif
     @if ($canDestroy)
@@ -44,7 +44,7 @@
         @csrf
         @method('DELETE')
         <button type="button" class="btn btn-danger btn-rounded me-2 py-1 bg-transparent" data-confirm-delete="soft" data-confirm-label="{{ $destroyLabel }}">
-            <span class="icon"><i class="fi-rr-trash"> </i></span>trash
+            <span class="icon"><i class="fi-rr-trash"> </i></span>{{ __('buttons.trash') }}
         </button>
     </form>
     @endif
@@ -53,7 +53,7 @@
         @csrf
         @method('PATCH')
         <button type="button" class="btn btn-primary btn-rounded me-2 py-1 bg-transparent" data-confirm-delete="restore" data-confirm-label="{{ $destroyLabel }}">
-            <span class="icon"><i class="fi-rr-undo"> </i></span>restore
+            <span class="icon"><i class="fi-rr-undo"> </i></span>{{ __('buttons.restore') }}
         </button>
     </form>
     @endif
@@ -62,7 +62,7 @@
         @csrf
         @method('DELETE')
         <button type="button" class="btn btn-danger btn-rounded me-2 py-1 bg-transparent" data-confirm-delete="permanent" data-confirm-label="{{ $destroyLabel }}">
-            <span class="icon"><i class="fi-rr-cross-circle"> </i></span>delete permanently
+            <span class="icon"><i class="fi-rr-cross-circle"> </i></span>{{ __('bulk_action.option.force_delete') }}
         </button>
     </form>
     @endif

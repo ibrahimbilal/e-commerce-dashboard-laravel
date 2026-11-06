@@ -1,6 +1,6 @@
 @extends('admin.layout')
 
-@section('title', 'E-Commerce Project')
+@section('title', __('admin.menu.products.title'))
 
 @section('content')
 <x-flash-messages />
@@ -9,13 +9,13 @@
 <div class="col-12 d-flex align-items-sm-center justify-content-sm-between flex-column flex-sm-row">
 
 <div class="text-capitalize mb-2 mb-sm-0 d-flex justify-content-between align-items-center">
-<h1 class="page-title">products</h1>@can('add products')
-<a class="add-btn btn text-capitalize" href="{{ route('admin.products.create') }}"><span class="icon"><i class="fi-rr-add"> </i></span>add new</a>
+<h1 class="page-title">{{ __('admin.menu.products.title') }}</h1>@can('add products')
+<a class="add-btn btn text-capitalize" href="{{ route('admin.products.create') }}"><span class="icon"><i class="fi-rr-add"> </i></span>{{ __('buttons.add_new') }}</a>
 @endcan
 </div>
 
 <div class="page-breadcrumbs d-flex align-items-sm-center justify-content-start justify-content-sm-end">
-<div class="breadcrumbs d-flex justify-content-between align-items-center"><a class="item text-capitalize d-flex justify-content-between align-items-center" href="{{ route('admin.dashboard') }}"><span class="icon"><i class="fi-rr-apps"> </i></span>dashboard</a><span class="angle"><span class="icon"><i class="fi-rr-angle-double-right"> </i></span></span><span class="item text-capitalize d-flex justify-content-between align-items-center">products</span>
+<div class="breadcrumbs d-flex justify-content-between align-items-center"><a class="item text-capitalize d-flex justify-content-between align-items-center" href="{{ route('admin.dashboard') }}"><span class="icon"><i class="fi-rr-apps"> </i></span>{{ __('admin.menu.dashboard.title') }}</a><span class="angle"><span class="icon"><i class="fi-rr-angle-double-right"> </i></span></span><span class="item text-capitalize d-flex justify-content-between align-items-center">{{ __('admin.menu.products.title') }}</span>
 </div>
 </div>
 </div>
@@ -23,13 +23,13 @@
 </div>
 @php
     $productFilterTabs = [
-        ['label' => 'All', 'key' => 'all', 'params' => []],
-        ['label' => 'Published', 'key' => 'published', 'params' => ['status' => 'published']],
-        ['label' => 'Featured', 'key' => 'featured', 'params' => ['featured' => '1']],
-        ['label' => 'New', 'key' => 'new', 'params' => ['new' => '1']],
-        ['label' => 'Sale', 'key' => 'sale', 'params' => ['sale' => '1']],
-        ['label' => 'Draft', 'key' => 'draft', 'params' => ['status' => 'draft']],
-        ['label' => 'Trashed', 'key' => 'trashed', 'params' => ['trashed' => '1']],
+        ['label' => __('admin.filters.all'), 'key' => 'all', 'params' => []],
+        ['label' => __('admin.filters.published'), 'key' => 'published', 'params' => ['status' => 'published']],
+        ['label' => __('admin.filters.featured'), 'key' => 'featured', 'params' => ['featured' => '1']],
+        ['label' => __('admin.filters.new'), 'key' => 'new', 'params' => ['new' => '1']],
+        ['label' => __('admin.filters.sale'), 'key' => 'sale', 'params' => ['sale' => '1']],
+        ['label' => __('admin.filters.draft'), 'key' => 'draft', 'params' => ['status' => 'draft']],
+        ['label' => __('admin.filters.trashed'), 'key' => 'trashed', 'params' => ['trashed' => '1']],
     ];
 @endphp
 <div class="row">
@@ -47,15 +47,15 @@
 <thead>
 <tr>
 <th></th>
-<th class="text-uppercase">image</th>
-<th class="text-uppercase">product name</th>
-<th class="text-uppercase">sku</th>
-<th class="text-uppercase">price</th>
-<th class="text-uppercase">status</th>
-<th class="text-uppercase text-center">featured</th>
-<th class="text-uppercase text-center">new</th>
-<th class="text-uppercase">published date</th>
-<th class="text-uppercase">action</th>
+<th class="text-uppercase">{{ __('tables.columns.image') }}</th>
+<th class="text-uppercase">{{ __('tables.columns.product_name') }}</th>
+<th class="text-uppercase">{{ __('tables.columns.sku') }}</th>
+<th class="text-uppercase">{{ __('tables.columns.price') }}</th>
+<th class="text-uppercase">{{ __('tables.columns.status') }}</th>
+<th class="text-uppercase text-center">{{ __('tables.columns.featured') }}</th>
+<th class="text-uppercase text-center">{{ __('tables.columns.new') }}</th>
+<th class="text-uppercase">{{ __('tables.columns.published_date') }}</th>
+<th class="text-uppercase">{{ __('tables.columns.action') }}</th>
 </tr>
 </thead>
 <tbody>
@@ -147,20 +147,34 @@ if ($.fn.DataTable && $('#products').length) {
       		[8, 'desc']
       	],
       	language: {
-      		emptyTable: 'No products found.',
-      		info: "Show _START_ To _END_ Of _TOTAL_ Products",
+      		emptyTable: "{{ __('tables.empty.products') }}",
+      		zeroRecords: "{{ __('tables.zeroRecords') }}",
+      		info: "{{ __('tables.words.show') }} _START_ {{ __('tables.words.to') }} _END_ {{ __('tables.words.of') }} _TOTAL_ {{ __('tables.words.products') }}",
+      		search: "{{ __('tables.words.search') }}",
       		buttons: {
-      			pageLength: 'Show %d',
-      			colvis: 'Columns'
+      			pageLength: "{{ __('tables.words.show') }} %d {{ __('tables.words.products') }}",
+      			colvis: "{{ __('tables.words.colvis') }}",
+      			print: "{{ __('tables.words.print') }}",
+      		},
+      		paginate: {
+      			first: "{{ __('tables.buttons.first') }}",
+      			previous: "{{ __('tables.buttons.prev') }}",
+      			next: "{{ __('tables.buttons.next') }}",
+      			last: "{{ __('tables.buttons.last') }}"
+      		},
+      		select: {
+      			rows: {
+      				_: "%d {{ __('tables.words.row_selected') }}"
+      			},
       		}
-      	},
+      	}
       	stateSave: true,
       	paging: true,
       	searching: true,
-      	lengthMenu: [[ 10, 25, 50, 75, 100 ], ['10 Products', '25 Products', '50 Products', '75 Products', '100 Products']],
+      	lengthMenu: [[ 10, 25, 50, 75, 100 ], ['10 {{ __('tables.words.products') }}', '25 {{ __('tables.words.products') }}', '50 {{ __('tables.words.products') }}', '75 {{ __('tables.words.products') }}', '100 {{ __('tables.words.products') }}']],
       	buttons: ($(window).width() > 578) ? ['pageLength', 'print', {
       		extend: 'collection',
-      		text: 'Export',
+      		text: "{{ __('tables.words.export') }}",
       		className: 'btn btn-group',
       		buttons: [
       			{
@@ -178,7 +192,7 @@ if ($.fn.DataTable && $('#products').length) {
       		]
       	}, 'colvis'] : ['pageLength', {
       		extend: 'collection',
-      		text: 'Export',
+      		text: "{{ __('tables.words.export') }}",
       		className: 'btn btn-group',
       		buttons: [
       			{

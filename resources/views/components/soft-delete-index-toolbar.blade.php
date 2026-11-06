@@ -7,8 +7,8 @@
 
 @php
     $softDeleteFilterTabs = [
-        ['label' => 'All', 'key' => 'all', 'params' => []],
-        ['label' => 'Trashed', 'key' => 'trashed', 'params' => ['trashed' => '1']],
+        ['label' => __('admin.filters.all'), 'key' => 'all', 'params' => []],
+        ['label' => __('admin.filters.trashed'), 'key' => 'trashed', 'params' => ['trashed' => '1']],
     ];
 @endphp
 

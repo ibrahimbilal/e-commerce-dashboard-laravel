@@ -29,4 +29,8 @@ return [
 	'unselect_all' => 'Unselect All',
 	'save_changes' => 'Save Changes',
 	'add_currency' => 'Add New Currency',
+	'view' => 'View',
+	'cancel' => 'Cancel',
+	'add_subscriber' => 'Add subscriber',
+	'edit_subscriber' => 'Edit subscriber',
 ];

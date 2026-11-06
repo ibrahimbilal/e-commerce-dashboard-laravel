@@ -29,4 +29,8 @@ return [
 	'unselect_all' => 'إلغاء تحديد الكل',
 	'save_changes' => 'حفظ التغييرات',
 	'add_currency' => 'إضافة عملة جديدة',
+	'view' => 'عرض',
+	'cancel' => 'إلغاء',
+	'add_subscriber' => 'إضافة مشترك',
+	'edit_subscriber' => 'تعديل المشترك',
 ];

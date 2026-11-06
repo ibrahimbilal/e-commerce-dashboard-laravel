@@ -1,6 +1,6 @@
 @extends('admin.layout')
 
-@section('title', 'Marketing')
+@section('title', __('admin.menu.marketing.title'))
 
 @push('stylesheet')
 @endpush
@@ -9,9 +9,9 @@
 <x-flash-messages />
 @php
     $marketingFilterTabs = [
-        ['label' => 'All', 'key' => 'all', 'params' => []],
-        ['label' => 'Subscribers', 'key' => 'subscribers', 'params' => ['subscribers' => '1']],
-        ['label' => 'Not subscribers', 'key' => 'not_subscribers', 'params' => ['subscribers' => '0']],
+        ['label' => __('admin.filters.all'), 'key' => 'all', 'params' => []],
+        ['label' => __('admin.filters.subscribers'), 'key' => 'subscribers', 'params' => ['subscribers' => '1']],
+        ['label' => __('admin.filters.not_subscribers'), 'key' => 'not_subscribers', 'params' => ['subscribers' => '0']],
     ];
     $showActions = auth()->user()?->can('edit marketing') || auth()->user()?->can('delete marketing');
 @endphp
@@ -20,14 +20,14 @@
 <div class="col-12 d-flex align-items-sm-center justify-content-sm-between flex-column flex-sm-row">
 
 <div class="text-capitalize mb-2 mb-sm-0 d-flex justify-content-between align-items-center">
-<h1 class="page-title">marketings</h1>
+<h1 class="page-title">{{ __('admin.menu.marketing.title') }}</h1>
 @can('add marketing')
-<button class="add-btn btn text-capitalize" type="button" data-bs-toggle="collapse" data-bs-target="#add-subscriber-panel" aria-expanded="false"><span class="icon"><i class="fi-rr-add"> </i></span>add new</button>
+<button class="add-btn btn text-capitalize" type="button" data-bs-toggle="collapse" data-bs-target="#add-subscriber-panel" aria-expanded="false"><span class="icon"><i class="fi-rr-add"> </i></span>{{ __('buttons.add_new') }}</button>
 @endcan
 </div>
 
 <div class="page-breadcrumbs d-flex align-items-sm-center justify-content-start justify-content-sm-end">
-<div class="breadcrumbs d-flex justify-content-between align-items-center"><a class="item text-capitalize d-flex justify-content-between align-items-center" href="{{ route('admin.dashboard') }}"><span class="icon"><i class="fi-rr-apps"> </i></span>dashboard</a><span class="angle"><span class="icon"><i class="fi-rr-angle-double-right"> </i></span></span><span class="item text-capitalize d-flex justify-content-between align-items-center">marketing</span>
+<div class="breadcrumbs d-flex justify-content-between align-items-center"><a class="item text-capitalize d-flex justify-content-between align-items-center" href="{{ route('admin.dashboard') }}"><span class="icon"><i class="fi-rr-apps"> </i></span>{{ __('admin.menu.dashboard.title') }}</a><span class="angle"><span class="icon"><i class="fi-rr-angle-double-right"> </i></span></span><span class="item text-capitalize d-flex justify-content-between align-items-center">{{ __('admin.menu.marketing.title') }}</span>
 </div>
 </div>
 </div>
@@ -40,11 +40,11 @@
 <form method="POST" action="{{ route('admin.marketing.subscribers.store') }}" class="row g-2 align-items-end">
 @csrf
 <div class="col-md-6">
-<label class="item-title meta-title" for="new-subscriber-email">Email</label>
+<label class="item-title meta-title" for="new-subscriber-email">{{ __('tables.columns.email') }}</label>
 <input class="form-control" id="new-subscriber-email" name="email" type="email" value="{{ old('email') }}" required maxlength="100"/>
 </div>
 <div class="col-md-auto">
-<button class="btn solid-btn" type="submit">Add subscriber</button>
+<button class="btn solid-btn" type="submit">{{ __('buttons.add_subscriber') }}</button>
 </div>
 </form>
 </div>
@@ -63,13 +63,13 @@
 <thead>
 <tr>
 <th></th>
-<th class="text-uppercase">name</th>
-<th class="text-uppercase">email</th>
-<th class="text-uppercase">country</th>
-<th class="text-uppercase text-center">subscriber</th>
-<th class="text-uppercase">created date</th>
+<th class="text-uppercase">{{ __('tables.columns.name') }}</th>
+<th class="text-uppercase">{{ __('tables.columns.email') }}</th>
+<th class="text-uppercase">{{ __('tables.columns.country') }}</th>
+<th class="text-uppercase text-center">{{ __('tables.columns.subscriber') }}</th>
+<th class="text-uppercase">{{ __('tables.columns.created_date') }}</th>
 @if ($showActions)
-<th class="text-uppercase">action</th>
+<th class="text-uppercase">{{ __('tables.columns.action') }}</th>
 @endif
 </tr>
 </thead>
@@ -95,13 +95,13 @@
 <td>
 <div class="btn-group">
 @can('edit marketing')
-<a class="btn btn-warning btn-rounded me-2 py-1" type="button" data-bs-toggle="modal" data-bs-target="#edit-subscriber-{{ $subscriber->id }}"><span class="icon"><i class="fi-rr-edit"> </i></span>edit</a>
+<a class="btn btn-warning btn-rounded me-2 py-1" type="button" data-bs-toggle="modal" data-bs-target="#edit-subscriber-{{ $subscriber->id }}"><span class="icon"><i class="fi-rr-edit"> </i></span>{{ __('buttons.edit') }}</a>
 @endcan
 @can('delete marketing')
 <form method="POST" action="{{ route('admin.marketing.subscribers.destroy', $subscriber) }}" class="d-inline destroy-resource-form" data-admin-json-row-action data-confirm-delete="soft" data-confirm-label="subscriber">
 @csrf
 @method('DELETE')
-<button type="button" class="btn btn-danger btn-rounded me-2 py-1 bg-transparent" data-confirm-delete="soft" data-confirm-label="subscriber"><span class="icon"><i class="fi-rr-trash"> </i></span>trash</button>
+<button type="button" class="btn btn-danger btn-rounded me-2 py-1 bg-transparent" data-confirm-delete="soft" data-confirm-label="subscriber"><span class="icon"><i class="fi-rr-trash"> </i></span>{{ __('buttons.trash') }}</button>
 </form>
 @endcan
 </div>
@@ -126,16 +126,16 @@
 @csrf
 @method('PUT')
 <div class="modal-header">
-<h5 class="modal-title text-capitalize">Edit subscriber</h5>
-<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<h5 class="modal-title text-capitalize">{{ __('buttons.edit_subscriber') }}</h5>
+<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('buttons.close') }}"></button>
 </div>
 <div class="modal-body">
-<label class="item-title meta-title" for="edit-email-{{ $subscriber->id }}">Email</label>
+<label class="item-title meta-title" for="edit-email-{{ $subscriber->id }}">{{ __('tables.columns.email') }}</label>
 <input class="form-control" id="edit-email-{{ $subscriber->id }}" name="email" type="email" value="{{ old('email', $subscriber->email) }}" required maxlength="100"/>
 </div>
 <div class="modal-footer">
-<button type="button" class="btn trans-btn" data-bs-dismiss="modal">Cancel</button>
-<button type="submit" class="btn solid-btn">Save</button>
+<button type="button" class="btn trans-btn" data-bs-dismiss="modal">{{ __('buttons.cancel') }}</button>
+<button type="submit" class="btn solid-btn">{{ __('buttons.save') }}</button>
 </div>
 </form>
 </div>
@@ -175,20 +175,34 @@ if ($.fn.DataTable && $('#subscribers').length) {
       		[{{ $showActions ? 5 : 4 }}, 'desc']
       	],
       	language: {
-      		emptyTable: 'No subscribers found.',
-      		info: "Show _START_ To _END_ Of _TOTAL_ subscribers",
+      		emptyTable: "{{ __('tables.empty.subscribers') }}",
+      		zeroRecords: "{{ __('tables.zeroRecords') }}",
+      		info: "{{ __('tables.words.show') }} _START_ {{ __('tables.words.to') }} _END_ {{ __('tables.words.of') }} _TOTAL_ {{ __('tables.words.subscribers') }}",
+      		search: "{{ __('tables.words.search') }}",
       		buttons: {
-      			pageLength: 'Show %d',
-      			colvis: 'Columns'
+      			pageLength: "{{ __('tables.words.show') }} %d {{ __('tables.words.subscribers') }}",
+      			colvis: "{{ __('tables.words.colvis') }}",
+      			print: "{{ __('tables.words.print') }}",
+      		},
+      		paginate: {
+      			first: "{{ __('tables.buttons.first') }}",
+      			previous: "{{ __('tables.buttons.prev') }}",
+      			next: "{{ __('tables.buttons.next') }}",
+      			last: "{{ __('tables.buttons.last') }}"
+      		},
+      		select: {
+      			rows: {
+      				_: "%d {{ __('tables.words.row_selected') }}"
+      			},
       		}
-      	},
+      	}
       	stateSave: true,
       	paging: true,
       	searching: true,
-      	lengthMenu: [[ 10, 15, 25, 50, 75, 100 ], ['10 subscribers', '15 subscribers', '25 subscribers', '50 subscribers', '75 subscribers', '100 subscribers']],
+      	lengthMenu: [[ 10, 15, 25, 50, 75, 100 ], ['10 {{ __('tables.words.subscribers') }}', '15 {{ __('tables.words.subscribers') }}', '25 {{ __('tables.words.subscribers') }}', '50 {{ __('tables.words.subscribers') }}', '75 {{ __('tables.words.subscribers') }}', '100 {{ __('tables.words.subscribers') }}']],
       	buttons: ($(window).width() > 578) ? ['pageLength', 'print', {
       		extend: 'collection',
-      		text: 'Export',
+      		text: "{{ __('tables.words.export') }}",
       		className: 'btn btn-group',
       		buttons: [
       			{ extend: 'excelHtml5', className: 'dropdown-item' },
@@ -197,7 +211,7 @@ if ($.fn.DataTable && $('#subscribers').length) {
       		]
       	}, 'colvis'] : ['pageLength', {
       		extend: 'collection',
-      		text: 'Export',
+      		text: "{{ __('tables.words.export') }}",
       		className: 'btn btn-group',
       		buttons: [
       			{ extend: 'excelHtml5', className: 'dropdown-item' },

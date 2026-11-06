@@ -198,7 +198,15 @@ return [
 
 	'filters' => [
 		'all' => 'الكل',
-		'trashed' => 'المحذوف'
+		'trashed' => 'المحذوف',
+		'published' => 'منشور',
+		'featured' => 'مميز',
+		'new' => 'جديد',
+		'sale' => 'تخفيض',
+		'draft' => 'مسودة',
+		'subscribers' => 'المشتركين',
+		'not_subscribers' => 'غير المشتركين',
+		'star' => ':count نجمة',
 	],
 
 	'sections' => [
