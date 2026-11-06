@@ -157,7 +157,7 @@ if ($.fn.DataTable && $('#reviews').length) {
       				_: "%d {{ __('tables.words.row_selected') }}"
       			},
       		}
-      	}
+      	},
       	stateSave: true,
       	paging: true,
       	searching: true,

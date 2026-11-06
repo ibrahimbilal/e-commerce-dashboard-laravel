@@ -123,7 +123,7 @@ if ($.fn.DataTable && $('#invoices').length) {
       				_: "%d {{ __('tables.words.row_selected') }}"
       			},
       		}
-      	}
+      	},
       	stateSave: true,
       	paging: true,
       	searching: true,

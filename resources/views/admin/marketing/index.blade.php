@@ -195,7 +195,7 @@ if ($.fn.DataTable && $('#subscribers').length) {
       				_: "%d {{ __('tables.words.row_selected') }}"
       			},
       		}
-      	}
+      	},
       	stateSave: true,
       	paging: true,
       	searching: true,
